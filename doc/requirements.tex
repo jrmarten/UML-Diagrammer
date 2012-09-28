@@ -1,0 +1,208 @@
+\documentclass[a4paper, 12pt]{article}
+\begin{document}
+\title{Project Requirements}
+\author{Felgenhauer, Maximilian\\
+	\and
+	Klose, Anthony\\
+	\and
+	Marten, Jameson}
+\date{September, 24, 2012}
+
+\maketitle
+
+\section{Introduction}
+
+\begin{enumerate}
+	\item{Purpose of the System}\\ 
+		The purpose of this system is to facilitate writing Java code, by modeling class structures in UML.
+
+	\item{Scope of the System}\\
+		This system is for Java programmers and program designers.
+
+	\item{The success criteria of the project}\\
+		To create a functioning program which can diagram UML, and translate UML into java code.
+\end{enumerate}
+
+\section{Proposed System}
+
+\begin{enumerate}
+	\item{Functional Requirements}\\
+		A user must be able to create and edit UML diagrams.\\
+		A user must be able to read and write diagrams to a file.\\
+		A user must be able to generate Java code from UML diagram.\\
+		A user must be able to make UML templates.\\
+
+	\item{Nonfunctional Requirements}
+	\begin{enumerate}
+		\item{Usability}\\
+			This application should look native to the windows or mac based on used operating system.\\
+			There should be a maximum of 2 step to create any gui element. \\
+			Program will have a Single Document Interface.\\
+
+		\item{Reliability}
+			Use report instead of crashing program.\\
+
+		\item{Performance}
+	\end{enumerate}
+\end{enumerate}
+
+
+%Use cases
+\section{Use Case Model}
+
+\begin{enumerate}
+	\item Creating UML Class Elements
+	\begin {enumerate}
+		\item Priority level Now
+		\item Participating Actors
+		\begin{itemize}
+			\item User
+			\item System
+		\end {itemize}
+		\item Flow of Events
+		\begin {enumerate}
+			\item User clicks somewhere on the document
+			\item System creates UML Class at the point on the screen the user clicked
+		\end {enumerate}
+		\item Entry Conditions
+		\begin {itemize}
+			\item User presses Edit/Create/UML Class
+			\item User presses Right Click/Create/UML Class
+		\end {itemize}
+		\item Exit Conditions
+		\begin {itemize}
+			\item UML Class is created
+		\end {itemize}
+	\end {enumerate}
+
+	\item Editing UML Class Elements
+	
+
+
+	\item{Open File}
+	\begin{enumerate}
+		\item{Priority} level green
+		\item{Participating Actors}
+		\begin {itemize}
+			\item User
+			\item System
+		\end{itemize}
+		\item{Flow of Events}
+		\begin{enumerate}
+			\item {System prompts User for a filename that exists on the System}
+			\item {User picks filename}
+			\item {System opens a new document with the contents of the file}
+		\end{enumerate}
+		\item {Entry Conditions}
+		\begin{itemize}
+			\item User presses File/Open
+		\end{itemize}
+		\item Exit Conditions
+		\begin{itemize}
+			\item User chooses filename
+			\item User cancels
+		\end{itemize}
+	\end {enumerate}
+
+	\item Write File
+	\begin {enumerate}
+		\item Priority level Cute Bunny!
+		\item Participating Actors
+		\begin {itemize}
+			\item User
+			\item System
+		\end {itemize}
+		\item Flow of Events
+		\begin {enumerate}
+			\item System prompts User for new or existing filename
+			\item User enters a filename
+			\item System save document into file on system
+		\end {enumerate}
+		\item Entry Conditions
+		\begin {itemize}
+			\item User presses File/Save
+			\item User presses File/Save as. . .
+			\item User presses Save button
+		\end {itemize}
+		\item Exit Conditions
+		\begin {itemize}
+			\item User specifies a file
+			\item User cancels
+		\end {itemize}
+	\end {enumerate}
+
+	\item Generate Java Skeletons
+	\begin {enumerate}
+		\item Priority level OHHHHHH Shit!
+		\item Participating Actors
+		\begin {itemize}
+			\item User
+			\item System
+		\end {itemize}
+		\item Flow of Events
+		\begin {enumerate}
+			\item System creates java files
+		\end {enumerate}
+		\item Entry conditions
+		\begin {itemize}
+			\item User presses File/export/Java Project
+			\item User presses Right click/export/Java Porject
+		\end {itemize}
+		\item Exit conditions
+		\begin {itemize}
+			\item System is done writing java files
+		\end{itemize}
+	\end {enumerate}
+
+	\item UML Template Creation
+	\begin {enumerate}
+		\item Priority level blah
+		\item Participating Actors
+		\begin {itemize}
+			\item User
+			\item System
+		\end {itemize}
+		\item Flow of Events
+		\begin {enumerate}
+			\item System prompt user for name of the template
+			\item system saves current document into templates file
+		\end {enumerate}
+		\item Entry conditions
+		\begin {itemize}
+			\item Document is not empty
+			\item User presses File/templates/create
+		\end {itemize}
+		\item Exit Conditions
+		\begin {itemize}
+			\item System finishes saving file
+		\end {itemize}
+	\end {enumerate}
+		
+	\item UML Template Instantiation
+	\begin {enumerate}
+		\item Piroity level Fuck it
+		\item Participating Actors
+		\begin {itemize}
+			\item User
+			\item System
+		\end {itemize}
+		\item Flow of Events
+		\begin {enumerate}
+			\item prompt user for which template to fill the document
+			\item if current document is not empty, system prompts the user if he/she wants to continue
+			\item if current document is not empty, clear it
+			\item fills current document with template
+		\end {enumerate}
+		\item Entry Conditions
+		\begin{itemize}
+			\item User presses File/templates/open
+		\end {itemize}
+		\item Exit Conditions
+		\begin {itemize}
+			\item User decides to not continue
+			\item System finishes loading template
+		\end {itemize}
+	\end {enumerate}
+\end {enumerate}
+
+\end{document}
