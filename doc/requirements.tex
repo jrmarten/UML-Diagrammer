@@ -1,4 +1,6 @@
 \documentclass[a4paper, 12pt]{article}
+\usepackage{graphicx}
+
 \begin{document}
 \title{Project Requirements}
 \author{Felgenhauer, Maximilian\\
@@ -34,15 +36,23 @@
 
 \item{Nonfunctional Requirements}
   \begin{enumerate}
-  \item{Usability}\\
-    This application should look native to the windows or mac based on used operating system.\\
-    There should be a maximum of 2 step to create any gui element. \\
-    Program will have a Single Document Interface.\\
+  \item{Usability}
+    \begin {itemize}
+      \item This application should look native to the windows or mac based on used operating system.
+      \item There should be a maximum of 2 step to create any gui element. 
+      \item Program will have a Single Document Interface.
+    \end {itemize}
 
   \item{Reliability}
-    Use report instead of crashing program.\\
+    \begin {itemize}
+      \item Use report instead of crashing program.
+    \end {itemize}
 
   \item{Performance}
+    \begin{itemize}
+      \item Should take the User no longer than 3 seconds to save a document
+      \item Adding Gui elements should be instantaineous %check
+    \end{itemize}
   \end{enumerate}
 \end{enumerate}
 
@@ -50,10 +60,19 @@
 %Use cases
 \section{Use Case Model}
 
+
+\begin{center}
+  \includegraphics[height=5in,width=3in]{img/SystemOverview.png}
+\end{center}
+
+\begin {center}
+  \includegraphics[height=3in, width=5in]{img/CreateDiagram.png}
+\end{center}
+
 \begin{enumerate}
 \item Create UML Class Elements
   \begin {enumerate}
-  \item Priority level Now
+  \item Priority level High
   \item Participating Actors
     \begin{itemize}
     \item User
@@ -75,9 +94,13 @@
     \end {itemize}
   \end {enumerate}
 
+  \begin{center}
+    \includegraphics[height=3in, width=5in]{img/EditDiagram.png}
+  \end{center}
+
 \item Edit UML Class Elements
   \begin {enumerate}
-  \item Priority Level red
+  \item Priority Level Medium
   \item Participating Actors
     \begin {itemize}
     \item User
@@ -94,9 +117,13 @@
     \end {itemize}
   \end {enumerate}
 
+  \begin {center}
+    \includegraphics[height=3in, width=5in]{img/CreateAssociation.png}
+  \end {center}
+
 \item Create Association
   \begin {enumerate}
-  \item Priority Level grey
+  \item Priority Level High
   \item Participating Actors
     \begin {itemize}
     \item User
@@ -118,12 +145,43 @@
     \begin {itemize}
     \item User cancels
     \item Link has been created
-    \end {enumerate}
+    \end {itemize}
   \end {enumerate}
+
+  \begin {center}
+    \includegraphics[width=5in, height=3in] {img/RemoveAssociation.png}
+  \end {center}
+
+\item Remove Association
+  \begin {enumerate}
+  \item Priority Level High
+  \item Participating Actors
+    \begin {itemize}
+    \item User
+    \item System
+    \end {itemize}
+  \item Flow of Events
+    \begin {enumerate}
+    \item User will select an Association
+    \item System will unlink the elements
+    \end {enumerate}
+  \item Entry Conditions
+    \begin {itemize}
+    \item User Clicks Edit/Association
+    \end {itemize}
+  \item Exit Conditions
+    \begin {itemize}
+    \item Link has been created
+    \end {itemize}
+  \end {enumerate}
+
+  \begin{center}
+    \includegraphics[height=2in, width=3in]{img/OpenDiagram.png}
+  \end{center}
 
 \item{Open File}
   \begin{enumerate}
-  \item{Priority} level green
+  \item{Priority} level Medium
   \item{Participating Actors}
     \begin {itemize}
     \item User
@@ -146,9 +204,13 @@
     \end{itemize}
   \end {enumerate}
 
+  \begin {center}
+    \includegraphics[height=2in,width=3in]{img/SaveDiagram.png}
+  \end {center}
+
 \item Write File
   \begin {enumerate}
-  \item Priority level Cute Bunny!
+  \item Priority level Medium
   \item Participating Actors
     \begin {itemize}
     \item User
@@ -173,9 +235,11 @@
     \end {itemize}
   \end {enumerate}
 
+
+
 \item Generate Java Skeletons
   \begin {enumerate}
-  \item Priority level OHHHHHH Shit!
+  \item Priority level High
   \item Participating Actors
     \begin {itemize}
     \item User
@@ -196,9 +260,13 @@
     \end{itemize}
   \end {enumerate}
 
+  \begin{center}
+    \includegraphics[height=2in,width=3in]{img/CreateGenericDesignPatternDiagram.png}
+  \end{center}
+
 \item Create UML Template
   \begin {enumerate}
-  \item Priority level blah
+  \item Priority level Low
   \item Participating Actors
     \begin {itemize}
     \item User
@@ -220,9 +288,13 @@
     \end {itemize}
   \end {enumerate}
 
-\item UML Template Instantiation
+  \begin {center}
+    \includegraphics[width=5in, height=3in] {img/UseTemplate.png}
+  \end {center}
+
+\item Use UML Template
   \begin {enumerate}
-  \item Piroity level Fuck it
+  \item Piroity level Low
   \item Participating Actors
     \begin {itemize}
     \item User

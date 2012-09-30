@@ -4,10 +4,17 @@
   </description>
   <property name="src" location="src" />
   <property name="bin" location="bin" />
+  <property name="lib" location="lib" />
+
 
   <target name="compile">
     <mkdir dir="${bin}" />
-    <javac srcdir="${src}" destdir="${bin}" />
+    <javac srcdir="${src}" destdir="${bin}">
+      <classpath location="${lib}/annotations.jar" />
+      <classpath location="${lib}/jsr305.jar" />
+      <classpath location="${lib}/quaqua.jar" />
+      <classpath location="${lib}/java_30.zip" />
+    </javac>
   </target>
 
   <target name="clean">

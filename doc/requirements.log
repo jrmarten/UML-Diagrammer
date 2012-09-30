@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.9.24)  28 SEP 2012 13:55
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.9.24)  30 SEP 2012 15:25
 entering extended mode
  %&-line parsing enabled.
 **requirements.tex
@@ -22,84 +22,152 @@ File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
-) (./requirements.aux)
+)
+(/usr/share/texmf-texlive/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf-texlive/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/usr/share/texmf-texlive/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf-texlive/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/etc/texmf/tex/latex/config/graphics.cfg
+File: graphics.cfg 2009/08/28 v1.8 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+(/usr/share/texmf-texlive/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2010/03/12 v0.04p Graphics/color for pdfTeX
+\Gread@gobject=\count87
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+(./requirements.aux)
 \openout1 = `requirements.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 2.
-LaTeX Font Info:    ... okay on input line 2.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 2.
-LaTeX Font Info:    ... okay on input line 2.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 2.
-LaTeX Font Info:    ... okay on input line 2.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 2.
-LaTeX Font Info:    ... okay on input line 2.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 2.
-LaTeX Font Info:    ... okay on input line 2.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 2.
-LaTeX Font Info:    ... okay on input line 2.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+ (/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count88
+\scratchdimen=\dimen105
+\scratchbox=\box26
+\nofMPsegments=\count89
+\nofMParguments=\count90
+\everyMPshowfont=\toks15
+\MPscratchCnt=\count91
+\MPscratchDim=\dimen106
+\MPnumerator=\count92
+\everyMPtoPDFconversion=\toks16
+)
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <14.4> on input line 11.
+(Font)              <14.4> on input line 13.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 11.
+(Font)              <7> on input line 13.
 
-Underfull \hbox (badness 10000) in paragraph at lines 29--34
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 37--41
+Underfull \hbox (badness 10000) in paragraph at lines 31--36
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 42--44
-
- []
-
-[1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 59.
-
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 41.
 (/usr/share/texmf-texlive/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 59.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 41.
+ [1
 
-Overfull \hbox (25.94038pt too wide) in paragraph at lines 89--90
-[]\OT1/cmr/m/n/12 User right click El-e-ment/edit/\OMS/cmsy/m/n/12 f\OT1/cmr/m/
-n/12 add at-tribute, re-move at-tribute,edit
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+<img/SystemOverview.png, id=9, 354.57469pt x 554.82281pt>
+File: img/SystemOverview.png Graphic file (type png)
+
+<use img/SystemOverview.png>
+<img/CreateDiagram.png, id=10, 423.08063pt x 308.65312pt>
+File: img/CreateDiagram.png Graphic file (type png)
+
+<use img/CreateDiagram.png> [2 <./img/SystemOverview.png (PNG copy)>]
+<img/EditDiagram.png, id=14, 423.08063pt x 239.39438pt>
+File: img/EditDiagram.png Graphic file (type png)
+
+<use img/EditDiagram.png>
+Overfull \hbox (0.73796pt too wide) in paragraph at lines 98--99
+ [] 
  []
 
-[2]
+[3 <./img/CreateDiagram.png (PNG copy)>]
+<img/CreateAssociation.png, id=18, 338.76563pt x 210.10454pt>
+File: img/CreateAssociation.png Graphic file (type png)
 
-! LaTeX Error: Something's wrong--perhaps a missing \item.
+<use img/CreateAssociation.png>
+Overfull \hbox (0.73895pt too wide) in paragraph at lines 121--122
+ [] 
+ []
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.115 		\end {itemize}
-                      
-? q
-OK, entering \batchmode...
- [3] [4] [5] (./requirements.aux) ) 
+[4 <./img/EditDiagram.png (PNG copy)>]
+<img/RemoveAssociation.png, id=22, 252.19218pt x 154.97072pt>
+File: img/RemoveAssociation.png Graphic file (type png)
+
+<use img/RemoveAssociation.png>
+Overfull \hbox (0.73022pt too wide) in paragraph at lines 152--153
+ [] 
+ []
+
+[5 <./img/CreateAssociation.png (PNG copy)>]
+<img/OpenDiagram.png, id=26, 423.08063pt x 161.85469pt>
+File: img/OpenDiagram.png Graphic file (type png)
+
+<use img/OpenDiagram.png> [6 <./img/RemoveAssociation.png (PNG copy)> <./img/Op
+enDiagram.png (PNG copy)>]
+<img/SaveDiagram.png, id=30, 423.08063pt x 161.85469pt>
+File: img/SaveDiagram.png Graphic file (type png)
+
+<use img/SaveDiagram.png> [7 <./img/SaveDiagram.png (PNG copy)>]
+<img/CreateGenericDesignPatternDiagram.png, id=35, 423.08063pt x 161.85469pt>
+File: img/CreateGenericDesignPatternDiagram.png Graphic file (type png)
+
+<use img/CreateGenericDesignPatternDiagram.png> [8 <./img/CreateGenericDesignPa
+tternDiagram.png (PNG copy)>]
+<img/UseTemplate.png, id=39, 591.57092pt x 263.74825pt>
+File: img/UseTemplate.png Graphic file (type png)
+
+<use img/UseTemplate.png>
+Overfull \hbox (0.7289pt too wide) in paragraph at lines 292--293
+ [] 
+ []
+
+[9 <./img/UseTemplate.png (PNG copy)>] [10] (./requirements.aux) ) 
 Here is how much of TeX's memory you used:
- 235 strings out of 495061
- 2686 string characters out of 1182621
- 52202 words of memory out of 3000000
- 3491 multiletter control sequences out of 15000+50000
+ 958 strings out of 495061
+ 12654 string characters out of 1182621
+ 62584 words of memory out of 3000000
+ 4177 multiletter control sequences out of 15000+50000
  6013 words of font info for 22 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 22i,6n,19p,159b,309s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/texmf-texlive/fonts/type1/public
-/amsfonts/cm/cmbx12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/c
-m/cmr12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on requirements.pdf (5 pages, 56913 bytes).
+ 25i,6n,19p,208b,312s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/share/t
+exmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-texliv
+e/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive/fonts/type
+1/public/amsfonts/cm/cmr17.pfb></usr/share/texmf-texlive/fonts/type1/public/ams
+fonts/cm/cmsy10.pfb>
+Output written on requirements.pdf (10 pages, 197365 bytes).
 PDF statistics:
- 34 PDF objects out of 1000 (max. 8388607)
+ 60 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 46 words of extra memory for PDF output out of 10000 (max. 10000000)
 
