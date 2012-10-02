@@ -16,13 +16,13 @@
 
 \begin{enumerate}
 \item{Purpose of the System}\\
-  The purpose of this system is to facilitate writing Java code, by modeling class structures in UML.
+  The purpose of this system is to facilitate writing Java code by modelling class structures in UML.
 
 \item{Scope of the System}\\
-  This system is for Java programmers and program designers.
+  This system is intended for Java programmers and program designers.
 
 \item{The success criteria of the project}\\
-  To create a functioning program which can diagram UML, and translate UML into java code.
+  To create a functioning program which can diagram UML and translate UML into Java code.
 \end{enumerate}
 
 \section{Proposed System}
@@ -31,27 +31,27 @@
 \item{Functional Requirements}\\
   A user must be able to create and edit UML diagrams.\\
   A user must be able to read and write diagrams to a file.\\
-  A user must be able to generate Java code from UML diagram.\\
+  A user must be able to generate Java code from UML diagrams.\\
   A user must be able to make UML templates.\\
 
 \item{Nonfunctional Requirements}
   \begin{enumerate}
   \item{Usability}
     \begin {itemize}
-      \item This application should look native to the windows or mac based on used operating system.
-      \item There should be a maximum of 2 step to create any gui element. 
+      \item This application should look native to the Windows or Mac, based on the operating system used.
+      \item There should be a maximum of 2 steps to create any UML element. 
       \item Program will have a Single Document Interface.
     \end {itemize}
 
   \item{Reliability}
     \begin {itemize}
-      \item Use report instead of crashing program.
+      \item The program will report any errors to the user instead of crashing, if possible.
     \end {itemize}
 
   \item{Performance}
     \begin{itemize}
-      \item Should take the User no longer than 3 seconds to save a document
-      \item Adding Gui elements should be instantaineous %check
+      \item Should take the User no longer than 3 seconds to save a document.
+      \item Adding GUI elements should be instantaneous. %check
     \end{itemize}
   \end{enumerate}
 \end{enumerate}
@@ -72,7 +72,7 @@
 \begin{enumerate}
 \item Create UML Class Elements
   \begin {enumerate}
-  \item Priority level High
+  \item Priority level: High
   \item Participating Actors
     \begin{itemize}
     \item User
@@ -100,7 +100,7 @@
 
 \item Edit UML Class Elements
   \begin {enumerate}
-  \item Priority Level Medium
+  \item Priority Level: Medium
   \item Participating Actors
     \begin {itemize}
     \item User
@@ -112,8 +112,8 @@
     \end {enumerate}
   \item Entry Conditions
     \begin {itemize}
-    \item User right click Element/edit/add attribute
-    \item User clicks Edit/Add/attribute
+    \item User right click Element/Edit/Add attribute
+    \item User clicks Edit/Add/Attribute
     \end {itemize}
   \end {enumerate}
 
@@ -123,7 +123,7 @@
 
 \item Create Association
   \begin {enumerate}
-  \item Priority Level High
+  \item Priority Level: High
   \item Participating Actors
     \begin {itemize}
     \item User
@@ -132,14 +132,14 @@
   \item Flow of Events
     \begin {enumerate}
     \item User will select which type of association
-    \item User will select one UML Element
-    \item User will select a second UML Element that is not the first
-    \item System creates a link between the two Elements
+    \item User will select one UML element
+    \item User will select a second UML element that is not the first
+    \item System creates a link between the two elements
     \end {enumerate}
   \item Entry Conditions
     \begin {itemize}
-    \item User Clicks Edit/create/Association
-    \item User Right clicks first Element
+    \item User Clicks Edit/Create/Association
+    \item User Right clicks first element
     \end {itemize}
   \item Exit Conditions
     \begin {itemize}
@@ -154,7 +154,7 @@
 
 \item Remove Association
   \begin {enumerate}
-  \item Priority Level High
+  \item Priority Level: High
   \item Participating Actors
     \begin {itemize}
     \item User
@@ -162,8 +162,8 @@
     \end {itemize}
   \item Flow of Events
     \begin {enumerate}
-    \item User will select an Association
-    \item System will unlink the elements
+    \item User selects an association
+    \item System unlinks the elements
     \end {enumerate}
   \item Entry Conditions
     \begin {itemize}
@@ -171,7 +171,7 @@
     \end {itemize}
   \item Exit Conditions
     \begin {itemize}
-    \item Link has been created
+    \item Link has been removed
     \end {itemize}
   \end {enumerate}
 
@@ -179,29 +179,29 @@
     \includegraphics[height=2in, width=3in]{img/OpenDiagram.png}
   \end{center}
 
-\item{Open File}
-  \begin{enumerate}
-  \item{Priority} level Medium
-  \item{Participating Actors}
+\item Open File
+  \begin {enumerate}
+  \item Priority Priority Level: Medium
+  \item Participating Actors
     \begin {itemize}
     \item User
     \item System
-    \end{itemize}
-  \item{Flow of Events}
-    \begin{enumerate}
-    \item {System prompts User for a filename that exists on the System}
-    \item {User picks filename}
-    \item {System opens a new document with the contents of the file}
-    \end{enumerate}
-  \item {Entry Conditions}
-    \begin{itemize}
+    \end {itemize}
+  \item Flow of Events
+    \begin {enumerate}
+    \item System prompts User for a filename that exists on the System
+    \item User picks filename
+    \item System opens a new document with the contents of the file
+    \end {enumerate}
+  \item  Entry Conditions 
+    \begin {itemize}
     \item User presses File/Open
-    \end{itemize}
+    \end {itemize}
   \item Exit Conditions
-    \begin{itemize}
+    \begin {itemize}
     \item User chooses filename
     \item User cancels
-    \end{itemize}
+    \end {itemize}
   \end {enumerate}
 
   \begin {center}
@@ -210,7 +210,7 @@
 
 \item Write File
   \begin {enumerate}
-  \item Priority level Medium
+  \item Priority level: Medium
   \item Participating Actors
     \begin {itemize}
     \item User
@@ -220,7 +220,7 @@
     \begin {enumerate}
     \item System prompts User for new or existing filename
     \item User enters a filename
-    \item System save document into file on system
+    \item System saves document to a file on the system
     \end {enumerate}
   \item Entry Conditions
     \begin {itemize}
@@ -239,7 +239,7 @@
 
 \item Generate Java Skeletons
   \begin {enumerate}
-  \item Priority level High
+  \item Priority level: High
   \item Participating Actors
     \begin {itemize}
     \item User
@@ -247,16 +247,16 @@
     \end {itemize}
   \item Flow of Events
     \begin {enumerate}
-    \item System creates java files
+    \item System creates Java files
     \end {enumerate}
-  \item Entry conditions
+  \item Entry Conditions
     \begin {itemize}
-    \item User presses File/export/Java Project
-    \item User presses Right click/export/Java Porject
+    \item User presses File/Export/Java Project
+    \item User presses Right click/Export/Java Porject
     \end {itemize}
-  \item Exit conditions
+  \item Exit Conditions
     \begin {itemize}
-    \item System is done writing java files
+    \item System is done writing Java files
     \end{itemize}
   \end {enumerate}
 
@@ -266,7 +266,7 @@
 
 \item Create UML Template
   \begin {enumerate}
-  \item Priority level Low
+  \item Priority level: Low
   \item Participating Actors
     \begin {itemize}
     \item User
@@ -280,7 +280,7 @@
   \item Entry conditions
     \begin {itemize}
     \item Document is not empty
-    \item User presses File/templates/create
+    \item User presses File/Templates/Create
     \end {itemize}
   \item Exit Conditions
     \begin {itemize}
@@ -294,7 +294,7 @@
 
 \item Use UML Template
   \begin {enumerate}
-  \item Piroity level Low
+  \item Piroity level: Low
   \item Participating Actors
     \begin {itemize}
     \item User
@@ -302,14 +302,14 @@
     \end {itemize}
   \item Flow of Events
     \begin {enumerate}
-    \item prompt user for which template to fill the document
-    \item if current document is not empty, system prompts the user if he/she wants to continue
-    \item if current document is not empty, clear it
-    \item fills current document with template
+    \item Prompt user for which template to fill the document
+    \item If current document is not empty, system prompts the user if he/she wants to continue
+    \item If current document is not empty, clear it
+    \item Fill current document with template
     \end {enumerate}
   \item Entry Conditions
     \begin{itemize}
-    \item User presses File/templates/open
+    \item User presses File/Templates/Open
     \end {itemize}
   \item Exit Conditions
     \begin {itemize}
