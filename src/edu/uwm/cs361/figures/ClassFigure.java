@@ -1,405 +1,346 @@
+/*
+ * @(#)ClassFigure.java
+ *
+ * Copyright (c) 1996-2010 by the original authors of JHotDraw and all its
+ * contributors. All rights reserved.
+ *
+ * You may not use, copy or modify this file, except in compliance with the 
+ * license agreement you entered into with the copyright holders. For details
+ * see accompanying license terms.
+ */
 package edu.uwm.cs361.figures;
 
-import javax.swing.*;
-
-import java.awt.*;
-import java.awt.event.*;
+import org.jhotdraw.draw.locator.RelativeLocator;
+import org.jhotdraw.draw.handle.MoveHandle;
+import org.jhotdraw.draw.handle.Handle;
+import org.jhotdraw.draw.event.FigureAdapter;
+import org.jhotdraw.draw.event.FigureEvent;
+import org.jhotdraw.draw.layouter.VerticalLayouter;
+import org.jhotdraw.draw.connector.LocatorConnector;
+import org.jhotdraw.draw.handle.ConnectorHandle;
+import java.io.IOException;
+import java.awt.geom.*;
+import static org.jhotdraw.draw.AttributeKeys.*;
 import java.util.*;
-import java.io.*;
-
-//import jmodeller.UMLClass;
-//import jmodeller.SeparatorFigure;
-
-
 import org.jhotdraw.draw.*;
-import org.jhotdraw.draw.event.*;
+import org.jhotdraw.draw.handle.BoundsOutlineHandle;
+import org.jhotdraw.geom.*;
+import org.jhotdraw.util.*;
+import org.jhotdraw.xml.*;
 
-import edu.uwm.cs361.UMLClass;
-
-/*import CH.ifa.draw.contrib.GraphicalCompositeFigure;
-import CH.ifa.draw.figures.RectangleFigure;
-import CH.ifa.draw.figures.TextFigure;
-import CH.ifa.draw.framework.Figure;
-import CH.ifa.draw.framework.FigureChangeEvent;
-import CH.ifa.draw.standard.NullHandle;
-import CH.ifa.draw.standard.RelativeLocator;
-import CH.ifa.draw.util.StorableInput;
-import CH.ifa.draw.util.StorableOutput;*/
-
+/**
+ * ClassFigure.
+ *
+ * @author Werner Randelshofer.
+ * @version $Id: ClassFigure.java 727 2011-01-09 13:23:59Z rawcoder $
+ */
 public class ClassFigure extends GraphicalCompositeFigure {
 
-	/**
-	 * Class in the model which is represented by this figure graphically
-	 */
-	private UMLClass myClass;
-	
-	/**
-	 * Font used for attribute names
-	 */
-    private Font            attributeFont;
+    private HashSet<DependencyFigure> dependencies;
 
     /**
-     * Font used for method names
+     * This adapter is used, to connect a TextFigure with the name of
+     * the ClassFigure model.
      */
-    private Font            methodFont;
+    private static class NameAdapter extends FigureAdapter {
 
-    /**
-     * Direct reference to a composite figure which stores text figures for attribute names.
-     * This figure is also part of this composite container.
-     */
-    private GraphicalCompositeFigure    myAttributesFigure;
+        private ClassFigure target;
 
-    /**
-     * Direct reference to a composite figure which stores text figures for method names.
-     * This figure is also part of this composite container.
-     */
-    private GraphicalCompositeFigure    myMethodsFigure;
+        public NameAdapter(ClassFigure target) {
+            this.target = target;
+        }
 
-    /**
-     * TextFigure for editing the class name
-     */
-    private TextFigure myClassNameFigure;
+        @Override
+        public void attributeChanged(FigureEvent e) {
+            // We could fire a property change event here, in case
+            // some other object would like to observe us.
+            //target.firePropertyChange("name", e.getOldValue(), e.getNewValue());
+        }
+    }
 
-    static final long serialVersionUID = 6098176631854387694L;
+    private static class DurationAdapter extends FigureAdapter {
 
-    /**
-     * Create a new instance of ClassFigure with a RectangleFigure as presentation figure
-     */    
+        private ClassFigure target;
+
+        public DurationAdapter(ClassFigure target) {
+            this.target = target;
+        }
+
+        @Override
+        public void attributeChanged(FigureEvent evt) {
+            // We could fire a property change event here, in case
+            // some other object would like to observe us.
+            //target.firePropertyChange("duration", e.getOldValue(), e.getNewValue());
+            for (ClassFigure succ : target.getSuccessors()) {
+                succ.updateStartTime();
+            }
+        }
+    }
+
+    /** Creates a new instance. */
     public ClassFigure() {
-        this(new RectangleFigure());
+        super(new RectangleFigure());
+
+        setLayouter(new VerticalLayouter());
+
+        RectangleFigure nameCompartmentPF = new RectangleFigure();
+        nameCompartmentPF.set(STROKE_COLOR, null);
+        nameCompartmentPF.setAttributeEnabled(STROKE_COLOR, false);
+        nameCompartmentPF.set(FILL_COLOR, null);
+        nameCompartmentPF.setAttributeEnabled(FILL_COLOR, false);
+        ListFigure nameCompartment = new ListFigure(nameCompartmentPF);
+        ListFigure attributeCompartment = new ListFigure();
+        SeparatorLineFigure separator1 = new SeparatorLineFigure();
+
+        add(nameCompartment);
+        add(separator1);
+        add(attributeCompartment);
+
+        Insets2D.Double insets = new Insets2D.Double(4, 8, 4, 8);
+        nameCompartment.set(LAYOUT_INSETS, insets);
+        attributeCompartment.set(LAYOUT_INSETS, insets);
+
+        TextFigure nameFigure;
+        nameCompartment.add(nameFigure = new TextFigure());
+        nameFigure.set(FONT_BOLD, true);
+        nameFigure.setAttributeEnabled(FONT_BOLD, false);
+
+        TextFigure durationFigure;
+        attributeCompartment.add(durationFigure = new TextFigure());
+        durationFigure.set(FONT_BOLD, true);
+        durationFigure.setText("0");
+        durationFigure.setAttributeEnabled(FONT_BOLD, false);
+
+        TextFigure startTimeFigure;
+        attributeCompartment.add(startTimeFigure = new TextFigure());
+        startTimeFigure.setEditable(false);
+        startTimeFigure.setText("0");
+        startTimeFigure.setAttributeEnabled(FONT_BOLD, false);
+
+        setAttributeEnabled(STROKE_DASHES, false);
+
+        ResourceBundleUtil labels =
+                ResourceBundleUtil.getBundle("org.jhotdraw.samples.pert.Labels");
+
+        setName(labels.getString("pert.task.defaultName"));
+        setDuration(0);
+
+        dependencies = new HashSet<DependencyFigure>();
+        nameFigure.addFigureListener(new NameAdapter(this));
+        durationFigure.addFigureListener(new DurationAdapter(this));
     }
 
-    /**
-     * Create a new instance of ClassFigure with a given presentation figure
-     *
-     * @param newPresentationFigure presentation figure
-     */    
-    public ClassFigure(Figure newPresentationFigure) {
-        super(newPresentationFigure);
-    }
-
-    /**
-     * Hook method called to initizialize a ClassFigure.
-     * It is called from the constructors and the clone() method.
-     */
-    protected void initialize() {
-        // start with an empty Composite
-        removeAll();
-
-        // set the fonts used to print attributes and methods
-        attributeFont = new Font("Helvetica", Font.PLAIN, 12);
-        methodFont = new Font("Helvetica", Font.PLAIN, 12);
-
-        // create a new Model object associated with this View figure
-        setModellerClass(new UMLClass());
-
-        // create a TextFigure responsible for the class name
-        setClassNameFigure(new TextFigure() {
-            public void setText(String newText) {
-                super.setText(newText);
-                getModellerClass().setName(newText);
-                update();
-            }
-        });
-        getClassNameFigure().setFont(new Font("Helvetica", Font.BOLD, 12));
-        getClassNameFigure().setText(getModellerClass().getName());
-        
-        // add the TextFigure to the Composite
-        GraphicalCompositeFigure nameFigure = new GraphicalCompositeFigure(new SeparatorLineFigure());
-        nameFigure.add(getClassNameFigure());
-        nameFigure.getLayouter().setInsets(new Insets(0, 4, 0, 0));
-        add(nameFigure);
-
-        // create a figure responsible for maintaining attributes
-        setAttributesFigure(new GraphicalCompositeFigure(new SeparatorLineFigure()));
-        getAttributesFigure().getLayouter().setInsets(new Insets(4, 4, 4, 0));
-        // add the figure to the Composite
-        add(getAttributesFigure());
-
-        // create a figure responsible for maintaining methods
-        setMethodsFigure(new GraphicalCompositeFigure(new SeparatorLineFigure()));
-        getMethodsFigure().getLayouter().setInsets(new Insets(4, 4, 4, 0));
-        // add the figure to the Composite
-        add(getMethodsFigure());
-
-        setAttribute(Figure.POPUP_MENU, createPopupMenu());
-
-        super.initialize();
-    }
-
-    /**
-     * Factory method to create a popup menu which allows to add attributes and methods.
-     *
-     * @return newly created popup menu
-     */
-    protected JPopupMenu createPopupMenu() {
-        JPopupMenu popupMenu = new JPopupMenu();
-        popupMenu.add(new AbstractAction("add attribute") {
-                public void actionPerformed(ActionEvent event) {
-                    addAttribute("attribute");
-                }
-            });
-        popupMenu.add(new AbstractAction("add method") {
-                public void actionPerformed(ActionEvent event) {
-                    addMethod("method()");
-                }
-            });
-
-        popupMenu.setLightWeightPopupEnabled(true);
-        return popupMenu;
-    }
-
-    /**
-     * Set the figure which containes all figures representing attribute names.
-     *
-     * @param newAttributesFigure container for other figures
-     */
-    protected void setAttributesFigure(GraphicalCompositeFigure newAttributesFigure) {
-        myAttributesFigure = newAttributesFigure;
-    }
-
-    /**
-     * Return the figure which containes all figures representing attribute names.
-     *
-     * @return container for other figures
-     */
-    public GraphicalCompositeFigure getAttributesFigure() {
-        return myAttributesFigure;
-    }
-
-    /**
-     * Set the figure which containes all figures representing methods names.
-     *
-     * @param newMethodsFigure container for other figures
-     */
-    protected void setMethodsFigure(GraphicalCompositeFigure newMethodsFigure) {
-        myMethodsFigure = newMethodsFigure;
-    }
-
-    /**
-     * Return the figure which containes all figures representing method names.
-     *
-     * @return container for other figures
-     */
-    public GraphicalCompositeFigure getMethodsFigure() {
-        return myMethodsFigure;
-    }
-
-    /**
-     * Set the class name text figure responsible for handling user input
-     *
-     * @param newClassNameFigure text figure for the class name
-     */
-    protected void setClassNameFigure(TextFigure newClassNameFigure) {
-        myClassNameFigure = newClassNameFigure;
-    }
-    
-    /**
-     * Return the text figure for the class name
-     *
-     * @return text figure for the class name
-     */
-    public TextFigure getClassNameFigure() {
-        return myClassNameFigure;
-    }
-
-    /**
-     * Add a name for an attribute. The underlying class in the model is updated as well.
-     * to hold the attribute name.
-     *
-     * @param newAttribute name of the new attribute
-     */
-    protected void addAttribute(String newAttribute) {
-        getModellerClass().addAttribute(newAttribute);
-        TextFigure classFigureAttribute = new TextFigure() {
-            public void setText(String newString) {
-                if (!getText().equals(newString)) {
-                    getModellerClass().renameAttribute(getText(), newString);
-                }
-                super.setText(newString);
-                updateAttributeFigure();
-            }
-        };
-        classFigureAttribute.setText(newAttribute);
-        classFigureAttribute.setFont(attributeFont);
-        getAttributesFigure().add(classFigureAttribute);
-        updateAttributeFigure();
-    }
-
-    /**
-     * Remove an attribute with a given name. The underlying class in the model is updated
-     * as well to exclude the attribute name.
-     *
-     * @param oldAttribute name of the attribute to be removed.
-     */
-    protected void removeAttribute(Figure oldAttribute) {
-        getModellerClass().removeAttribute(((TextFigure)oldAttribute).getText());
-        getAttributesFigure().remove(oldAttribute);
-        updateAttributeFigure();
-    }
-
-    /**
-     * Update the attribute figure and the ClassFigure itself as well. This causes calculating
-     * the layout of contained figures.
-     */
-    protected void updateAttributeFigure() {
-        getAttributesFigure().update();
-        update();
-    }
-
-    /**
-     * Add a name for a method. The underlying class in the model is updated as well
-     * to hold the method name.
-     *
-     * @param newMethod name of the new method
-     */    
-    protected void addMethod(String newMethod) {
-        getModellerClass().addMethod(newMethod);
-        TextFigure classFigureMethod = new TextFigure() {
-            public void setText(String newString) {
-                if (!getText().equals(newString)) {
-                    getModellerClass().renameMethod(getText(), newString);
-                }
-                super.setText(newString);
-                updateMethodFigure();
-            }
-        };
-        classFigureMethod.setText(newMethod);
-        classFigureMethod.setFont(methodFont);
-        getMethodsFigure().add(classFigureMethod);
-        updateMethodFigure();
-    }
-
-    /**
-     * Remove an method with a given name. The underlying class in the model is updated
-     * as well to exclude the method name.
-     *
-     * @param oldMethod name of the method to be removed.
-     */
-    protected void removeMethod(Figure oldMethod) {
-        getModellerClass().removeMethod(((TextFigure)oldMethod).getText());
-        getMethodsFigure().remove(oldMethod);
-        updateMethodFigure();
-    }
-
-    /**
-     * Update the method figure and the ClassFigure itself as well. This causes calculating
-     * the layout of contained figures.
-     */
-    protected void updateMethodFigure() {
-        getMethodsFigure().update();
-        update();
-    }
-
-    /**
-     * Set the class in the model which should be represented by this ClassFigure
-     *
-     * @param newClass class in the model
-     */
-    protected void setModellerClass(UMLClass newClass) {
-        myClass = newClass;
-    }
-
-    /**
-     * Return the class from the model which is represented by this ClassFigure
-     *
-     * @return class from the model
-     */
-    public UMLClass getModellerClass() {
-        return myClass;
-    }
-    
-    /**
-     * Propagate the removeFromDrawing request up to the container.
-     * A ClassFigure should not be removed just because one of its childern
-     * is removed.
-     */
-    public void figureRequestRemove(FigureEvent e) {
-        Figure removeFigure = e.getFigure();
-        if (getAttributesFigure().includes(removeFigure)) {
-            removeAttribute(removeFigure);
+    @Override
+    public Collection<Handle> createHandles(int detailLevel) {
+        java.util.List<Handle> handles = new LinkedList<Handle>();
+        switch (detailLevel) {
+            case -1:
+                handles.add(new BoundsOutlineHandle(getPresentationFigure(), false, true));
+                break;
+            case 0:
+                handles.add(new MoveHandle(this, RelativeLocator.northWest()));
+                handles.add(new MoveHandle(this, RelativeLocator.northEast()));
+                handles.add(new MoveHandle(this, RelativeLocator.southWest()));
+                handles.add(new MoveHandle(this, RelativeLocator.southEast()));
+                ConnectorHandle ch;
+                handles.add(ch = new ConnectorHandle(new LocatorConnector(this, RelativeLocator.east()), new DependencyFigure()));
+                ch.setToolTipText("Drag the connector to a dependent task.");
+                break;
         }
-        else if (getMethodsFigure().includes(removeFigure)) {
-            removeMethod(removeFigure);
-        }
-        else {
-            // remove itself
-            //listener().figureRequestRemove(new FigureEvent(this, displayBox()));
-        }
-    }
-
-    /**
-     * Return default handles on all four edges for this figure.
-     */
-    public Vector handles() {
-        Vector handles = new Vector();
-        handles.addElement(new NullHandle(getPresentationFigure(), RelativeLocator.northWest()));
-        handles.addElement(new NullHandle(getPresentationFigure(), RelativeLocator.northEast()));
-        handles.addElement(new NullHandle(getPresentationFigure(), RelativeLocator.southWest()));
-        handles.addElement(new NullHandle(getPresentationFigure(), RelativeLocator.southEast()));
-
         return handles;
     }
- 
-    /**
-     * Test whether this figure has child figures.
-     *
-     * @return true, if there are no child figures, false otherwise
-     */
-    public boolean isEmpty() {
-        return figureCount() == 0;
+
+    public void setName(String newValue) {
+        getNameFigure().setText(newValue);
+    }
+
+    public String getName() {
+        return getNameFigure().getText();
+    }
+
+    public void setDuration(int newValue) {
+        int oldValue = getDuration();
+        getDurationFigure().setText(Integer.toString(newValue));
+        if (oldValue != newValue) {
+            for (ClassFigure succ : getSuccessors()) {
+                succ.updateStartTime();
+            }
+
+        }
+    }
+
+    public int getDuration() {
+        try {
+            return Integer.valueOf(getDurationFigure().getText());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+
+    }
+
+    public void updateStartTime() {
+        willChange();
+        int oldValue = getStartTime();
+        int newValue = 0;
+        for (ClassFigure pre : getPredecessors()) {
+            newValue = Math.max(newValue,
+                    pre.getStartTime() + pre.getDuration());
+        }
+
+        getStartTimeFigure().setText(Integer.toString(newValue));
+        if (newValue != oldValue) {
+            for (ClassFigure succ : getSuccessors()) {
+                // The if-statement here guards against
+                // cyclic task dependencies. 
+                if (!this.isDependentOf(succ)) {
+                    succ.updateStartTime();
+                }
+
+            }
+        }
+        changed();
+    }
+
+    public int getStartTime() {
+        try {
+            return Integer.valueOf(getStartTimeFigure().getText());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+
+    }
+
+    private TextFigure getNameFigure() {
+        return (TextFigure) ((ListFigure) getChild(0)).getChild(0);
+    }
+
+    private TextFigure getDurationFigure() {
+        return (TextFigure) ((ListFigure) getChild(2)).getChild(0);
+    }
+
+    private TextFigure getStartTimeFigure() {
+        return (TextFigure) ((ListFigure) getChild(2)).getChild(1);
+    }
+
+    @Override
+    public ClassFigure clone() {
+        ClassFigure that = (ClassFigure) super.clone();
+        that.dependencies = new HashSet<DependencyFigure>();
+        that.getNameFigure().addFigureListener(new NameAdapter(that));
+        that.getDurationFigure().addFigureListener(new DurationAdapter(that));
+        that.updateStartTime();
+        return that;
+    }
+
+    @Override
+    public void read(DOMInput in) throws IOException {
+        double x = in.getAttribute("x", 0d);
+        double y = in.getAttribute("y", 0d);
+        double w = in.getAttribute("w", 0d);
+        double h = in.getAttribute("h", 0d);
+        setBounds(new Point2D.Double(x, y), new Point2D.Double(x + w, y + h));
+        readAttributes(in);
+        in.openElement("model");
+        in.openElement("name");
+        setName((String) in.readObject());
+        in.closeElement();
+        in.openElement("duration");
+        setDuration((Integer) in.readObject());
+        in.closeElement();
+        in.closeElement();
+    }
+
+    @Override
+    public void write(DOMOutput out) throws IOException {
+        Rectangle2D.Double r = getBounds();
+        out.addAttribute("x", r.x);
+        out.addAttribute("y", r.y);
+        writeAttributes(out);
+        out.openElement("model");
+        out.openElement("name");
+        out.writeObject(getName());
+        out.closeElement();
+        out.openElement("duration");
+        out.writeObject(getDuration());
+        out.closeElement();
+        out.closeElement();
+    }
+
+    @Override
+    public int getLayer() {
+        return 0;
+    }
+
+    public Set<DependencyFigure> getDependencies() {
+        return Collections.unmodifiableSet(dependencies);
+    }
+
+    public void addDependency(DependencyFigure f) {
+        dependencies.add(f);
+        updateStartTime();
+
+    }
+
+    public void removeDependency(DependencyFigure f) {
+        dependencies.remove(f);
+        updateStartTime();
+
     }
 
     /**
-     * Read the figure and its contained elements from the StorableOutput and sets
-     * the presentation figure and creates the popup menu.
+     * Returns dependent PertTasks which are directly connected via a
+     * PertDependency to this ClassFigure.
      */
-    public void read(StorableInput dr) throws IOException {
-        getClassNameFigure().setText(dr.readString());
+    public List<ClassFigure> getSuccessors() {
+        LinkedList<ClassFigure> list = new LinkedList<ClassFigure>();
+        for (DependencyFigure c : getDependencies()) {
+            if (c.getStartFigure() == this) {
+                list.add((ClassFigure) c.getEndFigure());
+            }
 
-        int attributesCount = dr.readInt();
-        for (int attributeIndex = 0; attributeIndex < attributesCount; attributeIndex++) {
-            addAttribute(dr.readString());
         }
-
-        int methodsCount = dr.readInt();
-        for (int methodIndex = 0; methodIndex < methodsCount; methodIndex++) {
-            addMethod(dr.readString());
-        }
-        setPresentationFigure((Figure)dr.readStorable());
-        setAttribute(Figure.POPUP_MENU, createPopupMenu());
-        update();
-    }
-    
-    /**
-     * Write the figure and its contained elements to the StorableOutput.
-     */
-    public void write(StorableOutput dw) {
-        dw.writeString(getModellerClass().getName());
-        dw.writeInt(getModellerClass().getNumberOfAttributes());
-
-        Iterator attributeIterator = getModellerClass().getAttributes();
-        while (attributeIterator.hasNext()) {
-            dw.writeString((String)attributeIterator.next());
-        }
-        dw.writeInt(getModellerClass().getNumberOfMethods());
-
-        Iterator methodIterator = getModellerClass().getMethods();
-        while (methodIterator.hasNext()) {
-            dw.writeString((String)methodIterator.next());
-        }
-        dw.writeStorable(getPresentationFigure());
+        return list;
     }
 
     /**
-     * Read the serialized figure and its contained elements from the input stream and
-     * creates the popup menu
+     * Returns predecessor PertTasks which are directly connected via a
+     * PertDependency to this ClassFigure.
      */
-    private void readObject(ObjectInputStream s) throws ClassNotFoundException, IOException {
-        // call superclass' private readObject() indirectly
-        s.defaultReadObject();
-        
-        setAttribute(Figure.POPUP_MENU, createPopupMenu());
+    public List<ClassFigure> getPredecessors() {
+        LinkedList<ClassFigure> list = new LinkedList<ClassFigure>();
+        for (DependencyFigure c : getDependencies()) {
+            if (c.getEndFigure() == this) {
+                list.add((ClassFigure) c.getStartFigure());
+            }
+
+        }
+        return list;
     }
 
+    /**
+     * Returns true, if the current task is a direct or
+     * indirect dependent of the specified task.
+     * If the dependency is cyclic, then this method returns true
+     * if <code>this</code> is passed as a parameter and for every other
+     * task in the cycle.
+     */
+    public boolean isDependentOf(ClassFigure t) {
+        if (this == t) {
+            return true;
+        }
+
+        for (ClassFigure pre : getPredecessors()) {
+            if (pre.isDependentOf(t)) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "ClassFigure#" + hashCode() + " " + getName() + " " + getDuration() + " " + getStartTime();
+    }
 }
+
