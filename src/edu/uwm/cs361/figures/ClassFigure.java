@@ -27,6 +27,7 @@ import org.jhotdraw.draw.handle.BoundsOutlineHandle;
 import org.jhotdraw.geom.*;
 import org.jhotdraw.util.*;
 import org.jhotdraw.xml.*;
+import org.jhotdraw.samples.pert.figures.*;
 
 /**
  * ClassFigure.
