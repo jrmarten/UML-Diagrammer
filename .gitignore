@@ -1,6 +1,8 @@
 *.class
 #*
 *~
+base
+
 
 # Package Files #
 
