@@ -4,7 +4,7 @@ import org.jhotdraw.app.*;
 
 
 
-class Driver
+class Main
 {
     public static void main ( String[] args )
     {
