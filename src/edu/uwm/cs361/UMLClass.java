@@ -159,24 +159,167 @@ public class UMLClass implements Serializable {
 	public void read ( DOMInput fin ) throws IOException
 	{
 	    fin.openElement ( "attribute" );
-	    fin.getAttribute( "name", "Read" );
-	    fin.getAttribute( "type", "Error" );
+	    name = fin.getAttribute( "name", "Read" );
+	    type = fin.getAttribute( "type", "Error" );
 	}
     }
 
 
-    /**
-       saving made easy
-    public void write ( DOMInput fin ) throws IOException
+    class Method
     {
+	String name;
+	String type;
+	String[] params;
+
+	public Method ()
+	{
+	    name = "";
+	    type = "";
+	    params = [];
+	}
+
+	private Method ( String str )
+	{
+	    String regex = "[():]";
+	    String[] parts = str.split ( regex );
+	    
+	    name = parts[0];
+	    type = parts[3];
+	    params = parts[1].split(",");
+	    
+	    for ( int i = 0; i < params.length; i++ )
+		{
+		    params[i] = params[i].trim();
+		}
+	}
+
+	public String getName ( ) { return name; }
+	public String getType ( ) { return type; }
+	public Iterator getParams ( ) { return new Vector( params ).iterator(); }
+	
+	@Override
+	public String toString ( )
+	{
+	    return getName() + "(" + ",".join( params ) + "):" + getType ();
+	}
+
+	@Override
+	public boolean equals ( Object o )
+	{
+	    if ( o instanceof Method )
+		{
+		    Method other = (Method) o;
+
+		    return 
+			other.name.equals(name) &&
+			other.type.equals(name) 
+			ArrayEquals(other.params, params);
+		}
+	    return false;
+	}
+	
+	@Override
+	public Method clone ( )
+	{
+	    Method result = new Method ( );
+	    result.name = getName();
+	    result.type = getType();
+	    result.params = new String[ params.length ];
+	    
+	    int i = 0;
+	    for ( String param : params )
+		{
+		    result.params[i] = param;
+		    i++;
+		}
+	}
+	
+	public void write ( DOMOutput fout ) throws IOException
+	{
+	    fout.openElement ( "method" );
+	    fout.addAttribute ( "name", name );
+	    fout.addAttribute ( "type", type );
+
+	    for ( String param : params )
+		{
+		    fout.openElement ( "param" );
+		    fout.addAttribute ( "type", param );
+		    fout.closeElement ( );
+		}
+	    fout.closeElement ();
+	}
+
+	public void read ( DOMInput fin ) throws IOException
+	{
+	    fin.openElement ( "method" );
+	    name = fin.getAttribute ( "name", "Read" );
+	    type = fin.getAttribute ( "type", "Error" );
+
+	    LinkedList<String> p = new LinkedList<String>();
+	    try 
+		{
+		    while ( true )
+			{
+			    fin.openElement ( "param" );
+			    p.add ( fin.getAttribute ( "type", "" ) );
+			    fin.closeElement ( );
+			}
+		} catch ( IOException e ) { /** no more elements to read. do nothing */ }
+	    params = p.toArray();
+	}
+
+    }
+
+    public static boolean ArrayEquals ( Object[] a, Object[] b )
+    {
+	if ( a.length != b.length ) return false;
+	for ( int i = 0; i < a.length; i++ )
+	    {
+		if ( ! a[i].equals(b[i]) ) return false;
+	    }
+	return true;
+    }
+    
+    public void write ( DOMOutput fout ) throws IOException
+    {
+        fout.openElement ( "class" );
 	for ( Attribute attr : myAttributes )
 	    {
-		attr.write ( fin );
+		attr.write ( fout );
 	    }
+	for ( Method meth : myMethods )
+	    {
+	        meth.write ( fout );
+	    }
+	fout.closeElement ( );
     }
-    */
-
-
+    
+    public void read ( DOMInput fin ) throw IOException
+    {
+	try
+	    {
+		while ( true )
+		    {
+			fin.openElement ( "attribute" );
+			Attribute attr = new Attribute();
+			attr.read ( fin );
+			myAttributes.add( attr );
+			fin.closeElement ( );
+		    }
+	    } catch ( IOException e ) { /** done with attributes */ }
+	
+	try
+	    {
+		while ( true )
+		    {
+			fin.openElement ( "method" );
+			Method meth = new Method();
+			meth.read ( fin );
+			myMethods.add( meth );
+			fin.closeElement ( );
+		    }
+	    } catch ( IOException e ) { /** done with methods */ }
+    }
 
 
     /**
