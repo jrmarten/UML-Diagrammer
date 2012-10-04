@@ -1,19 +1,77 @@
 package edu.uwm.cs361;
 
+import java.awt.BorderLayout;
 import java.io.IOException;
 import java.net.URI;
 
+import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
+
 import org.jhotdraw.app.*;
+import org.jhotdraw.draw.DefaultDrawing;
+import org.jhotdraw.draw.DefaultDrawingEditor;
+import org.jhotdraw.draw.DefaultDrawingView;
+import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.gui.PlacardScrollPaneLayout;
 import org.jhotdraw.gui.URIChooser;
+import org.jhotdraw.undo.UndoRedoManager;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 
+@SuppressWarnings("serial")
 public class UMLView extends AbstractView
 {
-
+	private JScrollPane scrollpane = new JScrollPane ( );
+	private DefaultDrawingView view = new DefaultDrawingView ( );
+	private DrawingEditor editor;
+	private UndoRedoManager undo;
+	
+	
     public UMLView ( )
     {
-
+    	initScroll( );
+    }
+    
+    public void initEditor ( )
+    {
+    	setEditor( new DefaultDrawingEditor());
+    	undo = new UndoRedoManager ( );
+    	view.setDrawing( createDrawing ( ) );
+    }
+    
+    public void initScroll ( )
+    {
+    	scrollpane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+    	scrollpane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+    	scrollpane.setViewportView ( view );
+    	setLayout( new BorderLayout( ) );
+    	add ( scrollpane );
+    	
+    	
+    	scrollpane.setLayout(new PlacardScrollPaneLayout());
+    	scrollpane.setBorder ( new EmptyBorder ( 0, 0, 0, 0 ));
+    }
+    
+    
+    public void setEditor ( DrawingEditor newEditor)
+    {
+    	DrawingEditor old = editor;
+    	if ( old != null ) old.remove(view);
+    	
+    	editor = newEditor;
+    	if ( newEditor != null ) newEditor.add( view );
+    }
+    
+    public DefaultDrawing createDrawing ( )
+    {
+    	DefaultDrawing drawing = new DefaultDrawing ( );
+    	//io blah
+    	return drawing;
+    }
+    
+    public boolean canSaveTo( URI uri )
+    {
+    	return uri.getPath().endsWith(".xml");
     }
 
 	@Override

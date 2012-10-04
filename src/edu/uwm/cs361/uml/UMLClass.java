@@ -5,35 +5,12 @@ import java.io.Serializable;
 
 public class UMLClass implements Serializable {
 
-    /**
-     * Name of the class to represent
-     */
     private String myName;
-
-    /**
-     * Names of attributes in the class
-     */
-    private Vector myAttributes;
-
-    /**
-     * Names of methods in the class
-     */
-    private Vector myMethods;
-
-    /**
-     * Associated classes
-     */
-    private Vector myAssociatedClasses;
-
-    /**
-     * Direct superclasses (multiple inheritance is possible)
-     */
-    private Vector mySuperclasses;
-
-    /**
-     * Classes upon which the current class is dependend
-     */
-    private Vector myDependClasses;
+    private LinkedList<Attribute> myAttributes;
+    private LinkedList<Method> myMethods;
+    private LinkedList<UMLClass> myAssociatedClasses;
+    private LinkedList<UMLClass> mySuperClasses;
+    private LinkedList<UMLClass> myDependClasses;
 
     static final long serialVersionUID = -3748332488864682801L;
 
@@ -41,7 +18,11 @@ public class UMLClass implements Serializable {
      * Create a new JModellerClass instance
      */
     public UMLClass() {
-        this("Class");
+        myAttributes = new LinkedList<Attribute>();
+        myMethods = new LinkedList<Method> ();
+        myAssociatedClasses = new LinkedList<UMLClass>();
+        mySuperClasses = new LinkedList<UMLClass> ( );
+        myDependClasses = new LinkedList<UMLClass> ( );
     }
 
     /**
@@ -50,12 +31,8 @@ public class UMLClass implements Serializable {
      * @param newClassName name of the class
      */
     public UMLClass(String newClassName) {
-        setName(newClassName);
-        myAttributes = new Vector();
-        myMethods = new Vector();
-        myAssociatedClasses = new Vector();
-        mySuperclasses = new Vector();
-        myDependClasses = new Vector();
+        this ( );
+    	setName(newClassName);
     }
 
     /**
@@ -85,8 +62,8 @@ public class UMLClass implements Serializable {
      *
      * @param newAttribute name of an attribute to be added
      */
-    public void addAttribute(String newAttribute) {
-        myAttributes.addElement(newAttribute);
+    public void addAttribute(Attribute newAttribute) {
+        myAttributes.add(newAttribute);
     }
 
     /**
@@ -94,8 +71,8 @@ public class UMLClass implements Serializable {
      *
      * @param oldAttribute name of the attribute to be removed
      */
-    public void removeAttribute(String oldAttribute) {
-        myAttributes.removeElement(oldAttribute);
+    public void removeAttribute(Attribute oldAttribute) {
+        myAttributes.remove(oldAttribute);
     }
 
     /**
@@ -104,11 +81,11 @@ public class UMLClass implements Serializable {
      * @param oldAttribute name of the attribute to be renamed
      * @param newAttribute new attribute name
      */
-    public void renameAttribute(String oldAttribute, String newAttribute) {
+    public void renameAttribute(Attribute oldAttribute, Attribute newAttribute) {
         int attributeIndex = myAttributes.indexOf(oldAttribute);
         if (attributeIndex >= 0) {
-            myAttributes.removeElementAt(attributeIndex);
-            myAttributes.insertElementAt(newAttribute, attributeIndex);
+            myAttributes.remove(attributeIndex);
+            myAttributes.add(attributeIndex, newAttribute);
         }
     }
 
@@ -117,7 +94,7 @@ public class UMLClass implements Serializable {
      *
      * @return iterator over all attribute names
      */
-    public Iterator getAttributes() {
+    public Iterator<Attribute> getAttributes() {
         return myAttributes.iterator();
     }
 
@@ -135,7 +112,7 @@ public class UMLClass implements Serializable {
      *
      * @return true, if the attribute exists, false otherwise
      */
-    public boolean hasAttribute(String checkAttributeName) {
+    public boolean hasAttribute(Attribute checkAttributeName) {
         return myAttributes.contains(checkAttributeName);
     }
 
@@ -144,8 +121,8 @@ public class UMLClass implements Serializable {
      *
      * @param newMethod name of a method to be added
      */
-    public void addMethod(String newMethod) {
-        myMethods.addElement(newMethod);
+    public void addMethod(Method newMethod) {
+        myMethods.add(newMethod);
     }
 
     /**
@@ -153,8 +130,8 @@ public class UMLClass implements Serializable {
      *
      * @param oldMethod name of the method to be removed
      */
-    public void removeMethod(String oldMethod) {
-        myMethods.removeElement(oldMethod);
+    public void removeMethod(Method oldMethod) {
+        myMethods.remove(oldMethod);
     }
 
     /**
@@ -163,11 +140,11 @@ public class UMLClass implements Serializable {
      * @param oldMethod name of the method to be renamed
      * @param newMethod new method name
      */
-    public void renameMethod(String oldMethod, String newMethod) {
+    public void renameMethod(Method oldMethod, Method newMethod) {
         int methodIndex = myMethods.indexOf(oldMethod);
         if (methodIndex >= 0) {
-            myMethods.removeElementAt(methodIndex);
-            myMethods.insertElementAt(newMethod, methodIndex);
+            myMethods.remove(methodIndex);
+            myMethods.add(methodIndex, newMethod );
         }
     }
 
@@ -176,7 +153,7 @@ public class UMLClass implements Serializable {
      *
      * @return iterator over all method names
      */
-    public Iterator getMethods() {
+    public Iterator<Method> getMethods() {
         return myMethods.iterator();
     }
 
@@ -230,7 +207,7 @@ public class UMLClass implements Serializable {
      *
      * @return iterator over associated classes
      */
-    public Iterator getAssociations() {
+    public Iterator<UMLClass> getAssociations() {
         return myAssociatedClasses.iterator();
     }
 
@@ -241,7 +218,7 @@ public class UMLClass implements Serializable {
      * @param newSuperclass superclass to be added
      */
     public void addSuperclass(UMLClass newSuperclass) {
-        mySuperclasses.add(newSuperclass);
+        mySuperClasses.add(newSuperclass);
     }
 
     /**
@@ -250,7 +227,7 @@ public class UMLClass implements Serializable {
      * @param oldSuperclass superclass to be removed
      */
     public void removeSuperclass(UMLClass oldSuperclass) {
-        mySuperclasses.remove(oldSuperclass);
+        mySuperClasses.remove(oldSuperclass);
     }
 
     /**
@@ -258,8 +235,8 @@ public class UMLClass implements Serializable {
      *
      * @return iterator over superclasses
      */
-    public Iterator getSuperclasses() {
-        return mySuperclasses.iterator();
+    public Iterator<UMLClass> getSuperclasses() {
+        return mySuperClasses.iterator();
     }
 
     /**
@@ -285,11 +262,11 @@ public class UMLClass implements Serializable {
      * @param   possibleSubclass    class which should be subclass to this class or its superclasses
      */
     public boolean isSuperclass(UMLClass possibleSubclass) {
-        if (possibleSubclass.mySuperclasses.contains(this)) {
+        if (possibleSubclass.mySuperClasses.contains(this)) {
             return true;
         }
 
-        Iterator i = possibleSubclass.getSuperclasses();
+        Iterator<UMLClass> i = possibleSubclass.getSuperclasses();
         while (i.hasNext()) {
             Object currentObject = i.next();
             if (isSuperclass((UMLClass) currentObject)) {
@@ -332,7 +309,7 @@ public class UMLClass implements Serializable {
      *
      * @return iterator over all classes on which this class depends
      */
-    public Iterator getDependencies() {
+    public Iterator<UMLClass> getDependencies() {
         return myDependClasses.iterator();
     }
 }
