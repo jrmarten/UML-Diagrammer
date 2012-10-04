@@ -4,15 +4,15 @@ import java.util.*;
 import java.io.Serializable;
 
 /**
- * A JModellerClass represents a class in a class diagram. It is known by its name
+ * A UMLClass represents a class in a class diagram. It is known by its name
  * and has attributes and methods and keeps track of its superclasses, associations
  * and dependencies.
  */
 public class UMLClass implements Serializable {
 
 	private static class Attribute {
-		enum Accessibility { PUBLIC, PRIVATE, PROTECTED, NONE }
-		enum Modifier { STATIC, ABSTRACT, NONE }
+		enum Accessibility { PUBLIC, PRIVATE, PROTECTED, DEFAULT }
+		enum Modifier { STATIC, ABSTRACT, DEFAULT }
 
 		Accessibility accessibility;
 		Modifier modifier;
@@ -22,11 +22,11 @@ public class UMLClass implements Serializable {
 		 * Constructors
 		 */
 		Attribute() {
-			this(Accessibility.NONE, Modifier.NONE, "Attribute");
+			this("Attribute");
 		}
 
 		Attribute(String name) {
-			this(Accessibility.NONE, Modifier.NONE, name);
+			this(Accessibility.DEFAULT, Modifier.DEFAULT, name);
 		}
 
 		Attribute(Accessibility access, Modifier mod, String name) {
@@ -61,8 +61,8 @@ public class UMLClass implements Serializable {
 	}
 
 	private static class Method {
-		enum Accessibility { PUBLIC, PRIVATE, PROTECTED, NONE }
-		enum Modifier { STATIC, ABSTRACT, NONE }
+		enum Accessibility { PUBLIC, PRIVATE, PROTECTED, DEFAULT }
+		enum Modifier { STATIC, ABSTRACT, DEFAULT }
 
 		Accessibility accessibility;
 		Modifier modifier;
@@ -76,7 +76,7 @@ public class UMLClass implements Serializable {
 		}
 
 		Method(String name) {
-			this(Accessibility.NONE, Modifier.NONE, name);
+			this(Accessibility.DEFAULT, Modifier.DEFAULT, name);
 		}
 
 		Method(Accessibility access, Modifier mod, String name) {
@@ -111,7 +111,7 @@ public class UMLClass implements Serializable {
 	}
 
 	private static class AssociatedClass {
-		enum Association { AGGREGATION, COMPOSITION, UNIDIRECTIONAL, BIDIRECTIONAL, NONE }
+		enum Association { AGGREGATION, COMPOSITION, UNIDIRECTIONAL, BIDIRECTIONAL, DEFAULT }
 		
 		UMLClass associate;
 		Association assocType;
@@ -120,7 +120,7 @@ public class UMLClass implements Serializable {
 		 * Constructors
 		 */
 		AssociatedClass(UMLClass associate) {
-			this(associate, Association.NONE);
+			this(associate, Association.DEFAULT);
 		}
 
 		AssociatedClass(UMLClass associate, Association type) {
