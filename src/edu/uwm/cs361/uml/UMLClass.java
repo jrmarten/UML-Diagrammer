@@ -1,4 +1,4 @@
-package edu.uwm.cs361;
+package edu.uwm.cs361.uml;
 
 import java.util.*;
 import java.io.Serializable;
@@ -78,48 +78,6 @@ public class UMLClass implements Serializable {
     }
 
 
-
-    
-    public void write ( DOMOutput fout ) throws IOException
-    {
-        fout.openElement ( "class" );
-	for ( Attribute attr : myAttributes )
-	    {
-		attr.write ( fout );
-	    }
-	for ( Method meth : myMethods )
-	    {
-	        meth.write ( fout );
-	    }
-	fout.closeElement ( );
-    }
-    
-    public void read ( DOMInput fin ) throw IOException
-    {
-	try
-	    {
-		while ( true )
-		    {
-			fin.openElement ( "attribute" );
-			Attribute attr = new Attribute();
-			attr.read ( fin );
-			myAttributes.add( attr );
-			fin.closeElement ( );
-		    }
-	    } catch ( IOException e ) { /** done with attributes */ }
-	
-	try
-	    {
-		while ( true )
-		    {
-			fin.openElement ( "method" );
-			Method meth = new Method();
-			meth.read ( fin );
-			myMethods.add( meth );
-			fin.closeElement ( );
-		    }
-	    } catch ( IOException e ) { /** done with methods */ }
-    }
 
 
     /**

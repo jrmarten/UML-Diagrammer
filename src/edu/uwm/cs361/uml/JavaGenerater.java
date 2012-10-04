@@ -1,4 +1,6 @@
+package edu.uwm.cs361.uml;
 
+import java.io.*;
 
 class JavaGenerator
 {
@@ -7,7 +9,7 @@ class JavaGenerator
 
     private PrintWriter fout;
 
-    public JavaGenerator ( File file )
+    public JavaGenerator ( File file ) throws FileNotFoundException
     {
 	fout = new PrintWriter ( file );
     }
@@ -38,10 +40,10 @@ class JavaGenerator
     public static int count ( String line, char ch )
     {
 	int sum = 0;
-	for ( char c : line )
-	    {
-		if ( c == ch ) sum++;
-	    }
+	
+	for ( int i = 0; i < line.length(); i++ )
+		if ( line.charAt(i) == ch ) sum++;
+	
 	return sum;
     } 
 

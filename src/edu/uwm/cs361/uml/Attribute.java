@@ -1,9 +1,15 @@
+package edu.uwm.cs361.uml;
+
+import java.io.*;
+import org.jhotdraw.xml.*;
+import java.util.regex.*;
 
 class Attribute
 {
     private String name;
     private String type;
     private Access access;
+    private boolean staticp;
 
     public Attribute ( )
     {
@@ -13,9 +19,9 @@ class Attribute
 
     private Attribute ( String str )
     {
-        String parts = str.split( ":" );
-        name = parts[0];
-        type = parts[1];
+        String[] parts = str.split( ":" );
+        name = parts[0].trim();
+        type = parts[1].trim();
     }
 
     @Override
@@ -47,36 +53,27 @@ class Attribute
     public static Attribute Create ( String str )
     {
 	String regex = 
-	    " *[+-]? *" //Access
-	    "[A-Za-z]+[A-Za-z0-9]*" //Method name
-	    " *: *" //seporator
-	    "[A-Za-z][A-Za-z0-9]*" //TypeName
+	    "^ *[+-#~]? *" +//Access
+	    "[A-Za-z]+[A-Za-z0-9]*" + //Method name
+	    " *: *" + //Separator
+	    "[A-Za-z][A-Za-z0-9]* *$"; //TypeName
 	    
-	    
+	    Pattern pat = Pattern.compile(regex);
 
-        str = str.trim();
-        for ( char ch : str )
-            {
-                if ( Character.isWhitespace ( ch ) ) return null;
-            }
-        return new Attribute ( str );
+		Matcher mat = pat.matcher(str);
+		return ( mat.find() ) ? new Attribute ( str ) : null;
     }
 
-    public String getName()
-    {
-        return name;
-    }
-
-    public String getType()
-    {
-        return type;
-    }
-
+    public String getName() { return name; }
+    public String getType() { return type; }
+    public Access getAccess ( ) { return access; }
+    public boolean isStatic ( ) { return staticp; }
+    
     public void write ( DOMOutput fout ) throws IOException
     {
-        out.openElement ( "attribute" );
-        out.addAttribute ( "name", getName() );
-        out.addAttribute ( "type", getType() );
+        fout.openElement ( "attribute" );
+        fout.addAttribute ( "name", getName() );
+        fout.addAttribute ( "type", getType() );
     }
 
 

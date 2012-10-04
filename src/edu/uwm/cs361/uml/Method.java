@@ -1,19 +1,29 @@
+package edu.uwm.cs361.uml;
+
+import java.io.IOException;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
 
+import org.jhotdraw.xml.DOMInput;
+import org.jhotdraw.xml.DOMOutput;
 
 class Method
 {
     private String name;
     private String type;
-    private String[] params;
-    private Access access = DEFAULT;
-
+    private LinkedList<String> params;
+    private Access access = Access.DEFAULT;
+    private boolean abstractp = false;
+    private boolean staticp = false;
+    
     public Method ()
     {
         name = "";
         type = "";
-        params = [];
+        params = new LinkedList<String>();
     }
 
     private Method ( String str )
@@ -23,24 +33,23 @@ class Method
 
         name = parts[0];
         type = parts[3];
-        params = parts[1].split(",");
+        String[] tmp = parts[1].split(",");
 
-        for ( int i = 0; i < params.length; i++ )
+        for ( int i = 0; i < tmp.length; i++ )
             {
-                params[i] = params[i].trim();
+                params.add ( tmp[i].trim());
             }
     }
     
 
-    //@Warning not finished
     public static Method Create ( String str )
     {
 	String regex = 
-	    "[+-]?[A-Za-z]?[A-Za-z0-9]*" //method name
-	    " *" //for space between name and param list
-	    "\\(" //start of param list
-	    "([A-Za-z]+,?)+" //param list 
-	    "\\)" //end of param list
+	    "[+-]?[A-Za-z]?[A-Za-z0-9]*" + //method name
+	    " *" +//for space between name and param list
+	    "\\(" +//start of param list
+	    "([A-Za-z]+,?)+" +//param list 
+	    "\\)" +//end of param list
 	    ":[A-Za-z]?[a-zA-Z0-9]*"; //return type
 
 	Pattern regexpat = Pattern.compile ( regex );
@@ -52,11 +61,27 @@ class Method
 
     public String getName ( ) { return name; }
     public String getType ( ) { return type; }
-    public Iterator getParams ( ) { return new Vector( params ).iterator(); }
-
+    public Iterator<String> getParams ( ) { return params.iterator(); }
+    public Access getAccess ( ) { return access; }
+    public boolean isAbstract ( ) { return abstractp; }
+    public boolean isStatic ( ) { return staticp; }
+    
+    public static String join ( Collection<String> parts, String delim)
+    {
+    	Iterator<String> it = parts.iterator();
+    	StringBuilder sb = new StringBuilder( );
+    	while ( it.hasNext() )
+    	{
+    		sb.append( it.next() );
+    		if ( ! it.hasNext() ) break;
+    		sb.append( delim );
+    	}
+    	return sb.toString();
+    }
+    
     @Override public String toString ( )
     {
-        return getName() + "(" + ",".join( params ) + "):" + getType ();
+        return getName() + "(" + join( params, "," ) + "):" + getType ();
     }
 
     @Override public boolean equals ( Object o )
@@ -67,25 +92,20 @@ class Method
 
                 return
                     other.name.equals(name) &&
-                    other.type.equals(name)
-                    ArrayEquals(other.params, params);
+                    other.type.equals(name) &&
+                    other.params.equals(params);
             }
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     @Override public Method clone ( )
     {
         Method result = new Method ( );
         result.name = getName();
         result.type = getType();
-        result.params = new String[ params.length ];
-
-        int i = 0;
-        for ( String param : params )
-            {
-                result.params[i] = param;
-                i++;
-            }
+        result.params = (LinkedList<String>)params.clone();
+        return result;
     }
 
     public void write ( DOMOutput fout ) throws IOException
@@ -109,28 +129,18 @@ class Method
         name = fin.getAttribute ( "name", "Read" );
         type = fin.getAttribute ( "type", "Error" );
 
-        LinkedList<String> p = new LinkedList<String>();
         try
             {
                 while ( true )
                     {
                         fin.openElement ( "param" );
-                        p.add ( fin.getAttribute ( "type", "" ) );
+                        params.add ( fin.getAttribute ( "type", "" ) );
                         fin.closeElement ( );
                     }
             } catch ( IOException e ) { /** no more elements to read. do nothing */ }
-        params = p.toArray();
     }
 
 
-    public static boolean ArrayEquals ( Object[] a, Object[] b )
-    {
-        if ( a.length != b.length ) return false;
-        for ( int i = 0; i < a.length; i++ )
-            {
-                if ( ! a[i].equals(b[i]) ) return false;
-            }
-        return true;
-    }
+   
 
 }
