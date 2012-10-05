@@ -65,7 +65,7 @@ public class UMLClass implements Serializable {
 		enum Modifier { STATIC, ABSTRACT, DEFAULT }
 
 		Accessibility accessibility;
-		Modifier modifier;
+		ArrayList<Modifier> modifiers;
 		String name;
 
 		/**
@@ -76,12 +76,14 @@ public class UMLClass implements Serializable {
 		}
 
 		Method(String name) {
-			this(Accessibility.DEFAULT, Modifier.DEFAULT, name);
+			this(Accessibility.DEFAULT, new ArrayList<Modifier>(), name);
 		}
 
-		Method(Accessibility access, Modifier mod, String name) {
+		Method(Accessibility access, ArrayList<Modifier> mods, String name) {
 			this.accessibility = access;
-			this.modifier = mod;
+			for (Modifier m : mods) {
+				this.modifiers.add(m);
+			}
 			this.name = name;
 		}
 
@@ -93,12 +95,22 @@ public class UMLClass implements Serializable {
 			this.accessibility = accessibility;
 		}
 
-		Modifier getModifier() {
-			return modifier;
+		ArrayList<Modifier> getModifiers() {
+			return modifiers;
 		}
 
-		void setModifier(Modifier modifier) {
-			this.modifier = modifier;
+		void setModifiers(ArrayList<Modifier> modifiers) {
+			this.modifiers = modifiers;
+		}
+		
+		void addModifier(Modifier mod) {
+			if (!this.modifiers.contains(mod))
+				this.modifiers.add(mod);
+		}
+		
+		void removeModifier(Modifier mod) {
+			if (this.modifiers.contains(mod))
+				this.modifiers.remove(mod);
 		}
 
 		String getName() {
