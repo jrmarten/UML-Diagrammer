@@ -18,7 +18,7 @@ public class Method
     private Access access = Access.DEFAULT;
     private boolean abstractp = false;
     private boolean staticp = false;
-    
+
     public Method ()
     {
         name = "";
@@ -28,53 +28,72 @@ public class Method
 
     private Method ( String str )
     {
-    	params = new LinkedList<String>();
+        params = new LinkedList<String>();
         String regex = "[():]";
         String[] parts = str.split ( regex );
 
-        for ( String s : parts)
-        {
-        	System.out.println ( s );
-        }
-        
         name = parts[0].trim();
-        char accesssym = name.charAt(0);
-        switch ( accesssym )
-        {
-        case '+':
-        case '-':
-        case '#':
-        case '~':
-        	access = Access.fromSymbol(accesssym);
-        	name = name.substring(1).trim();
-        	break;
-        default:
-        }
         
+        access ( );
+
         type = parts[3].trim();
         String[] tmp = parts[1].split(",");
-        
+
         for ( String s : tmp )
+            {
+                params.add( s.trim() );
+            }
+    }
+
+    private void access ( )
+    {
+    	char accesssym = name.charAt(0);
+        switch ( accesssym )
+            {
+            case '+':
+            case '-':
+            case '#':
+            case '~':
+                access = Access.fromSymbol(accesssym);
+                name = name.substring(1).trim();
+                break;
+            default:
+            }
+        
+        for ( Access a : Access.values())
         {
-        	params.add( s.trim() );
+        	String accessName = a.toString();        	
+        	if ( name.startsWith(accessName))
+        	{
+        		access = a;
+        		name = name.substring( accessName.length() ).trim();
+        	}
         }
     }
     
-
+    private void mods ( )
+    {
+    	
+    }
+    
     public static Method Create ( String str )
     {
-	String regex = 
-	    "[#+-~]?[A-Za-z]?[A-Za-z0-9]*" + //method name
-	    " *" +//for space between name and param list
-	    "\\(" +//start of param list
-	    "( *[A-Za-z]+,? *)+" +//param list 
-	    "\\) *" +//end of param list
-	    ": *[A-Za-z]?[a-zA-Z0-9]* *"; //return type
+        String regex =
+            " *" + //start
+            "([#+-~]|protected|public|private|default)? *" + //Access
+            "((a|abstract)?|(s|static)?) *" +
+            "[A-Za-z]?[A-Za-z0-9]*" + //method name
+            " *" +//for space between name and param list
+            "\\(" +//start of param list
+            "( *[A-Za-z]+,? *)+" +//param list
+            "\\) *" +//end of param list
+            ": *[A-Za-z]?[a-zA-Z0-9]*" +
+            " *"; //return type
 
-	Pattern regexpat = Pattern.compile ( regex );
-	Matcher comp = regexpat.matcher( str );
+        Pattern regexpat = Pattern.compile ( regex );
+        Matcher comp = regexpat.matcher( str );
 
-	return ( comp.find() ) ? new Method ( str ) : null;
+        return ( comp.find() ) ? new Method ( str ) : null;
     }
 
 
@@ -84,20 +103,20 @@ public class Method
     public Access getAccess ( ) { return access; }
     public boolean isAbstract ( ) { return abstractp; }
     public boolean isStatic ( ) { return staticp; }
-    
+
     public static String join ( Collection<String> parts, String delim)
     {
-    	Iterator<String> it = parts.iterator();
-    	StringBuilder sb = new StringBuilder( );
-    	while ( it.hasNext() )
-    	{
-    		sb.append( it.next() );
-    		if ( ! it.hasNext() ) break;
-    		sb.append( delim );
-    	}
-    	return sb.toString();
+        Iterator<String> it = parts.iterator();
+        StringBuilder sb = new StringBuilder( );
+        while ( it.hasNext() )
+            {
+                sb.append( it.next() );
+                if ( ! it.hasNext() ) break;
+                sb.append( delim );
+            }
+        return sb.toString();
     }
-    
+
     @Override public String toString ( )
     {
         return getAccess().getSymbol() + getName() + "(" + join( params, "," ) + "):" + getType ();
@@ -118,7 +137,7 @@ public class Method
     }
 
     @SuppressWarnings("unchecked")
-    @Override public Method clone ( )
+        @Override public Method clone ( )
     {
         Method result = new Method ( );
         result.name = getName();
@@ -160,6 +179,6 @@ public class Method
     }
 
 
-   
+
 
 }

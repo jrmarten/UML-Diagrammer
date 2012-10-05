@@ -9,10 +9,11 @@ public class Test {
 		Method m;
 		
 		String in = "";
-		while ( !in.equals ( "exit") )
+		while ( true )
 		{
 			System.out.println ( "Input a method: ");
 			in = cin.nextLine();
+			if ( in.equals("exit") ) break;
 			m = Method.Create(in);
 			System.out.println ( ( m != null ) ? m : "Not a proper method." );
 		}

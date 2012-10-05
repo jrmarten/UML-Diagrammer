@@ -34,6 +34,14 @@ public enum Access
     	}
     }
     
+    public static Access fromString ( String perm )
+    {
+    	if ( perm.equalsIgnoreCase ( "public" ) ) return PUBLIC;
+    	if ( perm.equalsIgnoreCase ( "protected" ) ) return PROTECTED;
+    	if ( perm.equalsIgnoreCase ( "private" ) ) return PRIVATE;
+    	return DEFAULT;
+    }
+    
     public String toString()
     {
         return name;
