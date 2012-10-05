@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 
-class Method
+public class Method
 {
     private String name;
     private String type;
@@ -28,29 +28,48 @@ class Method
 
     private Method ( String str )
     {
+    	params = new LinkedList<String>();
         String regex = "[():]";
         String[] parts = str.split ( regex );
 
-        name = parts[0];
-        type = parts[3];
+        for ( String s : parts)
+        {
+        	System.out.println ( s );
+        }
+        
+        name = parts[0].trim();
+        char accesssym = name.charAt(0);
+        switch ( accesssym )
+        {
+        case '+':
+        case '-':
+        case '#':
+        case '~':
+        	access = Access.fromSymbol(accesssym);
+        	name = name.substring(1).trim();
+        	break;
+        default:
+        }
+        
+        type = parts[3].trim();
         String[] tmp = parts[1].split(",");
-
-        for ( int i = 0; i < tmp.length; i++ )
-            {
-                params.add ( tmp[i].trim());
-            }
+        
+        for ( String s : tmp )
+        {
+        	params.add( s.trim() );
+        }
     }
     
 
     public static Method Create ( String str )
     {
 	String regex = 
-	    "[+-]?[A-Za-z]?[A-Za-z0-9]*" + //method name
+	    "[#+-~]?[A-Za-z]?[A-Za-z0-9]*" + //method name
 	    " *" +//for space between name and param list
 	    "\\(" +//start of param list
-	    "([A-Za-z]+,?)+" +//param list 
-	    "\\)" +//end of param list
-	    ":[A-Za-z]?[a-zA-Z0-9]*"; //return type
+	    "( *[A-Za-z]+,? *)+" +//param list 
+	    "\\) *" +//end of param list
+	    ": *[A-Za-z]?[a-zA-Z0-9]* *"; //return type
 
 	Pattern regexpat = Pattern.compile ( regex );
 	Matcher comp = regexpat.matcher( str );
@@ -81,7 +100,7 @@ class Method
     
     @Override public String toString ( )
     {
-        return getName() + "(" + join( params, "," ) + "):" + getType ();
+        return getAccess().getSymbol() + getName() + "(" + join( params, "," ) + "):" + getType ();
     }
 
     @Override public boolean equals ( Object o )

@@ -22,6 +22,18 @@ public enum Access
     	return sym;
     }
     
+    public static Access fromSymbol ( char c )
+    {
+    	switch ( c )
+    	{
+    	case '+': return Access.PUBLIC;
+    	case '-': return Access.PRIVATE;
+    	case '#': return Access.PROTECTED;
+    	case '~': return Access.DEFAULT;
+    	default: return Access.DEFAULT;
+    	}
+    }
+    
     public String toString()
     {
         return name;

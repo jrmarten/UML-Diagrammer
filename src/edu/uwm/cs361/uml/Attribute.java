@@ -4,7 +4,7 @@ import java.io.*;
 import org.jhotdraw.xml.*;
 import java.util.regex.*;
 
-class Attribute
+public class Attribute
 {
     private String name;
     private String type;
@@ -54,7 +54,8 @@ class Attribute
     {
 	String regex = 
 	    "^ *[+-#~]? *" +//Access
-	    "[A-Za-z]+[A-Za-z0-9]*" + //Method name
+	    "s? *" + //static
+	    "[A-Za-z]+[A-Za-z0-9]*" + //Attribute name
 	    " *: *" + //Separator
 	    "[A-Za-z][A-Za-z0-9]* *$"; //TypeName
 	    
