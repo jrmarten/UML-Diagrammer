@@ -19,13 +19,25 @@ public class Method
     private boolean abstractp = false;
     private boolean staticp = false;
 
-    public Method ()
-    {
-        name = "";
-        type = "";
-        params = new LinkedList<String>();
-    }
+    private static final String[] METHOD_MODS = { "abstract", "static" };
+    
+    
 
+    private static final Pattern regex = Pattern.compile(
+    				
+    				"^^ *" +
+    				"([#~+-]|(public|private|default|protected))? *" +
+    				"((s|static)|(a|abstract))? *" +
+    				UMLClass.idreg +
+    				" *\\( *" +
+    				"("+UMLClass.classreg+"( *, *"+UMLClass.classreg+")?)?" +
+    				" *\\) *" +
+    				": *" + UMLClass.classreg +
+    				" *$$"
+    		);
+
+    private Method() { }
+    
     private Method ( String str )
     {
         params = new LinkedList<String>();
@@ -35,7 +47,8 @@ public class Method
         name = parts[0].trim();
         
         access ( );
-
+        mods ( );
+        
         type = parts[3].trim();
         String[] tmp = parts[1].split(",");
 
@@ -73,26 +86,29 @@ public class Method
     
     private void mods ( )
     {
-    	
+    	for ( String mod : METHOD_MODS )
+    	{
+    		String shorthand = mod.charAt(0) + " ";
+    		if ( name.startsWith ( mod ) || name.startsWith( shorthand ))
+    		{
+    			int substart = (name.startsWith(shorthand)) ? shorthand.length() : mod.length();
+    			switch ( mod.charAt(0))
+    			{
+    			case 's':
+    				staticp = true;
+    				break;
+    			case 'a':
+    				abstractp = true;
+    				break;
+    			}
+    			name = name.substring(substart).trim();
+    		}
+    	}
     }
     
     public static Method Create ( String str )
     {
-        String regex =
-            " *" + //start
-            "([#+-~]|protected|public|private|default)? *" + //Access
-            "((a|abstract)?|(s|static)?) *" +
-            "[A-Za-z]?[A-Za-z0-9]*" + //method name
-            " *" +//for space between name and param list
-            "\\(" +//start of param list
-            "( *[A-Za-z]+,? *)+" +//param list
-            "\\) *" +//end of param list
-            ": *[A-Za-z]?[a-zA-Z0-9]*" +
-            " *"; //return type
-
-        Pattern regexpat = Pattern.compile ( regex );
-        Matcher comp = regexpat.matcher( str );
-
+        Matcher comp = regex.matcher( str );
         return ( comp.find() ) ? new Method ( str ) : null;
     }
 

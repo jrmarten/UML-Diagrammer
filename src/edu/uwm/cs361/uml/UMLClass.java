@@ -12,8 +12,20 @@ public class UMLClass implements Serializable {
     private LinkedList<UMLClass> mySuperClasses;
     private LinkedList<UMLClass> myDependClasses;
 
+    public static final String idreg = "[A-Za-z_$][A-Za-z0-9_$]*";
+    public static final String classreg = ".*";
+    
     static final long serialVersionUID = -3748332488864682801L;
 
+    public static Object[] cat ( Object[] obja, Object[] objb )
+    {
+    	Object[] result = new Object[obja.length+objb.length];
+    	int i = 0;
+    	for ( Object obj : obja ) result[i++] = obj;
+    	for ( Object obj : objb ) result[i++] = obj;
+    	return result;
+    }
+    
     /**
      * Create a new JModellerClass instance
      */

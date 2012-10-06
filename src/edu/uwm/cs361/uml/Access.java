@@ -34,6 +34,8 @@ public enum Access
     	}
     }
     
+    
+    
     public static Access fromString ( String perm )
     {
     	if ( perm.equalsIgnoreCase ( "public" ) ) return PUBLIC;

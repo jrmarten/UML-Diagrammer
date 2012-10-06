@@ -8,24 +8,48 @@ public class Attribute
 {
     private String name;
     private String type;
-    private Access access;
-    private boolean staticp;
-
-    public Attribute ( )
-    {
-        name = "";
-        type = "";
-    }
-
+    private Access access = Access.DEFAULT;
+    private boolean staticp = false;
+    private boolean finalp = false;
+    
+    private static final Pattern regex = Pattern.compile(
+    		"^^ *" +
+    				"([#~+-]|(public|private|default|protected))? *" +
+    				"((((s|static)|(f|final)) )?" +
+    				"((f|final)|(s|static)))?" +
+    				" *" +
+    				UMLClass.idreg +
+    				" *: *" + UMLClass.classreg +
+    				" *$$"
+    		);
+    
+    private Attribute ( ) { }
+    
     private Attribute ( String str )
     {
         String[] parts = str.split( ":" );
         name = parts[0].trim();
         type = parts[1].trim();
+        
+        
+        parts = name.split(" ");
+        name = parts[parts.length - 1];
+        parts[ parts.length - 1 ] = "";
+        
+        for ( String mod : parts)
+        for ( Access ac : Access.values())
+        {
+        	if ( mod.equals(ac.toString())) access = ac;
+        }
+        
+        for (String mod : parts )
+        {
+        	if ( mod.equals( "static" ) ) staticp = true;
+        	if ( mod.equals( "final" ) ) finalp = true;
+        }
     }
 
-    @Override
-        public Attribute clone ( )
+    @Override public Attribute clone ( )
     {
         Attribute result = new Attribute ();
         result.type = type;
@@ -33,14 +57,12 @@ public class Attribute
         return result;
     }
 
-    @Override
-        public String toString ( )
+    @Override public String toString ( )
     {
-        return name + ":" + type;
+        return access.getSymbol() + name + ":" + type;
     }
 
-    @Override
-        public boolean equals ( Object obj )
+    @Override public boolean equals ( Object obj )
     {
         if ( obj instanceof Attribute )
             {
@@ -52,23 +74,14 @@ public class Attribute
 
     public static Attribute Create ( String str )
     {
-	String regex = 
-	    "^ *[+-#~]? *" +//Access
-	    "s? *" + //static
-	    "[A-Za-z]+[A-Za-z0-9]*" + //Attribute name
-	    " *: *" + //Separator
-	    "[A-Za-z][A-Za-z0-9]* *$"; //TypeName
-	    
-	    Pattern pat = Pattern.compile(regex);
-
-		Matcher mat = pat.matcher(str);
-		return ( mat.find() ) ? new Attribute ( str ) : null;
+		return (regex.matcher(str).find() ) ? new Attribute ( str ) : null;
     }
 
     public String getName() { return name; }
     public String getType() { return type; }
     public Access getAccess ( ) { return access; }
     public boolean isStatic ( ) { return staticp; }
+    public boolean isFinal ( ) { return finalp; }
     
     public void write ( DOMOutput fout ) throws IOException
     {
