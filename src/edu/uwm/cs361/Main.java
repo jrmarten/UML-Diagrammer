@@ -5,7 +5,7 @@ import org.jhotdraw.app.*;
 public class Main {
     public static void main(String[] args) {
     	Application app = new SDIApplication();
-    	DefaultApplicationModel model = new DefaultApplicationModel();
+    	DefaultApplicationModel model = new UMLApplicationModel();
 
     	model.setName("UML Diagrammer");
     	model.setVersion("1.0");

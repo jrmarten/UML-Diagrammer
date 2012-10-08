@@ -27,7 +27,7 @@ public class UMLView extends AbstractView
 {
     private JScrollPane scrollpane = new JScrollPane ( );
     private DefaultDrawingView view = new DefaultDrawingView ( );
-    private DrawingEditor editor;
+    private DrawingEditor edit;
     private UndoRedoManager undo;
 
 
@@ -72,10 +72,10 @@ public class UMLView extends AbstractView
 
     public void setEditor ( DrawingEditor newEditor)
     {
-        DrawingEditor old = editor;
+        DrawingEditor old = edit;
         if ( old != null ) old.remove(view);
 
-        editor = newEditor;
+        edit = newEditor;
         if ( newEditor != null ) newEditor.add( view );
     }
 
@@ -111,4 +111,8 @@ public class UMLView extends AbstractView
         // TODO Auto-generated method stub
 
     }
+
+	public DrawingEditor getEditor() {
+		return edit;
+	}
 }

@@ -16,7 +16,6 @@ import org.jhotdraw.draw.handle.MoveHandle;
 import org.jhotdraw.draw.layouter.VerticalLayouter;
 import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.geom.Insets2D;
-import org.jhotdraw.samples.pert.figures.SeparatorLineFigure;
 import static org.jhotdraw.draw.AttributeKeys.*;
 
 
@@ -77,8 +76,8 @@ public class ClassFigure extends GraphicalCompositeFigure {
         ListFigure nameList = new ListFigure(nameListPF);
         ListFigure attrList = new ListFigure ( );
         ListFigure methodList = new ListFigure ( );
-        SeparatorLineFigure separator1 = new SeparatorLineFigure ( );
-        SeparatorLineFigure separator2 = new SeparatorLineFigure ( );
+        SeperationFigure separator1 = new SeperationFigure ( );
+        SeperationFigure separator2 = new SeperationFigure ( );
 
         add ( nameList );
         add ( separator1 );
