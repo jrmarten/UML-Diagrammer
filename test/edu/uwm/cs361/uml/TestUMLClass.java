@@ -2,7 +2,6 @@ package edu.uwm.cs361.uml;
 
 import static org.junit.Assert.*;
 import junit.framework.JUnit4TestAdapter;
-import junit.framework.TestCase;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +19,10 @@ public class TestUMLClass {
 	public void testAddAttribute(){
 		String str = "- size : int";
 		Attribute a = Attribute.Create(str);
+		assertTrue(a != null);
+		umlClass.addAttribute(a);
+		assertTrue((umlClass.getAttributes().toString().contains(str)));
+		
 	}
 
 	@Test
@@ -34,7 +37,8 @@ public class TestUMLClass {
 
 
 
-	public static junit.framework.Test suite() { 
+	/*public static junit.framework.Test suite() { 
 		return new JUnit4TestAdapter(UMLClass.class); 
 	}
+	*/
 }
