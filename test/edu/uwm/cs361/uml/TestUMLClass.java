@@ -7,18 +7,34 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestUMLClass extends TestCase {
+public class TestUMLClass {
+
+	private UMLClass umlClass;
 
 	@Before
 	public void setUp() throws Exception {
+		umlClass = new UMLClass();
 	}
 
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void testAddAttribute(){
+		String str = "- size : int";
+		Attribute a = Attribute.Create(str);
 	}
-	
+
+	@Test
+	public void testRemoveAttribute() {
+
+	}
+
+	@Test
+	public void testRenameAttribute(){
+
+	}
+
+
+
 	public static junit.framework.Test suite() { 
-	    return new JUnit4TestAdapter(UMLClass.class); 
+		return new JUnit4TestAdapter(UMLClass.class); 
 	}
 }
