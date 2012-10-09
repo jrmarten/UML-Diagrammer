@@ -38,6 +38,8 @@ public enum Access
     
     public static Access fromString ( String perm )
     {
+	perm = perm.trim();
+	if ( perm.length() == 1 ) return fromSymbol ( perm.charAt ( 0 ) );
     	if ( perm.equalsIgnoreCase ( "public" ) ) return PUBLIC;
     	if ( perm.equalsIgnoreCase ( "protected" ) ) return PROTECTED;
     	if ( perm.equalsIgnoreCase ( "private" ) ) return PRIVATE;

@@ -106,10 +106,86 @@ public class Method
     	}
     }
     
+    private Method ( String[] mods, String type, String name, String[] arglist )
+    {
+	this.name = name;
+	this.type = type;
+
+	for ( String arg : arglist )
+	    {
+		params.add ( arg.trim() );
+	    }
+
+	for ( String mod : mods )
+	    {
+		mod = mod.trim();
+		if ( mod.equals ( "" ) ) continue;
+
+		char tmp = mod.charAt(0);
+
+		switch ( tmp )
+		    {
+		    case 's':
+		    case 'S':
+			staticp = true;
+			break;
+
+		    case 'a':
+		    case 'A':
+			abstractp == true;
+			break;
+
+		    default:
+			if ( access != Access.DEFAULT ) continue;
+			access = Access.fromString ( mod );
+		    }
+	    }
+    }
+
     public static Method Create ( String str )
     {
-        Matcher comp = regex.matcher( str );
-        return ( comp.find() ) ? new Method ( str ) : null;
+	if ( ! regex.mather ( str ).find ( ) ) return null;
+	String tmp;
+	String[] tmpa;
+	int index;
+	String signature;
+
+	String type;
+	String name;
+	String[] args;
+	String[] mods;
+
+	tmpa = str.split ( ":" );
+        type = tmpa[1].trim();
+	tmp = tmpa[0];
+
+	index = tmp.indexOf ( '(' );
+	signature = tmp.substring ( 0, index - 1 );
+	tmp = tmp.substring ( index+1, tmp.indexOf ( ')' ) - 1 );
+	
+	args = tmp.split ( "," );
+	mods = signature.split( " " );
+	index = mods.length - 1;
+	name = mods[ index ];
+	
+	char sym = name.charAt ( 0 );
+	for ( Access ac : Access.values ( ) )
+	    {
+		if ( ac.getSymbol() == sym )
+		    {
+			mods [ index ] = (""+sym);
+			name = name.substring ( 1 );
+		    }
+	    }
+
+	if ( Keyword.blackListp ( name ) ) return null;
+	if ( keyWord.blackListp ( type ) ) return null;
+	for ( String arg : args )
+	    {
+		if ( Keyword.blackListp ( arg.trim() ) ) return null;
+	    }
+
+	return new Method ( mods, type, name, args );
     }
 
 
