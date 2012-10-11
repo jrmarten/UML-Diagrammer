@@ -4,10 +4,10 @@
  * Copyright (c) 2009-2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  * 
- * The copyright of this software is owned by the authors and  
- * contributors of the JHotDraw project ("the copyright holders").  
- * You may not use, copy or modify this software, except in  
- * accordance with the license agreement you entered into with  
+ * The copyright of this software is owned by the authors and
+ * contributors of the JHotDraw project ("the copyright holders").
+ * You may not use, copy or modify this software, except in
+ * accordance with the license agreement you entered into with
  * the copyright holders. For details see accompanying license terms.
  *
  * This class has been derived from WeakPropertyChangeListener.java,
@@ -43,7 +43,6 @@
  */
 package org.jhotdraw.beans;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.beans.*;
 import java.lang.ref.*;
 
@@ -63,51 +62,51 @@ import java.lang.ref.*;
  *  @version $Id: WeakPropertyChangeListener.java 717 2010-11-21 12:30:57Z rawcoder $
  */
 public class WeakPropertyChangeListener implements PropertyChangeListener {
-    private WeakReference<PropertyChangeListener> weakRef;
+	private WeakReference<PropertyChangeListener> weakRef;
 
-    public WeakPropertyChangeListener(PropertyChangeListener target) {
-        this.weakRef = new WeakReference<PropertyChangeListener>(target);
-    }
+	public WeakPropertyChangeListener(PropertyChangeListener target) {
+		this.weakRef = new WeakReference<PropertyChangeListener>(target);
+	}
 
-    /**
-     *  Method that can be subclassed to provide additional remove
-     *  support.  Default implementation only supports StandardBeans.
-     */
-    protected void removeFromSource(PropertyChangeEvent event) {
-        // Remove ourselves from the source
-        Object src = event.getSource();
-        try {
-            src.getClass().getMethod("removePropertyChangeListener", new Class[] {PropertyChangeListener.class}).invoke(src, this);
-        } catch (Exception ex) {
-            InternalError ie = new InternalError("Could not remove WeakPropertyChangeListener from "+src+".");
-            ie.initCause(ex);
-            throw ie;
-        }
-    }
+	/**
+	 *  Method that can be subclassed to provide additional remove
+	 *  support.  Default implementation only supports StandardBeans.
+	 */
+	protected void removeFromSource(PropertyChangeEvent event) {
+		// Remove ourselves from the source
+		Object src = event.getSource();
+		try {
+			src.getClass().getMethod("removePropertyChangeListener", new Class[] {PropertyChangeListener.class}).invoke(src, this);
+		} catch (Exception ex) {
+			InternalError ie = new InternalError("Could not remove WeakPropertyChangeListener from "+src+".");
+			ie.initCause(ex);
+			throw ie;
+		}
+	}
 
-    @Override
-    public void propertyChange(PropertyChangeEvent event) {
-        PropertyChangeListener listener = (PropertyChangeListener) weakRef.get();
-        if (listener == null) {
-            removeFromSource(event);
-            return;
-        }
-        listener.propertyChange(event);
-    }
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		PropertyChangeListener listener = weakRef.get();
+		if (listener == null) {
+			removeFromSource(event);
+			return;
+		}
+		listener.propertyChange(event);
+	}
 
-    /**
-     * Returns the target of this proxy. Returns null if the target has been
-     * garbage collected.
-     *
-     * @return The target or null.
-     */
-    @Nullable
-    public PropertyChangeListener getTarget() {
-        return weakRef.get();
-    }
+	/**
+	 * Returns the target of this proxy. Returns null if the target has been
+	 * garbage collected.
+	 *
+	 * @return The target or null.
+	 */
+	@Nullable
+	public PropertyChangeListener getTarget() {
+		return weakRef.get();
+	}
 
-    @Override
-    public String toString() {
-        return super.toString()+"["+weakRef.get()+"]";
-    }
+	@Override
+	public String toString() {
+		return super.toString()+"["+weakRef.get()+"]";
+	}
 }

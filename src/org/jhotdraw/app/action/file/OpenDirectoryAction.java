@@ -11,7 +11,6 @@
 
 package org.jhotdraw.app.action.file;
 
-import javax.swing.JFileChooser;
 import org.jhotdraw.app.*;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -37,16 +36,16 @@ import org.jhotdraw.util.ResourceBundleUtil;
  * @version $Id: OpenDirectoryAction.java 723 2010-12-28 14:31:24Z rawcoder $
  */
 public class OpenDirectoryAction extends OpenFileAction {
-    public final static String ID = "file.openDirectory";
+	public final static String ID = "file.openDirectory";
 
-    /** Creates a new instance. */
-    public OpenDirectoryAction(Application app) {
-        super(app);
-        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
-        labels.configureAction(this, ID);
-    }
-    @Override
-    protected URIChooser getChooser(View view) {
-        return getApplication().getModel().createOpenDirectoryChooser(getApplication(), view);
-    }
+	/** Creates a new instance. */
+	public OpenDirectoryAction(Application app) {
+		super(app);
+		ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+		labels.configureAction(this, ID);
+	}
+	@Override
+	protected URIChooser getChooser(View view) {
+		return getApplication().getModel().createOpenDirectoryChooser(getApplication(), view);
+	}
 }

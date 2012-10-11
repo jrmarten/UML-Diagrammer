@@ -9,13 +9,10 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 723 2010-12-28 14:31:24Z rawcoder $
-*/
+ */
 
 /**
 Provides actions for editing SVG drawings.
-*/
+ */
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.samples.svg.action;
-
-import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
-import edu.umd.cs.findbugs.annotations.NonNull;

@@ -11,193 +11,193 @@ import org.jhotdraw.xml.DOMOutput;
 
 public class Method
 {
-    private String name;
-    private String type;
-    private LinkedList<String> params = new LinkedList<String>();
-    private Access access = Access.DEFAULT;
-    private boolean abstractp = false;
-    private boolean staticp = false;
+	private String name;
+	private String type;
+	private LinkedList<String> params = new LinkedList<String>();
+	private Access access = Access.DEFAULT;
+	private boolean abstractp = false;
+	private boolean staticp = false;
 
-    private static final Pattern regex = Pattern.compile(
-    				
-    				"^^ *" +
-    				"([#~+-]|(public|private|default|protected))? *" +
-    				"((s|static)|(a|abstract))? *" +
-    				UMLClass.idreg +
-    				" *\\( *" +
-    				"("+UMLClass.classreg+"( *, *"+UMLClass.classreg+")?)?" +
-    				" *\\) *" +
-    				": *" + UMLClass.classreg +
-    				" *$$"
-    		);
-    
-    private Method ( )
-    {
-    	type = "";
-    	name = "";
-    }
-    
-    private Method ( String[] mods, String type, String name, String[] arglist )
-    {
-	this.name = name;
-	this.type = type;
+	private static final Pattern regex = Pattern.compile(
 
-	for ( String arg : arglist )
-	    {
-		params.add ( arg.trim() );
-	    }
+			"^^ *" +
+					"([#~+-]|(public|private|default|protected))? *" +
+					"((s|static)|(a|abstract))? *" +
+					UMLClass.idreg +
+					" *\\( *" +
+					"("+UMLClass.classreg+"( *, *"+UMLClass.classreg+")?)?" +
+					" *\\) *" +
+					": *" + UMLClass.classreg +
+					" *$$"
+			);
 
-	for ( String mod : mods )
-	    {
-		mod = mod.trim();
-		if ( mod.equals ( "" ) ) continue;
+	private Method ( )
+	{
+		type = "";
+		name = "";
+	}
 
-		char tmp = mod.charAt(0);
+	private Method ( String[] mods, String type, String name, String[] arglist )
+	{
+		this.name = name;
+		this.type = type;
 
-		switch ( tmp )
-		    {
-		    case 's':
-		    case 'S':
-			staticp = true;
-			break;
+		for ( String arg : arglist )
+			{
+				params.add ( arg.trim() );
+			}
 
-		    case 'a':
-		    case 'A':
-			abstractp = true;
-			break;
+		for ( String mod : mods )
+			{
+				mod = mod.trim();
+				if ( mod.equals ( "" ) ) continue;
 
-		    default:
-			if ( access != Access.DEFAULT ) continue;
-			access = Access.fromString ( mod );
-		    }
-	    }
-    }
+				char tmp = mod.charAt(0);
 
-    public static Method Create ( String str )
-    {
-	if ( ! regex.matcher ( str ).find ( ) ) return null;
-	String tmp;
-	String[] tmpa;
-	int index;
-	String signature;
+				switch ( tmp )
+				{
+					case 's':
+					case 'S':
+						staticp = true;
+						break;
 
-	String type;
-	String name;
-	String[] args;
-	String[] mods;
+					case 'a':
+					case 'A':
+						abstractp = true;
+						break;
 
-	tmpa = str.split ( ":" );
-        type = tmpa[1].trim();
-	tmp = tmpa[0];
+					default:
+						if ( access != Access.DEFAULT ) continue;
+						access = Access.fromString ( mod );
+				}
+			}
+	}
 
-	index = tmp.indexOf ( '(' );
-	signature = tmp.substring ( 0, index - 1 );
-	tmp = tmp.substring ( index+1, tmp.indexOf ( ')' ) - 1 );
-	
-	args = tmp.split ( "," );
-	mods = signature.split( " " );
-	index = mods.length - 1;
-	name = mods[ index ];
-	
-	char sym = name.charAt ( 0 );
-	for ( Access ac : Access.values ( ) )
-	    {
-		if ( ac.getSymbol() == sym )
-		    {
-			mods [ index ] = (""+sym);
-			name = name.substring ( 1 );
-		    }
-	    }
+	public static Method Create ( String str )
+	{
+		if ( ! regex.matcher ( str ).find ( ) ) return null;
+		String tmp;
+		String[] tmpa;
+		int index;
+		String signature;
 
-	if ( Keywords.blackListp ( name ) ) return null;
-	if ( Keywords.blackListp ( type ) ) return null;
-	for ( String arg : args )
-	    {
-		if ( Keywords.blackListp ( arg.trim() ) ) return null;
-	    }
+		String type;
+		String name;
+		String[] args;
+		String[] mods;
 
-	return new Method ( mods, type, name, args );
-    }
+		tmpa = str.split ( ":" );
+		type = tmpa[1].trim();
+		tmp = tmpa[0];
+
+		index = tmp.indexOf ( '(' );
+		signature = tmp.substring ( 0, index - 1 );
+		tmp = tmp.substring ( index+1, tmp.indexOf ( ')' ) - 1 );
+
+		args = tmp.split ( "," );
+		mods = signature.split( " " );
+		index = mods.length - 1;
+		name = mods[ index ];
+
+		char sym = name.charAt ( 0 );
+		for ( Access ac : Access.values ( ) )
+			{
+				if ( ac.getSymbol() == sym )
+					{
+						mods [ index ] = (""+sym);
+						name = name.substring ( 1 );
+					}
+			}
+
+		if ( Keywords.blackListp ( name ) ) return null;
+		if ( Keywords.blackListp ( type ) ) return null;
+		for ( String arg : args )
+			{
+				if ( Keywords.blackListp ( arg.trim() ) ) return null;
+			}
+
+		return new Method ( mods, type, name, args );
+	}
 
 
-    public String getName ( ) { return name; }
-    public String getType ( ) { return type; }
-    public LinkedList<String> getParameters ( ) { return params; }
-    public Access getAccess ( ) { return access; }
-    public boolean isAbstract ( ) { return abstractp; }
-    public boolean isStatic ( ) { return staticp; }
+	public String getName ( ) { return name; }
+	public String getType ( ) { return type; }
+	public LinkedList<String> getParameters ( ) { return params; }
+	public Access getAccess ( ) { return access; }
+	public boolean isAbstract ( ) { return abstractp; }
+	public boolean isStatic ( ) { return staticp; }
 
-    public static String join ( Collection<String> parts, String delim)
-    {
-        Iterator<String> it = parts.iterator();
-        StringBuilder sb = new StringBuilder( );
-        while ( it.hasNext() )
-            {
-                sb.append( it.next() );
-                if ( ! it.hasNext() ) break;
-                sb.append( delim );
-            }
-        return sb.toString();
-    }
+	public static String join ( Collection<String> parts, String delim)
+	{
+		Iterator<String> it = parts.iterator();
+		StringBuilder sb = new StringBuilder( );
+		while ( it.hasNext() )
+			{
+				sb.append( it.next() );
+				if ( ! it.hasNext() ) break;
+				sb.append( delim );
+			}
+		return sb.toString();
+	}
 
-    @Override public String toString ( )
-    {
-        return getAccess().getSymbol() + getName() + "(" + join( params, "," ) + "):" + getType ();
-    }
+	@Override public String toString ( )
+	{
+		return getAccess().getSymbol() + getName() + "(" + join( params, "," ) + "):" + getType ();
+	}
 
-    @Override public boolean equals ( Object o )
-    {
-        if ( o instanceof Method )
-            {
-                Method other = (Method) o;
+	@Override public boolean equals ( Object o )
+	{
+		if ( o instanceof Method )
+			{
+				Method other = (Method) o;
 
-                return
-                    other.name.equals(name) &&
-                    other.type.equals(name) &&
-                    other.params.equals(params);
-            }
-        return false;
-    }
+				return
+						other.name.equals(name) &&
+						other.type.equals(name) &&
+						other.params.equals(params);
+			}
+		return false;
+	}
 
-    @SuppressWarnings("unchecked")
-        @Override public Method clone ( )
-    {
-        Method result = new Method ( );
-        result.name = getName();
-        result.type = getType();
-        result.params = (LinkedList<String>)params.clone();
-        return result;
-    }
+	@SuppressWarnings("unchecked")
+	@Override public Method clone ( )
+	{
+		Method result = new Method ( );
+		result.name = getName();
+		result.type = getType();
+		result.params = (LinkedList<String>)params.clone();
+		return result;
+	}
 
-    public void write ( DOMOutput fout ) throws IOException
-    {
-        fout.openElement ( "method" );
-        fout.addAttribute ( "name", name );
-        fout.addAttribute ( "type", type );
+	public void write ( DOMOutput fout ) throws IOException
+	{
+		fout.openElement ( "method" );
+		fout.addAttribute ( "name", name );
+		fout.addAttribute ( "type", type );
 
-        for ( String param : params )
-            {
-                fout.openElement ( "param" );
-                fout.addAttribute ( "type", param );
-                fout.closeElement ( );
-            }
-        fout.closeElement ();
-    }
+		for ( String param : params )
+			{
+				fout.openElement ( "param" );
+				fout.addAttribute ( "type", param );
+				fout.closeElement ( );
+			}
+		fout.closeElement ();
+	}
 
-    public void read ( DOMInput fin ) throws IOException
-    {
-        fin.openElement ( "method" );
-        name = fin.getAttribute ( "name", "Read" );
-        type = fin.getAttribute ( "type", "Error" );
+	public void read ( DOMInput fin ) throws IOException
+	{
+		fin.openElement ( "method" );
+		name = fin.getAttribute ( "name", "Read" );
+		type = fin.getAttribute ( "type", "Error" );
 
-        try
-            {
-                while ( true )
-                    {
-                        fin.openElement ( "param" );
-                        params.add ( fin.getAttribute ( "type", "" ) );
-                        fin.closeElement ( );
-                    }
-            } catch ( IOException e ) { /** no more elements to read. do nothing */ }
-    }
+		try
+		{
+			while ( true )
+				{
+					fin.openElement ( "param" );
+					params.add ( fin.getAttribute ( "type", "" ) );
+					fin.closeElement ( );
+				}
+		} catch ( IOException e ) { /** no more elements to read. do nothing */ }
+	}
 }

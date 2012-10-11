@@ -9,13 +9,10 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 718 2010-11-21 17:49:53Z rawcoder $
-*/
+ */
 
 /**
 Provides utility classes for {@link org.jhotdraw.draw.TextHolderFigure}s.
-*/
+ */
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.draw.text;
-
-import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
-import edu.umd.cs.findbugs.annotations.NonNull;

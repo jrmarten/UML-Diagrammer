@@ -9,14 +9,11 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 723 2010-12-28 14:31:24Z rawcoder $
-*/
+ */
 
 /**
 Classes for reading and writing drawings using the Open Documeng Graphics
 file format.
-*/
+ */
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.samples.odg.io;
-
-import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
-import edu.umd.cs.findbugs.annotations.NonNull;

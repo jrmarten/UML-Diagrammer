@@ -9,13 +9,10 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 724 2011-01-08 14:17:28Z rawcoder $
-*/
+ */
 
 /**
 Provides model classes for {@link org.jhotdraw.gui.JFontChooser}.
-*/
+ */
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.gui.fontchooser;
-
-import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
-import edu.umd.cs.findbugs.annotations.NonNull;

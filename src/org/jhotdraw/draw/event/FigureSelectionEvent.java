@@ -4,7 +4,7 @@
  * Copyright (c) 1996-2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  *
- * You may not use, copy or modify this file, except in compliance with the 
+ * You may not use, copy or modify this file, except in compliance with the
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
@@ -31,25 +31,25 @@ import java.util.*;
  */
 public class FigureSelectionEvent extends java.util.EventObject {
 
-    private Set<Figure> oldValue;
-    private Set<Figure> newValue;
+	private Set<Figure> oldValue;
+	private Set<Figure> newValue;
 
-    /** Creates a new instance. */
-    public FigureSelectionEvent(DrawingView source, Set<Figure> oldValue, Set<Figure> newValue) {
-        super(source);
-        this.oldValue = oldValue;
-        this.newValue = newValue;
-    }
+	/** Creates a new instance. */
+	public FigureSelectionEvent(DrawingView source, Set<Figure> oldValue, Set<Figure> newValue) {
+		super(source);
+		this.oldValue = oldValue;
+		this.newValue = newValue;
+	}
 
-    public DrawingView getView() {
-        return (DrawingView) source;
-    }
+	public DrawingView getView() {
+		return (DrawingView) source;
+	}
 
-    public Set<Figure> getOldSelection() {
-        return oldValue;
-    }
+	public Set<Figure> getOldSelection() {
+		return oldValue;
+	}
 
-    public Set<Figure> getNewSelection() {
-        return newValue;
-    }
+	public Set<Figure> getNewSelection() {
+		return newValue;
+	}
 }

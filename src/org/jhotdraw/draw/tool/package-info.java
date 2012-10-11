@@ -9,14 +9,11 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 728 2011-01-09 16:14:14Z rawcoder $
-*/
+ */
 
 /**
 Defines the {@link org.jhotdraw.draw.tool.Tool} interface for representing
 the state of a drawing editor and provides default implementations.
-*/
+ */
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.draw.tool;
-
-import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
-import edu.umd.cs.findbugs.annotations.NonNull;

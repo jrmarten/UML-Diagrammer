@@ -1,7 +1,6 @@
 package edu.uwm.cs361.uml;
 
 import static org.junit.Assert.*;
-import junit.framework.JUnit4TestAdapter;
 import edu.uwm.cs361.classdiagram.data.*;
 
 import org.junit.Before;
@@ -24,7 +23,7 @@ public class TestUMLClass {
 		assertTrue(a != null);
 		umlClass.addAttribute(a);
 		assertTrue((umlClass.getAttributes().toString().contains(str)));
-		
+
 	}
 
 	@Test
@@ -39,8 +38,8 @@ public class TestUMLClass {
 
 
 
-	/*public static junit.framework.Test suite() { 
-		return new JUnit4TestAdapter(UMLClass.class); 
+	/*public static junit.framework.Test suite() {
+		return new JUnit4TestAdapter(UMLClass.class);
 	}
-	*/
+	 */
 }

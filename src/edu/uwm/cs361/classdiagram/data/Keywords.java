@@ -5,37 +5,37 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Keywords 
+public class Keywords
 {
-    private static ArrayList<String> blacklist;
+	private static ArrayList<String> blacklist;
 
-    private static void getList ( )
-    {
-	Scanner fin = null;
-	try {
-		fin = new Scanner ( new File ( "Java.keywords" ) );
-	} catch (FileNotFoundException e) {
-		blacklist = new ArrayList<String> ( );
+	private static void getList ( )
+	{
+		Scanner fin = null;
+		try {
+			fin = new Scanner ( new File ( "Java.keywords" ) );
+		} catch (FileNotFoundException e) {
+			blacklist = new ArrayList<String> ( );
+		}
+		String line = "";
+		String[] parts = null;
+
+		while ( fin.hasNext ( ) )
+			{
+				line = fin.nextLine();
+				parts = line.split ( " ;," );
+				for ( String tmp : parts )
+					{
+						if ( !tmp.equals ( "" ) )
+							blacklist.add ( tmp );
+					}
+			}
 	}
-	String line = "";
-	String[] parts = null;
 
-	while ( fin.hasNext ( ) )
-	    {
-		line = fin.nextLine();
-		parts = line.split ( " ;," );
-		for ( String tmp : parts )
-		    {
-			if ( !tmp.equals ( "" ) )
-			    blacklist.add ( tmp );
-		    }
-	    }
-    }
-
-    public static boolean blackListp ( String word )
-    {
-	if ( blacklist == null ) getList ( );
-	return blacklist.contains ( word );
-    }
+	public static boolean blackListp ( String word )
+	{
+		if ( blacklist == null ) getList ( );
+		return blacklist.contains ( word );
+	}
 
 }

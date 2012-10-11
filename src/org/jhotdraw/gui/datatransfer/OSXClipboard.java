@@ -4,7 +4,7 @@
  * Copyright (c) 2009-2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  * 
- * You may not use, copy or modify this file, except in compliance with the 
+ * You may not use, copy or modify this file, except in compliance with the
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
@@ -21,28 +21,28 @@ import java.awt.datatransfer.Transferable;
  */
 public class OSXClipboard extends AWTClipboard {
 
-    public OSXClipboard(Clipboard target) {
-        super(target);
-    }
+	public OSXClipboard(Clipboard target) {
+		super(target);
+	}
 
-    @Override
-    public Transferable getContents(Object requestor) {
-        Transferable t = super.getContents(requestor);
+	@Override
+	public Transferable getContents(Object requestor) {
+		Transferable t = super.getContents(requestor);
 
-            try {
-                Class c = Class.forName("ch.randelshofer.quaqua.osx.OSXClipboardTransferable");
-                @SuppressWarnings("unchecked")
-                boolean isAvailable = (Boolean) c.getMethod("isNativeCodeAvailable").invoke(null);
-                if (isAvailable) {
-                   CompositeTransferable ct = new CompositeTransferable();
-                   ct.add(t);
-                   ct.add((Transferable) c.newInstance());
-                   t = ct;
-                }
-            } catch (Throwable ex) {
-                // silently suppress
-            }
+		try {
+			Class c = Class.forName("ch.randelshofer.quaqua.osx.OSXClipboardTransferable");
+			@SuppressWarnings("unchecked")
+			boolean isAvailable = (Boolean) c.getMethod("isNativeCodeAvailable").invoke(null);
+			if (isAvailable) {
+				CompositeTransferable ct = new CompositeTransferable();
+				ct.add(t);
+				ct.add((Transferable) c.newInstance());
+				t = ct;
+			}
+		} catch (Throwable ex) {
+			// silently suppress
+		}
 
-        return t;
-    }
+		return t;
+	}
 }

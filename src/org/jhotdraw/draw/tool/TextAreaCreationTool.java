@@ -4,13 +4,12 @@
  * Copyright (c) 1996-2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  *
- * You may not use, copy or modify this file, except in compliance with the 
+ * You may not use, copy or modify this file, except in compliance with the
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
 package org.jhotdraw.draw.tool;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import org.jhotdraw.draw.text.*;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.text.FloatingTextArea;
@@ -78,172 +77,172 @@ import org.jhotdraw.util.ResourceBundleUtil;
  */
 public class TextAreaCreationTool extends CreationTool implements ActionListener {
 
-    private FloatingTextArea textArea;
-    @Nullable private TextHolderFigure typingTarget;
-    /**
-     * Rubberband color of the tool. When this is null, the tool does not
-     * draw a rubberband.
-     */
-    @Nullable private Color rubberbandColor = null;
+	private FloatingTextArea textArea;
+	@Nullable private TextHolderFigure typingTarget;
+	/**
+	 * Rubberband color of the tool. When this is null, the tool does not
+	 * draw a rubberband.
+	 */
+	@Nullable private Color rubberbandColor = null;
 
-    /** Creates a new instance. */
-    public TextAreaCreationTool(TextHolderFigure prototype) {
-        super(prototype);
-    }
+	/** Creates a new instance. */
+	public TextAreaCreationTool(TextHolderFigure prototype) {
+		super(prototype);
+	}
 
-    public TextAreaCreationTool(TextHolderFigure prototype, Map<AttributeKey,Object> attributes) {
-        super(prototype, attributes);
-    }
+	public TextAreaCreationTool(TextHolderFigure prototype, Map<AttributeKey,Object> attributes) {
+		super(prototype, attributes);
+	}
 
-    /**
-     * Sets the rubberband color for the tool. Setting this to null, disables
-     * the rubberband.
-     *
-     * @param c Rubberband color or null.
-     */
-    public void setRubberbandColor(Color c) {
-        rubberbandColor = c;
-    }
+	/**
+	 * Sets the rubberband color for the tool. Setting this to null, disables
+	 * the rubberband.
+	 *
+	 * @param c Rubberband color or null.
+	 */
+	public void setRubberbandColor(Color c) {
+		rubberbandColor = c;
+	}
 
-    @Override
-    public void deactivate(DrawingEditor editor) {
-        endEdit();
-        super.deactivate(editor);
-    }
+	@Override
+	public void deactivate(DrawingEditor editor) {
+		endEdit();
+		super.deactivate(editor);
+	}
 
-    /**
-     * Creates a new figure at the mouse location.
-     * If editing is in progress, this finishes editing.
-     */
-    @Override
-    public void mousePressed(MouseEvent e) {
-        // Note: The search sequence used here, must be
-        // consistent with the search sequence used by the
-        // HandleTracker, SelectAreaTracker, DelegationSelectionTool, SelectionTool.
+	/**
+	 * Creates a new figure at the mouse location.
+	 * If editing is in progress, this finishes editing.
+	 */
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// Note: The search sequence used here, must be
+		// consistent with the search sequence used by the
+		// HandleTracker, SelectAreaTracker, DelegationSelectionTool, SelectionTool.
 
-        if (typingTarget != null) {
-            endEdit();
-            if (isToolDoneAfterCreation()) {
-                fireToolDone();
-            }
-        } else {
-            super.mousePressed(e);
-        }
-    }
+		if (typingTarget != null) {
+			endEdit();
+			if (isToolDoneAfterCreation()) {
+				fireToolDone();
+			}
+		} else {
+			super.mousePressed(e);
+		}
+	}
 
-    /**
-     * This method allows subclasses to do perform additonal user interactions
-     * after the new figure has been created.
-     * The implementation of this class just invokes fireToolDone.
-     */
-    @Override
-    protected void creationFinished(Figure createdFigure) {
-        getView().clearSelection();
-        getView().addToSelection(createdFigure);
-        beginEdit((TextHolderFigure) createdFigure);
-    }
-    /*
+	/**
+	 * This method allows subclasses to do perform additonal user interactions
+	 * after the new figure has been created.
+	 * The implementation of this class just invokes fireToolDone.
+	 */
+	@Override
+	protected void creationFinished(Figure createdFigure) {
+		getView().clearSelection();
+		getView().addToSelection(createdFigure);
+		beginEdit((TextHolderFigure) createdFigure);
+	}
+	/*
     public void mouseDragged(java.awt.event.MouseEvent e) {
     }
-     */
+	 */
 
-    @Override
-    public void draw(Graphics2D g) {
-        if (createdFigure != null && rubberbandColor != null) {
-            g.setColor(rubberbandColor);
-            g.draw(getView().drawingToView(createdFigure.getBounds()));
-        }
-    }
+	@Override
+	public void draw(Graphics2D g) {
+		if (createdFigure != null && rubberbandColor != null) {
+			g.setColor(rubberbandColor);
+			g.draw(getView().drawingToView(createdFigure.getBounds()));
+		}
+	}
 
-    protected void beginEdit(TextHolderFigure textHolder) {
-        if (textArea == null) {
-            textArea = new FloatingTextArea();
+	protected void beginEdit(TextHolderFigure textHolder) {
+		if (textArea == null) {
+			textArea = new FloatingTextArea();
 
-        //textArea.addActionListener(this);
-        }
+			//textArea.addActionListener(this);
+		}
 
-        if (textHolder != typingTarget && typingTarget != null) {
-            endEdit();
-        }
-        textArea.createOverlay(getView(), textHolder);
-        textArea.setBounds(getFieldBounds(textHolder), textHolder.getText());
-        textArea.requestFocus();
-        typingTarget = textHolder;
-    }
+		if (textHolder != typingTarget && typingTarget != null) {
+			endEdit();
+		}
+		textArea.createOverlay(getView(), textHolder);
+		textArea.setBounds(getFieldBounds(textHolder), textHolder.getText());
+		textArea.requestFocus();
+		typingTarget = textHolder;
+	}
 
-    private Rectangle2D.Double getFieldBounds(TextHolderFigure figure) {
-        Rectangle2D.Double r = figure.getDrawingArea();
-        Insets2D.Double insets = figure.getInsets();
-        insets.subtractTo(r);
+	private Rectangle2D.Double getFieldBounds(TextHolderFigure figure) {
+		Rectangle2D.Double r = figure.getDrawingArea();
+		Insets2D.Double insets = figure.getInsets();
+		insets.subtractTo(r);
 
-        // FIXME - Find a way to determine the parameters for grow.
-        //r.grow(1,2);
-        //r.width += 16;
-        r.x -= 1;
-        r.y -= 2;
-        r.width += 18;
-        r.height += 4;
-        return r;
-    }
+		// FIXME - Find a way to determine the parameters for grow.
+		//r.grow(1,2);
+		//r.width += 16;
+		r.x -= 1;
+		r.y -= 2;
+		r.width += 18;
+		r.height += 4;
+		return r;
+	}
 
-    protected void endEdit() {
-        if (typingTarget != null) {
-            typingTarget.willChange();
+	protected void endEdit() {
+		if (typingTarget != null) {
+			typingTarget.willChange();
 
-            final TextHolderFigure editedFigure = typingTarget;
-            final String oldText = typingTarget.getText();
-            final String newText = textArea.getText();
+			final TextHolderFigure editedFigure = typingTarget;
+			final String oldText = typingTarget.getText();
+			final String newText = textArea.getText();
 
-            if (newText.length() > 0) {
-                typingTarget.setText(newText);
-            } else {
-                if (createdFigure != null) {
-                    getDrawing().remove((Figure) getAddedFigure());
-                // XXX - Fire undoable edit here!!
-                } else {
-                    typingTarget.setText("");
-                }
-            }
+			if (newText.length() > 0) {
+				typingTarget.setText(newText);
+			} else {
+				if (createdFigure != null) {
+					getDrawing().remove(getAddedFigure());
+					// XXX - Fire undoable edit here!!
+				} else {
+					typingTarget.setText("");
+				}
+			}
 
-            UndoableEdit edit = new AbstractUndoableEdit() {
+			UndoableEdit edit = new AbstractUndoableEdit() {
 
-                @Override
-                public String getPresentationName() {
-                    ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-                    return labels.getString("attribute.text.text");
-                }
+				@Override
+				public String getPresentationName() {
+					ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
+					return labels.getString("attribute.text.text");
+				}
 
-                @Override
-                public void undo() {
-                    super.undo();
-                    editedFigure.willChange();
-                    editedFigure.setText(oldText);
-                    editedFigure.changed();
-                }
+				@Override
+				public void undo() {
+					super.undo();
+					editedFigure.willChange();
+					editedFigure.setText(oldText);
+					editedFigure.changed();
+				}
 
-                @Override
-                public void redo() {
-                    super.redo();
-                    editedFigure.willChange();
-                    editedFigure.setText(newText);
-                    editedFigure.changed();
-                }
-            };
-            getDrawing().fireUndoableEditHappened(edit);
+				@Override
+				public void redo() {
+					super.redo();
+					editedFigure.willChange();
+					editedFigure.setText(newText);
+					editedFigure.changed();
+				}
+			};
+			getDrawing().fireUndoableEditHappened(edit);
 
-            typingTarget.changed();
-            typingTarget = null;
+			typingTarget.changed();
+			typingTarget = null;
 
-            textArea.endOverlay();
-        }
-    //	        view().checkDamage();
-    }
+			textArea.endOverlay();
+		}
+		//	        view().checkDamage();
+	}
 
-    @Override
-    public void actionPerformed(ActionEvent event) {
-        endEdit();
-        if (isToolDoneAfterCreation()) {
-            fireToolDone();
-        }
-    }
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		endEdit();
+		if (isToolDoneAfterCreation()) {
+			fireToolDone();
+		}
+	}
 }

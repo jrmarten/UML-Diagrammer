@@ -7,7 +7,6 @@ import org.jhotdraw.app.DefaultApplicationModel;
 import org.jhotdraw.app.View;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 
 import org.jhotdraw.app.action.view.ViewPropertyAction;
@@ -60,22 +59,22 @@ public class UMLApplicationModel extends DefaultApplicationModel {
 	@Override
 	public java.util.List<JToolBar> createToolBars(Application app,
 			@Nullable View view) {
-		ResourceBundleUtil Labels = ResourceBundleUtil
-				.getBundle("edu.uwm.cs361.Labels");
-		UMLView umlv = (UMLView) view;
+				ResourceBundleUtil Labels = ResourceBundleUtil
+						.getBundle("edu.uwm.cs361.Labels");
+				UMLView umlv = (UMLView) view;
 
-		DrawingEditor edit;
-		edit = (umlv == null) ? getSharedEditor() : umlv.getEditor();
+				DrawingEditor edit;
+				edit = (umlv == null) ? getSharedEditor() : umlv.getEditor();
 
-		LinkedList<JToolBar> list = new LinkedList<JToolBar>();
+				LinkedList<JToolBar> list = new LinkedList<JToolBar>();
 
-		JToolBar tmp = new JToolBar();
-		addCreationButtonsTo(tmp, edit);
-		tmp.setName(Labels.getString("window.drawToolBar.title"));
+				JToolBar tmp = new JToolBar();
+				addCreationButtonsTo(tmp, edit);
+				tmp.setName(Labels.getString("window.drawToolBar.title"));
 
-		list.add(tmp);
+				list.add(tmp);
 
-		return list;
+				return list;
 	}
 
 	// NOTE:might not make sense for this application
@@ -128,12 +127,12 @@ public class UMLApplicationModel extends DefaultApplicationModel {
 		@Override
 		public void addOtherViewItems(JMenu menu, Application app,
 				@Nullable View view) {
-			ActionMap am = app.getActionMap(view);
-			JCheckBoxMenuItem check;
-			check = new JCheckBoxMenuItem(am.get("view.toggleGrid"));
-			ActionUtil.configureJCheckBoxMenuItem(check,
-					am.get("view.toggleGrid"));
-			menu.add(check);
+					ActionMap am = app.getActionMap(view);
+					JCheckBoxMenuItem check;
+					check = new JCheckBoxMenuItem(am.get("view.toggleGrid"));
+					ActionUtil.configureJCheckBoxMenuItem(check,
+							am.get("view.toggleGrid"));
+					menu.add(check);
 		}
 
 	}

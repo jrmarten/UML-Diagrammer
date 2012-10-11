@@ -4,13 +4,12 @@
  * Copyright (c) 2009-2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  *
- * You may not use, copy or modify this file, except in compliance with the 
+ * You may not use, copy or modify this file, except in compliance with the
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
 package org.jhotdraw.app;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.util.*;
 import javax.swing.*;
 
@@ -24,22 +23,22 @@ import javax.swing.*;
  * @version $Id: EmptyApplicationModel.java 717 2010-11-21 12:30:57Z rawcoder $
  */
 public class EmptyApplicationModel
-        extends AbstractApplicationModel {
+extends AbstractApplicationModel {
 
-    /** Returns an empty ActionMap. */
-    @Override
-    public ActionMap createActionMap(Application a, @Nullable View v) {
-        return new ActionMap();
-    }
+	/** Returns an empty ActionMap. */
+	@Override
+	public ActionMap createActionMap(Application a, @Nullable View v) {
+		return new ActionMap();
+	}
 
-    /** Returns an empty unmodifiable list. */
-    @Override
-    public List<JToolBar> createToolBars(Application app, @Nullable View v) {
-        return Collections.emptyList();
-    }
+	/** Returns an empty unmodifiable list. */
+	@Override
+	public List<JToolBar> createToolBars(Application app, @Nullable View v) {
+		return Collections.emptyList();
+	}
 
-    @Override
-    public MenuBuilder getMenuBuilder() {
-        return new EmptyMenuBuilder();
-    }
+	@Override
+	public MenuBuilder getMenuBuilder() {
+		return new EmptyMenuBuilder();
+	}
 }

@@ -25,34 +25,34 @@ import javax.swing.Action;
  * @version $Id: ToggleLineNumbersAction.java 723 2010-12-28 14:31:24Z rawcoder $
  */
 public class ToggleLineNumbersAction extends AbstractViewAction {
-    public final static String ID = "view.toggleLineNumbers";
-    private ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.teddy.Labels");
-    
-    /**
-     * Creates a new instance.
-     */
-    public ToggleLineNumbersAction(Application app, View view) {
-        super(app, view);
-        labels.configureAction(this, ID);
-        setPropertyName("lineNumbersVisible");
-    }
-    
-    @Override
-    public TeddyView getActiveView() {
-        return (TeddyView) super.getActiveView();
-    }
-    
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        getActiveView().setLineNumbersVisible(! getActiveView().isLineNumbersVisible());
-    }
-    
-    
-    @Override
-    protected void updateView() {
-        putValue(
-                Action.SELECTED_KEY,
-                getActiveView() != null && getActiveView().isLineNumbersVisible()
-                );
-    }
+	public final static String ID = "view.toggleLineNumbers";
+	private ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.teddy.Labels");
+
+	/**
+	 * Creates a new instance.
+	 */
+	public ToggleLineNumbersAction(Application app, View view) {
+		super(app, view);
+		labels.configureAction(this, ID);
+		setPropertyName("lineNumbersVisible");
+	}
+
+	@Override
+	public TeddyView getActiveView() {
+		return (TeddyView) super.getActiveView();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		getActiveView().setLineNumbersVisible(! getActiveView().isLineNumbersVisible());
+	}
+
+
+	@Override
+	protected void updateView() {
+		putValue(
+				Action.SELECTED_KEY,
+				getActiveView() != null && getActiveView().isLineNumbersVisible()
+				);
+	}
 }

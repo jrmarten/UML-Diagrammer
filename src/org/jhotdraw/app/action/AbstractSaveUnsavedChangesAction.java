@@ -4,13 +4,12 @@
  * Copyright (c) 1996-2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  *
- * You may not use, copy or modify this file, except in compliance with the 
+ * You may not use, copy or modify this file, except in compliance with the
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
 package org.jhotdraw.app.action;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 import org.jhotdraw.gui.*;
 import org.jhotdraw.gui.event.*;
@@ -44,142 +43,142 @@ import org.jhotdraw.net.URIUtil;
  */
 public abstract class AbstractSaveUnsavedChangesAction extends AbstractViewAction {
 
-    @Nullable
-    private Component oldFocusOwner;
+	@Nullable
+	private Component oldFocusOwner;
 
-    /** Creates a new instance. */
-    public AbstractSaveUnsavedChangesAction(Application app, @Nullable View view) {
-        super(app, view);
-    }
+	/** Creates a new instance. */
+	public AbstractSaveUnsavedChangesAction(Application app, @Nullable View view) {
+		super(app, view);
+	}
 
-    @Override
-    public void actionPerformed(ActionEvent evt) {
-        final View v = getActiveView();
-        if (v == null) {
-            return;
-        }
-        if (v.isEnabled()) {
-            final ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
-            Window wAncestor = SwingUtilities.getWindowAncestor(v.getComponent());
-            oldFocusOwner = (wAncestor == null) ? null : wAncestor.getFocusOwner();
-            v.setEnabled(false);
+	@Override
+	public void actionPerformed(ActionEvent evt) {
+		final View v = getActiveView();
+		if (v == null) {
+			return;
+		}
+		if (v.isEnabled()) {
+			final ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+			Window wAncestor = SwingUtilities.getWindowAncestor(v.getComponent());
+			oldFocusOwner = (wAncestor == null) ? null : wAncestor.getFocusOwner();
+			v.setEnabled(false);
 
-            if (v.hasUnsavedChanges()) {
-                URI unsavedURI = v.getURI();
-                JOptionPane pane = new JOptionPane(
-                        "<html>" + UIManager.getString("OptionPane.css") +//
-                        "<b>" + labels.getFormatted("file.saveBefore.doYouWantToSave.message",//
-                        (unsavedURI == null) ? labels.getString("unnamedFile") : URIUtil.getName(unsavedURI)) + "</b><p>" +//
-                        labels.getString("file.saveBefore.doYouWantToSave.details"),
-                        JOptionPane.WARNING_MESSAGE);
-                Object[] options = { //
-                    labels.getString("file.saveBefore.saveOption.text"),//
-                    labels.getString("file.saveBefore.cancelOption.text"), //
-                    labels.getString("file.saveBefore.dontSaveOption.text")//
-                };
-                pane.setOptions(options);
-                pane.setInitialValue(options[0]);
-                pane.putClientProperty("Quaqua.OptionPane.destructiveOption", 2);
-                JSheet.showSheet(pane, v.getComponent(), new SheetListener() {
+			if (v.hasUnsavedChanges()) {
+				URI unsavedURI = v.getURI();
+				JOptionPane pane = new JOptionPane(
+						"<html>" + UIManager.getString("OptionPane.css") +//
+						"<b>" + labels.getFormatted("file.saveBefore.doYouWantToSave.message",//
+								(unsavedURI == null) ? labels.getString("unnamedFile") : URIUtil.getName(unsavedURI)) + "</b><p>" +//
+								labels.getString("file.saveBefore.doYouWantToSave.details"),
+								JOptionPane.WARNING_MESSAGE);
+				Object[] options = { //
+						labels.getString("file.saveBefore.saveOption.text"),//
+						labels.getString("file.saveBefore.cancelOption.text"), //
+						labels.getString("file.saveBefore.dontSaveOption.text")//
+				};
+				pane.setOptions(options);
+				pane.setInitialValue(options[0]);
+				pane.putClientProperty("Quaqua.OptionPane.destructiveOption", 2);
+				JSheet.showSheet(pane, v.getComponent(), new SheetListener() {
 
-                    @Override
-                    public void optionSelected(SheetEvent evt) {
-                        Object value = evt.getValue();
-                        if (value == null || value.equals(labels.getString("file.saveBefore.cancelOption.text"))) {
-                            v.setEnabled(true);
-                        } else if (value.equals(labels.getString("file.saveBefore.dontSaveOption.text"))) {
-                            doIt(v);
-                            v.setEnabled(true);
-                        } else if (value.equals(labels.getString("file.saveBefore.saveOption.text"))) {
-                            saveView(v);
-                        }
-                    }
-                });
+					@Override
+					public void optionSelected(SheetEvent evt) {
+						Object value = evt.getValue();
+						if (value == null || value.equals(labels.getString("file.saveBefore.cancelOption.text"))) {
+							v.setEnabled(true);
+						} else if (value.equals(labels.getString("file.saveBefore.dontSaveOption.text"))) {
+							doIt(v);
+							v.setEnabled(true);
+						} else if (value.equals(labels.getString("file.saveBefore.saveOption.text"))) {
+							saveView(v);
+						}
+					}
+				});
 
-            } else {
-                doIt(v);
-                v.setEnabled(true);
-                if (oldFocusOwner != null) {
-                    oldFocusOwner.requestFocus();
-                }
-            }
-        }
-    }
+			} else {
+				doIt(v);
+				v.setEnabled(true);
+				if (oldFocusOwner != null) {
+					oldFocusOwner.requestFocus();
+				}
+			}
+		}
+	}
 
-    protected URIChooser getChooser(View view) {
-        URIChooser chsr = (URIChooser) (view.getComponent()).getClientProperty("saveChooser");
-        if (chsr == null) {
-            chsr = getApplication().getModel().createSaveChooser(getApplication(), view);
-            view.getComponent().putClientProperty("saveChooser", chsr);
-        }
-        return chsr;
-    }
+	protected URIChooser getChooser(View view) {
+		URIChooser chsr = (URIChooser) (view.getComponent()).getClientProperty("saveChooser");
+		if (chsr == null) {
+			chsr = getApplication().getModel().createSaveChooser(getApplication(), view);
+			view.getComponent().putClientProperty("saveChooser", chsr);
+		}
+		return chsr;
+	}
 
-    protected void saveView(final View v) {
-        if (v.getURI() == null) {
-            URIChooser chooser = getChooser(v);
-            //int option = fileChooser.showSaveDialog(this);
-            JSheet.showSaveSheet(chooser, v.getComponent(), new SheetListener() {
+	protected void saveView(final View v) {
+		if (v.getURI() == null) {
+			URIChooser chooser = getChooser(v);
+			//int option = fileChooser.showSaveDialog(this);
+			JSheet.showSaveSheet(chooser, v.getComponent(), new SheetListener() {
 
-                @Override
-                public void optionSelected(final SheetEvent evt) {
-                    if (evt.getOption() == JFileChooser.APPROVE_OPTION) {
-                        final URI uri;
-                        if ((evt.getChooser() instanceof JFileURIChooser) && evt.getFileChooser().getFileFilter() instanceof ExtensionFileFilter) {
-                            uri = ((ExtensionFileFilter) evt.getFileChooser().getFileFilter()).makeAcceptable(evt.getFileChooser().getSelectedFile()).toURI();
-                        } else {
-                            uri = evt.getChooser().getSelectedURI();
-                        }
-                        saveViewToURI(v, uri, evt.getChooser());
-                    } else {
-                        v.setEnabled(true);
-                        if (oldFocusOwner != null) {
-                            oldFocusOwner.requestFocus();
-                        }
-                    }
-                }
-            });
-        } else {
-            saveViewToURI(v, v.getURI(), null);
-        }
-    }
+				@Override
+				public void optionSelected(final SheetEvent evt) {
+					if (evt.getOption() == JFileChooser.APPROVE_OPTION) {
+						final URI uri;
+						if ((evt.getChooser() instanceof JFileURIChooser) && evt.getFileChooser().getFileFilter() instanceof ExtensionFileFilter) {
+							uri = ((ExtensionFileFilter) evt.getFileChooser().getFileFilter()).makeAcceptable(evt.getFileChooser().getSelectedFile()).toURI();
+						} else {
+							uri = evt.getChooser().getSelectedURI();
+						}
+						saveViewToURI(v, uri, evt.getChooser());
+					} else {
+						v.setEnabled(true);
+						if (oldFocusOwner != null) {
+							oldFocusOwner.requestFocus();
+						}
+					}
+				}
+			});
+		} else {
+			saveViewToURI(v, v.getURI(), null);
+		}
+	}
 
-    protected void saveViewToURI(final View v, final URI uri, @Nullable final URIChooser chooser) {
-        v.execute(new Worker() {
+	protected void saveViewToURI(final View v, final URI uri, @Nullable final URIChooser chooser) {
+		v.execute(new Worker() {
 
-            @Override
-            protected Object construct() throws IOException {
-                v.write(uri, chooser);
-                return null;
-            }
+			@Override
+			protected Object construct() throws IOException {
+				v.write(uri, chooser);
+				return null;
+			}
 
-            @Override
-            protected void done(Object value) {
-                v.setURI(uri);
-                v.markChangesAsSaved();
-                doIt(v);
-            }
+			@Override
+			protected void done(Object value) {
+				v.setURI(uri);
+				v.markChangesAsSaved();
+				doIt(v);
+			}
 
-            @Override
-            protected void failed(Throwable value) {
-                String message = (value.getMessage() != null) ? value.getMessage() : value.toString();
-                ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
-                JSheet.showMessageSheet(getActiveView().getComponent(),
-                        "<html>" + UIManager.getString("OptionPane.css")
-                        + "<b>" + labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)) + "</b><p>"
-                        + ((message == null) ? "" : message),
-                        JOptionPane.ERROR_MESSAGE);
-            }
+			@Override
+			protected void failed(Throwable value) {
+				String message = (value.getMessage() != null) ? value.getMessage() : value.toString();
+				ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+				JSheet.showMessageSheet(getActiveView().getComponent(),
+						"<html>" + UIManager.getString("OptionPane.css")
+						+ "<b>" + labels.getFormatted("file.save.couldntSave.message", URIUtil.getName(uri)) + "</b><p>"
+						+ ((message == null) ? "" : message),
+						JOptionPane.ERROR_MESSAGE);
+			}
 
-            @Override
-            protected void finished() {
-                v.setEnabled(true);
-                if (oldFocusOwner != null) {
-                    oldFocusOwner.requestFocus();
-                }
-            }
-        });
-    }
+			@Override
+			protected void finished() {
+				v.setEnabled(true);
+				if (oldFocusOwner != null) {
+					oldFocusOwner.requestFocus();
+				}
+			}
+		});
+	}
 
-    protected abstract void doIt(View p);
+	protected abstract void doIt(View p);
 }

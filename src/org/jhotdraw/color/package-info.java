@@ -9,15 +9,12 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 723 2010-12-28 14:31:24Z rawcoder $
-*/
+ */
 
 /**
 Classes for working with colors using a variety of color spaces.
-*/
+ */
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.color;
-
-import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
-import edu.umd.cs.findbugs.annotations.NonNull;
 
 

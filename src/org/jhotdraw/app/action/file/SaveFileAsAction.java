@@ -4,14 +4,13 @@
  * Copyright (c) 1996-2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  *
- * You may not use, copy or modify this file, except in compliance with the 
+ * You may not use, copy or modify this file, except in compliance with the
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
 
 package org.jhotdraw.app.action.file;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import org.jhotdraw.util.*;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
@@ -31,12 +30,12 @@ import org.jhotdraw.app.View;
  * @version $Id: SaveFileAsAction.java 717 2010-11-21 12:30:57Z rawcoder $
  */
 public class SaveFileAsAction extends SaveFileAction {
-    public final static String ID = "file.saveAs";
+	public final static String ID = "file.saveAs";
 
-    /** Creates a new instance. */
-    public SaveFileAsAction(Application app, @Nullable View view) {
-        super(app, view, true);
-        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
-        labels.configureAction(this, ID);
-    }
+	/** Creates a new instance. */
+	public SaveFileAsAction(Application app, @Nullable View view) {
+		super(app, view, true);
+		ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+		labels.configureAction(this, ID);
+	}
 }

@@ -4,7 +4,7 @@
  * Copyright (c) 2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  * 
- * You may not use, copy or modify this file, except in compliance with the 
+ * You may not use, copy or modify this file, except in compliance with the
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
@@ -22,22 +22,22 @@ import java.io.IOException;
  */
 public class CMYKGenericColorSpace extends ICC_ColorSpace {
 
-    private static CMYKGenericColorSpace instance;
+	private static CMYKGenericColorSpace instance;
 
-    public static CMYKGenericColorSpace getInstance() {
-        if (instance == null) {
-            try {
-                instance = new CMYKGenericColorSpace();
-            } catch (IOException ex) {
-                InternalError error = new InternalError("Can't instanciate CMYKColorSpace");
-                error.initCause(ex);
-                throw error;
-            }
-        }
-        return instance;
-    }
+	public static CMYKGenericColorSpace getInstance() {
+		if (instance == null) {
+			try {
+				instance = new CMYKGenericColorSpace();
+			} catch (IOException ex) {
+				InternalError error = new InternalError("Can't instanciate CMYKColorSpace");
+				error.initCause(ex);
+				throw error;
+			}
+		}
+		return instance;
+	}
 
-    public CMYKGenericColorSpace() throws IOException {
-        super(ICC_Profile.getInstance(CMYKGenericColorSpace.class.getResourceAsStream("Generic CMYK Profile.icc")));
-    }
+	public CMYKGenericColorSpace() throws IOException {
+		super(ICC_Profile.getInstance(CMYKGenericColorSpace.class.getResourceAsStream("Generic CMYK Profile.icc")));
+	}
 }

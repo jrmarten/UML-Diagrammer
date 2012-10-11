@@ -4,7 +4,7 @@
  * Copyright (c) 1996-2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  *
- * You may not use, copy or modify this file, except in compliance with the 
+ * You may not use, copy or modify this file, except in compliance with the
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
@@ -41,21 +41,21 @@ import java.io.*;
  */
 public interface LineDecoration
 extends Cloneable, Serializable {
-    
-    /**
-     * Draws the decoration in the direction specified by the two Points.
-     */
-    public void draw(Graphics2D g, Figure f, Point2D.Double p1, Point2D.Double p2);
-    
-    /**
-     * Returns the radius of the decorator.
-     * This is used to crop the end of the line, to prevent it from being
-     * drawn over the decorator.
-     */
-    public abstract double getDecorationRadius(Figure f);
-    
-    /**
-     * Returns the drawing bounds of the decorator.
-     */
-    public Rectangle2D.Double getDrawingArea(Figure f, Point2D.Double p1, Point2D.Double p2);
+
+	/**
+	 * Draws the decoration in the direction specified by the two Points.
+	 */
+	public void draw(Graphics2D g, Figure f, Point2D.Double p1, Point2D.Double p2);
+
+	/**
+	 * Returns the radius of the decorator.
+	 * This is used to crop the end of the line, to prevent it from being
+	 * drawn over the decorator.
+	 */
+	public abstract double getDecorationRadius(Figure f);
+
+	/**
+	 * Returns the drawing bounds of the decorator.
+	 */
+	public Rectangle2D.Double getDrawingArea(Figure f, Point2D.Double p1, Point2D.Double p2);
 }

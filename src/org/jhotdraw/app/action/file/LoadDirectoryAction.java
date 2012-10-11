@@ -11,7 +11,6 @@
 
 package org.jhotdraw.app.action.file;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import org.jhotdraw.app.*;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.util.ResourceBundleUtil;
@@ -33,16 +32,16 @@ import org.jhotdraw.util.ResourceBundleUtil;
  * @version $Id: LoadDirectoryAction.java 723 2010-12-28 14:31:24Z rawcoder $
  */
 public class LoadDirectoryAction extends LoadFileAction {
-    public final static String ID = "file.loadDirectory";
+	public final static String ID = "file.loadDirectory";
 
-    /** Creates a new instance. */
-    public LoadDirectoryAction(Application app, @Nullable View view) {
-        super(app, view);
-        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
-        labels.configureAction(this, ID);
-    }
-    @Override
-    protected URIChooser getChooser(View view) {
-        return getApplication().getModel().createOpenDirectoryChooser(getApplication(), view);
-    }
+	/** Creates a new instance. */
+	public LoadDirectoryAction(Application app, @Nullable View view) {
+		super(app, view);
+		ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+		labels.configureAction(this, ID);
+	}
+	@Override
+	protected URIChooser getChooser(View view) {
+		return getApplication().getModel().createOpenDirectoryChooser(getApplication(), view);
+	}
 }

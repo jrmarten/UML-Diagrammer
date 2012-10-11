@@ -9,7 +9,7 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 723 2010-12-28 14:31:24Z rawcoder $
-*/
+ */
 
 /**
 <p>
@@ -17,9 +17,6 @@
     href="http://www.w3.org/TR/SVGMobile12/">Scalable Vector Graphics
     Mobile 1.2 (SVG Mobile 1.2)</a>.
 </p>
-*/
+ */
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.samples.svg;
-
-import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
-import edu.umd.cs.findbugs.annotations.NonNull;

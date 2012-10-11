@@ -9,14 +9,11 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 723 2010-12-28 14:31:24Z rawcoder $
-*/
+ */
 
 /**
 Provides an abstract JavaBeans Bean class.
-*/
+ */
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.beans;
-
-import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
-import edu.umd.cs.findbugs.annotations.NonNull;
 

@@ -4,13 +4,12 @@
  * Copyright (c) 2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  * 
- * You may not use, copy or modify this file, except in compliance with the 
+ * You may not use, copy or modify this file, except in compliance with the
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
 package org.jhotdraw.app.action.edit;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.AbstractAction;
@@ -46,44 +45,44 @@ import org.jhotdraw.beans.WeakPropertyChangeListener;
  */
 public abstract class AbstractSelectionAction extends AbstractAction {
 
-    /** The target of the action or null if the action acts on the currently
-     * focused component.
-     */
-    @Nullable protected JComponent target;
-    /** This variable keeps a strong reference on the property change listener. */
-    private PropertyChangeListener propertyHandler;
+	/** The target of the action or null if the action acts on the currently
+	 * focused component.
+	 */
+	@Nullable protected JComponent target;
+	/** This variable keeps a strong reference on the property change listener. */
+	private PropertyChangeListener propertyHandler;
 
-    /** Creates a new instance which acts on the specified component.
-     *
-     * @param target The target of the action. Specify null for the currently
-     * focused component.
-     */
-    public AbstractSelectionAction(@Nullable JComponent target) {
-        this.target = target;
-        if (target != null) {
-            // Register with a weak reference on the JComponent.
-            propertyHandler = new PropertyChangeListener() {
+	/** Creates a new instance which acts on the specified component.
+	 *
+	 * @param target The target of the action. Specify null for the currently
+	 * focused component.
+	 */
+	public AbstractSelectionAction(@Nullable JComponent target) {
+		this.target = target;
+		if (target != null) {
+			// Register with a weak reference on the JComponent.
+			propertyHandler = new PropertyChangeListener() {
 
-                @Override
-                public void propertyChange(PropertyChangeEvent evt) {
-                    String n = evt.getPropertyName();
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					String n = evt.getPropertyName();
 
-                    if (n.equals("enabled")) {
-                        updateEnabled();
-                    } else if (n.equals(EditableComponent.SELECTION_EMPTY_PROPERTY)) {
-                        updateEnabled();
-                    }
-                }
-            };
-            target.addPropertyChangeListener(new WeakPropertyChangeListener(propertyHandler));
-        }
-    }
+					if (n.equals("enabled")) {
+						updateEnabled();
+					} else if (n.equals(EditableComponent.SELECTION_EMPTY_PROPERTY)) {
+						updateEnabled();
+					}
+				}
+			};
+			target.addPropertyChangeListener(new WeakPropertyChangeListener(propertyHandler));
+		}
+	}
 
-    protected void updateEnabled() {
-        if (target instanceof EditableComponent) {
-            setEnabled(target.isEnabled() && !((EditableComponent) target).isSelectionEmpty());
-        } else if (target != null) {
-            setEnabled(target.isEnabled());
-        }
-    }
+	protected void updateEnabled() {
+		if (target instanceof EditableComponent) {
+			setEnabled(target.isEnabled() && !((EditableComponent) target).isSelectionEmpty());
+		} else if (target != null) {
+			setEnabled(target.isEnabled());
+		}
+	}
 }

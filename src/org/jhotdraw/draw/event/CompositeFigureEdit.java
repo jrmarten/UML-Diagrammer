@@ -4,7 +4,7 @@
  * Copyright (c) 2009-2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  * 
- * You may not use, copy or modify this file, except in compliance with the 
+ * You may not use, copy or modify this file, except in compliance with the
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
@@ -24,66 +24,66 @@ import org.jhotdraw.undo.CompositeEdit;
  */
 public class CompositeFigureEdit extends CompositeEdit {
 
-    private Figure figure;
+	private Figure figure;
 
-    /**
-     * Creates a new {@code CompositeFigureEdit} which uses
-     * CompoundEdit.getPresentatioName and is significant.
-     *
-     * @see javax.swing.undo.CompoundEdit#getPresentationName()
-     */
-    public CompositeFigureEdit(Figure figure) {
-        this.figure = figure;
-    }
+	/**
+	 * Creates a new {@code CompositeFigureEdit} which uses
+	 * CompoundEdit.getPresentatioName and is significant.
+	 *
+	 * @see javax.swing.undo.CompoundEdit#getPresentationName()
+	 */
+	public CompositeFigureEdit(Figure figure) {
+		this.figure = figure;
+	}
 
-    /**
-     * Creates new CompositeFigureEdit which uses the specified significance.
-     *
-     * @see javax.swing.undo.CompoundEdit#getPresentationName()
-     */
-    public CompositeFigureEdit(Figure figure, boolean isSignificant) {
-        super(isSignificant);
-        this.figure = figure;
-    }
+	/**
+	 * Creates new CompositeFigureEdit which uses the specified significance.
+	 *
+	 * @see javax.swing.undo.CompoundEdit#getPresentationName()
+	 */
+	public CompositeFigureEdit(Figure figure, boolean isSignificant) {
+		super(isSignificant);
+		this.figure = figure;
+	}
 
-    /**
-     * Creates new CompositeFigureEdit which uses the specified presentation name.
-     *
-     * @see javax.swing.undo.CompoundEdit#getPresentationName()
-     */
-    public CompositeFigureEdit(Figure figure, String presentationName) {
-        super(presentationName);
-        this.figure = figure;
-    }
+	/**
+	 * Creates new CompositeFigureEdit which uses the specified presentation name.
+	 *
+	 * @see javax.swing.undo.CompoundEdit#getPresentationName()
+	 */
+	public CompositeFigureEdit(Figure figure, String presentationName) {
+		super(presentationName);
+		this.figure = figure;
+	}
 
-    /**
-     * Creates new CompositeEdit.
-     * Which uses the given presentation name.
-     * If the presentation name is null, then CompoundEdit.getPresentatioName
-     * is used.
-     * @see javax.swing.undo.CompoundEdit#getPresentationName()
-     */
-    public CompositeFigureEdit(Figure figure, String presentationName, boolean isSignificant) {
-        super(presentationName, isSignificant);
-        this.figure = figure;
-    }
+	/**
+	 * Creates new CompositeEdit.
+	 * Which uses the given presentation name.
+	 * If the presentation name is null, then CompoundEdit.getPresentatioName
+	 * is used.
+	 * @see javax.swing.undo.CompoundEdit#getPresentationName()
+	 */
+	public CompositeFigureEdit(Figure figure, String presentationName, boolean isSignificant) {
+		super(presentationName, isSignificant);
+		this.figure = figure;
+	}
 
-    @Override
-    public void undo() {
-        if (!canUndo()) {
-            throw new CannotUndoException();
-        }
-        figure.willChange();
-        super.undo();
-        figure.changed();
-    }
-    @Override
-    public void redo() {
-        if (!canRedo()) {
-            throw new CannotRedoException();
-        }
-        figure.willChange();
-        super.redo();
-        figure.changed();
-    }
+	@Override
+	public void undo() {
+		if (!canUndo()) {
+			throw new CannotUndoException();
+		}
+		figure.willChange();
+		super.undo();
+		figure.changed();
+	}
+	@Override
+	public void redo() {
+		if (!canRedo()) {
+			throw new CannotRedoException();
+		}
+		figure.willChange();
+		super.redo();
+		figure.changed();
+	}
 }

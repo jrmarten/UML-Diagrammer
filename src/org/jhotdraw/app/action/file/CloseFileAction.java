@@ -4,13 +4,12 @@
  * Copyright (c) 1996-2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  *
- * You may not use, copy or modify this file, except in compliance with the 
+ * You may not use, copy or modify this file, except in compliance with the
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
 package org.jhotdraw.app.action.file;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import org.jhotdraw.util.*;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
@@ -39,20 +38,20 @@ import org.jhotdraw.app.action.AbstractSaveUnsavedChangesAction;
  */
 public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
 
-    public final static String ID = "file.close";
+	public final static String ID = "file.close";
 
-    /** Creates a new instance. */
-    public CloseFileAction(Application app, @Nullable View view) {
-        super(app, view);
-        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
-        labels.configureAction(this, ID);
-    }
+	/** Creates a new instance. */
+	public CloseFileAction(Application app, @Nullable View view) {
+		super(app, view);
+		ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+		labels.configureAction(this, ID);
+	}
 
-    @Override
-    protected void doIt(View view) {
-        if (view != null && view.getApplication() != null) {
-            Application app = view.getApplication();
-            app.dispose(view);
-        }
-    }
+	@Override
+	protected void doIt(View view) {
+		if (view != null && view.getApplication() != null) {
+			Application app = view.getApplication();
+			app.dispose(view);
+		}
+	}
 }
