@@ -1,6 +1,9 @@
-package edu.uwm.cs361.classdiagram.data;
+package edu.uwm.cs361.classdiagram.io;
 
 import java.io.*;
+import java.util.Iterator;
+
+import edu.uwm.cs361.classdiagram.data.*;
 
 class JavaGenerator
 {
@@ -10,7 +13,7 @@ class JavaGenerator
 
     private static String[][] defaults =
     { 
-	{"byte", "0"
+	{"byte", "0"},
 	{"int", "0" },
 	{"double", "0.0"},
 	{"float", "0.0f"},
@@ -18,7 +21,7 @@ class JavaGenerator
 	{"long", "0L"},
 	{"char", "0"},
 	{"boolean", "false"}
-    }
+    };
 
     public JavaGenerator ( File file ) throws FileNotFoundException
     {
@@ -56,8 +59,20 @@ class JavaGenerator
 
     public static void write ( UMLClass umlclass )
     {
-	JavaGenerator genny = new JavaGenerator ( umlclass.getName() + ".java" );
-	String start = "\n{\n", end = "\n{\n";
+    	
+    	File java_src;
+    	JavaGenerator genny;
+    	
+    	try {
+    		java_src = new File ( umlclass.getName() + ".java");
+    		genny = new JavaGenerator ( java_src );
+    	}
+    	catch ( Exception e )
+    	{
+    		return;
+    	}
+    	
+    	String start = "\n{\n", end = "\n{\n";
 
 	genny.write ( "class " + umlclass.getName() + start );
 	

@@ -1,5 +1,8 @@
-package edu.uwm.cs361.figures;
+package edu.uwm.cs361.classdiagram;
 
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,12 +19,12 @@ import org.jhotdraw.draw.handle.MoveHandle;
 import org.jhotdraw.draw.layouter.VerticalLayouter;
 import org.jhotdraw.draw.locator.RelativeLocator;
 import org.jhotdraw.geom.Insets2D;
+import org.jhotdraw.xml.DOMInput;
+import org.jhotdraw.xml.DOMOutput;
+
 import static org.jhotdraw.draw.AttributeKeys.*;
 
-
-import edu.uwm.cs361.uml.Attribute;
-import edu.uwm.cs361.uml.Method;
-import edu.uwm.cs361.uml.UMLClass;
+import edu.uwm.cs361.classdiagram.data.*;
 
 @SuppressWarnings("serial")
 public class ClassFigure extends GraphicalCompositeFigure {
@@ -90,7 +93,7 @@ public class ClassFigure extends GraphicalCompositeFigure {
         attrList.set ( LAYOUT_INSETS, insets );
         methodList.set ( LAYOUT_INSETS, insets );
 
-        TextFigure tmpFigure = createTextFigure( "Class " );
+        TextFigure tmpFigure = createTextFigure( "Class" );
         nameList.add ( tmpFigure );
 
         tmpFigure.addFigureListener ( new NameAdapter ( data ) );
@@ -173,7 +176,7 @@ public class ClassFigure extends GraphicalCompositeFigure {
     public void addMethod ( String methtxt )
     {
     	Method tmp = Method.Create( methtxt );
-    	if ( tmp == null ) return; //thrwow an error popup
+    	if ( tmp == null ) return; //throw an error popup
     	TextFigure tmpFig = createTextFigure ( tmp.toString() ) ;
     	if ( tmp.isStatic ( ) ) tmpFig.set( FONT_UNDERLINE, true );
     	if ( tmp.isAbstract ( ) ) tmpFig.set ( FONT_ITALIC, true );
@@ -194,7 +197,7 @@ public class ClassFigure extends GraphicalCompositeFigure {
 	readAttributes ( in );
 
 	in.openElement ( "class" );
-	UMLClass umlclass = new UMLClass ( out.getAttribute ( "name", "class" ) );
+	UMLClass umlclass = new UMLClass ( in.getAttribute ( "name", "class" ) );
 
 	try {
 	    while ( true )
@@ -242,7 +245,7 @@ public class ClassFigure extends GraphicalCompositeFigure {
 		out.openElement ( "attribute" );
 		out.addAttribute ( "name", attr.getName ( ) );
 		out.addAttribute ( "type", attr.getType ( ) );
-		out.addAttributee ("access", attr.getAccess ( ).toString ( ) );
+		out.addAttribute ("access", attr.getAccess ( ).toString ( ) );
 		out.addAttribute ( "final", (attr.isFinal())?"true":"false" );
 		out.addAttribute ( "static", (attr.isStatic())?"true":"false" );
 	    }

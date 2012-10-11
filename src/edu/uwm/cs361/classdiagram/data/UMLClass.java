@@ -107,7 +107,7 @@ public class UMLClass implements Serializable {
      * @return iterator over all attribute names
      */
     public final LinkedList<Attribute> getAttributes() {
-        return myAttributes.iterator();
+        return myAttributes;
     }
 
     /**
@@ -156,8 +156,8 @@ public class UMLClass implements Serializable {
      *
      * @return iterator over all method names
      */
-    public final ListedList<Method> getMethods() {
-        return myMethods.iterator();
+    public final LinkedList<Method> getMethods() {
+        return myMethods;
     }
 
     /**

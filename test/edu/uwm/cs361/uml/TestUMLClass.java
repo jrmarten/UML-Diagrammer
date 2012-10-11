@@ -2,9 +2,11 @@ package edu.uwm.cs361.uml;
 
 import static org.junit.Assert.*;
 import junit.framework.JUnit4TestAdapter;
+import edu.uwm.cs361.classdiagram.data.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
 
 public class TestUMLClass {
 

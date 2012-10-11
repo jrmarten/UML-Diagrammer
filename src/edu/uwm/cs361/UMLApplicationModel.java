@@ -8,7 +8,7 @@ import org.jhotdraw.app.View;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
-import edu.uwm.cs361.figures.ClassFigure;
+import edu.uwm.cs361.classdiagram.ClassFigure;
 
 import org.jhotdraw.app.action.view.ViewPropertyAction;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;

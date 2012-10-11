@@ -2,7 +2,6 @@ package edu.uwm.cs361.classdiagram.data;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -14,7 +13,7 @@ public class Method
 {
     private String name;
     private String type;
-    private LinkedList<String> params;
+    private LinkedList<String> params = new LinkedList<String>();
     private Access access = Access.DEFAULT;
     private boolean abstractp = false;
     private boolean staticp = false;
@@ -31,6 +30,12 @@ public class Method
     				": *" + UMLClass.classreg +
     				" *$$"
     		);
+    
+    private Method ( )
+    {
+    	type = "";
+    	name = "";
+    }
     
     private Method ( String[] mods, String type, String name, String[] arglist )
     {
@@ -58,7 +63,7 @@ public class Method
 
 		    case 'a':
 		    case 'A':
-			abstractp == true;
+			abstractp = true;
 			break;
 
 		    default:
@@ -70,7 +75,7 @@ public class Method
 
     public static Method Create ( String str )
     {
-	if ( ! regex.mather ( str ).find ( ) ) return null;
+	if ( ! regex.matcher ( str ).find ( ) ) return null;
 	String tmp;
 	String[] tmpa;
 	int index;
@@ -104,11 +109,11 @@ public class Method
 		    }
 	    }
 
-	if ( Keyword.blackListp ( name ) ) return null;
-	if ( keyWord.blackListp ( type ) ) return null;
+	if ( Keywords.blackListp ( name ) ) return null;
+	if ( Keywords.blackListp ( type ) ) return null;
 	for ( String arg : args )
 	    {
-		if ( Keyword.blackListp ( arg.trim() ) ) return null;
+		if ( Keywords.blackListp ( arg.trim() ) ) return null;
 	    }
 
 	return new Method ( mods, type, name, args );
@@ -117,7 +122,7 @@ public class Method
 
     public String getName ( ) { return name; }
     public String getType ( ) { return type; }
-    public Iterator<String> getParams ( ) { return params.iterator(); }
+    public LinkedList<String> getParameters ( ) { return params; }
     public Access getAccess ( ) { return access; }
     public boolean isAbstract ( ) { return abstractp; }
     public boolean isStatic ( ) { return staticp; }

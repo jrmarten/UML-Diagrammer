@@ -11,12 +11,11 @@ public class Keywords
 
     private static void getList ( )
     {
-	Scanner fin;
+	Scanner fin = null;
 	try {
 		fin = new Scanner ( new File ( "Java.keywords" ) );
 	} catch (FileNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		blacklist = new ArrayList<String> ( );
 	}
 	String line = "";
 	String[] parts = null;
