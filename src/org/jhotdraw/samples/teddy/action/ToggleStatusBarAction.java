@@ -10,6 +10,7 @@
  */
 package org.jhotdraw.samples.teddy.action;
 
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.jhotdraw.app.*;
 import org.jhotdraw.app.action.*;
 import org.jhotdraw.samples.teddy.*;
@@ -25,33 +26,33 @@ import javax.swing.Action;
  */
 public class ToggleStatusBarAction extends AbstractViewAction {
 
-	public final static String ID = "view.toggleStatusBar";
-	private ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.teddy.Labels");
+    public final static String ID = "view.toggleStatusBar";
+    private ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.teddy.Labels");
 
-	/**
-	 * Creates a new instance.
-	 */
-	public ToggleStatusBarAction(Application app, @Nullable View view) {
-		super(app, view);
-		labels.configureAction(this, ID);
-		setPropertyName("statusBarVisible");
-	}
+    /**
+     * Creates a new instance.
+     */
+    public ToggleStatusBarAction(Application app, @Nullable View view) {
+        super(app, view);
+        labels.configureAction(this, ID);
+        setPropertyName("statusBarVisible");
+    }
 
-	@Override
-	public TeddyView getActiveView() {
-		return (TeddyView) super.getActiveView();
-	}
+    @Override
+    public TeddyView getActiveView() {
+        return (TeddyView) super.getActiveView();
+    }
 
-	@Override
-	protected void updateView() {
-		putValue(
-				Action.SELECTED_KEY,
-				getActiveView() != null && getActiveView().isStatusBarVisible());
-	}
+    @Override
+    protected void updateView() {
+        putValue(
+                Action.SELECTED_KEY,
+                getActiveView() != null && getActiveView().isStatusBarVisible());
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		getActiveView().setStatusBarVisible(!getActiveView().isStatusBarVisible());
-	}
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        getActiveView().setStatusBarVisible(!getActiveView().isStatusBarVisible());
+    }
 }
 

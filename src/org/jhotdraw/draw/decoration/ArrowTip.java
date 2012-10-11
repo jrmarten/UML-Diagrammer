@@ -4,7 +4,7 @@
  * Copyright (c) 1996-2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  *
- * You may not use, copy or modify this file, except in compliance with the
+ * You may not use, copy or modify this file, except in compliance with the 
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
@@ -23,81 +23,81 @@ import org.jhotdraw.xml.DOMStorable;
  * @version $Id: ArrowTip.java 718 2010-11-21 17:49:53Z rawcoder $
  */
 public class ArrowTip extends AbstractLineDecoration
-implements DOMStorable {
+        implements DOMStorable {
 
-	/**
-	 * Pointiness of arrow.
-	 */
-	private double angle;
-	private double outerRadius;
-	private double innerRadius;
+    /**
+     * Pointiness of arrow.
+     */
+    private double angle;
+    private double outerRadius;
+    private double innerRadius;
 
-	public ArrowTip() {
-		this(0.35, 12, 11.3);
-	}
+    public ArrowTip() {
+        this(0.35, 12, 11.3);
+    }
 
-	/**
-	 * Constructs an arrow tip with the specified angle and outer and inner
-	 * radius.
-	 */
-	public ArrowTip(double angle, double outerRadius, double innerRadius) {
-		this(angle, outerRadius, innerRadius, true, false, true);
-	}
+    /**
+     * Constructs an arrow tip with the specified angle and outer and inner 
+     * radius.
+     */
+    public ArrowTip(double angle, double outerRadius, double innerRadius) {
+        this(angle, outerRadius, innerRadius, true, false, true);
+    }
 
-	/**
-	 * Constructs an arrow tip with the specified parameters.
-	 */
-	public ArrowTip(double angle, double outerRadius, double innerRadius, boolean isFilled, boolean isStroked, boolean isSolid) {
-		super(isFilled, isStroked, isSolid);
-		this.angle = angle;
-		this.outerRadius = outerRadius;
-		this.innerRadius = innerRadius;
-	}
+    /**
+     * Constructs an arrow tip with the specified parameters.
+     */
+    public ArrowTip(double angle, double outerRadius, double innerRadius, boolean isFilled, boolean isStroked, boolean isSolid) {
+        super(isFilled, isStroked, isSolid);
+        this.angle = angle;
+        this.outerRadius = outerRadius;
+        this.innerRadius = innerRadius;
+    }
 
-	@Override
-	protected Path2D.Double getDecoratorPath(Figure f) {
-		// FIXME - This should take the stroke join an the outer radius into
-		// account to compute the offset properly.
-		double offset = (isStroked()) ? 1 : 0;
+    @Override
+    protected Path2D.Double getDecoratorPath(Figure f) {
+        // FIXME - This should take the stroke join an the outer radius into
+        // account to compute the offset properly.
+        double offset = (isStroked()) ? 1 : 0;
 
 
 
-		Path2D.Double path = new Path2D.Double();
-		path.moveTo((outerRadius * Math.sin(-angle)), (offset + outerRadius * Math.cos(-angle)));
-		path.lineTo(0, offset);
-		path.lineTo((outerRadius * Math.sin(angle)), (offset + outerRadius * Math.cos(angle)));
-		if (innerRadius != 0) {
-			path.lineTo(0, (innerRadius + offset));
-			path.closePath();
-		}
+        Path2D.Double path = new Path2D.Double();
+        path.moveTo((outerRadius * Math.sin(-angle)), (offset + outerRadius * Math.cos(-angle)));
+        path.lineTo(0, offset);
+        path.lineTo((outerRadius * Math.sin(angle)), (offset + outerRadius * Math.cos(angle)));
+        if (innerRadius != 0) {
+            path.lineTo(0, (innerRadius + offset));
+            path.closePath();
+        }
 
-		return path;
-	}
+        return path;
+    }
 
-	@Override
-	protected double getDecoratorPathRadius(Figure f) {
-		double offset = (isStroked()) ? 0.5 : -0.1;
+    @Override
+    protected double getDecoratorPathRadius(Figure f) {
+        double offset = (isStroked()) ? 0.5 : -0.1;
 
-		return innerRadius + offset;
-	}
+        return innerRadius + offset;
+    }
 
-	@Override
-	public void read(DOMInput in) {
-		angle = in.getAttribute("angle", 0.35f);
-		innerRadius = in.getAttribute("innerRadius", 12f);
-		outerRadius = in.getAttribute("outerRadius", 12f);
-		setFilled(in.getAttribute("isFilled", false));
-		setStroked(in.getAttribute("isStroked", false));
-		setSolid(in.getAttribute("isSolid", false));
-	}
+    @Override
+    public void read(DOMInput in) {
+        angle = in.getAttribute("angle", 0.35f);
+        innerRadius = in.getAttribute("innerRadius", 12f);
+        outerRadius = in.getAttribute("outerRadius", 12f);
+        setFilled(in.getAttribute("isFilled", false));
+        setStroked(in.getAttribute("isStroked", false));
+        setSolid(in.getAttribute("isSolid", false));
+    }
 
-	@Override
-	public void write(DOMOutput out) {
-		out.addAttribute("angle", angle);
-		out.addAttribute("innerRadius", innerRadius);
-		out.addAttribute("outerRadius", outerRadius);
-		out.addAttribute("isFilled", isFilled());
-		out.addAttribute("isStroked", isStroked());
-		out.addAttribute("isSolid", isSolid());
-	}
+    @Override
+    public void write(DOMOutput out) {
+        out.addAttribute("angle", angle);
+        out.addAttribute("innerRadius", innerRadius);
+        out.addAttribute("outerRadius", outerRadius);
+        out.addAttribute("isFilled", isFilled());
+        out.addAttribute("isStroked", isStroked());
+        out.addAttribute("isSolid", isSolid());
+    }
 }

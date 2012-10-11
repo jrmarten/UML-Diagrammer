@@ -9,12 +9,15 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 724 2011-01-08 14:17:28Z rawcoder $
- */
+*/
 
 /**
 Provides classes which are used by {@link org.jhotdraw.app.OSXApplication}.
- */
+*/
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.app.osx;
+
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 

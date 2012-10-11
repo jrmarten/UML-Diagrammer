@@ -9,12 +9,15 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 723 2010-12-28 14:31:24Z rawcoder $
- */
+*/
 
 /**
 An unfinished sample drawing editor with limited support for the <a
 href="http://www.oasis-open.org/committees/download.php/20847/OpenDocument-v1.1-cs1.pdf"
 >OASIS Open Document Drawing 1.1 (ODG) file format</a> as used by Open Office.
- */
+*/
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.samples.odg;
+
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;

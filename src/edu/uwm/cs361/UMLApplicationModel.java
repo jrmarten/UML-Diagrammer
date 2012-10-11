@@ -7,18 +7,12 @@ import org.jhotdraw.app.DefaultApplicationModel;
 import org.jhotdraw.app.View;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 
+import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 
-import org.jhotdraw.app.action.view.ViewPropertyAction;
-import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
-import org.jhotdraw.app.action.file.ExportFileAction;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.draw.tool.CreationTool;
-import org.jhotdraw.draw.tool.TextAreaCreationTool;
-import org.jhotdraw.draw.tool.ConnectionTool;
-
 import java.awt.*;
-import java.awt.List;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;

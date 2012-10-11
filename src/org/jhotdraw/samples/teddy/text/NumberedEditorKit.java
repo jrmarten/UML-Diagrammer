@@ -28,13 +28,13 @@ import javax.swing.text.*;
  * @version $Id: NumberedEditorKit.java 723 2010-12-28 14:31:24Z rawcoder $
  */
 public class NumberedEditorKit extends StyledEditorKit {
-	private NumberedViewFactory viewFactory;
-
-	@Override
-	public ViewFactory getViewFactory() {
-		if (viewFactory == null) {
-			viewFactory = new NumberedViewFactory();
-		}
-		return viewFactory;
-	}
+    private NumberedViewFactory viewFactory;
+    
+    @Override
+    public ViewFactory getViewFactory() {
+        if (viewFactory == null) {
+            viewFactory = new NumberedViewFactory();
+        }
+        return viewFactory;
+    }
 }

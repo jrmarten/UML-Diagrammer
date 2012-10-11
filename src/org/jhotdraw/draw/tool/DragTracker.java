@@ -4,7 +4,7 @@
  * Copyright (c) 2009-2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  * 
- * You may not use, copy or modify this file, except in compliance with the
+ * You may not use, copy or modify this file, except in compliance with the 
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
@@ -31,7 +31,7 @@ import org.jhotdraw.draw.*;
  * preprocessed by the {@code DragTracker} of a {@code SelectionTool}. {@code
  * DragTracker} invokes "track" methods on a {@code Handle} which in turn
  * changes an aspect of a figure.
- * Client: {@link SelectionTool}; Handler: {@link DragTracker},
+ * Client: {@link SelectionTool}; Handler: {@link DragTracker}, 
  * {@link org.jhotdraw.draw.handle.Handle}.
  * <hr>
  *
@@ -41,6 +41,6 @@ import org.jhotdraw.draw.*;
  */
 public interface DragTracker extends Tool {
 
-	public void setDraggedFigure(Figure f);
+    public void setDraggedFigure(Figure f);
 
 }

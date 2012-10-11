@@ -9,12 +9,15 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 723 2010-12-28 14:31:24Z rawcoder $
- */
+*/
 
 /**
 <p>
     Provides the Graphical user interface classes for the SVG sample application.
 </p>
- */
+*/
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.samples.svg.gui;
+
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;

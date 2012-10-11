@@ -11,6 +11,7 @@
 
 package org.jhotdraw.samples.teddy.action;
 
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.jhotdraw.app.*;
 import org.jhotdraw.app.action.*;
 import org.jhotdraw.samples.teddy.*;
@@ -25,33 +26,33 @@ import javax.swing.Action;
  * @version $Id: ToggleLineWrapAction.java 723 2010-12-28 14:31:24Z rawcoder $
  */
 public class ToggleLineWrapAction extends AbstractViewAction {
-	public final static String ID = "view.toggleLineWrap";
-	private ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.teddy.Labels");
-
-	/**
-	 * Creates a new instance.
-	 */
-	public ToggleLineWrapAction(Application app, @Nullable View view) {
-		super(app, view);
-		labels.configureAction(this, ID);
-		setPropertyName("lineWrap");
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		getActiveView().setLineWrap(! getActiveView().isLineWrap());
-	}
-
-	@Override
-	public TeddyView getActiveView() {
-		return (TeddyView) super.getActiveView();
-	}
-
-	@Override
-	protected void updateView() {
-		putValue(
-				Action.SELECTED_KEY,
-				getActiveView() != null && getActiveView().isLineWrap()
-				);
-	}
+    public final static String ID = "view.toggleLineWrap";
+    private ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.teddy.Labels");
+    
+    /**
+     * Creates a new instance.
+     */
+    public ToggleLineWrapAction(Application app, @Nullable View view) {
+        super(app, view);
+        labels.configureAction(this, ID);
+        setPropertyName("lineWrap");
+    }
+    
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        getActiveView().setLineWrap(! getActiveView().isLineWrap());
+    }
+    
+    @Override
+    public TeddyView getActiveView() {
+        return (TeddyView) super.getActiveView();
+    }
+    
+    @Override
+    protected void updateView() {
+        putValue(
+                Action.SELECTED_KEY,
+                getActiveView() != null && getActiveView().isLineWrap()
+                );
+    }
 }

@@ -9,10 +9,13 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 727 2011-01-09 13:23:59Z rawcoder $
- */
+*/
 
 /**
 A very simple network diagram editor.
- */
+*/
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.samples.net;
+
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;

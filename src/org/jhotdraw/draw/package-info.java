@@ -9,7 +9,7 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 724 2011-01-08 14:17:28Z rawcoder $
- */
+*/
 
 /**<p>
 Defines a framework for structured drawing editors and provides default
@@ -46,3 +46,6 @@ The key interfaces for editing a drawing are:
 <p>*/
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.draw;
+
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;

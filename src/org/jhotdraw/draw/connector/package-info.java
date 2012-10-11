@@ -9,11 +9,14 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 718 2010-11-21 17:49:53Z rawcoder $
- */
+*/
 
 /**
 Provides {@link org.jhotdraw.draw.connector.Connector}s for locating the start point and end point
 of a {@link org.jhotdraw.draw.ConnectionFigure} on a {@link org.jhotdraw.draw.Figure}.
- */
+*/
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.draw.connector;
+
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;

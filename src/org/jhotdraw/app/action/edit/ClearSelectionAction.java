@@ -4,12 +4,13 @@
  * Copyright (c) 2008 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  *
- * You may not use, copy or modify this file, except in compliance with the
+ * You may not use, copy or modify this file, except in compliance with the 
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
 package org.jhotdraw.app.action.edit;
 
+import edu.umd.cs.findbugs.annotations.Nullable;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -50,48 +51,48 @@ import org.jhotdraw.gui.EditableComponent;
  */
 public class ClearSelectionAction extends AbstractSelectionAction {
 
-	public final static String ID = "edit.clearSelection";
+    public final static String ID = "edit.clearSelection";
 
-	/** Creates a new instance which acts on the currently focused component. */
-	public ClearSelectionAction() {
-		this(null);
-	}
+    /** Creates a new instance which acts on the currently focused component. */
+    public ClearSelectionAction() {
+        this(null);
+    }
 
-	/** Creates a new instance which acts on the specified component.
-	 *
-	 * @param target The target of the action. Specify null for the currently
-	 * focused component.
-	 */
-	public ClearSelectionAction(@Nullable JComponent target) {
-		super(target);
-		ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
-		labels.configureAction(this, ID);
-	}
+    /** Creates a new instance which acts on the specified component.
+     *
+     * @param target The target of the action. Specify null for the currently
+     * focused component.
+     */
+    public ClearSelectionAction(@Nullable JComponent target) {
+        super(target);
+        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.app.Labels");
+        labels.configureAction(this, ID);
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent evt) {
-		JComponent c = target;
-		if (c == null && (KeyboardFocusManager.getCurrentKeyboardFocusManager().
-				getPermanentFocusOwner() instanceof JComponent)) {
-					c = (JComponent) KeyboardFocusManager.getCurrentKeyboardFocusManager().
-							getPermanentFocusOwner();
-		}
-		if (c != null && c.isEnabled()) {
-			if (c instanceof EditableComponent) {
-				((EditableComponent) c).clearSelection();
-			} else if (c instanceof JTextComponent) {
-				JTextComponent tc = ((JTextComponent) c);
-				tc.select(tc.getSelectionStart(), tc.getSelectionStart());
-			} else {
-				c.getToolkit().beep();
-			}
-		}
-	}
+    @Override
+    public void actionPerformed(ActionEvent evt) {
+        JComponent c = target;
+        if (c == null && (KeyboardFocusManager.getCurrentKeyboardFocusManager().
+                getPermanentFocusOwner() instanceof JComponent)) {
+            c = (JComponent) KeyboardFocusManager.getCurrentKeyboardFocusManager().
+                    getPermanentFocusOwner();
+        }
+        if (c != null && c.isEnabled()) {
+            if (c instanceof EditableComponent) {
+                ((EditableComponent) c).clearSelection();
+            } else if (c instanceof JTextComponent) {
+                JTextComponent tc = ((JTextComponent) c);
+                tc.select(tc.getSelectionStart(), tc.getSelectionStart());
+            } else {
+                c.getToolkit().beep();
+            }
+        }
+    }
 
-	@Override
-	protected void updateEnabled() {
-		if (target != null) {
-			setEnabled(target.isEnabled());
-		}
-	}
+    @Override
+    protected void updateEnabled() {
+        if (target != null) {
+            setEnabled(target.isEnabled());
+        }
+    }
 }

@@ -4,12 +4,13 @@
  * Copyright (c) 2009-2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  *
- * You may not use, copy or modify this file, except in compliance with the
+ * You may not use, copy or modify this file, except in compliance with the 
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
 package org.jhotdraw.draw.tool;
 
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.jhotdraw.draw.text.*;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.text.FloatingTextArea;
@@ -57,125 +58,125 @@ import org.jhotdraw.util.ResourceBundleUtil;
  */
 public class TextAreaEditingTool extends AbstractTool implements ActionListener {
 
-	@Nullable private FloatingTextArea textArea;
-	@Nullable private TextHolderFigure typingTarget;
+    @Nullable private FloatingTextArea textArea;
+    @Nullable private TextHolderFigure typingTarget;
 
-	/** Creates a new instance. */
-	public TextAreaEditingTool(TextHolderFigure typingTarget) {
-		this.typingTarget = typingTarget;
-	}
+    /** Creates a new instance. */
+    public TextAreaEditingTool(TextHolderFigure typingTarget) {
+        this.typingTarget = typingTarget;
+    }
 
-	@Override
-	public void deactivate(DrawingEditor editor) {
-		endEdit();
-		super.deactivate(editor);
-	}
+    @Override
+    public void deactivate(DrawingEditor editor) {
+        endEdit();
+        super.deactivate(editor);
+    }
 
-	/**
-	 * Creates a new figure at the mouse location.
-	 * If editing is in progress, this finishes editing.
-	 */
-	@Override
-	public void mousePressed(MouseEvent e) {
-		if (typingTarget != null) {
-			beginEdit(typingTarget);
-			updateCursor(getView(), e.getPoint());
-		}
-	}
+    /**
+     * Creates a new figure at the mouse location.
+     * If editing is in progress, this finishes editing.
+     */
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if (typingTarget != null) {
+            beginEdit(typingTarget);
+            updateCursor(getView(), e.getPoint());
+        }
+    }
 
-	@Override
-	public void draw(Graphics2D g) {
-	}
+    @Override
+    public void draw(Graphics2D g) {
+    }
 
-	protected void beginEdit(TextHolderFigure textHolder) {
-		if (textArea == null) {
-			textArea = new FloatingTextArea();
+    protected void beginEdit(TextHolderFigure textHolder) {
+        if (textArea == null) {
+            textArea = new FloatingTextArea();
 
-			//textArea.addActionListener(this);
-		}
+        //textArea.addActionListener(this);
+        }
 
-		if (textHolder != typingTarget && typingTarget != null) {
-			endEdit();
-		}
-		textArea.createOverlay(getView(), textHolder);
-		textArea.setBounds(getFieldBounds(textHolder), textHolder.getText());
-		textArea.requestFocus();
-		typingTarget = textHolder;
-	}
+        if (textHolder != typingTarget && typingTarget != null) {
+            endEdit();
+        }
+        textArea.createOverlay(getView(), textHolder);
+        textArea.setBounds(getFieldBounds(textHolder), textHolder.getText());
+        textArea.requestFocus();
+        typingTarget = textHolder;
+    }
 
-	private Rectangle2D.Double getFieldBounds(TextHolderFigure figure) {
-		Rectangle2D.Double r = figure.getDrawingArea();
-		Insets2D.Double insets = figure.getInsets();
-		insets.subtractTo(r);
+    private Rectangle2D.Double getFieldBounds(TextHolderFigure figure) {
+        Rectangle2D.Double r = figure.getDrawingArea();
+        Insets2D.Double insets = figure.getInsets();
+        insets.subtractTo(r);
 
-		// FIXME - Find a way to determine the parameters for grow.
-		//r.grow(1,2);
-		//r.width += 16;
-		r.x -= 1;
-		r.y -= 2;
-		r.width += 18;
-		r.height += 4;
-		return r;
-	}
+        // FIXME - Find a way to determine the parameters for grow.
+        //r.grow(1,2);
+        //r.width += 16;
+        r.x -= 1;
+        r.y -= 2;
+        r.width += 18;
+        r.height += 4;
+        return r;
+    }
 
-	protected void endEdit() {
-		if (typingTarget != null) {
-			typingTarget.willChange();
+    protected void endEdit() {
+        if (typingTarget != null) {
+            typingTarget.willChange();
 
-			final TextHolderFigure editedFigure = typingTarget;
-			final String oldText = typingTarget.getText();
-			final String newText = textArea.getText();
+            final TextHolderFigure editedFigure = typingTarget;
+            final String oldText = typingTarget.getText();
+            final String newText = textArea.getText();
 
-			typingTarget.willChange();
-			if (newText.length() > 0) {
-				typingTarget.setText(newText);
-			} else {
-				typingTarget.setText("");
-			}
-			typingTarget.changed();
+            typingTarget.willChange();
+            if (newText.length() > 0) {
+                typingTarget.setText(newText);
+            } else {
+                typingTarget.setText("");
+            }
+            typingTarget.changed();
 
-			UndoableEdit edit = new AbstractUndoableEdit() {
+            UndoableEdit edit = new AbstractUndoableEdit() {
 
-				@Override
-				public String getPresentationName() {
-					ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-					return labels.getString("attribute.text.text");
-				}
+                @Override
+                public String getPresentationName() {
+                    ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
+                    return labels.getString("attribute.text.text");
+                }
 
-				@Override
-				public void undo() {
-					super.undo();
-					editedFigure.willChange();
-					editedFigure.setText(oldText);
-					editedFigure.changed();
-				}
+                @Override
+                public void undo() {
+                    super.undo();
+                    editedFigure.willChange();
+                    editedFigure.setText(oldText);
+                    editedFigure.changed();
+                }
 
-				@Override
-				public void redo() {
-					super.redo();
-					editedFigure.willChange();
-					editedFigure.setText(newText);
-					editedFigure.changed();
-				}
-			};
-			getDrawing().fireUndoableEditHappened(edit);
+                @Override
+                public void redo() {
+                    super.redo();
+                    editedFigure.willChange();
+                    editedFigure.setText(newText);
+                    editedFigure.changed();
+                }
+            };
+            getDrawing().fireUndoableEditHappened(edit);
 
-			typingTarget.changed();
-			typingTarget = null;
+            typingTarget.changed();
+            typingTarget = null;
 
-			textArea.endOverlay();
-		}
-		//	        view().checkDamage();
-	}
+            textArea.endOverlay();
+        }
+    //	        view().checkDamage();
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		endEdit();
-		fireToolDone();
-	}
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        endEdit();
+        fireToolDone();
+    }
 
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

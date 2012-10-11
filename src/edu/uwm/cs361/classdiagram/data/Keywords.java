@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Keywords
 {
-	private static ArrayList<String> blacklist;
+	private static ArrayList<String> blacklist = new ArrayList<String>();
 
 	private static void getList ( )
 	{
@@ -15,7 +15,7 @@ public class Keywords
 		try {
 			fin = new Scanner ( new File ( "Java.keywords" ) );
 		} catch (FileNotFoundException e) {
-			blacklist = new ArrayList<String> ( );
+			return;
 		}
 		String line = "";
 		String[] parts = null;

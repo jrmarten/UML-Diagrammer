@@ -4,7 +4,7 @@
  * Copyright (c) 2009-2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  * 
- * You may not use, copy or modify this file, except in compliance with the
+ * You may not use, copy or modify this file, except in compliance with the 
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
@@ -33,44 +33,44 @@ import java.awt.datatransfer.Transferable;
  */
 public class JNLPClipboard extends AbstractClipboard {
 
-	/** The proxy target. */
-	private Object target;
+    /** The proxy target. */
+    private Object target;
 
-	/**
-	 * Creates a new proxy for the specified target object.
-	 * The target object must have a getContent and a setContent method
-	 * as specified by the {@code javax.jnlp.ClipboardService} interface.
-	 *
-	 * @param target A Clipboard object.
-	 */
-	public JNLPClipboard(Object target) {
-		this.target = target;
-	}
+    /**
+     * Creates a new proxy for the specified target object.
+     * The target object must have a getContent and a setContent method
+     * as specified by the {@code javax.jnlp.ClipboardService} interface.
+     *
+     * @param target A Clipboard object.
+     */
+    public JNLPClipboard(Object target) {
+        this.target = target;
+    }
 
-	/** Returns the proxy target. */
-	public Object getTarget() {
-		return target;
-	}
+    /** Returns the proxy target. */
+    public Object getTarget() {
+        return target;
+    }
 
-	@Override
-	public Transferable getContents(Object requestor) {
-		try {
-			return (Transferable) target.getClass().getMethod("getContents").invoke(target);
-		} catch (Exception ex) {
-			InternalError error = new InternalError("Failed to invoke getContents() on "+target);
-			error.initCause(ex);
-			throw error;
-		}
-	}
+    @Override
+    public Transferable getContents(Object requestor) {
+        try {
+            return (Transferable) target.getClass().getMethod("getContents").invoke(target);
+        } catch (Exception ex) {
+            InternalError error = new InternalError("Failed to invoke getContents() on "+target);
+            error.initCause(ex);
+            throw error;
+        }
+    }
 
-	@Override
-	public void setContents(Transferable contents, ClipboardOwner owner) {
-		try {
-			target.getClass().getMethod("setContents", Transferable.class).invoke(target, contents);
-		} catch (Exception ex) {
-			InternalError error = new InternalError("Failed to invoke setContents(Transferable) on "+target);
-			error.initCause(ex);
-			throw error;
-		}
-	}
+    @Override
+    public void setContents(Transferable contents, ClipboardOwner owner) {
+        try {
+            target.getClass().getMethod("setContents", Transferable.class).invoke(target, contents);
+        } catch (Exception ex) {
+            InternalError error = new InternalError("Failed to invoke setContents(Transferable) on "+target);
+            error.initCause(ex);
+            throw error;
+        }
+    }
 }

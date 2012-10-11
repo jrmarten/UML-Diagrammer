@@ -4,7 +4,7 @@
  * Copyright (c) 2009-2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  * 
- * You may not use, copy or modify this file, except in compliance with the
+ * You may not use, copy or modify this file, except in compliance with the 
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
@@ -34,6 +34,6 @@ import java.util.Collection;
  */
 public interface HandleTracker extends Tool {
 
-	public void setHandles(Handle handle, Collection<Handle> compatibleHandles);
+    public void setHandles(Handle handle, Collection<Handle> compatibleHandles);
 
 }

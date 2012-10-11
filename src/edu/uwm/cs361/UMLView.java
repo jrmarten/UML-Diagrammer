@@ -20,6 +20,8 @@ import org.jhotdraw.gui.PlacardScrollPaneLayout;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.undo.UndoRedoManager;
 
+import edu.umd.cs.findbugs.annotations.Nullable;
+
 
 public class UMLView extends AbstractView
 {

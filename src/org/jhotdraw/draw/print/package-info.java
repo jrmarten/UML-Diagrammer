@@ -9,10 +9,13 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 718 2010-11-21 17:49:53Z rawcoder $
- */
+*/
 
 /**
 Provides classes for printing a drawing.
- */
+*/
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.draw.print;
+
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;

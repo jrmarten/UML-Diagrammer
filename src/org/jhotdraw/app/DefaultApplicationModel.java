@@ -4,12 +4,13 @@
  * Copyright (c) 1996-2010 by the original authors of JHotDraw and all its
  * contributors. All rights reserved.
  *
- * You may not use, copy or modify this file, except in compliance with the
+ * You may not use, copy or modify this file, except in compliance with the 
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
 package org.jhotdraw.app;
 
+import edu.umd.cs.findbugs.annotations.Nullable;
 import org.jhotdraw.app.action.file.SaveFileAsAction;
 import org.jhotdraw.app.action.file.SaveFileAction;
 import org.jhotdraw.app.action.file.NewFileAction;
@@ -59,62 +60,62 @@ import org.jhotdraw.app.action.edit.ClearSelectionAction;
  * @version $Id: DefaultApplicationModel.java 717 2010-11-21 12:30:57Z rawcoder $
  */
 public class DefaultApplicationModel
-extends AbstractApplicationModel {
-	@Nullable private MenuBuilder menuBuilder;
+        extends AbstractApplicationModel {
+    @Nullable private MenuBuilder menuBuilder;
 
-	/**
-	 * Does nothing.
-	 */
-	@Override
-	public void initView(Application a, View v) {
-	}
+    /**
+     * Does nothing.
+     */
+    @Override
+    public void initView(Application a, View v) {
+    }
 
-	/**
-	 * Returns an {@code ActionMap} with a default set of actions (See
-	 * class comments).
-	 */
-	@Override
-	public ActionMap createActionMap(Application a, @Nullable View v) {
-		ActionMap m=new ActionMap();
-		m.put(NewFileAction.ID, new NewFileAction(a));
-		m.put(OpenFileAction.ID, new OpenFileAction(a));
-		m.put(SaveFileAction.ID, new SaveFileAction(a,v));
-		m.put(SaveFileAsAction.ID, new SaveFileAsAction(a,v));
-		m.put(CloseFileAction.ID, new CloseFileAction(a,v));
+    /**
+     * Returns an {@code ActionMap} with a default set of actions (See
+     * class comments).
+     */
+    @Override
+    public ActionMap createActionMap(Application a, @Nullable View v) {
+        ActionMap m=new ActionMap();
+        m.put(NewFileAction.ID, new NewFileAction(a));
+        m.put(OpenFileAction.ID, new OpenFileAction(a));
+        m.put(SaveFileAction.ID, new SaveFileAction(a,v));
+        m.put(SaveFileAsAction.ID, new SaveFileAsAction(a,v));
+        m.put(CloseFileAction.ID, new CloseFileAction(a,v));
 
-		m.put(UndoAction.ID, new UndoAction(a,v));
-		m.put(RedoAction.ID, new RedoAction(a,v));
-		m.put(CutAction.ID, new CutAction());
-		m.put(CopyAction.ID, new CopyAction());
-		m.put(PasteAction.ID, new PasteAction());
-		m.put(DeleteAction.ID, new DeleteAction());
-		m.put(DuplicateAction.ID, new DuplicateAction());
-		m.put(SelectAllAction.ID, new SelectAllAction());
-		m.put(ClearSelectionAction.ID, new ClearSelectionAction());
-		return m;
-	}
+        m.put(UndoAction.ID, new UndoAction(a,v));
+        m.put(RedoAction.ID, new RedoAction(a,v));
+        m.put(CutAction.ID, new CutAction());
+        m.put(CopyAction.ID, new CopyAction());
+        m.put(PasteAction.ID, new PasteAction());
+        m.put(DeleteAction.ID, new DeleteAction());
+        m.put(DuplicateAction.ID, new DuplicateAction());
+        m.put(SelectAllAction.ID, new SelectAllAction());
+        m.put(ClearSelectionAction.ID, new ClearSelectionAction());
+        return m;
+    }
 
-	/** Returns an empty unmodifiable list. */
-	@Override
-	public List<JToolBar> createToolBars(Application app, @Nullable View p) {
-		return Collections.emptyList();
-	}
+    /** Returns an empty unmodifiable list. */
+    @Override
+    public List<JToolBar> createToolBars(Application app, @Nullable View p) {
+        return Collections.emptyList();
+    }
 
-	/** Creates the DefaultMenuBuilder. */
-	protected MenuBuilder createMenuBuilder() {
-		return new DefaultMenuBuilder();
-	}
+    /** Creates the DefaultMenuBuilder. */
+    protected MenuBuilder createMenuBuilder() {
+        return new DefaultMenuBuilder();
+    }
 
-	@Override
-	public MenuBuilder getMenuBuilder() {
-		if (menuBuilder==null) {
-			menuBuilder=createMenuBuilder();
-		}
-		return menuBuilder;
-	}
+    @Override
+    public MenuBuilder getMenuBuilder() {
+        if (menuBuilder==null) {
+            menuBuilder=createMenuBuilder();
+        }
+        return menuBuilder;
+    }
 
-	public void setMenuBuilder(@Nullable MenuBuilder newValue) {
-		menuBuilder = newValue;
-	}
+    public void setMenuBuilder(@Nullable MenuBuilder newValue) {
+        menuBuilder = newValue;
+    }
 
 }

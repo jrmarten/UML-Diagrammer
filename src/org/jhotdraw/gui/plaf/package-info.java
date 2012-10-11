@@ -9,10 +9,13 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 723 2010-12-28 14:31:24Z rawcoder $
- */
+*/
 
 /**
 Provides user interface delegate classes for JHotDraw JComponent's.
- */
+*/
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.gui.plaf;
+
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;

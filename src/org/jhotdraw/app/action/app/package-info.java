@@ -9,12 +9,15 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 724 2011-01-08 14:17:28Z rawcoder $
- */
+*/
 
 /**
 Provides Actions which act on an application object.
- */
+*/
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.app.action.app;
+
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
 
 

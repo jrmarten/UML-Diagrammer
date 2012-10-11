@@ -9,7 +9,7 @@
  *
  * @author Werner Randelshofer
  * @version $Id: package-info.java 723 2010-12-28 14:31:24Z rawcoder $
- */
+*/
 
 /**
 Defines a framework for document oriented applications and provides default
@@ -22,6 +22,9 @@ the Mac OS X application document interface (OSX), and applets.
     Key interfaces in this framework: {@link org.jhotdraw.app.Application},
      {@link org.jhotdraw.app.ApplicationModel}, {@link org.jhotdraw.app.View}.
 </p>
- */
+*/
 @DefaultAnnotation(NonNull.class)
 package org.jhotdraw.app;
+
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.NonNull;
