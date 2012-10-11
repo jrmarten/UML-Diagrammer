@@ -1,4 +1,4 @@
-package edu.uwm.cs361.classdiagram.data;
+package edu.uwm.cs361.classdiagram.data.jamesonLocal;
 
 import java.util.*;
 import java.io.Serializable;
