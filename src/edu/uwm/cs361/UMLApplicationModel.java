@@ -5,11 +5,16 @@ import java.util.HashMap;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.DefaultApplicationModel;
 import org.jhotdraw.app.View;
+import org.jhotdraw.draw.AttributeKey;
+import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.DefaultDrawingEditor;
+import org.jhotdraw.draw.TextAreaFigure;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 
+import org.jhotdraw.draw.tool.ConnectionTool;
+import org.jhotdraw.draw.tool.TextAreaCreationTool;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.draw.tool.CreationTool;
 import java.awt.*;
@@ -24,14 +29,17 @@ import org.jhotdraw.draw.action.*;
 import org.jhotdraw.gui.JFileURIChooser;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
+import org.jhotdraw.samples.pert.figures.DependencyFigure;
 import org.jhotdraw.util.*;
 
-public class UMLApplicationModel extends DefaultApplicationModel {
+public class UMLApplicationModel extends DefaultApplicationModel
+{
 
-	private DefaultDrawingEditor sharedEditor;
-	private HashMap<String, Action> actions;
+	private DefaultDrawingEditor		sharedEditor;
+	private HashMap<String, Action>	actions;
 
-	public UMLApplicationModel() {
+	public UMLApplicationModel()
+	{
 	}
 
 	// TODO: FINISH
@@ -53,22 +61,22 @@ public class UMLApplicationModel extends DefaultApplicationModel {
 	@Override
 	public java.util.List<JToolBar> createToolBars(Application app,
 			@Nullable View view) {
-				ResourceBundleUtil Labels = ResourceBundleUtil
-						.getBundle("edu.uwm.cs361.Labels");
-				UMLView umlv = (UMLView) view;
+		ResourceBundleUtil Labels = ResourceBundleUtil
+				.getBundle("edu.uwm.cs361.Labels");
+		UMLView umlv = (UMLView) view;
 
-				DrawingEditor edit;
-				edit = (umlv == null) ? getSharedEditor() : umlv.getEditor();
+		DrawingEditor edit;
+		edit = (umlv == null) ? getSharedEditor() : umlv.getEditor();
 
-				LinkedList<JToolBar> list = new LinkedList<JToolBar>();
+		LinkedList<JToolBar> list = new LinkedList<JToolBar>();
 
-				JToolBar tmp = new JToolBar();
-				addCreationButtonsTo(tmp, edit);
-				tmp.setName(Labels.getString("window.drawToolBar.title"));
+		JToolBar tmp = new JToolBar();
+		addCreationButtonsTo(tmp, edit);
+		tmp.setName(Labels.getString("window.drawToolBar.title"));
 
-				list.add(tmp);
+		list.add(tmp);
 
-				return list;
+		return list;
 	}
 
 	// NOTE:might not make sense for this application
@@ -87,6 +95,8 @@ public class UMLApplicationModel extends DefaultApplicationModel {
 		HashMap<AttributeKey, Object> attributes;
 
 		ResourceBundleUtil labels = ResourceBundleUtil
+				.getBundle("edu.uwm.cs361.Labels");
+		ResourceBundleUtil drawLabels = ResourceBundleUtil
 				.getBundle("org.jhotdraw.draw.Labels");
 		// Resource bundles
 
@@ -97,9 +107,16 @@ public class UMLApplicationModel extends DefaultApplicationModel {
 		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
 		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
 		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
-
 		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ClassFigure(),
 				attributes), "edit.createClass", labels);
+
+		attributes = new HashMap<AttributeKey, Object>();
+		attributes.put(AttributeKeys.STROKE_COLOR, new Color(0x000099));
+		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
+				new DependencyFigure(), attributes), "edit.createDependency", labels);
+		tb.addSeparator();
+		ButtonFactory.addToolTo(tb, edit, new TextAreaCreationTool(
+				new TextAreaFigure()), "edit.createTextArea", drawLabels);
 
 	}
 
@@ -117,34 +134,37 @@ public class UMLApplicationModel extends DefaultApplicationModel {
 		return c;
 	}
 
-	private static class UMLMenuBuilder extends DefaultMenuBuilder {
+	private static class UMLMenuBuilder extends DefaultMenuBuilder
+	{
 		@Override
 		public void addOtherViewItems(JMenu menu, Application app,
 				@Nullable View view) {
-					ActionMap am = app.getActionMap(view);
-					JCheckBoxMenuItem check;
-					check = new JCheckBoxMenuItem(am.get("view.toggleGrid"));
-					ActionUtil.configureJCheckBoxMenuItem(check,
-							am.get("view.toggleGrid"));
-					menu.add(check);
+			ActionMap am = app.getActionMap(view);
+			JCheckBoxMenuItem check;
+			check = new JCheckBoxMenuItem(am.get("view.toggleGrid"));
+			ActionUtil.configureJCheckBoxMenuItem(check, am.get("view.toggleGrid"));
+			menu.add(check);
 		}
 
 	}
 
-	private static class ToolButtonListener implements ItemListener {
-		private Tool tool;
-		private DrawingEditor editor;
+	private static class ToolButtonListener implements ItemListener
+	{
+		private Tool					tool;
+		private DrawingEditor	editor;
 
-		public ToolButtonListener(Tool t, DrawingEditor e) {
+		public ToolButtonListener(Tool t, DrawingEditor e)
+		{
 			tool = t;
 			editor = e;
 		}
 
 		@Override
 		public void itemStateChanged(ItemEvent e) {
-			if (e.getStateChange() == ItemEvent.SELECTED) {
-				editor.setTool(tool);
-			}
+			if (e.getStateChange() == ItemEvent.SELECTED)
+				{
+					editor.setTool(tool);
+				}
 		}
 	}
 }
