@@ -27,8 +27,8 @@ public class TestAttribute {
 		assertTrue ( attr == null);
 		attr = Attribute.Create("_x:private");
 		assertTrue ( attr == null );
-		attr = Attribute.Create("Abstract:int");
-		assertFalse ( attr == null );
+		attr = Attribute.Create("+ _name : int ");
+		assertNotNull ( attr );
 	}
 
 	@Test
@@ -36,6 +36,7 @@ public class TestAttribute {
 	{
 		String sig = "count:int";
 
+		assertNotNull ( Attribute.Create ( sig ) );
 		assertTrue ( Attribute.Create( sig ).getAccess() == Access.DEFAULT);
 
 		assertTrue ( Attribute.Create( "~" + sig ).getAccess() == Access.DEFAULT);

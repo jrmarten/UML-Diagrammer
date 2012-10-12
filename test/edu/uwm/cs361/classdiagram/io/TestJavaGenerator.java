@@ -21,6 +21,7 @@ public class TestJavaGenerator {
 		umlClass.addMethod(Method.Create("+size( ):int"));
 		umlClass.addMethod(Method.Create("+add(int):boolean" ) );
 		umlClass.addMethod(Method.Create ( "+remove( ):int"));
+		umlClass.addMethod ( Method.Create ( "abstract + add ( E )" ));
 	}
 
 	@Test

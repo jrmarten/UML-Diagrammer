@@ -52,8 +52,10 @@ class JavaGenerator
 
 		for ( String line : lines )
 			{
+				tab_count += - count(line, '}');
+				
 				fout.println( get_indent() + line.trim() );
-				tab_count += (count(line, '{' ) - count(line,'}' ));
+				tab_count += (count(line, '{' ));
 			}
 	}
 
@@ -72,7 +74,7 @@ class JavaGenerator
 			return;
 		}
 
-		String start = "\n{\n", end = "\n{\n";
+		String start = "\n{\n", end = "\n}\n\n";
 
 		genny.write ( "class " + umlclass.getName() + start );
 
@@ -83,7 +85,7 @@ class JavaGenerator
 				sig += (attr.isStatic())? "static " : "";
 				sig += (attr.isFinal())? "final " : "";
 				sig += attr.getType() + " ";
-				sig += attr.getName() + ";\n";
+				sig += attr.getName() + ";\n\n";
 				genny.write ( sig );
 			}
 
@@ -101,7 +103,7 @@ class JavaGenerator
 				for ( ; it.hasNext() ; )
 					{
 						sig += it.next() + " arg" + index;
-						if ( it.hasNext() ) break;
+						if ( !it.hasNext() ) break;
 						sig += ", ";
 					}
 				sig += " )" + start;

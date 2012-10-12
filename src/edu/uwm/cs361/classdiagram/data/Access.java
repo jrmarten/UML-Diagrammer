@@ -7,6 +7,7 @@ public enum Access
 	DEFAULT ( "default", '~' ),
 	PROTECTED ("protected", '#');
 
+	private static final char[] symbols = { '-', '+', '~', '#' };
 
 	private String name = "";
 	private char sym = 0;
@@ -20,6 +21,11 @@ public enum Access
 	public char getSymbol ( )
 	{
 		return sym;
+	}
+	
+	public static char[] symbols ( ) 
+	{
+		return symbols;
 	}
 
 	public static Access fromSymbol ( char c )

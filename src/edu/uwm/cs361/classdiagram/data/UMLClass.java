@@ -2,7 +2,6 @@ package edu.uwm.cs361.classdiagram.data;
 
 import java.util.*;
 import java.io.Serializable;
-import edu.uwm.cs361.classdiagram.data.*;
 
 public class UMLClass implements Serializable {
 
@@ -107,8 +106,8 @@ public class UMLClass implements Serializable {
      *
      * @return iterator over all attribute names
      */
-    public final Iterator<Attribute> getAttributes() {
-        return myAttributes.iterator();
+    public final LinkedList<Attribute> getAttributes() {
+        return myAttributes;
     }
 
     /**
@@ -157,8 +156,8 @@ public class UMLClass implements Serializable {
      *
      * @return iterator over all method names
      */
-    public final Iterator<Method> getMethods() {
-        return myMethods.iterator();
+    public final LinkedList<Method> getMethods() {
+        return myMethods;
     }
 
     /**

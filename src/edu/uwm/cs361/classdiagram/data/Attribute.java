@@ -84,7 +84,11 @@ public class Attribute
 
 	public static Attribute Create ( String str )
 	{
-		if ( ! regex.matcher(str).find() ) return null;
+		if ( ! regex.matcher(str).find() )
+		{
+			System.out.println ( "Stoped at regex");
+			return null;
+		}
 
 		String[] parts = str.split(  ":" );
 
@@ -94,8 +98,8 @@ public class Attribute
 		int tmpIndex = parts.length - 1;
 		String name = parts[ tmpIndex ];
 
-		if ( Keywords.blackListp ( type ) ) return null;
-		if ( Keywords.blackListp ( name ) ) return null;
+		if ( Keywords.keywordp ( type ) ) return null;
+		if ( Keywords.reservedp ( name ) ) return null;
 
 		char sym = name.charAt ( 0 );
 
