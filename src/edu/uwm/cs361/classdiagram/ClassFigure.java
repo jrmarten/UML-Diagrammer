@@ -8,9 +8,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.connector.LocatorConnector;
 import org.jhotdraw.draw.event.FigureAdapter;
 import org.jhotdraw.draw.event.FigureEvent;
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
+import org.jhotdraw.draw.handle.ConnectorHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.MoveHandle;
 import org.jhotdraw.draw.layouter.VerticalLayouter;
@@ -45,11 +47,11 @@ public class ClassFigure extends GraphicalCompositeFigure {
 		}
 	}
 
-	private static class DurationAdapter extends FigureAdapter {
+	private static class AttributeAdapter extends FigureAdapter {
 
 		private UMLClass target;
 
-		public DurationAdapter(UMLClass target) {
+		public AttributeAdapter(UMLClass target) {
 			this.target = target;
 		}
 
@@ -60,8 +62,21 @@ public class ClassFigure extends GraphicalCompositeFigure {
 
 		}
 	}
+	private static class MethodAdapter extends FigureAdapter {
 
+		private UMLClass target;
 
+		public MethodAdapter(UMLClass target) {
+			this.target = target;
+		}
+
+		@Override public void attributeChanged(FigureEvent evt) {
+			// We could fire a property change event here, in case
+			// some other object would like to observe us.
+			//target.firePropertyChange("duration", e.getOldValue(), e.getNewValue());
+
+		}
+	}
 
 	public ClassFigure ( )
 	{
@@ -121,9 +136,8 @@ public class ClassFigure extends GraphicalCompositeFigure {
 				handles.add(new MoveHandle(this, RelativeLocator.northEast()));
 				handles.add(new MoveHandle(this, RelativeLocator.southWest()));
 				handles.add(new MoveHandle(this, RelativeLocator.southEast()));
-				//LocatorConnector lc = new LocatorConnector(this, RelativeLocator.east());
-				//ConnectorHandle ch = new ConnectorHandle( lc);
-				//ch.setToolTipText( "Drag the connector to a dependate class" );  //dependancy stuff
+				ConnectorHandle ch;
+				handles.add(ch = new ConnectorHandle(new LocatorConnector(this, RelativeLocator.east()), new DependencyFigure()));
 				break;
 		}
 		return handles;
@@ -139,6 +153,17 @@ public class ClassFigure extends GraphicalCompositeFigure {
 	{
 		return (TextFigure) ((ListFigure) getChild(0)).getChild(0);
 	}
+	
+	public void addAttribute ( String attr )
+	{
+		Attribute tmp = Attribute.Create ( attr );
+		if ( tmp == null ) return; //throw an error popup
+		String tmpText = tmp.toString();
+		tmpText = (tmp.isFinal() ) ? tmpText.toUpperCase() : tmpText;
+		TextFigure tmpFig = createTextFigure ( tmpText );
+		if ( tmp.isStatic() ) tmpFig.set( FONT_UNDERLINE, true);
+		attrList.add( tmpFig );
+	}
 
 	private TextFigure getAttributeFigure ( int index )
 	{
@@ -149,27 +174,6 @@ public class ClassFigure extends GraphicalCompositeFigure {
 		return (TextFigure) ((ListFigure) getChild(2)).getChild(index);
 	}
 
-
-	private TextFigure getMethodFigure ( int index )
-	{
-		if ( index < 0 ) throw new IndexOutOfBoundsException ( );
-		if ( index >= ((ListFigure) getChild(4)).getChildCount() )
-			throw new IndexOutOfBoundsException( );
-
-		return (TextFigure) ((ListFigure) getChild(4)).getChild(index);
-	}
-
-	public void addAttribute ( String attr )
-	{
-		Attribute tmp = Attribute.Create ( attr );
-		if ( tmp == null ) return; //throw an error popup
-		String tmpText = tmp.toString();
-		tmpText = (tmp.isFinal() ) ? tmpText.toUpperCase(): tmpText;
-		TextFigure tmpFig = createTextFigure ( tmpText );
-		if ( tmp.isStatic() ) tmpFig.set( FONT_UNDERLINE, true);
-		attrList.add( tmpFig );
-	}
-
 	public void addMethod ( String methtxt )
 	{
 		Method tmp = Method.Create( methtxt );
@@ -178,6 +182,15 @@ public class ClassFigure extends GraphicalCompositeFigure {
 		if ( tmp.isStatic ( ) ) tmpFig.set( FONT_UNDERLINE, true );
 		if ( tmp.isAbstract ( ) ) tmpFig.set ( FONT_ITALIC, true );
 		methodList.add( tmpFig );
+	}
+
+	private TextFigure getMethodFigure ( int index )
+	{
+		if ( index < 0 ) throw new IndexOutOfBoundsException ( );
+		if ( index >= ((ListFigure) getChild(4)).getChildCount() )
+			throw new IndexOutOfBoundsException( );
+
+		return (TextFigure) ((ListFigure) getChild(4)).getChild(index);
 	}
 
 	@Override public void
