@@ -31,7 +31,7 @@ public class AssociationFigure extends LineConnectionFigure {
      */
     @Override
     public boolean canConnect(Connector start, Connector end) {
-        if ((start.getOwner() instanceof ClassFigure)
+ /*       if ((start.getOwner() instanceof ClassFigure)
                 && (end.getOwner() instanceof ClassFigure)) {
 
             ClassFigure sf = (ClassFigure) start.getOwner();
@@ -44,9 +44,9 @@ public class AssociationFigure extends LineConnectionFigure {
 
             // Disallow cyclic connections
             return !sf.isDependentOf(ef);
-        }
+        }*/
 
-        return false;
+        return true;
     }
 
     @Override
