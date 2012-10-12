@@ -76,7 +76,9 @@ class JavaGenerator
 
 		String start = "\n{\n", end = "\n}\n\n";
 
-		genny.write ( "class " + umlclass.getName() + start );
+		genny.write ( (umlclass.isAbstract()?"abstract ": "") +
+				"class " + umlclass.getName() + 
+				" " + umlclass.getGenerics ( ) + start );
 
 		for ( Attribute attr : umlclass.getAttributes ( ) )
 			{
