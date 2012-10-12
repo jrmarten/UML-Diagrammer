@@ -269,4 +269,14 @@ public class ClassFigure extends GraphicalCompositeFigure {
 						out.addAttribute ( "static", (meth.isStatic())?"true":"false");
 					}
 			}
+
+	public void removeDependency(AssociationFigure associationFigure) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void addDependency(AssociationFigure associationFigure) {
+		// TODO Auto-generated method stub
+		
+	}
 }
