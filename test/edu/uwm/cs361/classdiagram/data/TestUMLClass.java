@@ -3,6 +3,7 @@ package edu.uwm.cs361.classdiagram.data;
 import static org.junit.Assert.*;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,10 +12,16 @@ import org.junit.Test;
 public class TestUMLClass {
 
 	private UMLClass umlClass;
+	private LinkedList<UMLClass> classList = new LinkedList<UMLClass>();
+	private UMLClass newAssociatedClass = new UMLClass();
+	private UMLClass newSuperClass = new UMLClass();
+	private UMLClass newDependClass = new UMLClass();
 
 	@Before
 	public void setUp() throws Exception {
 		umlClass = new UMLClass();
+
+
 	}
 
 
@@ -30,48 +37,35 @@ public class TestUMLClass {
 
 	@Test
 	public void testRemoveAttribute() {
+		/*
+		 * Add attribute to the class, check that it is added.
+		 */
 		String str = "- size : int";
 		Attribute a = Attribute.Create(str);
 		assertTrue(a != null);
 		System.out.println ( a );
 		umlClass.addAttribute(a);
 		assertTrue ( umlClass.getAttributes().contains(a));
-
-
+		/*
+		 * Remove attribute and check that it is removed.
+		 */
 		umlClass.removeAttribute(a);
 		assertFalse ( umlClass.getAttributes().contains(a));
 
 	}
 
-	@Test
-	public void testRenameAttribute(){
-		String str = "- size : int";
-		Attribute a = Attribute.Create(str);
-		assertTrue(a != null);
-		System.out.println ( a );
-		umlClass.addAttribute(a);
-		assertTrue ( umlClass.getAttributes().contains(a));
 
-		String str2 = "- size : double";
-		Attribute b = Attribute.Create(str2);
-		assertTrue(b != null);
-		System.out.println( b );
-		umlClass.renameAttribute(a, b);	
-
-		assertFalse( umlClass.getAttributes().contains(a));
-		assertTrue( umlClass.getAttributes().contains(b));
-
-
-	}
 
 	@Test
 	public void testAddMethod( ){
+		/*
+		 * Add method to the class, check that it is added.
+		 */
 		String str = "+ name():String";
 		Method meth1 = Method.Create( str );
 		umlClass.addMethod(meth1);
 		assertTrue(meth1 != null);
 		System.out.println(meth1);
-
 		/*
 		 * Test all of the method 1 attributes
 		 */
@@ -79,7 +73,9 @@ public class TestUMLClass {
 		assertTrue(meth1.getType().equals("String"));
 		assertTrue(meth1.getAccess() == Access.PUBLIC);
 		assertTrue(umlClass.getNumberOfMethods() == 1);
-
+		/*
+		 * Add 2nd method to the class, check that it is added.
+		 */
 		String str2 = "- _type():String";
 		Method meth2 = Method.Create( str2 );
 		umlClass.addMethod(meth2);
@@ -98,72 +94,36 @@ public class TestUMLClass {
 
 	@Test
 	public void removeMethod( ) {
-
+		/*
+		 * Add methods and check that they are added.
+		 */
 		String str = "+ name():String";
 		Method meth1 = Method.Create( str );
 		String str2 = "- _type():String";
 		Method meth2 = Method.Create( str2 );
 		umlClass.addMethod(meth1);
+		assertTrue(meth1 != null);
+		assertTrue ( umlClass.getMethods().contains(meth1));
+
 		umlClass.addMethod(meth2);
-		assertTrue(meth1 != null);
 		assertTrue(meth2 != null);
-		System.out.println("meth 1 = " + meth1);
-		System.out.println("meth 2 = " + meth2);
+		assertTrue ( umlClass.getMethods().contains(meth2));
 
-		System.out.println(umlClass.getMethods());
-		System.out.println(umlClass.getNumberOfMethods());
-		//assertTrue(umlClass.getNumberOfMethods() == 2);
 
 		/*
-		 * remove a method
+		 * Remove method and check that it is removed.
 		 */
-
-		umlClass.removeMethod(meth1);
-		System.out.println(umlClass.getNumberOfMethods());
-		//assertTrue(umlClass.getNumberOfMethods() == 1);
-
-		/**
-		 * 
-		 * testing for the actual method in the UMLClass umlClass
-		 * cannot get recognition of the method when checking...
-		 * 
-		 */
+		umlClass.removeMethod(meth2);
+		assertFalse( umlClass.getMethods().contains(meth2));
 
 
 	}
 
-	@Test
-	public void renameMethod( ) {
-		/*
-		 * needs to be fixed
-		 * 
-		 */
-
-		String str = "+ name():String";
-		Method meth1 = Method.Create( str );
-		umlClass.addMethod(meth1);
-		assertTrue(meth1 != null);
-		//System.out.println(meth1);
-
-		/*
-		 * Test all of the method 1 attributes
-		 */
-		assertTrue(meth1.getName().equals("name"));
-		String str2 = "- _name():String";
-		Method meth2 = Method.Create(str2);
-
-		umlClass.renameMethod(meth1, meth2);
 
 
-	}
-
-	@Test
-	public void testGetNumberOfMethods( ) {
-		/*
-		 * needs to be fixed
-		 * 
-		 */
-		String str = "+ name():String";
+	/*
+	  public void testGetNumberOfMethods( ) {
+	  String str = "+ name():String";
 		Method meth1 = Method.Create( str );
 		String str2 = "- _type():String";
 		Method meth2 = Method.Create( str2 );
@@ -178,32 +138,102 @@ public class TestUMLClass {
 		System.out.println("umlClass.getNumberOfMethods(): " + umlClass.getNumberOfMethods());
 		//assertTrue(umlClass.getNumberOfMethods() == 2);
 
-		/*
-		 * remove a method, check for correct number of methods updated.
-		 */
+
 
 		umlClass.removeMethod(meth1);
 		System.out.println("umlClass.getNumberOfMethods(): " + umlClass.getNumberOfMethods());
 		//assertTrue(umlClass.getNumberOfMethods() == 1);
 
 	}
+	 */
+
+
+
 
 	@Test
-	public void testAssociations ( ) {
+	public void testAddAssociation( ) {
+		umlClass.addAssociation(newAssociatedClass);
+		classList.add( newAssociatedClass );
+
+		Iterator<UMLClass> it = umlClass.getAssociations().iterator();
+		Iterator<UMLClass> itl = classList.iterator();
+
+		while ( it.hasNext() && itl.hasNext() )
+			{
+				assertTrue ( it.next().equals(itl.next()));
+			}
+
+		assertFalse ( it.hasNext() );
+		assertFalse ( itl.hasNext() );
+
 
 	}
 
-	
 	@Test
-	 public void testSuperclass ( ) {
-		
+	public void testRemoveAssociation( ) {
+		/*
+		 * 
+		 * Not yet implemented
+		 * 	
+		 */
+
 	}
-	
-	
+
+
+
 	@Test
-	public void testInheritance ( ) {
-		
+	public void testAddSuperclass( ) {
+
+		umlClass.addSuperclass(newSuperClass);
+		classList.add(newSuperClass);
+
+		Iterator<UMLClass> it = umlClass.getSuperclasses().iterator();
+		Iterator<UMLClass> itl = classList.iterator();
+
+		while ( it.hasNext() && itl.hasNext() )
+			{
+				assertTrue ( it.next().equals(itl.next()));
+			}
+
+		assertFalse ( it.hasNext() );
+		assertFalse ( itl.hasNext() );
 	}
-	
-	
+
+
+	@Test
+	public void testRemoveSuperclass( ) {
+		/*
+		 * 
+		 * Not yet implemented
+		 * 	
+		 */
+	}
+
+	@Test
+	public void addDependency( ) {
+		umlClass.addDependency(newDependClass);
+		classList.add(newDependClass);
+
+		Iterator<UMLClass> it = umlClass.getDependencies().iterator();
+		Iterator<UMLClass> itl = classList.iterator();
+
+		while ( it.hasNext() && itl.hasNext() )
+			{
+				assertTrue ( it.next().equals(itl.next()));
+			}
+
+		assertFalse ( it.hasNext() );
+		assertFalse ( itl.hasNext() );
+	}
+
+	@Test
+	public void removeDependency( ) {
+		/*
+		 * 
+		 * Not yet implemented
+		 * 	
+		 */
+	}
+
+
 }
