@@ -15,6 +15,7 @@ import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.sequencediagram.LifelineFigure;
 
 import org.jhotdraw.draw.tool.ConnectionTool;
+import org.jhotdraw.draw.tool.DelegationSelectionTool;
 import org.jhotdraw.draw.tool.TextAreaCreationTool;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.draw.tool.CreationTool;
@@ -49,6 +50,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		ActionMap m = super.createActionMap(a, v);
 		ResourceBundleUtil drawLabels = ResourceBundleUtil
 				.getBundle("edu.uwm.cs361.Labels");
+		
 		return m;
 
 	}
@@ -131,6 +133,8 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		ButtonFactory.addToolTo(tb, edit, new TextAreaCreationTool(
 				new TextAreaFigure()), "edit.createTextArea", drawLabels);
 
+		ButtonFactory.addToolTo ( tb, edit, new DelegationSelectionTool()
+				, "", labels );
 	}
 
 	@Override
