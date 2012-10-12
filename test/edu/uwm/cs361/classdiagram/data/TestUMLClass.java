@@ -189,42 +189,19 @@ public class TestUMLClass {
 	}
 
 	@Test
-	public void testAddAssociation( ) {
+	public void testAssociations ( ) {
 
 	}
 
+	
 	@Test
-	public void testRemoveAssociation( ) {
-
-	}
-
-	@Test
-	public void testHasAssociation( ) {
-
-	}
-
-	@Test
-	public void testGetAssociations() {
+	 public void testSuperclass ( ) {
 		
 	}
 	
-	@Test
-	 public void testAddSuperclass( ) {
-		
-	}
 	
 	@Test
-	public void testRemoveSuperclass( ) {
-		
-	}
-	
-	@Test
-	public void testGetSuperclasses( ) {
-		
-	}
-	
-	@Test
-	public void testHasInheritanceCycle( ) {
+	public void testInheritance ( ) {
 		
 	}
 	
