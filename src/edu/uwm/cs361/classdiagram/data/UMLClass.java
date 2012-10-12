@@ -6,11 +6,14 @@ import java.io.Serializable;
 public class UMLClass implements Serializable {
 
     private String myName;
+    private LinkedList<String> generics;
     private LinkedList<Attribute> myAttributes;
     private LinkedList<Method> myMethods;
     private LinkedList<UMLClass> myAssociatedClasses;
     private LinkedList<UMLClass> mySuperClasses;
     private LinkedList<UMLClass> myDependClasses;
+    private boolean abstractp = false;
+    private boolean abstract_declaired = false;
 
     public static final String idreg = "[A-Za-z_$][A-Za-z0-9_$]*";
     public static final String classreg = ".*";
@@ -30,6 +33,8 @@ public class UMLClass implements Serializable {
      * Create a new JModellerClass instance
      */
     public UMLClass() {
+    		myName = "Class";
+    		generics = new LinkedList<String>();
         myAttributes = new LinkedList<Attribute>();
         myMethods = new LinkedList<Method> ();
         myAssociatedClasses = new LinkedList<UMLClass>();
@@ -44,7 +49,7 @@ public class UMLClass implements Serializable {
      */
     public UMLClass(String newClassName) {
         this ( );
-    	setName(newClassName);
+        setName(newClassName);
     }
 
     /**
@@ -55,6 +60,21 @@ public class UMLClass implements Serializable {
      */
     public void setName(String newName) {
         myName = newName;
+        
+        generics.clear ( );
+        if ( newName.contains ( "<" ) )
+        	{
+        		String tmp;
+        		myName = newName.substring ( 0, newName.indexOf ( "<" ));
+        		tmp = newName.substring ( newName.indexOf ( "<" ) + 1, 
+        															newName.indexOf ( ">" ));
+        		String[] classnames = tmp.split ( " , ");
+        		for ( String cl : classnames )
+        			{
+        				cl = cl.trim ( );
+        				if ( ! cl.equals ( "" ) ) generics.add ( cl );
+        			}
+        	}
     }
 
     /**
@@ -65,8 +85,24 @@ public class UMLClass implements Serializable {
     public String getName() {
         return myName;
     }
+    
+    public String getGenerics ( ) 
+    {
+    	Iterator<String> it = generics.iterator ( );
+    	String buf = "";
+    	while ( it.hasNext() )
+    	{
+    		buf += it.next ( );
+    		if ( !it.hasNext ( ) ) break;
+    		buf += ", ";
+    	}
+    	return "<" + buf + ">";
+    }
 
-
+    public boolean isAbstract ( ) 
+    {
+    	return abstractp;
+    }
 
 
     /**
@@ -125,6 +161,8 @@ public class UMLClass implements Serializable {
      * @param newMethod name of a method to be added
      */
     public void addMethod(Method newMethod) {
+    		if ( newMethod == null ) return;
+    		if ( newMethod.isAbstract ( ) ) abstractp = true;
         myMethods.add(newMethod);
     }
 
@@ -135,6 +173,20 @@ public class UMLClass implements Serializable {
      */
     public void removeMethod(Method oldMethod) {
         myMethods.remove(oldMethod);
+        
+        if ( oldMethod.isAbstract ( ) && abstractp && !abstract_declaired )
+    			{
+    				boolean is_abstract = false;
+    				for ( Method m : myMethods )
+    					{
+    						if ( m.isAbstract ( ) ) 
+    							{
+    								is_abstract = false;
+    								break;
+    							}
+    					}
+    				if ( !is_abstract ) abstractp = false;
+    			}
     }
 
     /**
