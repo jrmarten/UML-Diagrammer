@@ -117,7 +117,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
 				new DependencyFigure(), attributes), "edit.createDependency", labels);
 		
-		tb.addSeparator();
+		tb.addSeparator(); /**/
 		
 		attributes = new HashMap<AttributeKey, Object>();
 		attributes.put(AttributeKeys.FILL_COLOR, Color.white);

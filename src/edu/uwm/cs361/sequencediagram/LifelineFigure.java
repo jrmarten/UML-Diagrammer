@@ -54,6 +54,8 @@ public class LifelineFigure extends GraphicalCompositeFigure {
         ListFigure nameCompartment = new ListFigure(nameCompartmentPF);
 
         add(nameCompartment);
+        
+        LineFigure tail = new LineFigure();
 
         Insets2D.Double insets = new Insets2D.Double(4, 8, 4, 8);
         nameCompartment.set(LAYOUT_INSETS, insets);
