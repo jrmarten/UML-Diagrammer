@@ -18,10 +18,7 @@ import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.geom.*;
 /**
- * A horizontal line with a preferred size of 1,1.
- *
- * @author  Werner Randelshofer
- * @version $Id: SeparatorLineFigure.java 718 2010-11-21 17:49:53Z rawcoder $
+ * A horizontal line with a preferred size of 1,1 used for separating the ClassFigure's name, attributes and methods
  */
 public class SeparatorLineFigure
 extends RectangleFigure {
