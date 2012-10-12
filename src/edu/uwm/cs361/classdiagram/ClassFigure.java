@@ -76,8 +76,8 @@ public class ClassFigure extends GraphicalCompositeFigure {
 		ListFigure nameList = new ListFigure(nameListPF);
 		ListFigure attrList = new ListFigure ( );
 		ListFigure methodList = new ListFigure ( );
-		SeperationFigure separator1 = new SeperationFigure ( );
-		SeperationFigure separator2 = new SeperationFigure ( );
+		SeparatorLineFigure separator1 = new SeparatorLineFigure ( );
+		SeparatorLineFigure separator2 = new SeparatorLineFigure ( );
 
 		add ( nameList );
 		add ( separator1 );
