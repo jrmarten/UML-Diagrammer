@@ -137,7 +137,7 @@ public class ClassFigure extends GraphicalCompositeFigure {
 				handles.add(new MoveHandle(this, RelativeLocator.southWest()));
 				handles.add(new MoveHandle(this, RelativeLocator.southEast()));
 				ConnectorHandle ch;
-				handles.add(ch = new ConnectorHandle(new LocatorConnector(this, RelativeLocator.east()), new DependencyFigure()));
+				handles.add(ch = new ConnectorHandle(new LocatorConnector(this, RelativeLocator.east()), new AssociationFigure()));
 				break;
 		}
 		return handles;
