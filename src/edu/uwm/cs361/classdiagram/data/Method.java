@@ -2,7 +2,6 @@ package edu.uwm.cs361.classdiagram.data;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -125,7 +124,11 @@ public class Method
 		char tmpch = name.charAt ( 0 );
 		for ( char sym : Access.symbols ( ) )
 			{
-				if ( sym == tmpch ) mods[index] = "" + sym;
+				if ( sym == tmpch ) 
+					{	
+						mods[index] = "" + sym;
+						name = name.substring ( 1 );
+					}
 			}
 
 		boolean ap = false, sp = false;
@@ -163,7 +166,23 @@ public class Method
 		return new Method ( mods, type, name, args );
 	}
 
-	
+	public static boolean overloaded ( Method p, Method q )
+	{
+		if ( ! p.name.equals ( q.name ) ) return false;
+		if ( ! p.type.equals ( q.type ) ) return false;
+		
+		if ( p.params.size ( ) != q.params.size ( ) ) return true;
+		
+		Iterator<String> pit = p.params.iterator ( );
+		Iterator<String> qit = q.params.iterator ( );
+		
+		while ( pit.hasNext ( ) )
+			{
+				if ( !pit.next( ).equals ( qit.next( ) ) ) return true;
+			}
+		
+		return false;
+	}
 	
 	public String getName ( )
 	{

@@ -128,12 +128,22 @@ public class Attribute
 		return access.getSymbol() + name + ":" + type;
 	}
 
+	public boolean sigEquals ( Attribute attr )
+	{
+		return name.equals ( attr.name ) && type.equals ( attr.type );
+	}
+	
 	@Override public boolean equals ( Object obj )
 	{
 		if ( obj instanceof Attribute )
 			{
-				return (((Attribute)obj).name.equals ( name ) &&
-						((Attribute)obj).type.equals ( type ));
+				Attribute that = (Attribute) obj;
+				
+				boolean x = name.equals ( that.name );
+				x = x && type.equals ( that.type );
+				x = x && finalp == that.finalp && staticp == that.staticp;
+				x = x && access.equals ( that.access );
+				return x;
 			}
 		return false;
 	}
