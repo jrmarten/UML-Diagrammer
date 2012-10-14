@@ -258,4 +258,13 @@ public class UMLClass implements Serializable
 	{
 		return myDependClasses;
 	}
+	
+	//*********************************************************************
+	
+	//helps java generator
+	
+	public String getDeclaration ( )
+	{
+		return "class " + getName ( );
+	}
 }

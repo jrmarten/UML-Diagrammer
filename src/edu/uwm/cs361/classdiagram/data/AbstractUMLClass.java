@@ -10,6 +10,8 @@ public class AbstractUMLClass extends UMLClass
 	}
 	
 	
+	// short cut the abstract testing in 
+	// umlclass
 	@Override public boolean removeMethod ( Method m )
 	{
 		return myMethods.remove ( m );
@@ -25,4 +27,8 @@ public class AbstractUMLClass extends UMLClass
 		return true;
 	}
 
+	@Override public String getDeclaration ( )
+	{
+		return "abstract class" + getName ( );
+	}
 }

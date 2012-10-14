@@ -37,4 +37,9 @@ public class UMLInterface extends UMLClass
 		if ( !(c instanceof UMLInterface) ) return false;
 		return mySuperClasses.add ( c );
 	}
+	
+	@Override public String getDeclaration ( )
+	{
+		return "interface " + getName ( );
+	}
 }

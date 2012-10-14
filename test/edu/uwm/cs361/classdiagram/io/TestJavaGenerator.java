@@ -15,13 +15,15 @@ public class TestJavaGenerator {
 
 	@Before
 	public void setUp() throws Exception {
-		umlClass = new UMLClass ( "List");
+		umlClass = new UMLClass ( "List<E>");
 
 		umlClass.addAttribute(Attribute.Create("-_size:int"));
 		umlClass.addMethod(Method.Create("+size( ):int"));
 		umlClass.addMethod(Method.Create("+add(int):boolean" ) );
 		umlClass.addMethod(Method.Create ( "+remove( ):int"));
-		umlClass.addMethod ( Method.Create ( "abstract + add ( E )" ));
+		umlClass.addMethod(Method.Create ( "abstract add ( E ):void" ));
+		umlClass.addMethod ( Method.Create ( "public static main(String[]):void" ) );
+		umlClass.addMethod ( Method.Create ( "public static add ( int, int ) : int" ) );
 	}
 
 	@Test
