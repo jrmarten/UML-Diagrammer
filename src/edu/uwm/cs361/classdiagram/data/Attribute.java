@@ -127,6 +127,14 @@ public class Attribute
 	{
 		return access.getSymbol() + name + ":" + type;
 	}
+	
+	public String getSignature ( )
+	{
+		return access.toString ( ) + " " + 
+				((staticp)?"static ":"") +
+				((finalp)?"final ":"") +
+				type + " " + name;
+	}
 
 	public boolean sigEquals ( Attribute attr )
 	{

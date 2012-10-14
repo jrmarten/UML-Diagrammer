@@ -5,32 +5,21 @@ import java.io.Serializable;
 
 public class UMLClass implements Serializable
 {
-
-	private String								myName;
-	private LinkedList<String>		generics;
-	private LinkedList<Attribute>	myAttributes;
-	private LinkedList<Method>		myMethods;
-	private LinkedList<UMLClass>	myAssociatedClasses;
-	private LinkedList<UMLClass>	mySuperClasses;
-	private LinkedList<UMLClass>	myDependClasses;
+	protected String								myName;
+	protected LinkedList<String>		generics;
+	protected LinkedList<Attribute>	myAttributes;
+	protected LinkedList<Method>		myMethods;
+	protected LinkedList<UMLClass>	myAssociatedClasses;
+	protected LinkedList<UMLClass>	mySuperClasses;
+	protected LinkedList<UMLClass>	myDependClasses;
 	private boolean								abstractp						= false;
-	private boolean								abstract_declaired	= false;
-
+	
 	public static final String		idreg								= "[A-Za-z_$][A-Za-z0-9_$]*";
 	public static final String		classreg						= ".*";
 
 	static final long							serialVersionUID		= -3748332488864682801L;
 
-	public static Object[] cat ( Object[] obja, Object[] objb )
-	{
-		Object[] result = new Object[ obja.length + objb.length ];
-		int i = 0;
-		for ( Object obj : obja )
-			result[i++] = obj;
-		for ( Object obj : objb )
-			result[i++] = obj;
-		return result;
-	}
+	
 
 	/**
 	 * Create a new JModellerClass instance
@@ -108,6 +97,11 @@ public class UMLClass implements Serializable
 		return "<" + buf + ">";
 	}
 
+	public boolean isAbstractClass ( )
+	{
+		return false;
+	}
+	
 	public boolean isAbstract ( )
 	{
 		return abstractp;
@@ -144,7 +138,7 @@ public class UMLClass implements Serializable
 		return false;
 	}
 
-	public Iterable<Attribute> getAttributes ( )
+	public Collection<Attribute> getAttributes ( )
 	{
 		return myAttributes;
 	}
@@ -169,11 +163,11 @@ public class UMLClass implements Serializable
 		return true;
 	}
 
-	public void removeMethod ( Method oldMethod )
+	public boolean removeMethod ( Method oldMethod )
 	{
-		myMethods.remove ( oldMethod );
+		boolean result = myMethods.remove ( oldMethod );
 
-		if ( oldMethod.isAbstract ( ) && abstractp && !abstract_declaired )
+		if ( oldMethod.isAbstract ( ) && abstractp )
 			{
 				boolean is_abstract = false;
 				for ( Method m : myMethods )
@@ -186,9 +180,10 @@ public class UMLClass implements Serializable
 					}
 				if ( !is_abstract ) abstractp = false;
 			}
+		return result;
 	}
 
-	public Iterable<Method> getMethods ( )
+	public Collection<Method> getMethods ( )
 	{
 		return myMethods;
 	}
@@ -209,7 +204,7 @@ public class UMLClass implements Serializable
 		return myAssociatedClasses.remove ( oldAssociatedClass );
 	}
 
-	public Iterable<UMLClass> getAssociations ( )
+	public Collection<UMLClass> getAssociations ( )
 	{
 		return myAssociatedClasses;
 	}
@@ -218,18 +213,18 @@ public class UMLClass implements Serializable
 
 	// Inheritence
 
-	//TODO: Test
+	// TODO: Test
 	public boolean addSuperclass ( UMLClass par )
 	{
 		if ( par.isSuper ( this ) ) return false;
 		return mySuperClasses.add ( par );
 	}
-	
+
 	public boolean isSuper ( UMLClass par )
 	{
 		for ( UMLClass cl : par.getSuperclasses ( ) )
 			{
-				if ( cl.equals ( par )) return true;
+				if ( cl.equals ( par ) ) return true;
 				if ( cl.isSuper ( par ) ) return true;
 			}
 		return false;
@@ -240,26 +235,26 @@ public class UMLClass implements Serializable
 		mySuperClasses.remove ( oldSuperclass );
 	}
 
-	public Iterable<UMLClass> getSuperclasses ( )
+	public Collection<UMLClass> getSuperclasses ( )
 	{
 		return mySuperClasses;
 	}
 
-	//*******************************************************************
-	
-	//Dependencies
+	// *******************************************************************
+
+	// Dependencies
 
 	public boolean addDependency ( UMLClass newDependency )
 	{
 		return myDependClasses.add ( newDependency );
 	}
-	
+
 	public boolean removeDependency ( UMLClass oldDependency )
 	{
 		return myDependClasses.remove ( oldDependency );
 	}
 
-	public Iterable<UMLClass> getDependencies ( )
+	public Collection<UMLClass> getDependencies ( )
 	{
 		return myDependClasses;
 	}
