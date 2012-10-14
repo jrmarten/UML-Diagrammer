@@ -20,8 +20,6 @@ public class TestUMLClass {
 	@Before
 	public void setUp() throws Exception {
 		umlClass = new UMLClass();
-
-
 	}
 
 
@@ -29,10 +27,28 @@ public class TestUMLClass {
 	public void testAddAttribute(){
 		String str = "- size : int";
 		Attribute a = Attribute.Create(str);
-		assertTrue(a != null);
-		System.out.println ( a );
-		umlClass.addAttribute(a);
+		assertTrue ( a != null );
+		assertTrue ( umlClass.addAttribute(a) );
 		assertTrue ( umlClass.getAttributes().contains(a));
+		
+		a = Attribute.Create ( "- size : boolean");
+		assertTrue ( a != null );
+		assertFalse ( umlClass.addAttribute ( a ) );
+		assertTrue ( umlClass.getAttributes ( ).contains ( a ) );
+		assertTrue ( umlClass.getAttributes ( ).size ( ) == 1 );
+		
+		a = Attribute.Create ( "+ size : int" );
+		assertTrue ( a != null );
+		assertFalse ( umlClass.addAttribute ( a ) );
+		assertTrue ( umlClass.getAttributes ( ).size() == 1);
+		
+		Attribute only = umlClass.getAttributes ( ).iterator ( ).next ( );
+		
+		assertTrue ( only.getName ( ).equals ( "size" ) );
+		assertTrue ( only.getType ( ).equals ( "int" ) );
+		assertTrue ( only.getAccess ( ).equals ( Access.PRIVATE ) );
+		assertFalse ( only.isStatic ( ) );
+		assertFalse ( only.isFinal ( ) );
 	}
 
 	@Test
@@ -43,15 +59,15 @@ public class TestUMLClass {
 		String str = "- size : int";
 		Attribute a = Attribute.Create(str);
 		assertTrue(a != null);
-		System.out.println ( a );
-		umlClass.addAttribute(a);
+		assertTrue ( umlClass.addAttribute(a) );
 		assertTrue ( umlClass.getAttributes().contains(a));
-		/*
-		 * Remove attribute and check that it is removed.
-		 */
+		
 		umlClass.removeAttribute(a);
 		assertFalse ( umlClass.getAttributes().contains(a));
 
+		assertTrue ( umlClass.addAttribute ( a ) );
+		assertTrue ( umlClass.removeAttribute ( "size" ));
+		
 	}
 
 
@@ -72,7 +88,7 @@ public class TestUMLClass {
 		assertTrue(meth1.getName().equals("name"));
 		assertTrue(meth1.getType().equals("String"));
 		assertTrue(meth1.getAccess() == Access.PUBLIC);
-		assertTrue(umlClass.getNumberOfMethods() == 1);
+		assertTrue(umlClass.getMethods().size() == 1);
 		/*
 		 * Add 2nd method to the class, check that it is added.
 		 */
@@ -87,7 +103,7 @@ public class TestUMLClass {
 		assertTrue(meth2.getName().equals("_type"));
 		assertTrue(meth2.getType().equals("String"));
 		assertTrue(meth2.getAccess() == Access.PRIVATE);
-		assertTrue(umlClass.getNumberOfMethods() == 2);
+		assertTrue(umlClass.getMethods().size() == 2);
 
 
 	}
