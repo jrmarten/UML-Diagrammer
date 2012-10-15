@@ -1,0 +1,32 @@
+testDeclaration tests the polymorphism between 
+UMLClass and UMLAbstractTest which will later determine
+whether a class will switch abstract and non-abstract when
+a abstract method is added to it, or will remain abstract
+the regardless.
+
+testAddAttribute will test if you can not add two 
+attributes with the same identifier.
+
+testMethod tests if a method can be overloaded.
+
+testAbstractMethod tests if a concrete class turns 
+abstract if an abstract method is add to it, and 
+will turn concrete again after all abstract methods are
+removed.
+
+removeMethod tests if a Method can be removed from a 
+collection 
+
+testAddAssociation tests whether you can add an Association
+
+testRemoveAssociation tests whether an Association can be removed
+
+testAddSuperclass tests if a class is inheriting a class that 
+inherits itself, if not it checks to see if its added.
+
+testRemoveSuperclass tests if removeSuperclass removes 
+an inheritance connection.
+
+testAddDependency tests whether you can add an Dependency
+
+testRemoveDependency tests whether an Dependency can be removed

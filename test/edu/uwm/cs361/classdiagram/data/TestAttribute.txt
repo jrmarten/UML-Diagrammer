@@ -1,0 +1,13 @@
+The basicTest shows that a client can make attribute, in uml format.
+It will check if UML format is malformed, or if the indentifier
+is not a valid java identifier
+
+keywordTest shows that you can't have a attribute named or typed
+as a java keyword.
+
+accessTest brute force checks the different accesses that the attribute
+can have.
+
+modTest tests the different modifiers that an attribute can have
+currently only static, and final are the only modifiers.  They can
+both be used in one attribute.

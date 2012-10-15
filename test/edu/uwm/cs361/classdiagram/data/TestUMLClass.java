@@ -1,9 +1,12 @@
 package edu.uwm.cs361.classdiagram.data;
 
+import static edu.uwm.cs361.Util.dprint;
+import static edu.uwm.cs361.Util.printIterable;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -16,17 +19,18 @@ public class TestUMLClass
 	private UMLClass							umlClass;
 	private LinkedList<UMLClass>	classList						= new LinkedList<UMLClass> ( );
 	private UMLClass							newAssociatedClass	= new UMLClass ( );
-	private UMLClass							newSuperClass				= new UMLClass ( );
 	private UMLClass							newDependClass			= new UMLClass ( );
 
 	private UMLClass							foo;
 	private UMLClass							bar;
 	private UMLClass							widget;
 	private UMLClass							abs;
+	private UMLClass							abstractList;
 
 	private UMLClass							colInter;
 	private UMLClass							runInter;
 	private UMLClass							iterInter;
+	private UMLClass							iterableInter;
 
 	@Before
 	public void setUp ( ) throws Exception
@@ -34,7 +38,7 @@ public class TestUMLClass
 		umlClass = new UMLClass ( );
 		setUpFooBar ( );
 		widget = new UMLClass ( "Widget" );
-		abs = new AbstractUMLClass ( "AbstractClass" );
+		abs = new UMLAbstractClass ( "AbstractClass" );
 		setUpInterfaces ( );
 	}
 
@@ -54,7 +58,12 @@ public class TestUMLClass
 		colInter = new UMLInterface ( "Collection<E>" );
 		runInter = new UMLInterface ( "Runnable" );
 		iterInter = new UMLInterface ( "Interator<E>" );
+		iterableInter = new UMLInterface ( "Iterable<E>" );
+		abstractList = new UMLAbstractClass ( "List<E>" );
 
+		iterableInter.addMethod ( Method.Create ( "+ iterator ( ) : Iterator<E>" ) );
+
+		colInter.addSuperclass ( iterableInter );
 		colInter.addMethod ( Method.Create ( "+ add ( E ): boolean" ) );
 		colInter.addMethod ( Method.Create ( "+ iterator ( ) : Iterator<E>" ) );
 
@@ -63,6 +72,8 @@ public class TestUMLClass
 		iterInter.addMethod ( Method.Create ( "+ hasNext ( ) : boolean" ) );
 		iterInter.addMethod ( Method.Create ( "+ next ( ) : E" ) );
 		iterInter.addMethod ( Method.Create ( "+ remove ( ) : void " ) );
+
+		abstractList.addSuperclass ( colInter );
 	}
 
 	@Test
@@ -98,13 +109,15 @@ public class TestUMLClass
 
 		Attribute only = umlClass.getAttributes ( ).iterator ( ).next ( );
 
-		System.out.println ( only.getSignature ( ) );
+		dprint ( only.getSignature ( ) );
 
 		assertTrue ( only.getName ( ).equals ( "size" ) );
 		assertTrue ( only.getType ( ).equals ( "int" ) );
 		assertTrue ( only.getAccess ( ).equals ( Access.PRIVATE ) );
 		assertFalse ( only.isStatic ( ) );
 		assertFalse ( only.isFinal ( ) );
+
+		assertFalse ( umlClass.addAttribute ( null ) );
 	}
 
 	public void addAttribute ( UMLClass c, String attrstr, boolean contained,
@@ -139,23 +152,28 @@ public class TestUMLClass
 	@Test
 	public void testAddMethod ( )
 	{
-		AddMethod ( umlClass, "+ getName():String", false, 1 );
-		AddMethod ( umlClass, "- _type():String", false, 2 );
-		AddMethod ( umlClass, "+ getName():boolean", true, 2 );
-		AddMethod ( umlClass, "+ getName(String):String", true, 3 );
-		AddMethod ( umlClass, "- getName(int):String", true, 4 );
+		AddMethod ( umlClass, "+ getName():String", false, true, 1 );
+		AddMethod ( umlClass, "- _type():String", false, true, 2 );
+		AddMethod ( umlClass, "+ getName():boolean", true, false, 2 );
+		AddMethod ( umlClass, "+ getName(String):String", false, true, 3 );
+		AddMethod ( umlClass, "- getName(int):String", false, true, 4 );
 
 		// Checking method properties should not be in a test for a class.
 
 		assertFalse ( umlClass.addMethod ( null ) );
 	}
 
-	public void AddMethod ( UMLClass c, String methStr, boolean mult, int size )
+	public void AddMethod ( UMLClass c, String methStr, boolean isIn,
+			boolean inserted, int size )
 	{
 		Method m = Method.Create ( methStr );
 		assertNotNull ( m );
-		assertTrue ( c.addMethod ( m ) != mult ); // TODO: verify
-		assertTrue ( c.getMethods ( ).contains ( m ) );// TODO: verify
+		assertTrue ( c.addMethod ( m ) != isIn ); // TODO: verify
+		dprint ( m.toString ( ), false );
+
+		dprint ( "\nMethod List", false );
+		printIterable ( c.getMethods ( ), false );
+		assertTrue ( c.getMethods ( ).contains ( m ) == inserted );
 		assertTrue ( c.getMethods ( ).size ( ) == size );
 	}
 
@@ -216,30 +234,60 @@ public class TestUMLClass
 	@Test
 	public void testAddAssociation ( )
 	{
-		umlClass.addAssociation ( newAssociatedClass );
+		assertTrue ( umlClass.addAssociation ( newAssociatedClass ) );
 		classList.add ( newAssociatedClass );
+		checkItEqual ( classList, umlClass.getAssociations ( ) );
 
-		Iterator<UMLClass> it = umlClass.getAssociations ( ).iterator ( );
-		Iterator<UMLClass> itl = classList.iterator ( );
+		assertTrue ( umlClass.addAssociation ( abstractList ) );
+		classList.add ( abstractList );
+		checkItEqual ( classList, umlClass.getAssociations ( ) );
 
-		while ( it.hasNext ( ) && itl.hasNext ( ) )
+		assertTrue ( umlClass.addAssociation ( colInter ) );
+		classList.add ( colInter );
+		checkItEqual ( classList, umlClass.getAssociations ( ) );
+	}
+
+	public <E> void checkItEqual ( Iterable<E> a, Iterable<E> b )
+	{
+		Iterator<E> ait = a.iterator ( );
+		Iterator<E> bit = b.iterator ( );
+
+		while ( ait.hasNext ( ) && bit.hasNext ( ) )
 			{
-				assertTrue ( it.next ( ).equals ( itl.next ( ) ) );
+				assertTrue ( ait.next ( ).equals ( bit.next ( ) ) );
 			}
 
-		assertFalse ( it.hasNext ( ) );
-		assertFalse ( itl.hasNext ( ) );
-
+		assertFalse ( ait.hasNext ( ) );
+		assertFalse ( bit.hasNext ( ) );
 	}
 
 	@Test
 	public void testRemoveAssociation ( )
 	{
-		/*
-		 * 
-		 * Not yet implemented
-		 */
+		umlClass.addAssociation ( abstractList );
+		umlClass.addAssociation ( colInter );
+		umlClass.addAssociation ( iterInter );
 
+		classList.add ( abstractList );
+		classList.add ( colInter );
+		classList.add ( iterInter );
+
+		checkItEqual ( classList, umlClass.getAssociations ( ) );
+
+		assertTrue ( umlClass.removeAssociation ( iterInter ) );
+		classList.remove ( iterInter );
+
+		assertFalse ( umlClass.removeAssociation ( iterInter ) );
+
+		assertTrue ( umlClass.removeAssociation ( abstractList ) );
+		classList.remove ( abstractList );
+		checkItEqual ( classList, umlClass.getAssociations ( ) );
+
+		assertTrue ( umlClass.removeAssociation ( colInter ) );
+		classList.remove ( colInter );
+		checkItEqual ( classList, umlClass.getAssociations ( ) );
+
+		assertTrue ( umlClass.getAssociations ( ).size ( ) == 0 );
 	}
 
 	@Test
@@ -266,37 +314,61 @@ public class TestUMLClass
 	@Test
 	public void testRemoveSuperclass ( )
 	{
-		/*
-		 * 
-		 * Not yet implemented
-		 */
+		assertTrue ( abstractList.removeSuperclass ( colInter ) );
+		assertFalse ( abstractList.getSuperclasses ( ).contains ( colInter ) );
+
+		assertTrue ( colInter.removeSuperclass ( iterableInter ) );
+		assertFalse ( colInter.getSuperclasses ( ).contains ( iterableInter ) );
 	}
 
 	@Test
 	public void addDependency ( )
 	{
-		umlClass.addDependency ( newDependClass );
-		classList.add ( newDependClass );
+		depends ( umlClass, newDependClass );
+		depends ( umlClass, foo );
+		depends ( umlClass, bar );
+		depends ( umlClass, abstractList );
 
-		Iterator<UMLClass> it = umlClass.getDependencies ( ).iterator ( );
-		Iterator<UMLClass> itl = classList.iterator ( );
+	}
 
-		while ( it.hasNext ( ) && itl.hasNext ( ) )
-			{
-				assertTrue ( it.next ( ).equals ( itl.next ( ) ) );
-			}
-
-		assertFalse ( it.hasNext ( ) );
-		assertFalse ( itl.hasNext ( ) );
+	public void depends ( UMLClass ca, UMLClass cb )
+	{
+		assertTrue ( ca.addDependency ( cb ) );
+		classList.add ( cb );
+		checkItEqual ( ca.getDependencies ( ), classList );
 	}
 
 	@Test
 	public void removeDependency ( )
 	{
-		/*
-		 * 
-		 * Not yet implemented
-		 */
+		addDependency ( );
+
+		printIterable ( umlClass.getDependencies ( ) );
+		rdepends ( umlClass, foo );
+		assertFalse ( umlClass.removeDependency ( foo ) );
+		rdepends ( umlClass, bar );
+		rdepends ( umlClass, newDependClass );
+		rdepends ( umlClass, abstractList );
+
+		assertFalse ( umlClass.removeDependency ( null ) );
 	}
 
+	public void rdepends ( UMLClass ca, UMLClass cb )
+	{
+		assertTrue ( ca.removeDependency ( cb ) );
+		classList.add ( cb );
+		checkSetEqual ( ca.getDependencies ( ), classList );
+	}
+
+	public <E> void checkSetEqual ( Collection<E> a, Collection<E> b )
+	{
+		assertTrue ( a.size ( ) == b.size ( ) );
+
+		Iterator<E> it = a.iterator ( );
+
+		while ( it.hasNext ( ) )
+			{
+				assertTrue ( b.contains ( it.next ( ) ) );
+			}
+	}
 }

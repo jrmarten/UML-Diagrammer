@@ -1,0 +1,4 @@
+tests to see if an output java file can be compiled
+and if all the methods and attributes are contained in the
+class if it extends and implements it's super classes and 
+interfaces.

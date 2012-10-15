@@ -1,0 +1,15 @@
+the basicTest shows that you can create a Method
+from a UML formated string.
+
+argTest tests to make sure that argument extraction 
+from a string works.
+
+keywordTest makes sure you can not name a method after
+a java keyword, or return a java keyword as a type.
+
+accessTest brute force checks the different accesses that the attribute
+can have.
+
+modTest tests the different modifiers that an attribute can have
+currently only static, and abstract are the only modifiers.  
+A client can only have either static or abstract.
