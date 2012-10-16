@@ -12,7 +12,7 @@ import org.jhotdraw.draw.TextAreaFigure;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.uwm.cs361.classdiagram.ClassFigure;
-import edu.uwm.cs361.sequencediagram.LifelineFigure;
+import edu.uwm.cs361.sequencediagram.ObjectLifelineFigure;
 
 import org.jhotdraw.draw.tool.ConnectionTool;
 import org.jhotdraw.draw.tool.DelegationSelectionTool;
@@ -125,7 +125,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
 		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
 		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
-		ButtonFactory.addToolTo(tb, edit, new CreationTool(new LifelineFigure(),
+		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ObjectLifelineFigure(),
 				attributes), "edit.createLifeline", labels);
 		
 		tb.addSeparator();
