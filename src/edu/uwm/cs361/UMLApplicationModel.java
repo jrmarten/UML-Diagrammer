@@ -24,15 +24,12 @@ import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.TextAreaFigure;
-<<<<<<< HEAD
 import org.jhotdraw.draw.action.ButtonFactory;
-=======
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.sequencediagram.ObjectLifelineFigure;
 
->>>>>>> fbc47c0bed8ba7f20eda196148b70dfed8c64e5a
 import org.jhotdraw.draw.tool.ConnectionTool;
 import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.DelegationSelectionTool;
@@ -84,31 +81,31 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	@Override
 	public java.util.List<JToolBar> createToolBars ( Application app,
 			@Nullable View view )
-	{
-		ResourceBundleUtil Labels = ResourceBundleUtil
-				.getBundle ( "edu.uwm.cs361.Labels" );
-		UMLView umlv = (UMLView)view;
+			{
+				ResourceBundleUtil Labels = ResourceBundleUtil
+						.getBundle ( "edu.uwm.cs361.Labels" );
+				UMLView umlv = (UMLView)view;
 
-		DrawingEditor edit;
-		edit = ( umlv == null )? getSharedEditor ( ) : umlv.getEditor ( );
+				DrawingEditor edit;
+				edit = ( umlv == null )? getSharedEditor ( ) : umlv.getEditor ( );
 
-		LinkedList<JToolBar> list = new LinkedList<JToolBar> ( );
+				LinkedList<JToolBar> list = new LinkedList<JToolBar> ( );
 
-		JToolBar tmp = new JToolBar ( );
-		addCreationButtonsTo ( tmp, edit );
-		tmp.setName ( Labels.getString ( "window.drawToolBar.title" ) );
+				JToolBar tmp = new JToolBar ( );
+				addCreationButtonsTo ( tmp, edit );
+				tmp.setName ( Labels.getString ( "window.drawToolBar.title" ) );
 
-		list.add ( tmp );
+				list.add ( tmp );
 
-		return list;
-	}
+				return list;
+			}
 
 	// NOTE:might not make sense for this application
 	@Override
 	public void initView ( Application a, @Nullable View p )
 	{
 		if ( a.isSharingToolsAmongViews ( ) ) ( (UMLView)p )
-				.setEditor ( getSharedEditor ( ) );
+		.setEditor ( getSharedEditor ( ) );
 	}
 
 	@Override
@@ -128,7 +125,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 				.getBundle ( "org.jhotdraw.draw.Labels" );
 		// Resource bundles
 
-<<<<<<< HEAD
 		ButtonFactory.addSelectionToolTo ( tb, edit );
 
 		tb.addSeparator ( );
@@ -151,10 +147,10 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		attributes = new HashMap<AttributeKey, Object> ( );
 		attributes.put ( AttributeKeys.STROKE_COLOR, new Color ( 0x000099 ) );
 		ButtonFactory
-				.addToolTo ( tb, edit, new ConnectionTool ( new DependencyFigure ( ),
-						attributes ), "edit.createDependency", labels );
+		.addToolTo ( tb, edit, new ConnectionTool ( new DependencyFigure ( ),
+				attributes ), "edit.createDependency", labels );
 
-		tb.addSeparator ( ); /**/
+		tb.addSeparator ( );
 
 		attributes = new HashMap<AttributeKey, Object> ( );
 		attributes.put ( AttributeKeys.FILL_COLOR, Color.white );
@@ -174,52 +170,17 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		dst.setDrawingActions ( actions );
 		ButtonFactory.addToolTo ( tb, edit, new MySelectionTool (
 				new ClassFigureEditor ( )
+				{
+
+					public void edit ( ClassFigure cf )
+					{}
+
+					public void edit ( ClassFigure cf, String str )
 					{
+						cf.addAttribute ( str );
+					}
+				} ), "", labels );
 
-						public void edit ( ClassFigure cf )
-						{}
-
-						public void edit ( ClassFigure cf, String str )
-						{
-							cf.addAttribute ( str );
-						}
-					} ), "", labels );
-
-		// ButtonFactory.addToolTo ( tb, editor, tool, labelKey, drawLabels )
-=======
-		ButtonFactory.addSelectionToolTo(tb, edit);
-		
-		tb.addSeparator();
-
-		attributes = new HashMap<AttributeKey, Object>();
-		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
-		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
-		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
-		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ClassFigure(),
-				attributes), "edit.createClass", labels);
-
-		attributes = new HashMap<AttributeKey, Object>();
-		attributes.put(AttributeKeys.STROKE_COLOR, new Color(0x000099));
-		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
-				new DependencyFigure(), attributes), "edit.createDependency", labels);
-		
-		tb.addSeparator(); /**/
-		
-		attributes = new HashMap<AttributeKey, Object>();
-		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
-		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
-		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
-		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ObjectLifelineFigure(),
-				attributes), "edit.createLifeline", labels);
-		
-		tb.addSeparator();
-		
-		ButtonFactory.addToolTo(tb, edit, new TextAreaCreationTool(
-				new TextAreaFigure()), "edit.createTextArea", drawLabels);
-
-		ButtonFactory.addToolTo ( tb, edit, new DelegationSelectionTool()
-				, "", labels );
->>>>>>> fbc47c0bed8ba7f20eda196148b70dfed8c64e5a
 	}
 
 	@Override
