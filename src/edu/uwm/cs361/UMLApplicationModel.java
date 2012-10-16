@@ -67,7 +67,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		ResourceBundleUtil drawLabels = ResourceBundleUtil
 				.getBundle ( "edu.uwm.cs361.Labels" );
 
-		m.put ( AddAttributeAction.ID, new AddAttributeAction ( sharedEditor ) );
+		// m.put ( AddAttributeAction.ID, new AddAttributeAction ( sharedEditor ) );
 		return m;
 
 	}
@@ -81,31 +81,31 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	@Override
 	public java.util.List<JToolBar> createToolBars ( Application app,
 			@Nullable View view )
-			{
-				ResourceBundleUtil Labels = ResourceBundleUtil
-						.getBundle ( "edu.uwm.cs361.Labels" );
-				UMLView umlv = (UMLView)view;
+	{
+		ResourceBundleUtil Labels = ResourceBundleUtil
+				.getBundle ( "edu.uwm.cs361.Labels" );
+		UMLView umlv = (UMLView)view;
 
-				DrawingEditor edit;
-				edit = ( umlv == null )? getSharedEditor ( ) : umlv.getEditor ( );
+		DrawingEditor edit;
+		edit = ( umlv == null )? getSharedEditor ( ) : umlv.getEditor ( );
 
-				LinkedList<JToolBar> list = new LinkedList<JToolBar> ( );
+		LinkedList<JToolBar> list = new LinkedList<JToolBar> ( );
 
-				JToolBar tmp = new JToolBar ( );
-				addCreationButtonsTo ( tmp, edit );
-				tmp.setName ( Labels.getString ( "window.drawToolBar.title" ) );
+		JToolBar tmp = new JToolBar ( );
+		addCreationButtonsTo ( tmp, edit );
+		tmp.setName ( Labels.getString ( "window.drawToolBar.title" ) );
 
-				list.add ( tmp );
+		list.add ( tmp );
 
-				return list;
-			}
+		return list;
+	}
 
 	// NOTE:might not make sense for this application
 	@Override
 	public void initView ( Application a, @Nullable View p )
 	{
 		if ( a.isSharingToolsAmongViews ( ) ) ( (UMLView)p )
-		.setEditor ( getSharedEditor ( ) );
+				.setEditor ( getSharedEditor ( ) );
 	}
 
 	@Override
@@ -147,8 +147,8 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		attributes = new HashMap<AttributeKey, Object> ( );
 		attributes.put ( AttributeKeys.STROKE_COLOR, new Color ( 0x000099 ) );
 		ButtonFactory
-		.addToolTo ( tb, edit, new ConnectionTool ( new DependencyFigure ( ),
-				attributes ), "edit.createDependency", labels );
+				.addToolTo ( tb, edit, new ConnectionTool ( new DependencyFigure ( ),
+						attributes ), "edit.createDependency", labels );
 
 		tb.addSeparator ( );
 
@@ -165,21 +165,21 @@ public class UMLApplicationModel extends DefaultApplicationModel
 				new TextAreaFigure ( ) ), "edit.createTextArea", drawLabels );
 
 		actions.clear ( );
-		actions.add ( new AddAttributeAction ( getSharedEditor ( ) ) );
+		// actions.add ( new AddAttributeAction ( getSharedEditor ( ) ) );
 		DelegationSelectionTool dst = new DelegationSelectionTool ( );
 		dst.setDrawingActions ( actions );
 		ButtonFactory.addToolTo ( tb, edit, new MySelectionTool (
 				new ClassFigureEditor ( )
-				{
-
-					public void edit ( ClassFigure cf )
-					{}
-
-					public void edit ( ClassFigure cf, String str )
 					{
-						cf.addAttribute ( str );
-					}
-				} ), "", labels );
+
+						public void edit ( ClassFigure cf )
+						{}
+
+						public void edit ( ClassFigure cf, String str )
+						{
+							cf.addAttribute ( str );
+						}
+					} ), "", labels );
 
 	}
 
