@@ -24,7 +24,15 @@ import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.TextAreaFigure;
+<<<<<<< HEAD
 import org.jhotdraw.draw.action.ButtonFactory;
+=======
+
+import edu.umd.cs.findbugs.annotations.Nullable;
+import edu.uwm.cs361.classdiagram.ClassFigure;
+import edu.uwm.cs361.sequencediagram.ObjectLifelineFigure;
+
+>>>>>>> fbc47c0bed8ba7f20eda196148b70dfed8c64e5a
 import org.jhotdraw.draw.tool.ConnectionTool;
 import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.DelegationSelectionTool;
@@ -120,6 +128,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 				.getBundle ( "org.jhotdraw.draw.Labels" );
 		// Resource bundles
 
+<<<<<<< HEAD
 		ButtonFactory.addSelectionToolTo ( tb, edit );
 
 		tb.addSeparator ( );
@@ -177,6 +186,40 @@ public class UMLApplicationModel extends DefaultApplicationModel
 					} ), "", labels );
 
 		// ButtonFactory.addToolTo ( tb, editor, tool, labelKey, drawLabels )
+=======
+		ButtonFactory.addSelectionToolTo(tb, edit);
+		
+		tb.addSeparator();
+
+		attributes = new HashMap<AttributeKey, Object>();
+		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
+		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
+		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
+		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ClassFigure(),
+				attributes), "edit.createClass", labels);
+
+		attributes = new HashMap<AttributeKey, Object>();
+		attributes.put(AttributeKeys.STROKE_COLOR, new Color(0x000099));
+		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
+				new DependencyFigure(), attributes), "edit.createDependency", labels);
+		
+		tb.addSeparator(); /**/
+		
+		attributes = new HashMap<AttributeKey, Object>();
+		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
+		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
+		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
+		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ObjectLifelineFigure(),
+				attributes), "edit.createLifeline", labels);
+		
+		tb.addSeparator();
+		
+		ButtonFactory.addToolTo(tb, edit, new TextAreaCreationTool(
+				new TextAreaFigure()), "edit.createTextArea", drawLabels);
+
+		ButtonFactory.addToolTo ( tb, edit, new DelegationSelectionTool()
+				, "", labels );
+>>>>>>> fbc47c0bed8ba7f20eda196148b70dfed8c64e5a
 	}
 
 	@Override

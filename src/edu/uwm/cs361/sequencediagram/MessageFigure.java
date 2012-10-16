@@ -51,7 +51,7 @@ public class MessageFigure extends LineConnectionFigure {
 
     @Override
     public boolean canConnect(Connector start) {
-        return (start.getOwner() instanceof LifelineFigure);
+        return (start.getOwner() instanceof ObjectLifelineFigure);
     }
 
     /**
