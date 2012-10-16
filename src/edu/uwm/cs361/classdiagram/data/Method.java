@@ -1,16 +1,11 @@
 package edu.uwm.cs361.classdiagram.data;
 
-import java.io.IOException;
-import java.util.regex.Pattern;
-import java.util.Collection;
+import static edu.uwm.cs361.Util.join;
+import static edu.uwm.cs361.Util.report;
+
 import java.util.Iterator;
 import java.util.LinkedList;
-
-import org.jhotdraw.xml.DOMInput;
-import org.jhotdraw.xml.DOMOutput;
-
-import static edu.uwm.cs361.Util.*;
-
+import java.util.regex.Pattern;
 
 public class Method
 {
@@ -124,8 +119,8 @@ public class Method
 		char tmpch = name.charAt ( 0 );
 		for ( char sym : Access.symbols ( ) )
 			{
-				if ( sym == tmpch ) 
-					{	
+				if ( sym == tmpch )
+					{
 						mods[index] = "" + sym;
 						name = name.substring ( 1 );
 					}
@@ -134,8 +129,8 @@ public class Method
 		boolean ap = false, sp = false;
 		for ( String mod : mods )
 			{
-				if ( mod.equals ( ""  ) ) continue;
-				
+				if ( mod.equals ( "" ) ) continue;
+
 				boolean valid = false;
 				for ( String keyword : Modifiers )
 					{
@@ -143,47 +138,46 @@ public class Method
 						if ( mod.equals ( "abstract" ) ) ap = true;
 						if ( mod.equals ( "static" ) ) sp = true;
 					}
-				if ( ! valid ) return (Method) report ( "Illegal Modifier: " + name);
+				if ( !valid ) return (Method)report ( "Illegal Modifier: " + name );
 			}
-		
-			if ( ap && sp ) return null;
-		
-		if ( Keywords.keywordp ( name ) ) 
-			return (Method) report ( "Black Listed: " + name + "(name)" );
-		
-		//Not valid because primary names are blacklisted
-		
-			if ( Keywords.reservedp ( type ) ) 
-				return (Method) report ( "Black Listed: " + name + "(type)" );
-		
-		  for ( String arg : args )
+
+		if ( ap && sp ) return null;
+
+		if ( Keywords.keywordp ( name ) ) return (Method)report ( "Black Listed: "
+				+ name + "(name)" );
+
+		// Not valid because primary names are blacklisted
+
+		if ( Keywords.reservedp ( type ) ) return (Method)report ( "Black Listed: "
+				+ name + "(type)" );
+
+		for ( String arg : args )
 			{
-				if ( Keywords.reservedp ( arg.trim ( ) ) ) 
-					return (Method) report ( "Black Listed: " + name + "(arg)" );
+				if ( Keywords.reservedp ( arg.trim ( ) ) ) return (Method)report ( "Black Listed: "
+						+ name + "(arg)" );
 			}
-		  
-		  
+
 		return new Method ( mods, type, name, args );
 	}
 
 	public static boolean overloaded ( Method p, Method q )
 	{
-		if ( ! p.name.equals ( q.name ) ) return false;
-		if ( ! p.type.equals ( q.type ) ) return false;
-		
+		if ( !p.name.equals ( q.name ) ) return false;
+		if ( !p.type.equals ( q.type ) ) return false;
+
 		if ( p.params.size ( ) != q.params.size ( ) ) return true;
-		
+
 		Iterator<String> pit = p.params.iterator ( );
 		Iterator<String> qit = q.params.iterator ( );
-		
+
 		while ( pit.hasNext ( ) )
 			{
-				if ( !pit.next( ).equals ( qit.next( ) ) ) return true;
+				if ( !pit.next ( ).equals ( qit.next ( ) ) ) return true;
 			}
-		
+
 		return false;
 	}
-	
+
 	public String getName ( )
 	{
 		return name;
@@ -214,19 +208,6 @@ public class Method
 		return staticp;
 	}
 
-	public static String join ( Collection<String> parts, String delim )
-	{
-		Iterator<String> it = parts.iterator ( );
-		StringBuilder sb = new StringBuilder ( );
-		while ( it.hasNext ( ) )
-			{
-				sb.append ( it.next ( ) );
-				if ( !it.hasNext ( ) ) break;
-				sb.append ( delim );
-			}
-		return sb.toString ( );
-	}
-
 	@Override
 	public String toString ( )
 	{
@@ -241,7 +222,7 @@ public class Method
 			{
 				Method other = (Method)o;
 
-				return other.name.equals ( name ) && other.type.equals ( name )
+				return other.name.equals ( name ) && other.type.equals ( type )
 						&& other.params.equals ( params );
 			}
 		return false;
@@ -258,38 +239,15 @@ public class Method
 		return result;
 	}
 
-	public void write ( DOMOutput fout ) throws IOException
+	private String getModSig ( )
 	{
-		fout.openElement ( "method" );
-		fout.addAttribute ( "name", name );
-		fout.addAttribute ( "type", type );
-
-		for ( String param : params )
-			{
-				fout.openElement ( "param" );
-				fout.addAttribute ( "type", param );
-				fout.closeElement ( );
-			}
-		fout.closeElement ( );
+		return "" + ( ( abstractp )? "abstract " : "" )
+				+ ( ( staticp )? "static " : "" );
 	}
 
-	public void read ( DOMInput fin ) throws IOException
+	public String getSignature ( )
 	{
-		fin.openElement ( "method" );
-		name = fin.getAttribute ( "name", "Read" );
-		type = fin.getAttribute ( "type", "Error" );
-
-		try
-			{
-				while ( true )
-					{
-						fin.openElement ( "param" );
-						params.add ( fin.getAttribute ( "type", "" ) );
-						fin.closeElement ( );
-					}
-			}
-		catch ( IOException e )
-			{	/** no more elements to read. do nothing */
-			}
+		return getAccess ( ).toString ( ) + " " + getModSig ( ) + " " + getType ( )
+				+ " " + getName ( ) + " ( " + join ( params, ", " ) + " ) ";
 	}
 }

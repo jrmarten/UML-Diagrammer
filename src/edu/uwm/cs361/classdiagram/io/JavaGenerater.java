@@ -20,7 +20,8 @@ class JavaGenerator
 				{"short", "0"},
 				{"long", "0L"},
 				{"char", "0"},
-				{"boolean", "false"}
+				{"boolean", "false"},
+				{"void", "" }
 		};
 
 	public JavaGenerator ( File file ) throws FileNotFoundException
@@ -76,9 +77,19 @@ class JavaGenerator
 
 		String start = "\n{\n", end = "\n}\n\n";
 
+		String buffer = "implements ";
+		Iterator<UMLClass> it = umlclass.getSuperclasses ( ).iterator ( );
+		for ( ; it.hasNext ( ); )
+			{
+				buffer += it.next ( );
+				if ( !it.hasNext ( ) ) break;
+				buffer += ", ";
+			}
+		
 		genny.write ( (umlclass.isAbstract()?"abstract ": "") +
 				"class " + umlclass.getName() + 
-				" " + umlclass.getGenerics ( ) + start );
+				" " + umlclass.getGenerics ( ) +
+				buffer + " "+ start );
 
 		for ( Attribute attr : umlclass.getAttributes ( ) )
 			{
@@ -100,16 +111,16 @@ class JavaGenerator
 				sig += meth.getType ( ) + " ";
 				sig += meth.getName() + " ( ";
 
-				Iterator<String> it = meth.getParameters ( ).iterator() ;
+				Iterator<String> it1 = meth.getParameters ( ).iterator() ;
 				int index = 0;
-				for ( ; it.hasNext() ; )
+				for ( ; it1.hasNext() ; )
 					{
-						sig += it.next() + " arg" + index;
-						if ( !it.hasNext() ) break;
+						sig += it1.next() + " arg" + index++;
+						if ( !it1.hasNext() ) break;
 						sig += ", ";
 					}
 				sig += " )" + start;
-				sig += " return " + genny.getDefault ( meth.getType ( ) ) + " ;" + end;
+				sig += " return " + genny.getDefault ( meth.getType ( ) ) + ";" + end;
 				genny.write ( sig );
 			}
 

@@ -5,11 +5,14 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static edu.uwm.cs361.Util.*;
+
 public class Keywords
 {
-	private static ArrayList <String> blacklist;
-	private static ArrayList <String> primitives;
-	
+
+	private static ArrayList<String>	blacklist;
+	private static ArrayList<String>	primitives;
+
 	public static void print ( )
 	{
 		for ( String tmp : blacklist )
@@ -17,24 +20,27 @@ public class Keywords
 				System.out.println ( tmp );
 			}
 	}
-	
+
 	private static void getList ( )
 	{
-		blacklist= new ArrayList<String>();
+		blacklist = new ArrayList<String> ( );
 		Scanner fin = null;
-		try {
-			File keywords = new File ( "Java.keywords");
-			fin = new Scanner ( keywords );
-		} catch (FileNotFoundException e) {
-			
-			return;
-		}
+		try
+			{
+				File keywords = new File ( "Java.keywords" );
+				fin = new Scanner ( keywords );
+			}
+		catch ( FileNotFoundException e )
+			{
+
+				return;
+			}
 		String line = "";
 		String[] parts = null;
 
 		while ( fin.hasNext ( ) )
 			{
-				line = fin.nextLine();
+				line = fin.nextLine ( );
 				parts = line.split ( " ;," );
 				for ( String part : parts )
 					{
@@ -48,21 +54,24 @@ public class Keywords
 
 	private static void getPrim ( )
 	{
-		primitives = new ArrayList<String>();
+		primitives = new ArrayList<String> ( );
 		Scanner fin = null;
-		try {
-			File keywords = new File ( "Java.primitives");
-			fin = new Scanner ( keywords );
-		} catch (FileNotFoundException e) {
-			
-			return;
-		}
+		try
+			{
+				File keywords = new File ( "Java.primitives" );
+				fin = new Scanner ( keywords );
+			}
+		catch ( FileNotFoundException e )
+			{
+
+				return;
+			}
 		String line = "";
 		String[] parts = null;
 
 		while ( fin.hasNext ( ) )
 			{
-				line = fin.nextLine();
+				line = fin.nextLine ( );
 				parts = line.split ( " ;," );
 				for ( String part : parts )
 					{
@@ -73,37 +82,37 @@ public class Keywords
 					}
 			}
 	}
-	
+
 	public static boolean reservedp ( String word )
 	{
 		if ( blacklist == null ) getList ( );
 		if ( primitives == null ) getPrim ( );
-		
+
 		for ( String tmp : blacklist )
 			{
 				if ( word.equals ( tmp ) )
 					{
-						System.out.println ( word + ": " + tmp );
+						dprint ( word + ": " + tmp );
 						return true;
 					}
 			}
-			
+
 		return false;
 	}
-	
+
 	public static boolean keywordp ( String word )
 	{
-	if ( blacklist == null ) getList ( );
-		
+		if ( blacklist == null ) getList ( );
+
 		for ( String tmp : blacklist )
 			{
 				if ( word.equals ( tmp ) )
 					{
-						System.out.println ( word + ": " + tmp );
+						dprint ( word + ": " + tmp );
 						return true;
 					}
 			}
-			
+
 		return false;
 	}
 }

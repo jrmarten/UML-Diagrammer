@@ -1,10 +1,14 @@
 package edu.uwm.cs361.classdiagram.data;
 
-import java.util.*;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import static edu.uwm.cs361.Util.*;
 
 public class UMLClass implements Serializable
 {
+
 	protected String								myName;
 	protected LinkedList<String>		generics;
 	protected LinkedList<Attribute>	myAttributes;
@@ -12,14 +16,13 @@ public class UMLClass implements Serializable
 	protected LinkedList<UMLClass>	myAssociatedClasses;
 	protected LinkedList<UMLClass>	mySuperClasses;
 	protected LinkedList<UMLClass>	myDependClasses;
-	private boolean								abstractp						= false;
-	
-	public static final String		idreg								= "[A-Za-z_$][A-Za-z0-9_$]*";
-	public static final String		classreg						= ".*";
+	private boolean									abstractp					= false;
+	private int											superclasses			= 0;
 
-	static final long							serialVersionUID		= -3748332488864682801L;
+	public static final String			idreg							= "[A-Za-z_$][A-Za-z0-9_$]*";
+	public static final String			classreg					= ".*";
 
-	
+	static final long								serialVersionUID	= -3748332488864682801L;
 
 	/**
 	 * Create a new JModellerClass instance
@@ -101,7 +104,7 @@ public class UMLClass implements Serializable
 	{
 		return false;
 	}
-	
+
 	public boolean isAbstract ( )
 	{
 		return abstractp;
@@ -154,13 +157,17 @@ public class UMLClass implements Serializable
 		for ( Method meth : myMethods )
 			{
 				if ( newMethod.getName ( ).equals ( meth.getName ( ) )
-						&& !Method.overloaded ( meth, newMethod ) ) return false;
+						&& !Method.overloaded ( meth, newMethod ) )
+					{
+						dprint ( "Same name, but is not overloaded: " + newMethod + ", "
+								+ meth );
+						return false;
+					}
 			}
 
 		if ( newMethod.isAbstract ( ) ) abstractp = true;
-		myMethods.add ( newMethod );
 
-		return true;
+		return myMethods.add ( newMethod );
 	}
 
 	public boolean removeMethod ( Method oldMethod )
@@ -211,28 +218,33 @@ public class UMLClass implements Serializable
 
 	// *********************************************
 
-	// Inheritence
+	// Inheritance
 
 	// TODO: Test
+	// XXX: not completely correct
 	public boolean addSuperclass ( UMLClass par )
 	{
-		if ( par.isSuper ( this ) ) return false;
+		boolean interfacep = par instanceof UMLInterface;
+		if ( superclasses > 0 && !interfacep ) return false;
+		if ( isSuper ( this, par ) ) return false;
+		if ( !interfacep ) superclasses++;
 		return mySuperClasses.add ( par );
 	}
 
-	public boolean isSuper ( UMLClass par )
+	public boolean isSuper ( UMLClass par, UMLClass child )
 	{
-		for ( UMLClass cl : par.getSuperclasses ( ) )
+		for ( UMLClass tmp : child.getSuperclasses ( ) )
 			{
-				if ( cl.equals ( par ) ) return true;
-				if ( cl.isSuper ( par ) ) return true;
+				if ( tmp.equals ( par ) ) return true;
+				if ( isSuper ( par, tmp ) ) return true;
 			}
 		return false;
 	}
 
-	public void removeSuperclass ( UMLClass oldSuperclass )
+	public boolean removeSuperclass ( UMLClass oldSuperclass )
 	{
-		mySuperClasses.remove ( oldSuperclass );
+		if ( ! ( oldSuperclass instanceof UMLInterface ) ) superclasses--;
+		return mySuperClasses.remove ( oldSuperclass );
 	}
 
 	public Collection<UMLClass> getSuperclasses ( )
@@ -258,13 +270,29 @@ public class UMLClass implements Serializable
 	{
 		return myDependClasses;
 	}
-	
-	//*********************************************************************
-	
-	//helps java generator
-	
+
+	// *********************************************************************
+
+	// helps java generator
+
+	// TODO: add implement and extends functionallity
 	public String getDeclaration ( )
 	{
-		return "class " + getName ( );
+		String implementbuffer = "";
+		String extendbuffer = "";
+
+		for ( UMLClass tmp : getSuperclasses ( ) )
+			{
+				if ( tmp instanceof UMLInterface ) implementbuffer += tmp.getName ( )
+						+ ", ";
+			}
+
+		return ( ( abstractp )? "abstract " : "" ) + "class " + getName ( );
+	}
+
+	@Override
+	public String toString ( )
+	{
+		return getDeclaration ( );
 	}
 }
