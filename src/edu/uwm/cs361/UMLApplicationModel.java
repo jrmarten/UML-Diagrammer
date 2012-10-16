@@ -143,6 +143,32 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		ButtonFactory.addToolTo ( tb, edit, new CreationTool ( new ClassFigure (
 				new UMLAbstractClass ( ) ), attributes ), "edit.createAbstractClass",
 				labels );
+		
+		ButtonFactory.addToolTo ( tb, edit, new MySelectionTool (
+				new ClassFigureEditor ( )
+				{
+
+					public void edit ( ClassFigure cf )
+					{}
+
+					public void edit ( ClassFigure cf, String str )
+					{
+						cf.addAttribute ( str );
+					}
+				} ), "edit.addAttribute", labels );
+		
+		ButtonFactory.addToolTo ( tb, edit, new MySelectionTool (
+				new ClassFigureEditor ( )
+				{
+
+					public void edit ( ClassFigure cf )
+					{}
+
+					public void edit ( ClassFigure cf, String str )
+					{
+						cf.addMethod ( str );
+					}
+				} ), "edit.addMethod", labels );
 
 		attributes = new HashMap<AttributeKey, Object> ( );
 		attributes.put ( AttributeKeys.STROKE_COLOR, new Color ( 0x000099 ) );
@@ -168,21 +194,8 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		actions.add ( new AddAttributeAction ( getSharedEditor ( ) ) );
 		DelegationSelectionTool dst = new DelegationSelectionTool ( );
 		dst.setDrawingActions ( actions );
-		ButtonFactory.addToolTo ( tb, edit, new MySelectionTool (
-				new ClassFigureEditor ( )
-				{
-
-					public void edit ( ClassFigure cf )
-					{}
-
-					public void edit ( ClassFigure cf, String str )
-					{
-						cf.addAttribute ( str );
-					}
-				} ), "", labels );
-
 	}
-
+	
 	@Override
 	public URIChooser createOpenChooser ( Application app, @Nullable View v )
 	{
