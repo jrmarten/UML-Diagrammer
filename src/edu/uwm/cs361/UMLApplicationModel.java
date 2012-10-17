@@ -25,11 +25,6 @@ import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.TextAreaFigure;
 import org.jhotdraw.draw.action.ButtonFactory;
-
-import edu.umd.cs.findbugs.annotations.Nullable;
-import edu.uwm.cs361.classdiagram.ClassFigure;
-import edu.uwm.cs361.sequencediagram.ObjectLifelineFigure;
-
 import org.jhotdraw.draw.tool.ConnectionTool;
 import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.DelegationSelectionTool;
@@ -42,7 +37,6 @@ import org.jhotdraw.samples.pert.figures.DependencyFigure;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
-import edu.uwm.cs361.classdiagram.AddAttributeAction;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.MySelectionTool;
 import edu.uwm.cs361.classdiagram.MySelectionTool.ClassFigureEditor;
