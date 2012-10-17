@@ -1,15 +1,27 @@
 package edu.uwm.cs361.classdiagram;
 
+import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.FONT_BOLD;
+import static org.jhotdraw.draw.AttributeKeys.FONT_ITALIC;
+import static org.jhotdraw.draw.AttributeKeys.FONT_UNDERLINE;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
+
+import static edu.uwm.cs361.Util.*;
+
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.Action;
 
-import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.GraphicalCompositeFigure;
+import org.jhotdraw.draw.ListFigure;
+import org.jhotdraw.draw.RectangleFigure;
+import org.jhotdraw.draw.TextFigure;
 import org.jhotdraw.draw.connector.LocatorConnector;
 import org.jhotdraw.draw.event.FigureAdapter;
 import org.jhotdraw.draw.event.FigureEvent;
@@ -23,19 +35,21 @@ import org.jhotdraw.geom.Insets2D;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 
-import static org.jhotdraw.draw.AttributeKeys.*;
-
-import edu.uwm.cs361.classdiagram.data.*;
+import edu.uwm.cs361.classdiagram.data.Attribute;
+import edu.uwm.cs361.classdiagram.data.Method;
+import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
+import edu.uwm.cs361.classdiagram.data.UMLClass;
+import edu.uwm.cs361.classdiagram.data.UMLInterface;
 
 @SuppressWarnings ( "serial" )
 public class ClassFigure extends GraphicalCompositeFigure
 {
 
-	ListFigure				nameList;
-	ListFigure				attrList;
-	ListFigure				methodList;
+	protected ListFigure	nameList		= new ListFigure ( );
+	protected ListFigure	attrList		= new ListFigure ( );
+	protected ListFigure	methodList	= new ListFigure ( );
 
-	private UMLClass	data;
+	private UMLClass			data				= new UMLClass ( );
 
 	private class NameAdapter extends FigureAdapter
 	{
@@ -50,50 +64,110 @@ public class ClassFigure extends GraphicalCompositeFigure
 		@Override
 		public void attributeChanged ( FigureEvent e )
 		{
-			data.setName ( (String)e.getNewValue ( ) );
+			target.setName ( (String)e.getNewValue ( ) );
 		}
 	}
 
-	private static class AttributeAdapter extends FigureAdapter
+	private static abstract class SimpleAdapter extends FigureAdapter
 	{
 
-		private UMLClass	target;
+		protected UMLClass	target;
+
+		public SimpleAdapter ( UMLClass target )
+		{
+			this.target = target;
+		}
+
+		protected abstract boolean add ( String n );
+
+		protected abstract boolean rename ( String old, String n );
+
+		protected abstract boolean remove ( String old );
+
+		@Override
+		public void attributeChanged ( FigureEvent evt )
+		{
+			String n = (String)evt.getNewValue ( );
+			String old = (String)evt.getOldValue ( );
+
+			if ( ( (String)evt.getNewValue ( ) ).trim ( ).equals ( "" ) )
+				{
+					dprint ( ( remove ( n ) )? "" : "Cannot add new element" );
+				}
+			if ( evt.getOldValue ( ).equals ( "" ) )
+				{
+					dprint ( ( add ( n ) )? "" : "Can not add new Attribute" );
+				}
+			else
+				{
+					dprint ( ( rename ( old, n ) )? "" : "Can not rename" );
+				}
+		}
+	}
+
+	private static class AttributeAdapter extends SimpleAdapter
+	{
 
 		public AttributeAdapter ( UMLClass target )
 		{
-			this.target = target;
+			super ( target );
 		}
 
 		@Override
-		public void attributeChanged ( FigureEvent evt )
+		protected boolean add ( String n )
 		{
-			// We could fire a property change event here, in case
-			// some other object would like to observe us.
-			// target.firePropertyChange("duration", e.getOldValue(),
-			// e.getNewValue());
-
+			Attribute attr = Attribute.Create ( n );
+			return target.addAttribute ( attr );
 		}
+
+		@Override
+		protected boolean rename ( String old, String n )
+		{
+			Attribute newAttr = Attribute.Create ( n );
+			Attribute oldAttr = Attribute.Create ( old );
+			return target.removeAttribute ( oldAttr )
+					&& target.removeAttribute ( newAttr );
+		}
+
+		@Override
+		protected boolean remove ( String old )
+		{
+			Attribute attr = Attribute.Create ( old );
+			return target.removeAttribute ( attr );
+		}
+
 	}
 
-	private static class MethodAdapter extends FigureAdapter
+	private static class MethodAdapter extends SimpleAdapter
 	{
-
-		private UMLClass	target;
 
 		public MethodAdapter ( UMLClass target )
 		{
-			this.target = target;
+			super ( target );
 		}
 
 		@Override
-		public void attributeChanged ( FigureEvent evt )
+		protected boolean add ( String n )
 		{
-			// We could fire a property change event here, in case
-			// some other object would like to observe us.
-			// target.firePropertyChange("duration", e.getOldValue(),
-			// e.getNewValue());
-
+			Method meth = Method.Create ( n );
+			return target.addMethod ( meth );
 		}
+
+		@Override
+		protected boolean rename ( String old, String n )
+		{
+			Method newMeth = Method.Create ( n );
+			Method oldMeth = Method.Create ( old );
+			return target.removeMethod ( oldMeth ) && target.addMethod ( newMeth );
+		}
+
+		@Override
+		protected boolean remove ( String old )
+		{
+			Method meth = Method.Create ( old );
+			return target.removeMethod ( meth );
+		}
+
 	}
 
 	public ClassFigure ( )
@@ -124,16 +198,39 @@ public class ClassFigure extends GraphicalCompositeFigure
 		methodList.set ( LAYOUT_INSETS, insets );
 
 		TextFigure tmpFigure = createTextFigure ( "Class" );
+		tmpFigure.addFigureListener ( new NameAdapter ( data ) );
 		nameList.add ( tmpFigure );
 
-		tmpFigure.addFigureListener ( new NameAdapter ( data ) );
+		tmpFigure = createTextFigure ( "" );
+		// tmpFigure.addFigureListener ( new AttributeAdapter ( data ) );
+		attrList.add ( tmpFigure );
+
 		// add Method, and Attribute Listeners
+	}
+
+	@Override
+	public Collection<Action> getActions ( Point2D.Double p )
+	{
+		Collection<Action> col = new ArrayList<Action> ( );
+		col.add ( new AddAttributeAction ( this ) );
+		return col;
 	}
 
 	public ClassFigure ( UMLClass proto )
 	{
 		this ( );
-		data = proto;
+		if ( proto instanceof UMLAbstractClass )
+			{
+				data = new UMLAbstractClass ( );
+			}
+		else if ( proto instanceof UMLInterface )
+			{
+				data = new UMLInterface ( );
+			}
+		else
+			{
+				data = new UMLClass ( );
+			}
 	}
 
 	private TextFigure createTextFigure ( String text )
@@ -188,8 +285,17 @@ public class ClassFigure extends GraphicalCompositeFigure
 		String tmpText = tmp.toString ( );
 		tmpText = ( tmp.isFinal ( ) )? tmpText.toUpperCase ( ) : tmpText;
 		TextFigure tmpFig = createTextFigure ( tmpText );
-		if ( tmp.isStatic ( ) ) tmpFig.set ( FONT_UNDERLINE, true );
-		attrList.add ( tmpFig );
+		if ( tmp.isStatic ( ) )
+			{
+				tmpFig.set ( FONT_UNDERLINE, true );
+				tmpFig.setAttributeEnabled ( FONT_UNDERLINE, false );
+			}
+		tmpFig.addFigureListener ( new AttributeAdapter ( data ) );
+
+		dprint ( ( attrList.add ( tmpFig ) )? "TRUE" : "FALSE" );
+		dprint ( ( data.addAttribute ( tmp ) )? "" : "ATTRIBUTE NOT ADDED TO DATA" );
+		dprint ( tmp + " was added" );
+		printIterable ( data.getAttributes ( ) );
 	}
 
 	private TextFigure getAttributeFigure ( int index )
@@ -243,7 +349,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 						attr_sig += ( in.getAttribute ( "final", false ) )? "final " : "";
 						attr_sig += in.getAttribute ( "name", "attr_name" ) + " ";
 						attr_sig += " : ";
-						attr_sig += in.getAttribute ( "type", "void*" ) + " ";
+						attr_sig += in.getAttribute ( "type", "void*" ) + " ";// XXX:
 						umlclass.addAttribute ( Attribute.Create ( attr_sig ) );
 					}
 			}
@@ -261,7 +367,8 @@ public class ClassFigure extends GraphicalCompositeFigure
 								: "";
 						meth_sig += in.getAttribute ( "name", "meth_name" ) + " ";
 						meth_sig += " : ";
-						meth_sig += in.getAttribute ( "type", "void*" ) + " ";
+						meth_sig += in.getAttribute ( "type", "void*" ) + " "; // XXX:joke
+																																		// :D
 						umlclass.addMethod ( Method.Create ( meth_sig ) );
 					}
 			}

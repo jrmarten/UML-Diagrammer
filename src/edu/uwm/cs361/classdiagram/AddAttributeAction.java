@@ -1,45 +1,46 @@
 package edu.uwm.cs361.classdiagram;
 
 import java.awt.event.ActionEvent;
-import java.util.Set;
 
-import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.action.AbstractSelectedAction;
+import javax.swing.AbstractAction;
 
+import edu.uwm.cs361.classdiagram.data.Attribute;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
 
+import static edu.uwm.cs361.Util.*;
 
-public class AddAttributeAction extends AbstractSelectedAction
+public class AddAttributeAction extends AbstractAction
 {
-	
-	public static final String ID = "Class.AddAttribute";
-	private static final boolean DEBUG = true;
-	
-	public AddAttributeAction ( DrawingEditor edit )
+
+	public static final String		ID		= "actions.addAttribute";
+	private static final boolean	DEBUG	= true;
+
+	private ClassFigure						data;
+
+	public AddAttributeAction ( ClassFigure c )
 	{
-		super( edit );
-		
-	}
-	
-	public void updateEnabledState ( ) 
-	{
-		if ( getView ( ) != null )
-			{
-				Set<Figure> figs = getView().getSelectedFigures();
-				boolean classselected = figs.size() == 1 && 
-						figs.iterator ( ).next() instanceof UMLClass;
-						
-				setEnabled ( getView().isEnabled ( ) &&  classselected );
-			}
-		setEnabled ( false );
+		data = c;
 	}
 
 	@Override
-	public void actionPerformed ( ActionEvent arg0 )
+	public void actionPerformed ( ActionEvent e )
 	{
-		if ( DEBUG) System.out.println ( "Add Action has been called");
-		ClassFigure selected = (ClassFigure) getView().getSelectedFigures().iterator ( ).next ( );
-		selected.addAttribute ( "_default:int" );
+		data.addAttribute ( "_default:int" );
 	}
+	/*
+	 * public AddAttributeAction ( DrawingEditor edit ) { super ( edit ); }
+	 * 
+	 * public void updateEnabledState ( ) { if ( getView ( ) != null ) {
+	 * Set<Figure> figs = getView ( ).getSelectedFigures ( ); boolean
+	 * classselected = figs.size ( ) == 1 && figs.iterator ( ).next ( ) instanceof
+	 * UMLClass;
+	 * 
+	 * setEnabled ( getView ( ).isEnabled ( ) && classselected ); } setEnabled (
+	 * false ); }
+	 * 
+	 * @Override public void actionPerformed ( ActionEvent arg0 ) { if ( DEBUG )
+	 * System.out.println ( "Add Action has been called" ); ClassFigure selected =
+	 * (ClassFigure)getView ( ).getSelectedFigures ( ) .iterator ( ).next ( );
+	 * selected.addAttribute ( "_default:int" ); } //
+	 */
 }

@@ -1,8 +1,7 @@
 package edu.uwm.cs361.classdiagram.data;
 
-import static edu.uwm.cs361.Util.dprint;
-
 import java.util.regex.Pattern;
+import static edu.uwm.cs361.Util.dprint;
 
 public class Attribute
 {
@@ -83,6 +82,7 @@ public class Attribute
 	{
 		if ( !regex.matcher ( str ).find ( ) )
 			{
+
 				dprint ( "Attribute stopped at regex: " + str );
 				return null;
 			}

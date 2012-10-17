@@ -1,5 +1,6 @@
 package edu.uwm.cs361.classdiagram;
 
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,10 +13,15 @@ import edu.uwm.cs361.classdiagram.MySelectionTool.ClassFigureEditor;
 public class PromptFrame extends JFrame
 {
 
-	JLabel						prompt;
-	JTextField				ans;
-	ClassFigure				cf;
-	ClassFigureEditor	edit;
+	public static final int	WIDTH		= 300;
+	public static final int	HEIGHT	= 100;
+	public static int				x				= -1;
+	public static int				y				= -1;
+
+	JLabel									prompt;
+	JTextField							ans;
+	ClassFigure							cf;
+	ClassFigureEditor				edit;
 
 	public PromptFrame ( String prompt, ClassFigure fig, ClassFigureEditor edit )
 	{
@@ -26,8 +32,11 @@ public class PromptFrame extends JFrame
 			ClassFigureEditor edit )
 	{
 		super ( title );
+		setBounds ( x, y, WIDTH, HEIGHT );
+		setLayout ( new FlowLayout ( FlowLayout.CENTER ) );
 		this.prompt = new JLabel ( prompt );
-		ans = new JTextField ( );
+		ans = new JTextField ( 10 );
+
 		setAlwaysOnTop ( true );
 		cf = fig;
 		ans.addActionListener ( new EnterListener ( ) );
