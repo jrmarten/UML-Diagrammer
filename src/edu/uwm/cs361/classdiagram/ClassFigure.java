@@ -41,30 +41,29 @@ import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
 import edu.uwm.cs361.classdiagram.data.UMLInterface;
 
-@SuppressWarnings ( "serial" )
+@SuppressWarnings("serial")
 public class ClassFigure extends GraphicalCompositeFigure
 {
 
-	protected ListFigure	nameList		= new ListFigure ( );
-	protected ListFigure	attrList		= new ListFigure ( );
-	protected ListFigure	methodList	= new ListFigure ( );
+	protected ListFigure	nameList		= new ListFigure();
+	protected ListFigure	attrList		= new ListFigure();
+	protected ListFigure	methodList	= new ListFigure();
 
-	private UMLClass			data				= new UMLClass ( );
+	private UMLClass			data				= new UMLClass();
 
 	private class NameAdapter extends FigureAdapter
 	{
 
 		private UMLClass	target;
 
-		public NameAdapter ( UMLClass target )
+		public NameAdapter(UMLClass target)
 		{
 			this.target = target;
 		}
 
 		@Override
-		public void attributeChanged ( FigureEvent e )
-		{
-			target.setName ( (String)e.getNewValue ( ) );
+		public void attributeChanged(FigureEvent e) {
+			target.setName((String) e.getNewValue());
 		}
 	}
 
@@ -73,34 +72,39 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 		protected UMLClass	target;
 
-		public SimpleAdapter ( UMLClass target )
+		public SimpleAdapter(UMLClass target)
 		{
 			this.target = target;
+			dprint("Adapter added");
 		}
 
-		protected abstract boolean add ( String n );
+		protected abstract boolean add(String n);
 
-		protected abstract boolean rename ( String old, String n );
+		protected abstract boolean rename(String old, String n);
 
-		protected abstract boolean remove ( String old );
+		protected abstract boolean remove(String old);
 
 		@Override
-		public void attributeChanged ( FigureEvent evt )
-		{
-			String n = (String)evt.getNewValue ( );
-			String old = (String)evt.getOldValue ( );
+		public void attributeChanged(FigureEvent evt) {
+			String n = (String) evt.getNewValue();
+			String old = (String) evt.getOldValue();
 
-			if ( ( (String)evt.getNewValue ( ) ).trim ( ).equals ( "" ) )
+			dprint("Something Changed");
+			System.out.println("???");
+
+			if (((String) evt.getNewValue()).trim().equals(""))
 				{
-					dprint ( ( remove ( n ) )? "" : "Cannot add new element" );
+					dprint((remove(n)) ? "" : "Cannot add new element");
 				}
-			if ( evt.getOldValue ( ).equals ( "" ) )
+			if (evt.getOldValue().equals(""))
 				{
-					dprint ( ( add ( n ) )? "" : "Can not add new Attribute" );
-				}
-			else
+					dprint("Source is "
+							+ ((evt.getSource() instanceof ListFigure) ? "" : "not ")
+							+ "a ListFigure");
+					dprint((add(n)) ? "" : "Can not add new Attribute");
+				} else
 				{
-					dprint ( ( rename ( old, n ) )? "" : "Can not rename" );
+					dprint((rename(old, n)) ? "" : "Can not rename");
 				}
 		}
 	}
@@ -108,32 +112,28 @@ public class ClassFigure extends GraphicalCompositeFigure
 	private static class AttributeAdapter extends SimpleAdapter
 	{
 
-		public AttributeAdapter ( UMLClass target )
+		public AttributeAdapter(UMLClass target)
 		{
-			super ( target );
+			super(target);
 		}
 
 		@Override
-		protected boolean add ( String n )
-		{
-			Attribute attr = Attribute.Create ( n );
-			return target.addAttribute ( attr );
+		protected boolean add(String n) {
+			Attribute attr = Attribute.Create(n);
+			return target.addAttribute(attr);
 		}
 
 		@Override
-		protected boolean rename ( String old, String n )
-		{
-			Attribute newAttr = Attribute.Create ( n );
-			Attribute oldAttr = Attribute.Create ( old );
-			return target.removeAttribute ( oldAttr )
-					&& target.removeAttribute ( newAttr );
+		protected boolean rename(String old, String n) {
+			Attribute newAttr = Attribute.Create(n);
+			Attribute oldAttr = Attribute.Create(old);
+			return target.removeAttribute(oldAttr) && target.removeAttribute(newAttr);
 		}
 
 		@Override
-		protected boolean remove ( String old )
-		{
-			Attribute attr = Attribute.Create ( old );
-			return target.removeAttribute ( attr );
+		protected boolean remove(String old) {
+			Attribute attr = Attribute.Create(old);
+			return target.removeAttribute(attr);
 		}
 
 	}
@@ -141,280 +141,268 @@ public class ClassFigure extends GraphicalCompositeFigure
 	private static class MethodAdapter extends SimpleAdapter
 	{
 
-		public MethodAdapter ( UMLClass target )
+		public MethodAdapter(UMLClass target)
 		{
-			super ( target );
+			super(target);
 		}
 
 		@Override
-		protected boolean add ( String n )
-		{
-			Method meth = Method.Create ( n );
-			return target.addMethod ( meth );
+		protected boolean add(String n) {
+			Method meth = Method.Create(n);
+			return target.addMethod(meth);
 		}
 
 		@Override
-		protected boolean rename ( String old, String n )
-		{
-			Method newMeth = Method.Create ( n );
-			Method oldMeth = Method.Create ( old );
-			return target.removeMethod ( oldMeth ) && target.addMethod ( newMeth );
+		protected boolean rename(String old, String n) {
+			Method newMeth = Method.Create(n);
+			Method oldMeth = Method.Create(old);
+			return target.removeMethod(oldMeth) && target.addMethod(newMeth);
 		}
 
 		@Override
-		protected boolean remove ( String old )
-		{
-			Method meth = Method.Create ( old );
-			return target.removeMethod ( meth );
+		protected boolean remove(String old) {
+			Method meth = Method.Create(old);
+			return target.removeMethod(meth);
 		}
 
 	}
 
-	public ClassFigure ( )
+	public ClassFigure()
 	{
-		super ( new RectangleFigure ( ) );
-		setLayouter ( new VerticalLayouter ( ) );
+		super(new RectangleFigure());
+		setLayouter(new VerticalLayouter());
 
-		RectangleFigure nameListPF = new RectangleFigure ( );
-		nameListPF.set ( STROKE_COLOR, null );
-		nameListPF.setAttributeEnabled ( STROKE_COLOR, false );
-		nameListPF.set ( FILL_COLOR, null );
-		nameListPF.setAttributeEnabled ( FILL_COLOR, false );
-		ListFigure nameList = new ListFigure ( nameListPF );
-		ListFigure attrList = new ListFigure ( );
-		ListFigure methodList = new ListFigure ( );
-		SeparatorLineFigure separator1 = new SeparatorLineFigure ( );
-		SeparatorLineFigure separator2 = new SeparatorLineFigure ( );
+		RectangleFigure nameListPF = new RectangleFigure();
+		nameListPF.set(STROKE_COLOR, null);
+		nameListPF.setAttributeEnabled(STROKE_COLOR, false);
+		nameListPF.set(FILL_COLOR, null);
+		nameListPF.setAttributeEnabled(FILL_COLOR, false);
+		ListFigure nameList = new ListFigure(nameListPF);
+		ListFigure attrList = new ListFigure();
+		ListFigure methodList = new ListFigure();
+		SeparatorLineFigure separator1 = new SeparatorLineFigure();
+		SeparatorLineFigure separator2 = new SeparatorLineFigure();
 
-		add ( nameList );
-		add ( separator1 );
-		add ( attrList );
-		add ( separator2 );
-		add ( methodList );
+		add(nameList);
+		add(separator1);
+		add(attrList);
+		add(separator2);
+		add(methodList);
 
-		Insets2D.Double insets = new Insets2D.Double ( 4, 8, 4, 8 );
-		nameList.set ( LAYOUT_INSETS, insets );
-		attrList.set ( LAYOUT_INSETS, insets );
-		methodList.set ( LAYOUT_INSETS, insets );
+		Insets2D.Double insets = new Insets2D.Double(4, 8, 4, 8);
+		nameList.set(LAYOUT_INSETS, insets);
+		attrList.set(LAYOUT_INSETS, insets);
+		methodList.set(LAYOUT_INSETS, insets);
 
-		TextFigure tmpFigure = createTextFigure ( "Class" );
-		tmpFigure.addFigureListener ( new NameAdapter ( data ) );
-		nameList.add ( tmpFigure );
+		TextFigure tmpFigure = createTextFigure("Class");
+		tmpFigure.addFigureListener(new NameAdapter(data));
+		nameList.add(tmpFigure);
 
-		tmpFigure = createTextFigure ( "" );
-		// tmpFigure.addFigureListener ( new AttributeAdapter ( data ) );
-		attrList.add ( tmpFigure );
+		tmpFigure = createTextFigure("");
+		tmpFigure.addFigureListener(new AttributeAdapter(data));
+		attrList.add(tmpFigure);
 
 		// add Method, and Attribute Listeners
 	}
 
 	@Override
-	public Collection<Action> getActions ( Point2D.Double p )
-	{
-		Collection<Action> col = new ArrayList<Action> ( );
-		col.add ( new AddAttributeAction ( this ) );
+	public Collection<Action> getActions(Point2D.Double p) {
+		Collection<Action> col = new ArrayList<Action>();
+		col.add(new AddAttributeAction(this));
 		return col;
 	}
 
-	public ClassFigure ( UMLClass proto )
+	public ClassFigure(UMLClass proto)
 	{
-		this ( );
-		if ( proto instanceof UMLAbstractClass )
+		this();
+		if (proto instanceof UMLAbstractClass)
 			{
-				data = new UMLAbstractClass ( );
-			}
-		else if ( proto instanceof UMLInterface )
+				data = new UMLAbstractClass();
+			} else if (proto instanceof UMLInterface)
 			{
-				data = new UMLInterface ( );
-			}
-		else
+				data = new UMLInterface();
+			} else
 			{
-				data = new UMLClass ( );
+				data = new UMLClass();
 			}
 	}
 
-	private TextFigure createTextFigure ( String text )
-	{
-		TextFigure result = new TextFigure ( );
-		result.setText ( text );
-		result.set ( FONT_BOLD, true );
-		result.setAttributeEnabled ( FONT_BOLD, false );
+	private TextFigure createTextFigure(String text) {
+		TextFigure result = new TextFigure();
+		result.setText(text);
+		result.set(FONT_BOLD, true);
+		result.setAttributeEnabled(FONT_BOLD, false);
 		return result;
 	}
 
 	@Override
-	public Collection<Handle> createHandles ( int detailLevel )
-	{
-		List<Handle> handles = new LinkedList<Handle> ( );
+	public Collection<Handle> createHandles(int detailLevel) {
+		List<Handle> handles = new LinkedList<Handle>();
 
-		switch ( detailLevel )
+		switch (detailLevel)
 			{
 				case -1:
-					handles.add ( new BoundsOutlineHandle ( getPresentationFigure ( ),
-							false, true ) );
+					handles.add(new BoundsOutlineHandle(getPresentationFigure(), false,
+							true));
 				break;
 
 				case 0:
-					handles.add ( new MoveHandle ( this, RelativeLocator.northWest ( ) ) );
-					handles.add ( new MoveHandle ( this, RelativeLocator.northEast ( ) ) );
-					handles.add ( new MoveHandle ( this, RelativeLocator.southWest ( ) ) );
-					handles.add ( new MoveHandle ( this, RelativeLocator.southEast ( ) ) );
+					handles.add(new MoveHandle(this, RelativeLocator.northWest()));
+					handles.add(new MoveHandle(this, RelativeLocator.northEast()));
+					handles.add(new MoveHandle(this, RelativeLocator.southWest()));
+					handles.add(new MoveHandle(this, RelativeLocator.southEast()));
 					ConnectorHandle ch;
-					handles.add ( ch = new ConnectorHandle ( new LocatorConnector ( this,
-							RelativeLocator.east ( ) ), new AssociationFigure ( ) ) );
+					handles.add(ch = new ConnectorHandle(new LocatorConnector(this,
+							RelativeLocator.east()), new AssociationFigure()));
 				break;
 			}
 		return handles;
 	}
 
-	public void setName ( String newName )
-	{
-		data.setName ( newName );
-		getNameFigure ( ).setText ( newName );
+	public void setName(String newName) {
+		data.setName(newName);
+		getNameFigure().setText(newName);
 	}
 
-	private TextFigure getNameFigure ( )
-	{
-		return (TextFigure) ( (ListFigure)getChild ( 0 ) ).getChild ( 0 );
+	private TextFigure getNameFigure() {
+		return (TextFigure) ((ListFigure) getChild(0)).getChild(0);
 	}
 
-	public void addAttribute ( String attr )
-	{
-		Attribute tmp = Attribute.Create ( attr );
-		if ( tmp == null ) return; // throw an error popup
-		String tmpText = tmp.toString ( );
-		tmpText = ( tmp.isFinal ( ) )? tmpText.toUpperCase ( ) : tmpText;
-		TextFigure tmpFig = createTextFigure ( tmpText );
-		if ( tmp.isStatic ( ) )
+	public void addAttribute(String attr) {
+		Attribute tmp = Attribute.Create(attr);
+		if (tmp == null)
+			return; // throw an error popup
+		String tmpText = tmp.toString();
+		tmpText = (tmp.isFinal()) ? tmpText.toUpperCase() : tmpText;
+		TextFigure tmpFig = createTextFigure(tmpText);
+		if (tmp.isStatic())
 			{
-				tmpFig.set ( FONT_UNDERLINE, true );
-				tmpFig.setAttributeEnabled ( FONT_UNDERLINE, false );
+				tmpFig.set(FONT_UNDERLINE, true);
+				tmpFig.setAttributeEnabled(FONT_UNDERLINE, false);
 			}
-		tmpFig.addFigureListener ( new AttributeAdapter ( data ) );
+		tmpFig.addFigureListener(new AttributeAdapter(data));
 
-		dprint ( ( attrList.add ( tmpFig ) )? "TRUE" : "FALSE" );
-		dprint ( ( data.addAttribute ( tmp ) )? "" : "ATTRIBUTE NOT ADDED TO DATA" );
-		dprint ( tmp + " was added" );
-		printIterable ( data.getAttributes ( ) );
+		dprint((attrList.add(tmpFig)) ? "TRUE" : "FALSE");
+		dprint((data.addAttribute(tmp)) ? "" : "ATTRIBUTE NOT ADDED TO DATA");
+		dprint(tmp + " was added");
+		printIterable(data.getAttributes());
 	}
 
-	private TextFigure getAttributeFigure ( int index )
-	{
-		if ( index < 0 ) throw new IndexOutOfBoundsException ( );
-		if ( index >= ( (ListFigure)getChild ( 2 ) ).getChildCount ( ) ) throw new IndexOutOfBoundsException ( );
+	private TextFigure getAttributeFigure(int index) {
+		if (index < 0)
+			throw new IndexOutOfBoundsException();
+		if (index >= ((ListFigure) getChild(2)).getChildCount())
+			throw new IndexOutOfBoundsException();
 
-		return (TextFigure) ( (ListFigure)getChild ( 2 ) ).getChild ( index );
+		return (TextFigure) ((ListFigure) getChild(2)).getChild(index);
 	}
 
-	public void addMethod ( String methtxt )
-	{
-		Method tmp = Method.Create ( methtxt );
-		if ( tmp == null ) return; // throw an error popup
-		TextFigure tmpFig = createTextFigure ( tmp.toString ( ) );
-		if ( tmp.isStatic ( ) ) tmpFig.set ( FONT_UNDERLINE, true );
-		if ( tmp.isAbstract ( ) ) tmpFig.set ( FONT_ITALIC, true );
-		methodList.add ( tmpFig );
+	public void addMethod(String methtxt) {
+		Method tmp = Method.Create(methtxt);
+		if (tmp == null)
+			return; // throw an error popup
+		TextFigure tmpFig = createTextFigure(tmp.toString());
+		if (tmp.isStatic())
+			tmpFig.set(FONT_UNDERLINE, true);
+		if (tmp.isAbstract())
+			tmpFig.set(FONT_ITALIC, true);
+		methodList.add(tmpFig);
 	}
 
-	private TextFigure getMethodFigure ( int index )
-	{
-		if ( index < 0 ) throw new IndexOutOfBoundsException ( );
-		if ( index >= ( (ListFigure)getChild ( 4 ) ).getChildCount ( ) ) throw new IndexOutOfBoundsException ( );
+	private TextFigure getMethodFigure(int index) {
+		if (index < 0)
+			throw new IndexOutOfBoundsException();
+		if (index >= ((ListFigure) getChild(4)).getChildCount())
+			throw new IndexOutOfBoundsException();
 
-		return (TextFigure) ( (ListFigure)getChild ( 4 ) ).getChild ( index );
+		return (TextFigure) ((ListFigure) getChild(4)).getChild(index);
 	}
 
 	@Override
-	public void read ( DOMInput in ) throws IOException
-	{
-		double x = in.getAttribute ( "x", 0d );
-		double y = in.getAttribute ( "y", 0d );
-		double w = in.getAttribute ( "w", 0d );
-		double h = in.getAttribute ( "h", 0d );
+	public void read(DOMInput in) throws IOException {
+		double x = in.getAttribute("x", 0d);
+		double y = in.getAttribute("y", 0d);
+		double w = in.getAttribute("w", 0d);
+		double h = in.getAttribute("h", 0d);
 
-		setBounds ( new Point2D.Double ( x, y ), new Point2D.Double ( x + w, y + h ) );
+		setBounds(new Point2D.Double(x, y), new Point2D.Double(x + w, y + h));
 
-		readAttributes ( in );
+		readAttributes(in);
 
-		in.openElement ( "class" );
-		UMLClass umlclass = new UMLClass ( in.getAttribute ( "name", "class" ) );
+		in.openElement("class");
+		UMLClass umlclass = new UMLClass(in.getAttribute("name", "class"));
 
 		try
 			{
-				while ( true )
+				while (true)
 					{
 						String attr_sig = "";
-						attr_sig += in.getAttribute ( "access", "default" ) + " ";
-						attr_sig += ( in.getAttribute ( "static", false ) )? "static " : "";
-						attr_sig += ( in.getAttribute ( "final", false ) )? "final " : "";
-						attr_sig += in.getAttribute ( "name", "attr_name" ) + " ";
+						attr_sig += in.getAttribute("access", "default") + " ";
+						attr_sig += (in.getAttribute("static", false)) ? "static " : "";
+						attr_sig += (in.getAttribute("final", false)) ? "final " : "";
+						attr_sig += in.getAttribute("name", "attr_name") + " ";
 						attr_sig += " : ";
-						attr_sig += in.getAttribute ( "type", "void*" ) + " ";// XXX:
-						umlclass.addAttribute ( Attribute.Create ( attr_sig ) );
+						attr_sig += in.getAttribute("type", "void*") + " ";// XXX:
+						umlclass.addAttribute(Attribute.Create(attr_sig));
 					}
+			} catch (Exception e)
+			{
 			}
-		catch ( Exception e )
-			{}
 
 		try
 			{
-				while ( true )
+				while (true)
 					{
 						String meth_sig = "";
-						meth_sig += in.getAttribute ( "access", "default" ) + " ";
-						meth_sig += ( in.getAttribute ( "static", false ) )? "static " : "";
-						meth_sig += ( in.getAttribute ( "abstract", false ) )? "abstract "
-								: "";
-						meth_sig += in.getAttribute ( "name", "meth_name" ) + " ";
+						meth_sig += in.getAttribute("access", "default") + " ";
+						meth_sig += (in.getAttribute("static", false)) ? "static " : "";
+						meth_sig += (in.getAttribute("abstract", false)) ? "abstract " : "";
+						meth_sig += in.getAttribute("name", "meth_name") + " ";
 						meth_sig += " : ";
-						meth_sig += in.getAttribute ( "type", "void*" ) + " "; // XXX:joke
-																																		// :D
-						umlclass.addMethod ( Method.Create ( meth_sig ) );
+						meth_sig += in.getAttribute("type", "void*") + " "; // XXX:joke
+																																// :D
+						umlclass.addMethod(Method.Create(meth_sig));
 					}
+			} catch (Exception e)
+			{
 			}
-		catch ( Exception e )
-			{}
 
 	}
 
 	@Override
-	public void write ( DOMOutput out ) throws IOException
-	{
-		Rectangle2D.Double r = getBounds ( );
-		out.addAttribute ( "x", r.x );
-		out.addAttribute ( "y", r.y );
-		writeAttributes ( out );
-		out.openElement ( "class" );
-		out.addAttribute ( "name", data.getName ( ) );
-		for ( Attribute attr : data.getAttributes ( ) )
+	public void write(DOMOutput out) throws IOException {
+		Rectangle2D.Double r = getBounds();
+		out.addAttribute("x", r.x);
+		out.addAttribute("y", r.y);
+		writeAttributes(out);
+		out.openElement("class");
+		out.addAttribute("name", data.getName());
+		for (Attribute attr : data.getAttributes())
 			{
-				out.openElement ( "attribute" );
-				out.addAttribute ( "name", attr.getName ( ) );
-				out.addAttribute ( "type", attr.getType ( ) );
-				out.addAttribute ( "access", attr.getAccess ( ).toString ( ) );
-				out.addAttribute ( "final", ( attr.isFinal ( ) )? "true" : "false" );
-				out.addAttribute ( "static", ( attr.isStatic ( ) )? "true" : "false" );
+				out.openElement("attribute");
+				out.addAttribute("name", attr.getName());
+				out.addAttribute("type", attr.getType());
+				out.addAttribute("access", attr.getAccess().toString());
+				out.addAttribute("final", (attr.isFinal()) ? "true" : "false");
+				out.addAttribute("static", (attr.isStatic()) ? "true" : "false");
 			}
-		for ( Method meth : data.getMethods ( ) )
+		for (Method meth : data.getMethods())
 			{
-				out.openElement ( "method" );
-				out.addAttribute ( "name", meth.getName ( ) );
-				out.addAttribute ( "type", meth.getType ( ) );
-				out.addAttribute ( "access", meth.getAccess ( ).toString ( ) );
-				out.addAttribute ( "abstract", ( meth.isAbstract ( ) )? "true"
-						: "false" );
-				out.addAttribute ( "static", ( meth.isStatic ( ) )? "true" : "false" );
+				out.openElement("method");
+				out.addAttribute("name", meth.getName());
+				out.addAttribute("type", meth.getType());
+				out.addAttribute("access", meth.getAccess().toString());
+				out.addAttribute("abstract", (meth.isAbstract()) ? "true" : "false");
+				out.addAttribute("static", (meth.isStatic()) ? "true" : "false");
 			}
 	}
 
-	public void removeDependency ( AssociationFigure associationFigure )
-	{
+	public void removeDependency(AssociationFigure associationFigure) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void addDependency ( AssociationFigure associationFigure )
-	{
+	public void addDependency(AssociationFigure associationFigure) {
 		// TODO Auto-generated method stub
 
 	}

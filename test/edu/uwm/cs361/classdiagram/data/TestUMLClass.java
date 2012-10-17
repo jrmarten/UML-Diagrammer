@@ -1,7 +1,7 @@
 package edu.uwm.cs361.classdiagram.data;
 
-//import static edu.uwm.cs361.Util.dprint;
-//import static edu.uwm.cs361.Util.printIterable;
+import static edu.uwm.cs361.Util.dprint;
+import static edu.uwm.cs361.Util.printIterable;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;

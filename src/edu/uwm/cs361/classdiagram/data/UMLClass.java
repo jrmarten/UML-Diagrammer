@@ -14,10 +14,12 @@ public class UMLClass implements Serializable
 	protected LinkedList<Attribute>	myAttributes;
 	protected LinkedList<Method>		myMethods;
 	protected LinkedList<UMLClass>	myAssociatedClasses;
-	protected LinkedList<UMLClass>	mySuperClasses;
+
+	protected UMLClass							superClass;
+	protected LinkedList<UMLClass>	myInterfaces;
+
 	protected LinkedList<UMLClass>	myDependClasses;
 	private boolean									abstractp					= false;
-	private int											superclasses			= 0;
 
 	public static final String			idreg							= "[A-Za-z_$][A-Za-z0-9_$]*";
 	public static final String			classreg					= ".*";
@@ -27,15 +29,15 @@ public class UMLClass implements Serializable
 	/**
 	 * Create a new JModellerClass instance
 	 */
-	public UMLClass ( )
+	public UMLClass()
 	{
 		myName = "Class";
-		generics = new LinkedList<String> ( );
-		myAttributes = new LinkedList<Attribute> ( );
-		myMethods = new LinkedList<Method> ( );
-		myAssociatedClasses = new LinkedList<UMLClass> ( );
-		mySuperClasses = new LinkedList<UMLClass> ( );
-		myDependClasses = new LinkedList<UMLClass> ( );
+		generics = new LinkedList<String>();
+		myAttributes = new LinkedList<Attribute>();
+		myMethods = new LinkedList<Method>();
+		myAssociatedClasses = new LinkedList<UMLClass>();
+		myInterfaces = new LinkedList<UMLClass>();
+		myDependClasses = new LinkedList<UMLClass>();
 	}
 
 	/**
@@ -44,10 +46,10 @@ public class UMLClass implements Serializable
 	 * @param newClassName
 	 *          name of the class
 	 */
-	public UMLClass ( String newClassName )
+	public UMLClass(String newClassName)
 	{
-		this ( );
-		setName ( newClassName );
+		this();
+		setName(newClassName);
 	}
 
 	/**
@@ -57,22 +59,21 @@ public class UMLClass implements Serializable
 	 * @param newName
 	 *          new name of the class
 	 */
-	public void setName ( String newName )
-	{
+	public void setName(String newName) {
 		myName = newName;
 
-		generics.clear ( );
-		if ( newName.contains ( "<" ) )
+		generics.clear();
+		if (newName.contains("<"))
 			{
 				String tmp;
-				myName = newName.substring ( 0, newName.indexOf ( "<" ) );
-				tmp = newName.substring ( newName.indexOf ( "<" ) + 1,
-						newName.indexOf ( ">" ) );
-				String[] classnames = tmp.split ( " , " );
-				for ( String cl : classnames )
+				myName = newName.substring(0, newName.indexOf("<"));
+				tmp = newName.substring(newName.indexOf("<") + 1, newName.indexOf(">"));
+				String[] classnames = tmp.split(" , ");
+				for (String cl : classnames)
 					{
-						cl = cl.trim ( );
-						if ( !cl.equals ( "" ) ) generics.add ( cl );
+						cl = cl.trim();
+						if (!cl.equals(""))
+							generics.add(cl);
 					}
 			}
 	}
@@ -82,31 +83,28 @@ public class UMLClass implements Serializable
 	 * 
 	 * @return name of the class
 	 */
-	public String getName ( )
-	{
+	public String getName() {
 		return myName;
 	}
 
-	public String getGenerics ( )
-	{
-		Iterator<String> it = generics.iterator ( );
+	public String getGenerics() {
+		Iterator<String> it = generics.iterator();
 		String buf = "";
-		while ( it.hasNext ( ) )
+		while (it.hasNext())
 			{
-				buf += it.next ( );
-				if ( !it.hasNext ( ) ) break;
+				buf += it.next();
+				if (!it.hasNext())
+					break;
 				buf += ", ";
 			}
 		return "<" + buf + ">";
 	}
 
-	public boolean isAbstractClass ( )
-	{
+	public boolean isAbstractClass() {
 		return false;
 	}
 
-	public boolean isAbstract ( )
-	{
+	public boolean isAbstract() {
 		return abstractp;
 	}
 
@@ -114,35 +112,34 @@ public class UMLClass implements Serializable
 
 	// Attribute Methods
 
-	public boolean addAttribute ( Attribute newAttribute )
-	{
-		if ( newAttribute == null ) return false;
-		for ( Attribute attr : myAttributes )
+	public boolean addAttribute(Attribute newAttribute) {
+		if (newAttribute == null)
+			return false;
+		for (Attribute attr : myAttributes)
 			{
-				if ( attr.getName ( ).equals ( newAttribute.getName ( ) ) ) return false;
+				if (attr.getName().equals(newAttribute.getName()))
+					return false;
 			}
-		myAttributes.add ( newAttribute );
+		myAttributes.add(newAttribute);
 		return true;
 	}
 
-	public boolean removeAttribute ( Attribute oldAttribute )
-	{
-		return myAttributes.remove ( oldAttribute );
+	public boolean removeAttribute(Attribute oldAttribute) {
+		return myAttributes.remove(oldAttribute);
 	}
 
-	public boolean removeAttribute ( String attrname )
-	{
-		if ( attrname == null ) return false;
-		for ( Attribute attr : myAttributes )
+	public boolean removeAttribute(String attrname) {
+		if (attrname == null)
+			return false;
+		for (Attribute attr : myAttributes)
 			{
-				if ( attr.getName ( ).equals ( attrname ) ) return myAttributes
-						.remove ( attr );
+				if (attr.getName().equals(attrname))
+					return myAttributes.remove(attr);
 			}
 		return false;
 	}
 
-	public Collection<Attribute> getAttributes ( )
-	{
+	public Collection<Attribute> getAttributes() {
 		return myAttributes;
 	}
 
@@ -150,48 +147,48 @@ public class UMLClass implements Serializable
 
 	// Methods
 
-	public boolean addMethod ( Method newMethod )
-	{
-		if ( newMethod == null ) return false;
+	public boolean addMethod(Method newMethod) {
+		if (newMethod == null)
+			return false;
 
-		for ( Method meth : myMethods )
+		for (Method meth : myMethods)
 			{
-				if ( newMethod.getName ( ).equals ( meth.getName ( ) )
-						&& !Method.overloaded ( meth, newMethod ) )
+				if (newMethod.getName().equals(meth.getName())
+						&& !Method.overloaded(meth, newMethod))
 					{
-						dprint ( "Same name, but is not overloaded: " + newMethod + ", "
-								+ meth );
+						dprint("Same name, but is not overloaded: " + newMethod + ", "
+								+ meth);
 						return false;
 					}
 			}
 
-		if ( newMethod.isAbstract ( ) ) abstractp = true;
+		if (newMethod.isAbstract())
+			abstractp = true;
 
-		return myMethods.add ( newMethod );
+		return myMethods.add(newMethod);
 	}
 
-	public boolean removeMethod ( Method oldMethod )
-	{
-		boolean result = myMethods.remove ( oldMethod );
+	public boolean removeMethod(Method oldMethod) {
+		boolean result = myMethods.remove(oldMethod);
 
-		if ( oldMethod.isAbstract ( ) && abstractp )
+		if (oldMethod.isAbstract() && abstractp)
 			{
 				boolean is_abstract = false;
-				for ( Method m : myMethods )
+				for (Method m : myMethods)
 					{
-						if ( m.isAbstract ( ) )
+						if (m.isAbstract())
 							{
 								is_abstract = false;
 								break;
 							}
 					}
-				if ( !is_abstract ) abstractp = false;
+				if (!is_abstract)
+					abstractp = false;
 			}
 		return result;
 	}
 
-	public Collection<Method> getMethods ( )
-	{
+	public Collection<Method> getMethods() {
 		return myMethods;
 	}
 
@@ -201,18 +198,15 @@ public class UMLClass implements Serializable
 
 	// not much to do
 
-	public boolean addAssociation ( UMLClass newAssociatedClass )
-	{
-		return myAssociatedClasses.add ( newAssociatedClass );
+	public boolean addAssociation(UMLClass newAssociatedClass) {
+		return myAssociatedClasses.add(newAssociatedClass);
 	}
 
-	public boolean removeAssociation ( UMLClass oldAssociatedClass )
-	{
-		return myAssociatedClasses.remove ( oldAssociatedClass );
+	public boolean removeAssociation(UMLClass oldAssociatedClass) {
+		return myAssociatedClasses.remove(oldAssociatedClass);
 	}
 
-	public Collection<UMLClass> getAssociations ( )
-	{
+	public Collection<UMLClass> getAssociations() {
 		return myAssociatedClasses;
 	}
 
@@ -222,52 +216,64 @@ public class UMLClass implements Serializable
 
 	// TODO: Test
 	// XXX: not completely correct
-	public boolean addSuperclass ( UMLClass par )
-	{
+	public boolean addSuperclass(UMLClass par) {
 		boolean interfacep = par instanceof UMLInterface;
-		if ( superclasses > 0 && !interfacep ) return false;
-		if ( isSuper ( this, par ) ) return false;
-		if ( !interfacep ) superclasses++;
-		return mySuperClasses.add ( par );
+
+		if (!interfacep)
+			{
+				if (isSuper(this, par))
+					return false;
+				superClass = par;
+				return true;
+			}
+
+		if (myInterfaces.contains(par))
+			return false;
+		return myInterfaces.add(par);
+
 	}
 
-	public boolean isSuper ( UMLClass par, UMLClass child )
-	{
-		for ( UMLClass tmp : child.getSuperclasses ( ) )
+	public static boolean isSuper(UMLClass par, UMLClass child) {
+		for (UMLClass tmp : child.getSuperclasses())
 			{
-				if ( tmp.equals ( par ) ) return true;
-				if ( isSuper ( par, tmp ) ) return true;
+				if (tmp.equals(par))
+					return true;
+				if (isSuper(par, tmp))
+					return true;
 			}
 		return false;
 	}
 
-	public boolean removeSuperclass ( UMLClass oldSuperclass )
-	{
-		if ( ! ( oldSuperclass instanceof UMLInterface ) ) superclasses--;
-		return mySuperClasses.remove ( oldSuperclass );
+	public boolean removeSuperclass(UMLClass oldSuperclass) {
+		if (superClass != null && oldSuperclass.equals(superClass))
+			{
+				superClass = null;
+				return true;
+			}
+		return myInterfaces.remove(oldSuperclass);
 	}
 
-	public Collection<UMLClass> getSuperclasses ( )
-	{
-		return mySuperClasses;
+	public Collection<UMLClass> getSuperclasses() {
+		LinkedList<UMLClass> result = new LinkedList<UMLClass>(myInterfaces);
+		if (superClass != null)
+			result.add(superClass);
+
+		return result;
 	}
 
 	// *******************************************************************
 
 	// Dependencies
 
-	public boolean addDependency ( UMLClass newDependency )
-	{
-		return myDependClasses.add ( newDependency );
+	public boolean addDependency(UMLClass newDependency) {
+		return myDependClasses.add(newDependency);
 	}
 
-	public boolean removeDependency ( UMLClass oldDependency )
-	{
-		return myDependClasses.remove ( oldDependency );
+	public boolean removeDependency(UMLClass oldDependency) {
+		return myDependClasses.remove(oldDependency);
 	}
 
-	public Collection<UMLClass> getDependencies ( )
-	{
+	public Collection<UMLClass> getDependencies() {
 		return myDependClasses;
 	}
 
@@ -276,23 +282,21 @@ public class UMLClass implements Serializable
 	// helps java generator
 
 	// TODO: add implement and extends functionallity
-	public String getDeclaration ( )
-	{
-		String implementbuffer = "";
-		String extendbuffer = "";
+	public String getDeclaration() {
+		String buffer = "";
 
-		for ( UMLClass tmp : getSuperclasses ( ) )
+		buffer += (superClass == null) ? "" : (" extends " + superClass.getName());
+
+		if (myInterfaces.size() > 0)
 			{
-				if ( tmp instanceof UMLInterface ) implementbuffer += tmp.getName ( )
-						+ ", ";
+				buffer += " implements " + join(myInterfaces, ", ");
 			}
 
-		return ( ( abstractp )? "abstract " : "" ) + "class " + getName ( );
+		return ((abstractp) ? "abstract " : "") + "class " + getName() + buffer;
 	}
 
 	@Override
-	public String toString ( )
-	{
-		return getDeclaration ( );
+	public String toString() {
+		return getName();
 	}
 }
