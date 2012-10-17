@@ -206,17 +206,10 @@ public class ClassFigure extends GraphicalCompositeFigure
 	}
 
 	@Override
-<<<<<<< HEAD
 	public Collection<Action> getActions(Point2D.Double p) {
 		Collection<Action> col = new ArrayList<Action>();
 		col.add(new AddAttributeAction("Add Attribute", this));
-=======
-	public Collection<Action> getActions ( Point2D.Double p )
-	{
-		Collection<Action> col = new ArrayList<Action> ( );
-		col.add ( new AddAttributeAction ( this ) );
 		col.add(new AddMethodAction(this));
->>>>>>> 69c4b7bf02f06b7917f25c19cd09ac620813d3d3
 		return col;
 	}
 
@@ -234,22 +227,12 @@ public class ClassFigure extends GraphicalCompositeFigure
 				data = new UMLClass();
 			}
 	}
-<<<<<<< HEAD
 
 	private TextFigure createTextFigure(String text) {
 		TextFigure result = new TextFigure();
 		result.setText(text);
 		result.set(FONT_BOLD, true);
 		result.setAttributeEnabled(FONT_BOLD, false);
-=======
-	
-	private TextFigure createTextFigure ( String text )
-	{
-		TextFigure result = new TextFigure ( );
-		result.setText ( text );
-		result.set ( FONT_BOLD, true );
-		result.setAttributeEnabled ( FONT_BOLD, false );
->>>>>>> 69c4b7bf02f06b7917f25c19cd09ac620813d3d3
 		return result;
 	}
 
