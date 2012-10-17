@@ -213,6 +213,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 	{
 		Collection<Action> col = new ArrayList<Action> ( );
 		col.add ( new AddAttributeAction ( this ) );
+		col.add(new AddMethodAction(this));
 		return col;
 	}
 
@@ -232,7 +233,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 				data = new UMLClass ( );
 			}
 	}
-
+	
 	private TextFigure createTextFigure ( String text )
 	{
 		TextFigure result = new TextFigure ( );
