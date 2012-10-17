@@ -5,11 +5,24 @@ import java.util.Iterator;
 public class Util
 {
 
-	private static final boolean	DEBUG	= false;
+	private static final boolean	DEBUG	= true;
 
 	public static void dprint ( String line )
 	{
 		if ( DEBUG ) System.out.println ( line );
+	}
+
+	public static <E> void printIterable ( Iterable<E> col )
+	{
+		for ( E e : col )
+			{
+				System.out.println ( e );
+			}
+	}
+
+	public static <E> void printIterable ( Iterable<E> col, boolean debug )
+	{
+		if ( debug ) printIterable ( col );
 	}
 
 	public static <E> String join ( Iterable<E> col, String sep )
@@ -30,6 +43,11 @@ public class Util
 	{
 		System.out.println ( line );
 		return null;
+	}
+
+	public static void dprint ( String line, boolean debug )
+	{
+		if ( debug ) System.out.println ( line );
 	}
 
 }
