@@ -208,7 +208,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 	@Override
 	public Collection<Action> getActions(Point2D.Double p) {
 		Collection<Action> col = new ArrayList<Action>();
-		col.add(new AddAttributeAction(this));
+		col.add(new AddAttributeAction("Add Attribute", this));
 		return col;
 	}
 

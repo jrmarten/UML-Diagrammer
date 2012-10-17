@@ -17,15 +17,15 @@ public class AddAttributeAction extends AbstractAction
 
 	private ClassFigure						data;
 
-	public AddAttributeAction ( ClassFigure c )
+	public AddAttributeAction(String s, ClassFigure c)
 	{
+		super(s);
 		data = c;
 	}
 
 	@Override
-	public void actionPerformed ( ActionEvent e )
-	{
-		data.addAttribute ( "_default:int" );
+	public void actionPerformed(ActionEvent e) {
+		data.addAttribute("_default:int");
 	}
 	/*
 	 * public AddAttributeAction ( DrawingEditor edit ) { super ( edit ); }
