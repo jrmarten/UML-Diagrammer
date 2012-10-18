@@ -60,6 +60,15 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	{
 	}
 
+	private static ResourceBundleUtil	projectLabels	= null;
+
+	public static ResourceBundleUtil getProjectResources() {
+		if (projectLabels == null)
+			projectLabels = ResourceBundleUtil.getBundle("edu.uwm.cs361.Labels");
+
+		return projectLabels;
+	}
+
 	// TODO: FINISH
 	@Override
 	public ActionMap createActionMap(Application a, @Nullable View v) {

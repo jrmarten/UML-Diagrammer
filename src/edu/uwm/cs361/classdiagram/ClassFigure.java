@@ -210,8 +210,8 @@ public class ClassFigure extends GraphicalCompositeFigure
 	@Override
 	public Collection<Action> getActions(Point2D.Double p) {
 		Collection<Action> col = new ArrayList<Action>();
-		col.add(new AddAttributeAction("Add Attribute", this));
-		col.add(new AddMethodAction("Add Method", this));
+		col.add(new AddAttributeAction(this));
+		col.add(new AddMethodAction(this));
 		return col;
 	}
 
@@ -277,43 +277,70 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 	public void addAttribute(String attr) {
 		Attribute tmp = Attribute.Create(attr);
-		if (tmp == null)
-			return; // throw an error popup
-		String tmpText = tmp.toString();
-		tmpText = (tmp.isFinal()) ? tmpText.toUpperCase() : tmpText;
+		addAttribute(tmp);
+		updateAttributes();
+	}
+
+	private boolean addAttribute(Attribute attr) {
+		if (attr == null)
+			return false;
+		String tmpText = attr.toString();
+		tmpText = (attr.isFinal()) ? tmpText.toUpperCase() : tmpText;
 		TextFigure tmpFig = createTextFigure(tmpText);
-		if (tmp.isStatic())
+		if (attr.isStatic())
 			{
 				tmpFig.set(FONT_UNDERLINE, true);
 				tmpFig.setAttributeEnabled(FONT_UNDERLINE, false);
 			}
 		tmpFig.addFigureListener(new AttributeAdapter(data));
 
-		dprint((attrList.add(tmpFig)) ? "TRUE" : "FALSE");
-		dprint((data.addAttribute(tmp)) ? "" : "ATTRIBUTE NOT ADDED TO DATA");
-		dprint(tmp + " was added");
+		boolean added = attrList.add(tmpFig);
+
+		dprint((added) ? "TRUE" : "FALSE");
+		dprint((data.addAttribute(attr)) ? "" : "ATTRIBUTE NOT ADDED TO DATA");
+		dprint(attr + " was added");
 		printIterable(data.getAttributes());
-	}
-
-	private TextFigure getAttributeFigure(int index) {
-		if (index < 0)
-			throw new IndexOutOfBoundsException();
-		if (index >= ((ListFigure) getChild(2)).getChildCount())
-			throw new IndexOutOfBoundsException();
-
-		return (TextFigure) ((ListFigure) getChild(2)).getChild(index);
+		return added;
 	}
 
 	public void addMethod(String methtxt) {
 		Method tmp = Method.Create(methtxt);
-		if (tmp == null)
+		addMethod(tmp);
+	}
+
+	public void updateAttributes() {
+		attrList.removeAllChildren();
+
+		for (Attribute attr : data.getAttributes())
+			{
+				addAttribute(attr);
+			}
+
+	}
+
+	private void addMethod(Method meth) {
+		if (meth == null)
 			return; // throw an error popup
-		TextFigure tmpFig = createTextFigure(tmp.toString());
-		if (tmp.isStatic())
+		TextFigure tmpFig = createTextFigure(meth.toString());
+		if (meth.isStatic())
 			tmpFig.set(FONT_UNDERLINE, true);
-		if (tmp.isAbstract())
+		if (meth.isAbstract())
 			tmpFig.set(FONT_ITALIC, true);
 		methodList.add(tmpFig);
+	}
+
+	public void removeMethod(String methtxt) {
+		Method meth = Method.Create(methtxt);
+		data.removeMethod(meth);
+		updateMethods();
+	}
+
+	public void updateMethods() {
+		methodList.removeAllChildren();
+		for (Method meth : data.getMethods())
+			{
+				addMethod(meth);
+			}
 	}
 
 	private TextFigure getMethodFigure(int index) {
@@ -412,5 +439,22 @@ public class ClassFigure extends GraphicalCompositeFigure
 	public void addDependency(AssociationFigure associationFigure) {
 		// TODO Auto-generated method stub
 
+	}
+
+	// XXX:FOR DEBUGING ONLY
+	public String snapShot() {
+
+		String buffer = data.getName() + "{\n";
+		for (Attribute attr : data.getAttributes())
+			{
+				buffer += attr.getSignature() + "\n";
+			}
+		for (Method meth : data.getMethods())
+			{
+				buffer += meth.getSignature() + "\n";
+			}
+		buffer += "}\n";
+
+		return buffer;
 	}
 }
