@@ -8,7 +8,7 @@ import edu.uwm.cs361.classdiagram.ClassFigure;
 @SuppressWarnings("serial")
 public class RemoveAttributeAction extends ClassFigureAction
 {
-	public static final String	ID	= "action.removeAttribute.title";
+	public static final String	ID	= "actions.removeAttribute.title";
 
 	public RemoveAttributeAction(ClassFigure fig)
 	{

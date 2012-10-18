@@ -1,12 +1,12 @@
 package edu.uwm.cs361.classdiagram;
 
+import static edu.uwm.cs361.Util.dprint;
+import static edu.uwm.cs361.Util.printIterable;
 import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
 import static org.jhotdraw.draw.AttributeKeys.FONT_BOLD;
 import static org.jhotdraw.draw.AttributeKeys.FONT_ITALIC;
 import static org.jhotdraw.draw.AttributeKeys.FONT_UNDERLINE;
 import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
-
-import static edu.uwm.cs361.Util.*;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -37,6 +37,8 @@ import org.jhotdraw.xml.DOMOutput;
 
 import edu.uwm.cs361.action.AddAttributeAction;
 import edu.uwm.cs361.action.AddMethodAction;
+import edu.uwm.cs361.action.RemoveAttributeAction;
+import edu.uwm.cs361.action.RemoveMethodAction;
 import edu.uwm.cs361.classdiagram.data.Attribute;
 import edu.uwm.cs361.classdiagram.data.Method;
 import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
@@ -219,6 +221,8 @@ public class ClassFigure extends GraphicalCompositeFigure
 		Collection<Action> col = new ArrayList<Action>();
 		col.add(new AddAttributeAction(this));
 		col.add(new AddMethodAction(this));
+		col.add(new RemoveAttributeAction(this));
+		col.add(new RemoveMethodAction(this));
 		return col;
 	}
 
