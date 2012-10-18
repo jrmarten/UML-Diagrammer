@@ -35,6 +35,8 @@ import org.jhotdraw.geom.Insets2D;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 
+import edu.uwm.cs361.action.AddAttributeAction;
+import edu.uwm.cs361.action.AddMethodAction;
 import edu.uwm.cs361.classdiagram.data.Attribute;
 import edu.uwm.cs361.classdiagram.data.Method;
 import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
@@ -209,7 +211,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 	public Collection<Action> getActions(Point2D.Double p) {
 		Collection<Action> col = new ArrayList<Action>();
 		col.add(new AddAttributeAction("Add Attribute", this));
-		col.add(new AddMethodAction(this));
+		col.add(new AddMethodAction("Add Method", this));
 		return col;
 	}
 
@@ -234,6 +236,10 @@ public class ClassFigure extends GraphicalCompositeFigure
 		result.set(FONT_BOLD, true);
 		result.setAttributeEnabled(FONT_BOLD, false);
 		return result;
+	}
+
+	public void update() {
+		// attrList //TODO: update listFigure.
 	}
 
 	@Override

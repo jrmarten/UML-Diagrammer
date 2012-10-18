@@ -8,6 +8,8 @@ import javax.swing.KeyStroke;
 
 import org.jhotdraw.draw.DefaultDrawingEditor;
 
+import edu.uwm.cs361.action.AddAttributeAction;
+
 
 public class UMLDrawingEditor extends DefaultDrawingEditor
 {
