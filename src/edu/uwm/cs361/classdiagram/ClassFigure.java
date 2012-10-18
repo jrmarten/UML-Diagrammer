@@ -199,12 +199,19 @@ public class ClassFigure extends GraphicalCompositeFigure
 		TextFigure tmpFigure = createTextFigure("Class");
 		tmpFigure.addFigureListener(new NameAdapter(data));
 		nameList.add(tmpFigure);
+	}
 
-		tmpFigure = createTextFigure("");
-		tmpFigure.addFigureListener(new AttributeAdapter(data));
-		attrList.add(tmpFigure);
+	public void update() {
+		removeAllChildren();
+		updateName();
+		SeparatorLineFigure separator1 = new SeparatorLineFigure();
+		SeparatorLineFigure separator2 = new SeparatorLineFigure();
 
-		// add Method, and Attribute Listeners
+		add(nameList);
+		add(separator1);
+		add(attrList);
+		add(separator2);
+		add(methodList);
 	}
 
 	@Override
@@ -238,10 +245,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 		return result;
 	}
 
-	public void update() {
-		// attrList //TODO: update listFigure.
-	}
-
 	@Override
 	public Collection<Handle> createHandles(int detailLevel) {
 		List<Handle> handles = new LinkedList<Handle>();
@@ -271,6 +274,11 @@ public class ClassFigure extends GraphicalCompositeFigure
 		getNameFigure().setText(newName);
 	}
 
+	public void updateName() {
+		nameList.removeAllChildren();
+		nameList.add(createTextFigure(data.getName()));
+	}
+
 	private TextFigure getNameFigure() {
 		return (TextFigure) ((ListFigure) getChild(0)).getChild(0);
 	}
@@ -278,7 +286,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 	public void addAttribute(String attr) {
 		Attribute tmp = Attribute.Create(attr);
 		addAttribute(tmp);
-		updateAttributes();
+		update();
 	}
 
 	private boolean addAttribute(Attribute attr) {
@@ -306,6 +314,8 @@ public class ClassFigure extends GraphicalCompositeFigure
 	public void addMethod(String methtxt) {
 		Method tmp = Method.Create(methtxt);
 		addMethod(tmp);
+
+		update();
 	}
 
 	public void updateAttributes() {
@@ -315,7 +325,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 			{
 				addAttribute(attr);
 			}
-
 	}
 
 	private void addMethod(Method meth) {

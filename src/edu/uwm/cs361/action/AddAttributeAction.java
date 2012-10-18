@@ -2,8 +2,7 @@ package edu.uwm.cs361.action;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.JOptionPane;
-
+import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 
 @SuppressWarnings("serial")
@@ -18,7 +17,6 @@ public class AddAttributeAction extends ClassFigureAction
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String attr = JOptionPane.showInputDialog(("Attribute: "));
-		data.addAttribute(attr);
+		data.addAttribute(UMLApplicationModel.prompt(attribute_prompt));
 	}
 }

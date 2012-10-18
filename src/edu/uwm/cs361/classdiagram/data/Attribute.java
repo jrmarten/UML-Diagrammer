@@ -13,53 +13,58 @@ public class Attribute
 	private boolean								finalp	= false;
 
 	private static final Pattern	regex		= Pattern
-																						.compile ( "^^ *"
+																						.compile("^^ *"
 																								+ "([#~+-]|(public|private|default|protected))? *"
 																								+ "((((s|static)|(f|final)) )?"
 																								+ "((f|final)|(s|static)))?"
 																								+ " *" + UMLClass.idreg
 																								+ " *: *" + UMLClass.classreg
-																								+ " *$$" );
+																								+ " *$$");
 
-	private Attribute ( )
-	{}
-
-	private Attribute ( String str )
+	private Attribute()
 	{
-		String[] parts = str.split ( ":" );
-		name = parts[0].trim ( );
-		type = parts[1].trim ( );
+	}
 
-		parts = name.split ( " " );
+	private Attribute(String str)
+	{
+		String[] parts = str.split(":");
+		name = parts[0].trim();
+		type = parts[1].trim();
+
+		parts = name.split(" ");
 		name = parts[parts.length - 1];
 		parts[parts.length - 1] = "";
 
-		for ( String mod : parts )
-			for ( Access ac : Access.values ( ) )
+		for (String mod : parts)
+			for (Access ac : Access.values())
 				{
-					if ( mod.equals ( ac.toString ( ) ) ) access = ac;
+					if (mod.equals(ac.toString()))
+						access = ac;
 				}
 
-		for ( String mod : parts )
+		for (String mod : parts)
 			{
-				if ( mod.equals ( "static" ) ) staticp = true;
-				if ( mod.equals ( "final" ) ) finalp = true;
+				if (mod.equals("static"))
+					staticp = true;
+				if (mod.equals("final"))
+					finalp = true;
 			}
 	}
 
-	private Attribute ( String[] perms, String name, String type )
+	private Attribute(String[] perms, String name, String type)
 	{
 		this.name = name;
 		this.type = type;
 
-		for ( String perm : perms )
+		for (String perm : perms)
 			{
-				perm = perm.trim ( );
-				if ( perm.equals ( "" ) ) continue;
+				perm = perm.trim();
+				if (perm.equals(""))
+					continue;
 
-				char tmp = perm.charAt ( 0 );
+				char tmp = perm.charAt(0);
 
-				switch ( tmp )
+				switch (tmp)
 					{
 						case 's':
 						case 'S':
@@ -72,111 +77,105 @@ public class Attribute
 						break;
 
 						default:
-							if ( access != Access.DEFAULT ) continue;
-							access = Access.fromString ( perm );
+							if (access != Access.DEFAULT)
+								continue;
+							access = Access.fromString(perm);
 					}
 			}
 	}
 
-	public static Attribute Create ( String str )
-	{
-		if ( !regex.matcher ( str ).find ( ) )
+	public static Attribute Create(String str) {
+		if (str == null)
+			return null;
+		if (!regex.matcher(str).find())
 			{
 
-				dprint ( "Attribute stopped at regex: " + str );
+				dprint("Attribute stopped at regex: " + str);
 				return null;
 			}
 
-		String[] parts = str.split ( ":" );
+		String[] parts = str.split(":");
 
-		String signature = parts[0].trim ( );
-		String type = parts[1].trim ( );
-		parts = signature.split ( " " );
+		String signature = parts[0].trim();
+		String type = parts[1].trim();
+		parts = signature.split(" ");
 		int tmpIndex = parts.length - 1;
 		String name = parts[tmpIndex];
 		parts[tmpIndex] = "";
 
-		if ( Keywords.keywordp ( type ) ) return null;
-		if ( Keywords.reservedp ( name ) ) return null;
+		if (Keywords.keywordp(type))
+			return null;
+		if (Keywords.reservedp(name))
+			return null;
 
-		char sym = name.charAt ( 0 );
+		char sym = name.charAt(0);
 
-		for ( Access ac : Access.values ( ) )
+		for (Access ac : Access.values())
 			{
-				if ( ac.getSymbol ( ) == sym )
+				if (ac.getSymbol() == sym)
 					{
-						parts[tmpIndex] = ( "" + sym );
-						name = name.substring ( 1 );
+						parts[tmpIndex] = ("" + sym);
+						name = name.substring(1);
 					}
 			}
 
-		return new Attribute ( parts, name, type );
+		return new Attribute(parts, name, type);
 	}
 
 	@Override
-	public Attribute clone ( )
-	{
-		Attribute result = new Attribute ( );
+	public Attribute clone() {
+		Attribute result = new Attribute();
 		result.type = type;
 		result.name = name;
 		return result;
 	}
 
 	@Override
-	public String toString ( )
-	{
-		return access.getSymbol ( ) + name + ":" + type;
+	public String toString() {
+		return access.getSymbol() + name + ":" + type;
 	}
 
-	public String getSignature ( )
-	{
-		return access.toString ( ) + " " + ( ( staticp )? "static " : "" )
-				+ ( ( finalp )? "final " : "" ) + type + " " + name;
+	public String getSignature() {
+		return access.toString() + " " + ((staticp) ? "static " : "")
+				+ ((finalp) ? "final " : "") + type + " " + name;
 	}
 
-	public boolean sigEquals ( Attribute attr )
-	{
-		return name.equals ( attr.name ) && type.equals ( attr.type );
+	public boolean sigEquals(Attribute attr) {
+		return name.equals(attr.name) && type.equals(attr.type);
 	}
 
 	@Override
-	public boolean equals ( Object obj )
-	{
-		if ( obj instanceof Attribute )
+	public boolean equals(Object obj) {
+		if (obj instanceof Attribute)
 			{
-				Attribute that = (Attribute)obj;
+				Attribute that = (Attribute) obj;
 
-				boolean x = name.equals ( that.name );
-				x = x && type.equals ( that.type );
+				boolean x = name.equals(that.name);
+				x = x && type.equals(that.type);
 				x = x && finalp == that.finalp && staticp == that.staticp;
-				x = x && access.equals ( that.access );
+				x = x && access.equals(that.access);
 				return x;
 			}
 		return false;
 	}
 
-	public String getName ( )
-	{
+	public String getName() {
 		return name;
 	}
 
-	public String getType ( )
-	{
+	public String getType() {
 		return type;
 	}
 
-	public Access getAccess ( )
-	{
+	public Access getAccess() {
 		return access;
 	}
 
-	public boolean isStatic ( )
-	{
+	public boolean isStatic() {
 		return staticp;
 	}
 
-	public boolean isFinal ( )
-	{
+	public boolean isFinal() {
 		return finalp;
 	}
 }

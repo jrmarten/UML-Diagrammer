@@ -11,6 +11,7 @@ import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
+import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 
 import org.jhotdraw.app.Application;
@@ -25,12 +26,6 @@ import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.TextAreaFigure;
 import org.jhotdraw.draw.action.ButtonFactory;
-
-import edu.umd.cs.findbugs.annotations.Nullable;
-import edu.uwm.cs361.classdiagram.ClassFigure;
-import edu.uwm.cs361.sequencediagram.ActivationFigure;
-import edu.uwm.cs361.sequencediagram.ObjectLifelineFigure;
-
 import org.jhotdraw.draw.tool.ConnectionTool;
 import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.DelegationSelectionTool;
@@ -48,6 +43,7 @@ import edu.uwm.cs361.classdiagram.MySelectionTool;
 import edu.uwm.cs361.classdiagram.MySelectionTool.ClassFigureEditor;
 import edu.uwm.cs361.classdiagram.UMLDrawingEditor;
 import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
+import edu.uwm.cs361.sequencediagram.ActivationFigure;
 import edu.uwm.cs361.sequencediagram.LifelineFigure;
 
 public class UMLApplicationModel extends DefaultApplicationModel
@@ -67,6 +63,10 @@ public class UMLApplicationModel extends DefaultApplicationModel
 			projectLabels = ResourceBundleUtil.getBundle("edu.uwm.cs361.Labels");
 
 		return projectLabels;
+	}
+
+	public static String prompt(String id) {
+		return JOptionPane.showInputDialog(getProjectResources().getString(id));
 	}
 
 	// TODO: FINISH
