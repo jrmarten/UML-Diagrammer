@@ -306,9 +306,14 @@ public class ClassFigure extends GraphicalCompositeFigure
 	private boolean addAttribute(Attribute attr) {
 		if (attr == null)
 			return false;
+
+		TextFigure tmpFig;
+
+		boolean added = data.addAttribute(attr);
+
 		String tmpText = attr.toString();
 		tmpText = (attr.isFinal()) ? tmpText.toUpperCase() : tmpText;
-		TextFigure tmpFig = createTextFigure(tmpText);
+		tmpFig = createTextFigure(tmpText);
 		if (attr.isStatic())
 			{
 				tmpFig.set(FONT_UNDERLINE, true);
@@ -316,7 +321,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 			}
 		tmpFig.addFigureListener(new AttributeAdapter(data));
 
-		boolean added = attrList.add(tmpFig);
+		added = attrList.add(tmpFig);
 
 		dprint((added) ? "TRUE" : "FALSE");
 		dprint((data.addAttribute(attr)) ? "" : "ATTRIBUTE NOT ADDED TO DATA");
@@ -344,6 +349,9 @@ public class ClassFigure extends GraphicalCompositeFigure
 	private void addMethod(Method meth) {
 		if (meth == null)
 			return; // throw an error popup
+
+		boolean added = data.addMethod(meth);
+
 		TextFigure tmpFig = createTextFigure(meth.toString());
 		if (meth.isStatic())
 			tmpFig.set(FONT_UNDERLINE, true);
@@ -364,15 +372,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 			{
 				addMethod(meth);
 			}
-	}
-
-	private TextFigure getMethodFigure(int index) {
-		if (index < 0)
-			throw new IndexOutOfBoundsException();
-		if (index >= ((ListFigure) getChild(4)).getChildCount())
-			throw new IndexOutOfBoundsException();
-
-		return (TextFigure) ((ListFigure) getChild(4)).getChild(index);
 	}
 
 	@Override
@@ -479,5 +478,9 @@ public class ClassFigure extends GraphicalCompositeFigure
 		buffer += "}\n";
 
 		return buffer;
+	}
+
+	public UMLClass getData() {
+		return data;
 	}
 }

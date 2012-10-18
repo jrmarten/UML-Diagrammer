@@ -27,19 +27,7 @@ public class Method
 																							+ "(" + UMLClass.classreg
 																							+ "( *, *" + UMLClass.classreg
 																							+ ")?)?" + " *\\) *" + ": *"
-																							+ UMLClass.classreg + " *$$"
-
-																					/*
-																					 * "^^ *" +
-																					 * "([#~+-]|(public|private|default|protected))? *"
-																					 * + "((s|static)|(a|abstract))? *" +
-																					 * UMLClass.idreg + " *\\( *" +
-																					 * "("+UMLClass
-																					 * .classreg+"( *, *"+UMLClass
-																					 * .classreg+")?)?" + " *\\) *" +
-																					 * ": *" + UMLClass.classreg + " *$$"
-																					 */
-																					);
+																							+ UMLClass.classreg + " *$$");
 
 	private Method()
 	{
