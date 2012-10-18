@@ -60,6 +60,9 @@ public class UMLClass implements Serializable
 	 *          new name of the class
 	 */
 	public void setName(String newName) {
+		if (newName == null)
+			return;
+
 		myName = newName;
 
 		generics.clear();
@@ -125,6 +128,8 @@ public class UMLClass implements Serializable
 	}
 
 	public boolean removeAttribute(Attribute oldAttribute) {
+		if (oldAttribute == null)
+			return false;
 		return myAttributes.remove(oldAttribute);
 	}
 
@@ -169,6 +174,8 @@ public class UMLClass implements Serializable
 	}
 
 	public boolean removeMethod(Method oldMethod) {
+		if (oldMethod == null)
+			return false;
 		boolean result = myMethods.remove(oldMethod);
 
 		if (oldMethod.isAbstract() && abstractp)
@@ -199,10 +206,14 @@ public class UMLClass implements Serializable
 	// not much to do
 
 	public boolean addAssociation(UMLClass newAssociatedClass) {
+		if (newAssociatedClass == null)
+			return false;
 		return myAssociatedClasses.add(newAssociatedClass);
 	}
 
 	public boolean removeAssociation(UMLClass oldAssociatedClass) {
+		if (oldAssociatedClass == null)
+			return false;
 		return myAssociatedClasses.remove(oldAssociatedClass);
 	}
 
@@ -217,6 +228,8 @@ public class UMLClass implements Serializable
 	// TODO: Test
 	// XXX: not completely correct
 	public boolean addSuperclass(UMLClass par) {
+		if (par == null)
+			return false;
 		boolean interfacep = par instanceof UMLInterface;
 
 		if (!interfacep)
@@ -234,6 +247,9 @@ public class UMLClass implements Serializable
 	}
 
 	public static boolean isSuper(UMLClass par, UMLClass child) {
+		if (par == null || child == null)
+			return false;
+
 		for (UMLClass tmp : child.getSuperclasses())
 			{
 				if (tmp.equals(par))
@@ -245,6 +261,8 @@ public class UMLClass implements Serializable
 	}
 
 	public boolean removeSuperclass(UMLClass oldSuperclass) {
+		if (oldSuperclass == null)
+			return false;
 		if (superClass != null && oldSuperclass.equals(superClass))
 			{
 				superClass = null;
@@ -266,10 +284,14 @@ public class UMLClass implements Serializable
 	// Dependencies
 
 	public boolean addDependency(UMLClass newDependency) {
+		if (newDependency == null)
+			return false;
 		return myDependClasses.add(newDependency);
 	}
 
 	public boolean removeDependency(UMLClass oldDependency) {
+		if (oldDependency == null)
+			return false;
 		return myDependClasses.remove(oldDependency);
 	}
 

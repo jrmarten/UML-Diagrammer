@@ -42,6 +42,8 @@ public class UMLInterface extends UMLClass
 
 	@Override
 	public boolean addSuperclass(UMLClass c) {
+		if (c == null)
+			return false;
 		boolean interfacep = c instanceof UMLInterface;
 
 		if (!interfacep)

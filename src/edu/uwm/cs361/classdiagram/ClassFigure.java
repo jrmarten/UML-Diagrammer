@@ -49,11 +49,12 @@ import edu.uwm.cs361.classdiagram.data.UMLInterface;
 public class ClassFigure extends GraphicalCompositeFigure
 {
 
-	protected ListFigure	nameList		= new ListFigure();
-	protected ListFigure	attrList		= new ListFigure();
-	protected ListFigure	methodList	= new ListFigure();
+	protected ListFigure			nameList		= new ListFigure();
+	protected ListFigure			attrList		= new ListFigure();
+	protected ListFigure			methodList	= new ListFigure();
+	protected RectangleFigure	container		= new RectangleFigure();
 
-	private UMLClass			data				= new UMLClass();
+	private UMLClass					data				= new UMLClass();
 
 	private class NameAdapter extends FigureAdapter
 	{
@@ -93,19 +94,20 @@ public class ClassFigure extends GraphicalCompositeFigure
 			String n = (String) evt.getNewValue();
 			String old = (String) evt.getOldValue();
 
-			dprint("Something Changed");
-			System.out.println("???");
+			dprint("Class representation changed");
 
 			if (((String) evt.getNewValue()).trim().equals(""))
 				{
-					dprint((remove(n)) ? "" : "Cannot add new element");
+					dprint((remove(old)) ? "removing element" : "Cannot remove element");
 				}
 			if (evt.getOldValue().equals(""))
 				{
 					dprint("Source is "
 							+ ((evt.getSource() instanceof ListFigure) ? "" : "not ")
 							+ "a ListFigure");
-					dprint((add(n)) ? "" : "Can not add new Attribute");
+					boolean added = add(n);
+					dprint((added) ? "" : "Can not add new Attribute");
+					dprint((added) ? "" : "New: " + n + "\nOld: " + old);
 				} else
 				{
 					dprint((rename(old, n)) ? "" : "Can not rename");
@@ -131,7 +133,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 		protected boolean rename(String old, String n) {
 			Attribute newAttr = Attribute.Create(n);
 			Attribute oldAttr = Attribute.Create(old);
-			return target.removeAttribute(oldAttr) && target.removeAttribute(newAttr);
+			return target.removeAttribute(oldAttr) && target.addAttribute(newAttr);
 		}
 
 		@Override
@@ -176,12 +178,11 @@ public class ClassFigure extends GraphicalCompositeFigure
 		super(new RectangleFigure());
 		setLayouter(new VerticalLayouter());
 
-		RectangleFigure nameListPF = new RectangleFigure();
-		nameListPF.set(STROKE_COLOR, null);
-		nameListPF.setAttributeEnabled(STROKE_COLOR, false);
-		nameListPF.set(FILL_COLOR, null);
-		nameListPF.setAttributeEnabled(FILL_COLOR, false);
-		ListFigure nameList = new ListFigure(nameListPF);
+		container.set(STROKE_COLOR, null);
+		container.setAttributeEnabled(STROKE_COLOR, false);
+		container.set(FILL_COLOR, null);
+		container.setAttributeEnabled(FILL_COLOR, false);
+		ListFigure nameList = new ListFigure(container);
 		ListFigure attrList = new ListFigure();
 		ListFigure methodList = new ListFigure();
 		SeparatorLineFigure separator1 = new SeparatorLineFigure();
@@ -204,8 +205,15 @@ public class ClassFigure extends GraphicalCompositeFigure
 	}
 
 	public void update() {
-		removeAllChildren();
+
+		willChange();
 		updateName();
+
+		while (getChildren().size() != 0)
+			{
+				removeChild(0);
+			}
+
 		SeparatorLineFigure separator1 = new SeparatorLineFigure();
 		SeparatorLineFigure separator2 = new SeparatorLineFigure();
 
@@ -214,6 +222,8 @@ public class ClassFigure extends GraphicalCompositeFigure
 		add(attrList);
 		add(separator2);
 		add(methodList);
+
+		changed();
 	}
 
 	@Override
