@@ -33,7 +33,7 @@ public class SingleSelectionTool extends SelectionTool
 
 		if (fig instanceof ClassFigure && p_func instanceof ClassFigureAction)
 			{
-				((ClassFigureAction) fig).setData((ClassFigure) fig);
+				((ClassFigureAction) p_func).setData((ClassFigure) fig);
 			}
 	}
 }
