@@ -19,4 +19,8 @@ public abstract class ClassFigureAction extends AbstractAction
 		data = fig;
 	}
 
+	public void setData(ClassFigure fig) {
+		data = fig;
+	}
+
 }
