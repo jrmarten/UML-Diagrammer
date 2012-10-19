@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.tool.SelectionTool;
 
@@ -20,8 +21,10 @@ public class SingleSelectionTool extends SelectionTool
 		p_func = aa;
 	}
 
-	public void deactivate() {
-		Set<Figure> selected = editor.getActiveView().getSelectedFigures();
+	@Override
+	public void deactivate(DrawingEditor edit) {
+		super.deactivate(edit);
+		Set<Figure> selected = edit.getActiveView().getSelectedFigures();
 
 		if (selected.size() != 1)
 			return;
