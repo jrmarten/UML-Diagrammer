@@ -100,8 +100,20 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		LinkedList<JToolBar> list = new LinkedList<JToolBar>();
 
 		JToolBar tmp = new JToolBar();
-		addCreationButtonsTo(tmp, edit);
-		tmp.setName(Labels.getString("window.drawToolBar.title"));
+		addGeneralButtonsTo(tmp, edit);
+		tmp.setName(Labels.getString("window.generalToolBar.title"));
+
+		list.add(tmp);
+
+		tmp = new JToolBar();
+		addClassButtonsTo(tmp, edit);
+		tmp.setName(Labels.getString("window.classToolBar.title"));
+
+		list.add(tmp);
+
+		tmp = new JToolBar();
+		addSequenceButtonsTo(tmp, edit);
+		tmp.setName(Labels.getString("window.sequenceToolBar.title"));
 
 		list.add(tmp);
 
@@ -120,7 +132,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		return new UMLMenuBuilder();
 	}
 
-	private void addCreationButtonsTo(JToolBar tb, final DrawingEditor edit) {
+	private void addGeneralButtonsTo(JToolBar tb, final DrawingEditor edit) {
 		Collection<Action> actions = new LinkedList<Action>();
 		HashMap<AttributeKey, Object> attributes;
 
@@ -132,7 +144,22 @@ public class UMLApplicationModel extends DefaultApplicationModel
 
 		ButtonFactory.addSelectionToolTo(tb, edit);
 
-		tb.addSeparator();
+		ButtonFactory.addToolTo(tb, edit, new TextAreaCreationTool(
+				new TextAreaFigure()), "edit.createTextArea", drawLabels);
+
+	}
+
+	private void addClassButtonsTo(JToolBar tb, final DrawingEditor edit) {
+		Collection<Action> actions = new LinkedList<Action>();
+		HashMap<AttributeKey, Object> attributes;
+
+		ResourceBundleUtil labels = ResourceBundleUtil
+				.getBundle("edu.uwm.cs361.Labels");
+		ResourceBundleUtil drawLabels = ResourceBundleUtil
+				.getBundle("org.jhotdraw.draw.Labels");
+		// Resource bundles
+
+		ButtonFactory.addSelectionToolTo(tb, edit);
 
 		attributes = new HashMap<AttributeKey, Object>();
 		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
@@ -152,7 +179,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		ButtonFactory.addToolTo(tb, edit, new MySelectionTool(
 				new ClassFigureEditor()
 					{
-
 						public void edit(ClassFigure cf) {
 						}
 
@@ -164,7 +190,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		ButtonFactory.addToolTo(tb, edit, new MySelectionTool(
 				new ClassFigureEditor()
 					{
-
 						public void edit(ClassFigure cf) {
 						}
 
@@ -177,8 +202,19 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		attributes.put(AttributeKeys.STROKE_COLOR, new Color(0x000099));
 		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
 				new DependencyFigure(), attributes), "edit.createDependency", labels);
+	}
 
-		tb.addSeparator();
+	private void addSequenceButtonsTo(JToolBar tb, final DrawingEditor edit) {
+		Collection<Action> actions = new LinkedList<Action>();
+		HashMap<AttributeKey, Object> attributes;
+
+		ResourceBundleUtil labels = ResourceBundleUtil
+				.getBundle("edu.uwm.cs361.Labels");
+		ResourceBundleUtil drawLabels = ResourceBundleUtil
+				.getBundle("org.jhotdraw.draw.Labels");
+		// Resource bundles
+
+		ButtonFactory.addSelectionToolTo(tb, edit);
 
 		attributes = new HashMap<AttributeKey, Object>();
 		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
@@ -193,26 +229,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
 		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ActivationFigure(),
 				attributes), "edit.createActivation", labels);
-
-		tb.addSeparator();
-
-		ButtonFactory.addToolTo(tb, edit, new TextAreaCreationTool(
-				new TextAreaFigure()), "edit.createTextArea", drawLabels);
-
-		actions.clear();
-		// actions.add ( new AddAttributeAction ( getSharedEditor ( ) ) );
-		DelegationSelectionTool dst = new DelegationSelectionTool();
-		dst.setDrawingActions(actions);
-		ButtonFactory.addToolTo(tb, edit, new MySelectionTool(
-				new ClassFigureEditor()
-					{
-						public void edit(ClassFigure cf) {
-						}
-
-						public void edit(ClassFigure cf, String str) {
-							cf.addAttribute(str);
-						}
-					}), "", labels);
 	}
 
 	@Override
