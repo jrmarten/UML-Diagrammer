@@ -3,7 +3,6 @@ package edu.uwm.cs361;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -39,13 +38,13 @@ import org.jhotdraw.util.ResourceBundleUtil;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.uwm.cs361.action.AddAttributeAction;
 import edu.uwm.cs361.action.AddMethodAction;
+import edu.uwm.cs361.action.DebugSnapShotAction;
 import edu.uwm.cs361.classdiagram.ClassFigure;
-import edu.uwm.cs361.classdiagram.MySelectionTool;
-import edu.uwm.cs361.classdiagram.MySelectionTool.ClassFigureEditor;
 import edu.uwm.cs361.classdiagram.UMLDrawingEditor;
 import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
 import edu.uwm.cs361.sequencediagram.ActivationFigure;
 import edu.uwm.cs361.sequencediagram.LifelineFigure;
+import edu.uwm.cs361.tool.ClickTool;
 import edu.uwm.cs361.tool.SingleSelectionTool;
 
 public class UMLApplicationModel extends DefaultApplicationModel
@@ -75,7 +74,8 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	@Override
 	public ActionMap createActionMap(Application a, @Nullable View v) {
 		ActionMap m = super.createActionMap(a, v);
-		// ResourceBundleUtil drawLabels = ResourceBundleUtil.getBundle("edu.uwm.cs361.Labels");
+		// ResourceBundleUtil drawLabels =
+		// ResourceBundleUtil.getBundle("edu.uwm.cs361.Labels");
 
 		// m.put ( AddAttributeAction.ID, new AddAttributeAction ( sharedEditor ) );
 		return m;
@@ -137,7 +137,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		HashMap<AttributeKey, Object> attributes;
 
 		ResourceBundleUtil labels = getProjectResources();
-		
+
 		ButtonFactory.addSelectionToolTo(tb, edit);
 
 		ButtonFactory.addToolTo(tb, edit, new TextAreaCreationTool(
@@ -167,13 +167,18 @@ public class UMLApplicationModel extends DefaultApplicationModel
 				new UMLAbstractClass()), attributes), "edit.createAbstractClass",
 				labels);
 
-		ButtonFactory.addToolTo(tb, edit, new SingleSelectionTool ( new AddAttributeAction ( null )), "edit.addAttribute", labels);
-		ButtonFactory.addToolTo(tb, edit, new SingleSelectionTool ( new AddMethodAction ( null )), "edit.addMethod", labels);
+		ButtonFactory.addToolTo(tb, edit, new SingleSelectionTool(
+				new AddAttributeAction(null)), "edit.addAttribute", labels);
+		ButtonFactory.addToolTo(tb, edit, new SingleSelectionTool(
+				new AddMethodAction(null)), "edit.addMethod", labels);
 
 		attributes = new HashMap<AttributeKey, Object>();
 		attributes.put(AttributeKeys.STROKE_COLOR, new Color(0x000099));
 		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
 				new DependencyFigure(), attributes), "edit.createDependency", labels);
+
+		ButtonFactory.addToolTo(tb, edit, new ClickTool(new DebugSnapShotAction(
+				edit.getActiveView())), "edit.DebugSnapShot", labels);
 	}
 
 	private void addSequenceButtonsTo(JToolBar tb, final DrawingEditor edit) {
