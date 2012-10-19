@@ -275,8 +275,8 @@ public class ClassFigure extends GraphicalCompositeFigure
 					handles.add(new MoveHandle(this, RelativeLocator.northEast()));
 					handles.add(new MoveHandle(this, RelativeLocator.southWest()));
 					handles.add(new MoveHandle(this, RelativeLocator.southEast()));
-					ConnectorHandle ch;
-					handles.add(ch = new ConnectorHandle(new LocatorConnector(this,
+					// ConnectorHandle ch;
+					handles.add(new ConnectorHandle(new LocatorConnector(this,
 							RelativeLocator.east()), new AssociationFigure()));
 				break;
 			}
@@ -350,13 +350,14 @@ public class ClassFigure extends GraphicalCompositeFigure
 		if (meth == null)
 			return; // throw an error popup
 
-		boolean added = data.addMethod(meth);
+		data.addMethod(meth);
 
 		TextFigure tmpFig = createTextFigure(meth.toString());
 		if (meth.isStatic())
 			tmpFig.set(FONT_UNDERLINE, true);
 		if (meth.isAbstract())
 			tmpFig.set(FONT_ITALIC, true);
+		tmpFig.addFigureListener(new MethodAdapter(data));
 		methodList.add(tmpFig);
 	}
 

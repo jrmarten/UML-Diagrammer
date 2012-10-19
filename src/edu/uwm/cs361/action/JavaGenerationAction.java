@@ -15,6 +15,7 @@ import org.jhotdraw.gui.JFileURIChooser;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.io.*;
 
+@SuppressWarnings("serial")
 public class JavaGenerationAction extends AbstractAction
 {
 	DrawingView	data;
