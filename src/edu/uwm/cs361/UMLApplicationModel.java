@@ -28,7 +28,6 @@ import org.jhotdraw.draw.TextAreaFigure;
 import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.draw.tool.ConnectionTool;
 import org.jhotdraw.draw.tool.CreationTool;
-import org.jhotdraw.draw.tool.DelegationSelectionTool;
 import org.jhotdraw.draw.tool.TextAreaCreationTool;
 import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.gui.JFileURIChooser;
@@ -38,6 +37,8 @@ import org.jhotdraw.samples.pert.figures.DependencyFigure;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
+import edu.uwm.cs361.action.AddAttributeAction;
+import edu.uwm.cs361.action.AddMethodAction;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.MySelectionTool;
 import edu.uwm.cs361.classdiagram.MySelectionTool.ClassFigureEditor;
@@ -45,6 +46,7 @@ import edu.uwm.cs361.classdiagram.UMLDrawingEditor;
 import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
 import edu.uwm.cs361.sequencediagram.ActivationFigure;
 import edu.uwm.cs361.sequencediagram.LifelineFigure;
+import edu.uwm.cs361.tool.SingleSelectionTool;
 
 public class UMLApplicationModel extends DefaultApplicationModel
 {
@@ -176,27 +178,8 @@ public class UMLApplicationModel extends DefaultApplicationModel
 				new UMLAbstractClass()), attributes), "edit.createAbstractClass",
 				labels);
 
-		ButtonFactory.addToolTo(tb, edit, new MySelectionTool(
-				new ClassFigureEditor()
-					{
-						public void edit(ClassFigure cf) {
-						}
-
-						public void edit(ClassFigure cf, String str) {
-							cf.addAttribute(str);
-						}
-					}), "edit.addAttribute", labels);
-
-		ButtonFactory.addToolTo(tb, edit, new MySelectionTool(
-				new ClassFigureEditor()
-					{
-						public void edit(ClassFigure cf) {
-						}
-
-						public void edit(ClassFigure cf, String str) {
-							cf.addMethod(str);
-						}
-					}), "edit.addMethod", labels);
+		ButtonFactory.addToolTo(tb, edit, new SingleSelectionTool ( new AddAttributeAction ( null )), "edit.addAttribute", labels);
+		ButtonFactory.addToolTo(tb, edit, new SingleSelectionTool ( new AddMethodAction ( null )), "edit.addMethod", labels);
 
 		attributes = new HashMap<AttributeKey, Object>();
 		attributes.put(AttributeKeys.STROKE_COLOR, new Color(0x000099));
