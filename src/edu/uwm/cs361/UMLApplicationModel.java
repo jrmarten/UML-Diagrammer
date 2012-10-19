@@ -75,8 +75,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	@Override
 	public ActionMap createActionMap(Application a, @Nullable View v) {
 		ActionMap m = super.createActionMap(a, v);
-		ResourceBundleUtil drawLabels = ResourceBundleUtil
-				.getBundle("edu.uwm.cs361.Labels");
+		// ResourceBundleUtil drawLabels = ResourceBundleUtil.getBundle("edu.uwm.cs361.Labels");
 
 		// m.put ( AddAttributeAction.ID, new AddAttributeAction ( sharedEditor ) );
 		return m;
@@ -135,31 +134,21 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	}
 
 	private void addGeneralButtonsTo(JToolBar tb, final DrawingEditor edit) {
-		Collection<Action> actions = new LinkedList<Action>();
 		HashMap<AttributeKey, Object> attributes;
 
-		ResourceBundleUtil labels = ResourceBundleUtil
-				.getBundle("edu.uwm.cs361.Labels");
-		ResourceBundleUtil drawLabels = ResourceBundleUtil
-				.getBundle("org.jhotdraw.draw.Labels");
-		// Resource bundles
-
+		ResourceBundleUtil labels = getProjectResources();
+		
 		ButtonFactory.addSelectionToolTo(tb, edit);
 
 		ButtonFactory.addToolTo(tb, edit, new TextAreaCreationTool(
-				new TextAreaFigure()), "edit.createTextArea", drawLabels);
+				new TextAreaFigure()), "edit.createTextArea", labels);
 
 	}
 
 	private void addClassButtonsTo(JToolBar tb, final DrawingEditor edit) {
-		Collection<Action> actions = new LinkedList<Action>();
 		HashMap<AttributeKey, Object> attributes;
 
-		ResourceBundleUtil labels = ResourceBundleUtil
-				.getBundle("edu.uwm.cs361.Labels");
-		ResourceBundleUtil drawLabels = ResourceBundleUtil
-				.getBundle("org.jhotdraw.draw.Labels");
-		// Resource bundles
+		ResourceBundleUtil labels = getProjectResources();
 
 		ButtonFactory.addSelectionToolTo(tb, edit);
 
@@ -188,14 +177,9 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	}
 
 	private void addSequenceButtonsTo(JToolBar tb, final DrawingEditor edit) {
-		Collection<Action> actions = new LinkedList<Action>();
 		HashMap<AttributeKey, Object> attributes;
 
-		ResourceBundleUtil labels = ResourceBundleUtil
-				.getBundle("edu.uwm.cs361.Labels");
-		ResourceBundleUtil drawLabels = ResourceBundleUtil
-				.getBundle("org.jhotdraw.draw.Labels");
-		// Resource bundles
+		ResourceBundleUtil labels = getProjectResources();
 
 		ButtonFactory.addSelectionToolTo(tb, edit);
 
