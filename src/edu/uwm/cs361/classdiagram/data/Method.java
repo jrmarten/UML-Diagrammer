@@ -99,7 +99,7 @@ public class Method
 				name = name.substring(1);
 			}
 
-		return filter(mods, name, type, params);
+		return filter(mods, type, name, params);
 	}
 
 	private static Method fromSignature(String str) {
@@ -124,7 +124,7 @@ public class Method
 				name = name.substring(1);
 			}
 
-		return filter(mods, name, type, params);
+		return filter(mods, type, name, params);
 	}
 
 	private static String[] parseModParam(String in) {
@@ -136,13 +136,14 @@ public class Method
 		return result;
 	}
 
-	private static Method filter(String[] mods, String name, String type,
+	private static Method filter(String[] mods, String type, String name,
 			String[] params) {
 
 		for (String mod : mods)
 			{
 				if (!isValid(mod))
-					return (Method) report("Invalid Modifier in Method Declaration");
+					return (Method) report("Invalid Modifier in Method Declaration: "
+							+ mod);
 			}
 
 		boolean let = false;
@@ -164,14 +165,14 @@ public class Method
 					}
 			}
 
-		return new Method(mods, name, type, params);
+		return new Method(mods, type, name, params);
 	}
 
 	private static boolean isValid(String in) {
+		if (in.equals(""))
+			return true;
 		for (String mod : mods)
 			{
-				if (in.equals(""))
-					continue;
 				if (mod.equalsIgnoreCase(in))
 					return true;
 			}

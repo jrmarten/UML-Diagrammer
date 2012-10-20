@@ -20,7 +20,7 @@ public class JavaGenerationAction extends AbstractAction
 {
 	DrawingView	data;
 
-	JavaGenerationAction(DrawingView view)
+	public JavaGenerationAction(DrawingView view)
 	{
 		data = view;
 	}

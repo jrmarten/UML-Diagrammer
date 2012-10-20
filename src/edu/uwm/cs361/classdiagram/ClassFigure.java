@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.swing.Action;
 
+import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.GraphicalCompositeFigure;
 import org.jhotdraw.draw.ListFigure;
 import org.jhotdraw.draw.RectangleFigure;
@@ -454,14 +455,34 @@ public class ClassFigure extends GraphicalCompositeFigure
 			}
 	}
 
-	public void removeDependency(AssociationFigure associationFigure) {
-		// TODO Auto-generated method stub
+	public void removeDependency(AssociationFigure fig) {
+		Figure other;
+		if (fig.getStartFigure() == this)
+			other = fig.getEndFigure();
+		else
+			other = fig.getStartFigure();
 
+		if (!(other instanceof ClassFigure))
+			return;
+
+		ClassFigure cfig = (ClassFigure) other;
+
+		data.addDependency(cfig.getData());
 	}
 
-	public void addDependency(AssociationFigure associationFigure) {
-		// TODO Auto-generated method stub
+	public void addDependency(AssociationFigure fig) {
+		Figure other;
+		if (fig.getStartFigure() == this)
+			other = fig.getEndFigure();
+		else
+			other = fig.getStartFigure();
 
+		if (!(other instanceof ClassFigure))
+			return;
+
+		ClassFigure cfig = (ClassFigure) other;
+
+		data.addDependency(cfig.getData());
 	}
 
 	// XXX:FOR DEBUGING ONLY

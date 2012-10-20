@@ -103,10 +103,10 @@ public class Attribute
 	}
 
 	private static boolean isValid(String in) {
+		if (in.equals(""))
+			return true;
 		for (String mod : mods)
 			{
-				if (in.equals(""))
-					continue;
 				if (mod.equalsIgnoreCase(in))
 					return true;
 			}
@@ -117,7 +117,8 @@ public class Attribute
 		for (String mod : mods)
 			{
 				if (!isValid(mod))
-					return (Attribute) report("Invalid Modifier in Attribute Declaration");
+					return (Attribute) report("Invalid Modifier in Attribute Declaration: "
+							+ mod);
 			}
 
 		boolean let = false;

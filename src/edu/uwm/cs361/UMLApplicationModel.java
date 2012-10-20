@@ -39,8 +39,8 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.uwm.cs361.action.AddAttributeAction;
 import edu.uwm.cs361.action.AddMethodAction;
 import edu.uwm.cs361.action.DebugSnapShotAction;
+import edu.uwm.cs361.action.JavaGenerationAction;
 import edu.uwm.cs361.classdiagram.ClassFigure;
-import edu.uwm.cs361.classdiagram.UMLDrawingEditor;
 import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
 import edu.uwm.cs361.sequencediagram.ActivationFigure;
 import edu.uwm.cs361.sequencediagram.LifelineFigure;
@@ -174,6 +174,9 @@ public class UMLApplicationModel extends DefaultApplicationModel
 
 		ButtonFactory.addToolTo(tb, edit, new ClickTool(new DebugSnapShotAction(
 				edit.getActiveView())), "edit.DebugSnapShot", labels);
+
+		ButtonFactory.addToolTo(tb, edit, new ClickTool(new JavaGenerationAction(
+				edit.getActiveView())), "edit.javaGenerator", getProjectResources());
 	}
 
 	private void addSequenceButtonsTo(JToolBar tb, final DrawingEditor edit) {
