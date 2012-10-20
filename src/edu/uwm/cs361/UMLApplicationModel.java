@@ -50,8 +50,7 @@ import edu.uwm.cs361.tool.SingleSelectionTool;
 public class UMLApplicationModel extends DefaultApplicationModel
 {
 
-	private DefaultDrawingEditor		sharedEditor;
-	private HashMap<String, Action>	actions;
+	private DefaultDrawingEditor	sharedEditor;
 
 	public UMLApplicationModel()
 	{
@@ -74,10 +73,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	@Override
 	public ActionMap createActionMap(Application a, @Nullable View v) {
 		ActionMap m = super.createActionMap(a, v);
-		// ResourceBundleUtil drawLabels =
-		// ResourceBundleUtil.getBundle("edu.uwm.cs361.Labels");
-
-		// m.put ( AddAttributeAction.ID, new AddAttributeAction ( sharedEditor ) );
 		return m;
 
 	}

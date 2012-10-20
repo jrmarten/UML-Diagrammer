@@ -18,6 +18,7 @@ public class ClickTool extends SelectionTool
 
 	@Override
 	public void activate(DrawingEditor edit) {
+		super.activate(edit);
 		ActionEvent ae = new ActionEvent(this, 0, "Clicked");
 		p_func.actionPerformed(ae);
 		deactivate(edit);

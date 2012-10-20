@@ -17,17 +17,8 @@ public class Method
 	private boolean								abstractp	= false;
 	private boolean								staticp		= false;
 
-	private static final String[]	Modifiers	= { "private", "public", "protected",
+	private static final String[]	mods			= { "private", "public", "protected",
 			"default", "abstract", "static", "#", "+", "-", "~" };
-
-	private static final Pattern	regex			= Pattern.compile(
-
-																					"^^ *(([#~+-]|[a-z]*) *)* *"
-																							+ UMLClass.idreg + " *\\( *"
-																							+ "(" + UMLClass.classreg
-																							+ "( *, *" + UMLClass.classreg
-																							+ ")?)?" + " *\\) *" + ": *"
-																							+ UMLClass.classreg + " *$$");
 
 	private Method()
 	{
@@ -76,87 +67,115 @@ public class Method
 	}
 
 	public static Method Create(String str) {
-		if (str == null)
-			return null;
+		if (str.contains(":"))
+			return fromUML(str);
+		else
+			return fromSignature(str);
+	}
 
-		boolean works = regex.matcher(str).find();
-		if (!works)
-			{
-				System.out.println("Stoped at regex: " + str);
-				return null;
-			}
-		String tmp;
-		String[] tmpa;
-		int index;
-		String signature;
+	private static Method fromUML(String str) {
 
-		String type;
-		String name;
-		String[] args;
-		String[] mods;
+		String[] parts = str.split(":");
+		if (parts.length != 2)
+			return (Method) report("Too many colons in Method delcaration");
+		String type = parts[1].trim();
+		if (type.contains(" "))
+			return (Method) report("Type has space in Method delcaration");
 
-		tmpa = str.split(":");
-		type = tmpa[1].trim();
-		tmp = tmpa[0];
+		String tmp = parts[0];
+		parts = parseModParam(tmp);
 
-		index = tmp.indexOf('(');
-		signature = tmp.substring(0, index);
-		tmp = tmp.substring(index + 1, tmp.indexOf(')'));
+		String[] mods = parts[0].split(" ");
+		String[] params = parts[1].split(", ");
 
-		args = tmp.split(",");
-		mods = signature.split(" ");
-		index = mods.length - 1;
-		name = mods[index];
+		int index = mods.length - 1;
+		String name = mods[index];
 		mods[index] = "";
 
-		char tmpch = name.charAt(0);
-		for (char sym : Access.symbols())
+		Access a = Access.fromSymbol(name.charAt(0));
+		if (a != null)
 			{
-				if (sym == tmpch)
-					{
-						mods[index] = "" + sym;
-						name = name.substring(1);
-					}
+				mods[index] = a.toString();
+				name = name.substring(1);
 			}
 
-		boolean ap = false, sp = false;
+		return filter(mods, name, type, params);
+	}
+
+	private static Method fromSignature(String str) {
+
+		String[] parts = parseModParam(str);
+
+		String[] mods = parts[0].split(" ");
+		String[] params = parts[1].split(", ");
+
+		int index = mods.length - 1;
+
+		String name = mods[index];
+		String type = mods[index - 1];
+
+		mods[index] = "";
+		mods[index - 1] = "";
+
+		Access a = Access.fromSymbol(name.charAt(0));
+		if (a != null)
+			{
+				mods[index] = a.toString();
+				name = name.substring(1);
+			}
+
+		return filter(mods, name, type, params);
+	}
+
+	private static String[] parseModParam(String in) {
+		String mods = in.substring(0, in.indexOf('('));
+		String params = in.substring(in.indexOf('(') + 1, in.indexOf(')'));
+		String[] result = new String[2];
+		result[0] = mods;
+		result[1] = params;
+		return result;
+	}
+
+	private static Method filter(String[] mods, String name, String type,
+			String[] params) {
+
 		for (String mod : mods)
 			{
-				if (mod.equals(""))
-					continue;
-
-				boolean valid = false;
-				for (String keyword : Modifiers)
-					{
-						if (keyword.equals(mod))
-							valid = true;
-						if (mod.equals("abstract"))
-							ap = true;
-						if (mod.equals("static"))
-							sp = true;
-					}
-				if (!valid)
-					return (Method) report("Illegal Modifier: " + name);
+				if (!isValid(mod))
+					return (Method) report("Invalid Modifier in Method Declaration");
 			}
 
-		if (ap && sp)
-			return null;
+		boolean let = false;
+		boolean sym = false;
+		boolean num = false;
 
-		if (Keywords.keywordp(name))
-			return (Method) report("Black Listed: " + name + "(name)");
+		if (Character.isDigit(name.charAt(0)))
+			return (Method) report("Invalid name in Method Declaration");
 
-		// Not valid because primary names are blacklisted
-
-		if (Keywords.reservedp(type))
-			return (Method) report("Black Listed: " + name + "(type)");
-
-		for (String arg : args)
+		for (char ch : name.toCharArray())
 			{
-				if (Keywords.reservedp(arg.trim()))
-					return (Method) report("Black Listed: " + name + "(arg)");
+				let = Character.isLetter(ch);
+				sym = ch == '_' || ch == '$';
+				num = Character.isDigit(ch);
+
+				if (!(let || sym || num))
+					{
+						return (Method) report("Name is Ill formated in Method Declaration");
+					}
 			}
 
-		return new Method(mods, type, name, args);
+		return new Method(mods, name, type, params);
+	}
+
+	private static boolean isValid(String in) {
+		for (String mod : mods)
+			{
+				if (in.equals(""))
+					continue;
+				if (mod.equalsIgnoreCase(in))
+					return true;
+			}
+		return false;
 	}
 
 	public static boolean overloaded(Method p, Method q) {

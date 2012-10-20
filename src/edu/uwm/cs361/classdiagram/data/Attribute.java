@@ -1,7 +1,6 @@
 package edu.uwm.cs361.classdiagram.data;
 
-import java.util.regex.Pattern;
-import static edu.uwm.cs361.Util.dprint;
+import static edu.uwm.cs361.Util.report;
 
 public class Attribute
 {
@@ -12,43 +11,11 @@ public class Attribute
 	private boolean								staticp	= false;
 	private boolean								finalp	= false;
 
-	private static final Pattern	regex		= Pattern
-																						.compile("^^ *"
-																								+ "([#~+-]|(public|private|default|protected))? *"
-																								+ "((((s|static)|(f|final)) )?"
-																								+ "((f|final)|(s|static)))?"
-																								+ " *" + UMLClass.idreg
-																								+ " *: *" + UMLClass.classreg
-																								+ " *$$");
+	private static final String[]	mods		= { "private", "-", "public", "+",
+			"default", "~", "protected", "#", "static", "final" };
 
-	private Attribute()
+	public Attribute()
 	{
-	}
-
-	private Attribute(String str)
-	{
-		String[] parts = str.split(":");
-		name = parts[0].trim();
-		type = parts[1].trim();
-
-		parts = name.split(" ");
-		name = parts[parts.length - 1];
-		parts[parts.length - 1] = "";
-
-		for (String mod : parts)
-			for (Access ac : Access.values())
-				{
-					if (mod.equals(ac.toString()))
-						access = ac;
-				}
-
-		for (String mod : parts)
-			{
-				if (mod.equals("static"))
-					staticp = true;
-				if (mod.equals("final"))
-					finalp = true;
-			}
 	}
 
 	private Attribute(String[] perms, String name, String type)
@@ -85,41 +52,94 @@ public class Attribute
 	}
 
 	public static Attribute Create(String str) {
-		if (str == null)
-			return null;
-		if (!regex.matcher(str).find())
-			{
+		if (str.contains(":"))
+			return fromUML(str);
+		else
+			return fromSignature(str);
+	}
 
-				dprint("Attribute stopped at regex: " + str);
-				return null;
+	private static Attribute fromUML(String str) {
+		String[] parts = str.split(":");
+		if (parts.length != 2)
+			return (Attribute) report("More than one colon in attribute declaration");
+
+		String type = parts[1].trim();
+		if (type.contains(" "))
+			return (Attribute) report("(type) contains a space in attribute delcaration");
+
+		parts = parts[0].split(" ");
+		int index = parts.length - 1;
+		String name = parts[index];
+		parts[index] = "";
+
+		Access a = Access.fromSymbol(name.charAt(0));
+		if (a != null)
+			{
+				parts[index] = a.toString();
+				name = name.substring(1);
 			}
 
-		String[] parts = str.split(":");
+		return filter(parts, name, type);
+	}
 
-		String signature = parts[0].trim();
-		String type = parts[1].trim();
-		parts = signature.split(" ");
-		int tmpIndex = parts.length - 1;
-		String name = parts[tmpIndex];
-		parts[tmpIndex] = "";
+	private static Attribute fromSignature(String str) {
+		String[] parts = str.split(" ");
 
-		if (Keywords.keywordp(type))
-			return null;
-		if (Keywords.reservedp(name))
-			return null;
+		int nameIndex = parts.length - 1;
 
-		char sym = name.charAt(0);
+		String name = parts[nameIndex];
+		String type = parts[nameIndex - 1];
 
-		for (Access ac : Access.values())
+		parts[nameIndex] = "";
+		parts[nameIndex - 1] = "";
+
+		Access a = Access.fromSymbol(name.charAt(0));
+		if (a != null)
 			{
-				if (ac.getSymbol() == sym)
+				parts[nameIndex] = a.toString();
+				name = name.substring(1);
+			}
+		return filter(parts, name, type);
+	}
+
+	private static boolean isValid(String in) {
+		for (String mod : mods)
+			{
+				if (in.equals(""))
+					continue;
+				if (mod.equalsIgnoreCase(in))
+					return true;
+			}
+		return false;
+	}
+
+	private static Attribute filter(String[] mods, String name, String type) {
+		for (String mod : mods)
+			{
+				if (!isValid(mod))
+					return (Attribute) report("Invalid Modifier in Attribute Declaration");
+			}
+
+		boolean let = false;
+		boolean sym = false;
+		boolean num = false;
+
+		if (Character.isDigit(name.charAt(0)))
+			return (Attribute) report("Invalid name in Attribute Declaration");
+
+		for (char ch : name.toCharArray())
+			{
+				let = Character.isLetter(ch);
+				sym = ch == '_' || ch == '$';
+				num = Character.isDigit(ch);
+
+				if (!(let || sym || num))
 					{
-						parts[tmpIndex] = ("" + sym);
-						name = name.substring(1);
+						return (Attribute) report("Name is Ill formated in Attribute Declaration");
 					}
 			}
 
-		return new Attribute(parts, name, type);
+		return new Attribute(mods, name, type);
 	}
 
 	@Override
