@@ -1,0 +1,25 @@
+This is the task list
+
+format
+	(Task Name):  (Personel assigned to)optional
+		(description)
+		
+put a * in front for a task being worked on
+
+when you finish a tasks copy the task and put it in TasksDone.txt with your name behind it.
+
+feel free to put your name on any task that has not been claimed, or being worked on.
+feel free to put tasks up as you need them.
+
+
+Update MenuToolBars:
+	Update menu so that only one has focus at a time.
+	
+	
+Dependcies :
+	handle depenencies at ClassFigure level.	
+	
+Make Inheritence Decorations:
+	extend LineDecoration some how.
+	
+	

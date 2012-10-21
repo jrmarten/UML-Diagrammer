@@ -1,0 +1,10 @@
+
+
+Create modification : Max
+	modify Create in Method and Attribute so that 
+	it will take the form
+	
+	access modifiers name:type 
+	access modifiers type name
+	access modifiers name ( params ) : type
+	access modifiers type name ( params )
