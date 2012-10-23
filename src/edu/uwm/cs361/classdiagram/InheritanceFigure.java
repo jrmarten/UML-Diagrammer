@@ -10,10 +10,10 @@ import edu.uwm.cs361.classdiagram.decorations.InheritenceDecoration;
 import static org.jhotdraw.draw.AttributeKeys.*;
 import static edu.uwm.cs361.Util.dprint;
 
-public class InheritenceFigure extends AssociationFigure
+public class InheritanceFigure extends AssociationFigure
 {
 
-	public InheritenceFigure()
+	public InheritanceFigure()
 	{
 		set(STROKE_COLOR, Color.BLUE);
 		set(STROKE_WIDTH, 1d);

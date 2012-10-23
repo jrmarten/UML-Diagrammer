@@ -280,6 +280,11 @@ public class ClassFigure extends GraphicalCompositeFigure
 			}
 	}
 
+	@Override
+	public int getLayer() {
+		return 0;
+	}
+
 	private void addMethod(Method meth) {
 		if (meth == null)
 			return; // throw an error popup
