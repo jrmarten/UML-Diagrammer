@@ -41,54 +41,33 @@ import edu.uwm.cs361.action.RemoveAttributeAction;
 import edu.uwm.cs361.action.RemoveMethodAction;
 import edu.uwm.cs361.classdiagram.data.Attribute;
 import edu.uwm.cs361.classdiagram.data.Method;
-import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
-import edu.uwm.cs361.classdiagram.data.UMLInterface;
 
 @SuppressWarnings("serial")
 public class ClassFigure extends GraphicalCompositeFigure
 {
 
 	protected ListFigure			nameList		= new ListFigure();
+	protected TextFigure			nameFig;
 	protected ListFigure			attrList		= new ListFigure();
 	protected ListFigure			methodList	= new ListFigure();
 	protected RectangleFigure	container		= new RectangleFigure();
 
-	private UMLClass					data				= new UMLClass();
+	private UMLClass					data;
 
 	private class NameAdapter extends FigureAdapter
 	{
-
-		private UMLClass	target;
-
-		public NameAdapter(UMLClass target)
-		{
-			this.target = target;
-			dprint("Name Adaptor created");
-		}
-
 		@Override
 		public void attributeChanged(FigureEvent e) {
-			dprint(String.format("Setting %s to %s", e.getOldValue().toString(), e
-					.getNewValue().toString()));
-			dprint("x");
-
-			target.setName(e.getNewValue().toString());
-
-			dprint(target.getName());
+			willChange();
+			data.setName(e.getNewValue().toString());
+			nameFig.setText(e.getNewValue().toString());
+			changed();
 		}
 	}
 
-	private static abstract class SimpleAdapter extends FigureAdapter
+	private abstract class SimpleAdapter extends FigureAdapter
 	{
-
-		protected UMLClass	target;
-
-		public SimpleAdapter(UMLClass target)
-		{
-			this.target = target;
-		}
-
 		protected abstract boolean add(String n);
 
 		protected abstract boolean rename(String old, String n);
@@ -121,67 +100,62 @@ public class ClassFigure extends GraphicalCompositeFigure
 		}
 	}
 
-	private static class AttributeAdapter extends SimpleAdapter
+	private class AttributeAdapter extends SimpleAdapter
 	{
-
-		public AttributeAdapter(UMLClass target)
-		{
-			super(target);
-		}
-
 		@Override
 		protected boolean add(String n) {
 			Attribute attr = Attribute.Create(n);
-			return target.addAttribute(attr);
+			return data.addAttribute(attr);
 		}
 
 		@Override
 		protected boolean rename(String old, String n) {
 			Attribute newAttr = Attribute.Create(n);
 			Attribute oldAttr = Attribute.Create(old);
-			return target.removeAttribute(oldAttr) && target.addAttribute(newAttr);
+			return data.removeAttribute(oldAttr) && data.addAttribute(newAttr);
 		}
 
 		@Override
 		protected boolean remove(String old) {
 			Attribute attr = Attribute.Create(old);
-			return target.removeAttribute(attr);
+			return data.removeAttribute(attr);
 		}
 
 	}
 
-	private static class MethodAdapter extends SimpleAdapter
+	private class MethodAdapter extends SimpleAdapter
 	{
-
-		public MethodAdapter(UMLClass target)
-		{
-			super(target);
-		}
-
 		@Override
 		protected boolean add(String n) {
 			Method meth = Method.Create(n);
-			return target.addMethod(meth);
+			return data.addMethod(meth);
 		}
 
 		@Override
 		protected boolean rename(String old, String n) {
 			Method newMeth = Method.Create(n);
 			Method oldMeth = Method.Create(old);
-			return target.removeMethod(oldMeth) && target.addMethod(newMeth);
+			return data.removeMethod(oldMeth) && data.addMethod(newMeth);
 		}
 
 		@Override
 		protected boolean remove(String old) {
 			Method meth = Method.Create(old);
-			return target.removeMethod(meth);
+			return data.removeMethod(meth);
 		}
 
 	}
 
 	public ClassFigure()
 	{
+		this(new UMLClass());
+	}
+
+	public ClassFigure(UMLClass proto)
+	{
 		super(new RectangleFigure());
+
+		data = (UMLClass) proto.clone();
 		setLayouter(new VerticalLayouter());
 
 		container.set(STROKE_COLOR, null);
@@ -194,14 +168,14 @@ public class ClassFigure extends GraphicalCompositeFigure
 		SeparatorLineFigure separator1 = new SeparatorLineFigure();
 		SeparatorLineFigure separator2 = new SeparatorLineFigure();
 
-		TextFigure tmpFigure = createTextFigure("Class");
-		tmpFigure.addFigureListener(new NameAdapter(data));
-		nameList.add(tmpFigure);
-
 		Insets2D.Double insets = new Insets2D.Double(4, 8, 4, 8);
 		nameList.set(LAYOUT_INSETS, insets);
 		attrList.set(LAYOUT_INSETS, insets);
 		methodList.set(LAYOUT_INSETS, insets);
+
+		nameFig = createTextFigure("Class");
+		nameFig.addFigureListener(new NameAdapter());
+		nameList.add(nameFig);
 
 		add(nameList);
 		add(separator1);
@@ -218,21 +192,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 		col.add(new RemoveAttributeAction(this));
 		col.add(new RemoveMethodAction(this));
 		return col;
-	}
-
-	public ClassFigure(UMLClass proto)
-	{
-		this();
-		if (proto instanceof UMLAbstractClass)
-			{
-				data = new UMLAbstractClass();
-			} else if (proto instanceof UMLInterface)
-			{
-				data = new UMLInterface();
-			} else
-			{
-				data = new UMLClass();
-			}
 	}
 
 	private static TextFigure createTextFigure(String text) {
@@ -270,7 +229,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 	public boolean addAttribute(String str) {
 		Attribute attr = Attribute.Create(str);
 		boolean result = addAttribute(attr);
-		x();
 
 		return result;
 	}
@@ -292,11 +250,11 @@ public class ClassFigure extends GraphicalCompositeFigure
 				tmpFig.set(FONT_UNDERLINE, true);
 				tmpFig.setAttributeEnabled(FONT_UNDERLINE, false);
 			}
-		tmpFig.addFigureListener(new AttributeAdapter(data));
+		tmpFig.addFigureListener(new AttributeAdapter());
 
-		willChange();
+		// willChange();
 		boolean added_fig = attrList.add(tmpFig);
-		changed();
+		// changed();
 
 		dprint(tmpFig.getText());
 
@@ -334,7 +292,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 			tmpFig.set(FONT_UNDERLINE, true);
 		if (meth.isAbstract())
 			tmpFig.set(FONT_ITALIC, true);
-		tmpFig.addFigureListener(new MethodAdapter(data));
+		tmpFig.addFigureListener(new MethodAdapter());
 
 		willChange();
 		methodList.add(tmpFig);
@@ -472,6 +430,13 @@ public class ClassFigure extends GraphicalCompositeFigure
 		return buffer;
 	}
 
+	public String toString() {
+		String buffer = "" + hashCode();
+		buffer += "\n" + snapShot();
+
+		return buffer;
+	}
+
 	public UMLClass getData() {
 		return data;
 	}
@@ -480,8 +445,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 	public ClassFigure clone() {
 		ClassFigure fig = new ClassFigure();
 
-		fig.data = this.data;
-
+		fig.data = (UMLClass) this.data.clone();
 		return fig;
 	}
 }

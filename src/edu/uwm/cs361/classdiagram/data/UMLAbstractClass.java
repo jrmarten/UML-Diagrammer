@@ -1,5 +1,7 @@
 package edu.uwm.cs361.classdiagram.data;
 
+import java.util.LinkedList;
+
 @SuppressWarnings("serial")
 public class UMLAbstractClass extends UMLClass
 {
@@ -36,5 +38,18 @@ public class UMLAbstractClass extends UMLClass
 	@Override
 	public String getDeclaration() {
 		return "abstract class " + getName();
+	}
+
+	@Override
+	public Object clone() {
+		UMLClass result = new UMLAbstractClass(getName());
+		result.generics = (LinkedList<String>) generics.clone();
+		result.myAttributes = (LinkedList<Attribute>) myAttributes.clone();
+		result.myMethods = (LinkedList<Method>) myMethods.clone();
+		result.myAssociatedClasses = (LinkedList<UMLClass>) myAssociatedClasses
+				.clone();
+		result.myDependClasses = (LinkedList<UMLClass>) myDependClasses.clone();
+		result.myInterfaces = (LinkedList<UMLClass>) myInterfaces.clone();
+		return result;
 	}
 }

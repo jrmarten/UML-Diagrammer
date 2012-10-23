@@ -21,7 +21,7 @@ public class ClickTool extends AbstractTool
 	public void activate(DrawingEditor edit) {
 		super.activate(edit);
 
-		super.deactivate(edit);
+		fireToolDone();
 	}
 
 	public void deactivate(DrawingEditor edit) {
@@ -33,7 +33,5 @@ public class ClickTool extends AbstractTool
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 }

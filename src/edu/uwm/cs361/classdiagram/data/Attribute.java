@@ -148,6 +148,9 @@ public class Attribute
 	@Override
 	public Attribute clone() {
 		Attribute result = new Attribute();
+		result.access = access;
+		result.finalp = finalp;
+		result.staticp = staticp;
 		result.type = type;
 		result.name = name;
 		return result;

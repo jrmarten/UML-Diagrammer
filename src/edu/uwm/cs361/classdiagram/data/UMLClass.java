@@ -21,9 +21,6 @@ public class UMLClass implements Serializable
 	protected LinkedList<UMLClass>	myDependClasses;
 	private boolean									abstractp					= false;
 
-	public static final String			idreg							= "[A-Za-z_$][A-Za-z0-9_$]*";
-	public static final String			classreg					= ".*";
-
 	static final long								serialVersionUID	= -3748332488864682801L;
 
 	/**
@@ -65,20 +62,20 @@ public class UMLClass implements Serializable
 
 		myName = newName;
 
-		generics.clear();
-		if (newName.contains("<"))
-			{
-				String tmp;
-				myName = newName.substring(0, newName.indexOf("<"));
-				tmp = newName.substring(newName.indexOf("<") + 1, newName.indexOf(">"));
-				String[] classnames = tmp.split(" , ");
-				for (String cl : classnames)
-					{
-						cl = cl.trim();
-						if (!cl.equals(""))
-							generics.add(cl);
-					}
-			}
+		// generics.clear();
+		// if (newName.contains("<"))
+		// {
+		// String tmp;
+		// myName = newName.substring(0, newName.indexOf("<"));
+		// tmp = newName.substring(newName.indexOf("<") + 1, newName.indexOf(">"));
+		// String[] classnames = tmp.split(" , ");
+		// for (String cl : classnames)
+		// {
+		// cl = cl.trim();
+		// if (!cl.equals(""))
+		// generics.add(cl);
+		// }
+		// }
 	}
 
 	/**
@@ -320,5 +317,20 @@ public class UMLClass implements Serializable
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	@Override
+	public Object clone() {
+		UMLClass result = new UMLClass(getName());
+		result.abstractp = abstractp;
+		result.generics = (LinkedList<String>) generics.clone();
+		result.myAttributes = (LinkedList<Attribute>) myAttributes.clone();
+		result.myMethods = (LinkedList<Method>) myMethods.clone();
+		result.myAssociatedClasses = (LinkedList<UMLClass>) myAssociatedClasses
+				.clone();
+		result.myDependClasses = (LinkedList<UMLClass>) myDependClasses.clone();
+		result.myInterfaces = (LinkedList<UMLClass>) myInterfaces.clone();
+
+		return result;
 	}
 }

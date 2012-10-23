@@ -247,6 +247,9 @@ public class Method
 	@Override
 	public Method clone() {
 		Method result = new Method();
+		result.access = access;
+		result.abstractp = abstractp;
+		result.staticp = staticp;
 		result.name = getName();
 		result.type = getType();
 		result.params = (LinkedList<String>) params.clone();
