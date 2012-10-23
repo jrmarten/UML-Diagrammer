@@ -12,8 +12,9 @@ import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.gui.JFileURIChooser;
 
+import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.ClassFigure;
-import edu.uwm.cs361.classdiagram.io.*;
+import edu.uwm.cs361.classdiagram.io.JavaGenerator;
 
 @SuppressWarnings("serial")
 public class JavaGenerationAction extends AbstractAction
@@ -26,6 +27,11 @@ public class JavaGenerationAction extends AbstractAction
 	}
 
 	public void actionPerformed(ActionEvent e) {
+
+		Util.dprint("To Be Implemented");
+		if (Util.debug())
+			return;
+
 		List<Figure> figs = data.getDrawing().getFiguresFrontToBack();
 
 		JFileURIChooser c = new JFileURIChooser();
