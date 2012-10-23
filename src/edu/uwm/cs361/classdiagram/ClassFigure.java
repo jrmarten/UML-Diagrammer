@@ -64,6 +64,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 		public NameAdapter(UMLClass target)
 		{
 			this.target = target;
+			dprint("Name Adaptor created");
 		}
 
 		@Override
@@ -72,7 +73,9 @@ public class ClassFigure extends GraphicalCompositeFigure
 					.getNewValue().toString()));
 			dprint("x");
 
-			target.setName((String) e.getNewValue());
+			target.setName(e.getNewValue().toString());
+
+			dprint(target.getName());
 		}
 	}
 
@@ -471,5 +474,14 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 	public UMLClass getData() {
 		return data;
+	}
+
+	@Override
+	public ClassFigure clone() {
+		ClassFigure fig = new ClassFigure();
+
+		fig.data = this.data;
+
+		return fig;
 	}
 }
