@@ -1,5 +1,8 @@
 package edu.uwm.cs361.tool;
 
+import static edu.uwm.cs361.Util.dprint;
+
+import java.awt.event.ActionEvent;
 import java.util.Set;
 
 import javax.swing.AbstractAction;
@@ -27,7 +30,11 @@ public class SingleSelectionTool extends SelectionTool
 		Set<Figure> selected = edit.getActiveView().getSelectedFigures();
 
 		if (selected.size() != 1)
-			return;
+			{
+				dprint((selected.size() > 1) ? "Too many Figures selected"
+						: "No Figures Selected");
+				return;
+			}
 
 		Figure fig = selected.iterator().next();
 
@@ -35,5 +42,7 @@ public class SingleSelectionTool extends SelectionTool
 			{
 				((ClassFigureAction) p_func).setData((ClassFigure) fig);
 			}
+
+		p_func.actionPerformed(new ActionEvent(this, 0, "Selected"));
 	}
 }

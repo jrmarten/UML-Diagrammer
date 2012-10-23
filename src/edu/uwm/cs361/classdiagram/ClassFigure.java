@@ -1,7 +1,6 @@
 package edu.uwm.cs361.classdiagram;
 
 import static edu.uwm.cs361.Util.dprint;
-import static edu.uwm.cs361.Util.printIterable;
 import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
 import static org.jhotdraw.draw.AttributeKeys.FONT_BOLD;
 import static org.jhotdraw.draw.AttributeKeys.FONT_ITALIC;
@@ -69,6 +68,10 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 		@Override
 		public void attributeChanged(FigureEvent e) {
+			dprint(String.format("Setting %s to %s", e.getOldValue().toString(), e
+					.getNewValue().toString()));
+			dprint("x");
+
 			target.setName((String) e.getNewValue());
 		}
 	}
@@ -81,7 +84,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 		public SimpleAdapter(UMLClass target)
 		{
 			this.target = target;
-			dprint("Adapter added");
 		}
 
 		protected abstract boolean add(String n);
@@ -189,42 +191,20 @@ public class ClassFigure extends GraphicalCompositeFigure
 		SeparatorLineFigure separator1 = new SeparatorLineFigure();
 		SeparatorLineFigure separator2 = new SeparatorLineFigure();
 
-		add(nameList);
-		add(separator1);
-		add(attrList);
-		add(separator2);
-		add(methodList);
+		TextFigure tmpFigure = createTextFigure("Class");
+		tmpFigure.addFigureListener(new NameAdapter(data));
+		nameList.add(tmpFigure);
 
 		Insets2D.Double insets = new Insets2D.Double(4, 8, 4, 8);
 		nameList.set(LAYOUT_INSETS, insets);
 		attrList.set(LAYOUT_INSETS, insets);
 		methodList.set(LAYOUT_INSETS, insets);
 
-		TextFigure tmpFigure = createTextFigure("Class");
-		tmpFigure.addFigureListener(new NameAdapter(data));
-		nameList.add(tmpFigure);
-	}
-
-	public void update() {
-
-		willChange();
-		updateName();
-
-		while (getChildren().size() != 0)
-			{
-				removeChild(0);
-			}
-
-		SeparatorLineFigure separator1 = new SeparatorLineFigure();
-		SeparatorLineFigure separator2 = new SeparatorLineFigure();
-
 		add(nameList);
 		add(separator1);
 		add(attrList);
 		add(separator2);
 		add(methodList);
-
-		changed();
 	}
 
 	@Override
@@ -252,7 +232,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 			}
 	}
 
-	private TextFigure createTextFigure(String text) {
+	private static TextFigure createTextFigure(String text) {
 		TextFigure result = new TextFigure();
 		result.setText(text);
 		result.set(FONT_BOLD, true);
@@ -284,24 +264,12 @@ public class ClassFigure extends GraphicalCompositeFigure
 		return handles;
 	}
 
-	public void setName(String newName) {
-		data.setName(newName);
-		getNameFigure().setText(newName);
-	}
+	public boolean addAttribute(String str) {
+		Attribute attr = Attribute.Create(str);
+		boolean result = addAttribute(attr);
+		x();
 
-	public void updateName() {
-		nameList.removeAllChildren();
-		nameList.add(createTextFigure(data.getName()));
-	}
-
-	private TextFigure getNameFigure() {
-		return (TextFigure) ((ListFigure) getChild(0)).getChild(0);
-	}
-
-	public void addAttribute(String attr) {
-		Attribute tmp = Attribute.Create(attr);
-		addAttribute(tmp);
-		update();
+		return result;
 	}
 
 	private boolean addAttribute(Attribute attr) {
@@ -312,6 +280,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 		boolean added = data.addAttribute(attr);
 
+		willChange();
 		String tmpText = attr.toString();
 		tmpText = (attr.isFinal()) ? tmpText.toUpperCase() : tmpText;
 		tmpFig = createTextFigure(tmpText);
@@ -322,28 +291,31 @@ public class ClassFigure extends GraphicalCompositeFigure
 			}
 		tmpFig.addFigureListener(new AttributeAdapter(data));
 
-		added = attrList.add(tmpFig);
+		willChange();
+		boolean added_fig = attrList.add(tmpFig);
+		changed();
 
-		dprint((added) ? "TRUE" : "FALSE");
-		dprint((data.addAttribute(attr)) ? "" : "ATTRIBUTE NOT ADDED TO DATA");
-		dprint(attr + " was added");
-		printIterable(data.getAttributes());
+		dprint(tmpFig.getText());
+
+		dprint((added_fig) ? "" : "TextFigure not added to attrList");
+		dprint((added) ? "" : "ATTRIBUTE NOT ADDED TO DATA");
 		return added;
 	}
 
 	public void addMethod(String methtxt) {
 		Method tmp = Method.Create(methtxt);
 		addMethod(tmp);
-
-		update();
 	}
 
-	public void updateAttributes() {
-		attrList.removeAllChildren();
-
-		for (Attribute attr : data.getAttributes())
+	public void x() {
+		dprint("\n");
+		dprint("Attribute List");
+		for (Figure x : attrList.getChildren())
 			{
-				addAttribute(attr);
+				if (x instanceof TextFigure)
+					{
+						dprint(((TextFigure) x).getText());
+					}
 			}
 	}
 
@@ -351,6 +323,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 		if (meth == null)
 			return; // throw an error popup
 
+		willChange();
 		data.addMethod(meth);
 
 		TextFigure tmpFig = createTextFigure(meth.toString());
@@ -359,21 +332,15 @@ public class ClassFigure extends GraphicalCompositeFigure
 		if (meth.isAbstract())
 			tmpFig.set(FONT_ITALIC, true);
 		tmpFig.addFigureListener(new MethodAdapter(data));
+
+		willChange();
 		methodList.add(tmpFig);
+		changed();
 	}
 
 	public void removeMethod(String methtxt) {
 		Method meth = Method.Create(methtxt);
 		data.removeMethod(meth);
-		updateMethods();
-	}
-
-	public void updateMethods() {
-		methodList.removeAllChildren();
-		for (Method meth : data.getMethods())
-			{
-				addMethod(meth);
-			}
 	}
 
 	@Override
@@ -488,7 +455,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 	// XXX:FOR DEBUGING ONLY
 	public String snapShot() {
 
-		String buffer = data.getName() + "{\n";
+		String buffer = data.getDeclaration() + "{\n";
 		for (Attribute attr : data.getAttributes())
 			{
 				buffer += attr.getSignature() + "\n";
