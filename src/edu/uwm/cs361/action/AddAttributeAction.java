@@ -8,11 +8,12 @@ import edu.uwm.cs361.classdiagram.ClassFigure;
 @SuppressWarnings("serial")
 public class AddAttributeAction extends ClassFigureAction
 {
-	public static final String	ID	= "actions.addAttribute.title";
+	public static final String	ID	= "actions.addAttribute";
 
 	public AddAttributeAction(ClassFigure c)
 	{
 		super(ID, c);
+		UMLApplicationModel.getProjectResources().configureAction(this, ID);
 	}
 
 	@Override

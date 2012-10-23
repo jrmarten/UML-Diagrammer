@@ -9,11 +9,12 @@ import edu.uwm.cs361.classdiagram.ClassFigure;
 public class AddMethodAction extends ClassFigureAction
 {
 
-	public static final String	ID	= "actions.addMethod.title";
+	public static final String	ID	= "actions.addMethod";
 
 	public AddMethodAction(ClassFigure c)
 	{
 		super(ID, c);
+		UMLApplicationModel.getProjectResources().configureAction(this, ID);
 	}
 
 	@Override
