@@ -9,11 +9,12 @@ import edu.uwm.cs361.classdiagram.ClassFigure;
 public class RemoveMethodAction extends ClassFigureAction
 {
 
-	public static final String	ID	= "actions.removeMethod.title";
+	public static final String	ID	= "actions.removeMethod";
 
 	public RemoveMethodAction(ClassFigure c)
 	{
 		super(ID, c);
+		UMLApplicationModel.getProjectResources().configureAction(this, ID);
 	}
 
 	public void actionPerformed(ActionEvent e) {
