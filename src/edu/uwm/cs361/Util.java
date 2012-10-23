@@ -7,6 +7,10 @@ public class Util
 
 	private static final boolean	DEBUG	= true;
 
+	public static boolean debug() {
+		return DEBUG;
+	}
+
 	public static void dprint(String line) {
 		if (line.equals(""))
 			return;
