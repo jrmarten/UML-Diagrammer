@@ -252,9 +252,9 @@ public class ClassFigure extends GraphicalCompositeFigure
 			}
 		tmpFig.addFigureListener(new AttributeAdapter());
 
-		// willChange();
+		willChange();
 		boolean added_fig = attrList.add(tmpFig);
-		// changed();
+		changed();
 
 		dprint(tmpFig.getText());
 
