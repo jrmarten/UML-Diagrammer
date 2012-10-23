@@ -31,7 +31,6 @@ import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.gui.JFileURIChooser;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
-import org.jhotdraw.samples.pert.figures.DependencyFigure;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -40,7 +39,8 @@ import edu.uwm.cs361.action.AddMethodAction;
 import edu.uwm.cs361.action.DebugSnapShotAction;
 import edu.uwm.cs361.action.JavaGenerationAction;
 import edu.uwm.cs361.classdiagram.ClassFigure;
-import edu.uwm.cs361.classdiagram.InheritenceFigure;
+import edu.uwm.cs361.classdiagram.AssociationFigure;
+import edu.uwm.cs361.classdiagram.InheritanceFigure;
 import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
 import edu.uwm.cs361.sequencediagram.ActivationFigure;
 import edu.uwm.cs361.sequencediagram.LifelineFigure;
@@ -166,16 +166,15 @@ public class UMLApplicationModel extends DefaultApplicationModel
 
 		ButtonFactory.addToolTo(tb, edit, new SingleSelectionTool(
 				new AddAttributeAction(null)), "edit.addAttribute", labels);
+		
 		ButtonFactory.addToolTo(tb, edit, new SingleSelectionTool(
 				new AddMethodAction(null)), "edit.addMethod", labels);
 
-		attributes = new HashMap<AttributeKey, Object>();
-		attributes.put(AttributeKeys.STROKE_COLOR, new Color(0x000099));
 		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
-				new DependencyFigure(), attributes), "edit.createDependency", labels);
+				new AssociationFigure()), "edit.createAssociation", labels);
 
 		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
-				new InheritenceFigure()), "edit.createInheritence", labels);
+				new InheritanceFigure()), "edit.createInheritance", labels);
 
 		ButtonFactory.addToolTo(tb, edit, new ClickTool(new DebugSnapShotAction(
 				edit.getActiveView())), "edit.DebugSnapShot", labels);
