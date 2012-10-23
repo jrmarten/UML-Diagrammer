@@ -1,7 +1,7 @@
 This is the task list
 
 format
-	(Task Name):  (Personel assigned to)optional
+	(Task Name):  (Personnel assigned to)optional
 		(description)
 		
 put a * in front for a task being worked on
@@ -15,11 +15,20 @@ feel free to put tasks up as you need them.
 Update MenuToolBars:
 	Update menu so that only one has focus at a time.
 	
+Dependencies :
+	handle dependencies at ClassFigure level.	
 	
-Dependcies :
-	handle depenencies at ClassFigure level.	
-	
-Make Inheritence Decorations:
+Make Inheritance Decorations:
 	extend LineDecoration some how.
 	
+Ensure Semicolons : 
+    Have the system insert a semicolon at the end of the instance variables when it is translated to java code if the user forgot to enter it.
+    E.g.: 
+	class Class{
+        public int size
+    }
+    should be:
+    class Class{
+        public int size;
+    }
 	
