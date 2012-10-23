@@ -10,16 +10,19 @@ import static edu.uwm.cs361.Util.*;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 
+import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 
 public class DebugSnapShotAction extends AbstractAction
 {
 
-	DrawingView	data;
+	public static final String	ID	= "edit.DebugSnapShot";
+	DrawingView									data;
 
 	public DebugSnapShotAction(DrawingView view)
 	{
 		data = view;
+		UMLApplicationModel.getProjectResources().configureAction(this, ID);
 	}
 
 	@Override
@@ -27,7 +30,8 @@ public class DebugSnapShotAction extends AbstractAction
 		List<Figure> d = data.getDrawing().getFiguresFrontToBack();
 		for (Figure fig : d)
 			{
-				dprint(((ClassFigure) fig).snapShot());
+				if (fig instanceof ClassFigure)
+					dprint(((ClassFigure) fig).snapShot());
 			}
 	}
 

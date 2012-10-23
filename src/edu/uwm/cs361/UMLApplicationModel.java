@@ -6,7 +6,6 @@ import java.awt.event.ItemListener;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
@@ -41,6 +40,7 @@ import edu.uwm.cs361.action.AddMethodAction;
 import edu.uwm.cs361.action.DebugSnapShotAction;
 import edu.uwm.cs361.action.JavaGenerationAction;
 import edu.uwm.cs361.classdiagram.ClassFigure;
+import edu.uwm.cs361.classdiagram.InheritenceFigure;
 import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
 import edu.uwm.cs361.sequencediagram.ActivationFigure;
 import edu.uwm.cs361.sequencediagram.LifelineFigure;
@@ -73,6 +73,8 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	@Override
 	public ActionMap createActionMap(Application a, @Nullable View v) {
 		ActionMap m = super.createActionMap(a, v);
+		m.put(DebugSnapShotAction.ID, new DebugSnapShotAction(getSharedEditor()
+				.getActiveView()));
 		return m;
 
 	}
@@ -171,6 +173,9 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		attributes.put(AttributeKeys.STROKE_COLOR, new Color(0x000099));
 		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
 				new DependencyFigure(), attributes), "edit.createDependency", labels);
+
+		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
+				new InheritenceFigure()), "edit.createInheritence", labels);
 
 		ButtonFactory.addToolTo(tb, edit, new ClickTool(new DebugSnapShotAction(
 				edit.getActiveView())), "edit.DebugSnapShot", labels);

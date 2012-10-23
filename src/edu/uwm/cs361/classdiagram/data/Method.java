@@ -5,7 +5,6 @@ import static edu.uwm.cs361.Util.report;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.regex.Pattern;
 
 public class Method
 {
@@ -67,6 +66,8 @@ public class Method
 	}
 
 	public static Method Create(String str) {
+		if (str == null)
+			return null;
 		if (str.contains(":"))
 			return fromUML(str);
 		else

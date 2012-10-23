@@ -52,6 +52,8 @@ public class Attribute
 	}
 
 	public static Attribute Create(String str) {
+		if (str == null)
+			return null;
 		if (str.contains(":"))
 			return fromUML(str);
 		else
