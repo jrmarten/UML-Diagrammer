@@ -24,20 +24,3 @@ Make Inheritance Decorations:
 Clone in Interface:
 	when and if UMLInterface gets integrated clone must be implemented
 
-
-????
-is this about the debug tool?
-which is not the same operation as generating
-source code
-????
-
-Ensure Semicolons : 
-    Have the system insert a semicolon at the end of the instance variables when it is translated to java code if the user forgot to enter it.
-    E.g.: 
-	class Class{
-        public int size
-    }
-    should be:
-    class Class{
-        public int size;
-    }
