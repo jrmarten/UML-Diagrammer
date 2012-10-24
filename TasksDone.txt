@@ -8,3 +8,8 @@ Create modification : Max
 	access modifiers type name
 	access modifiers name ( params ) : type
 	access modifiers type name ( params )
+	
+Clone in Interface: Max
+	when and if UMLInterface gets integrated clone must be implemented
+
+	

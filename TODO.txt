@@ -21,6 +21,3 @@ Dependencies :
 Make Inheritance Decorations:
 	extend LineDecoration some how.
 	
-Clone in Interface:
-	when and if UMLInterface gets integrated clone must be implemented
-
