@@ -17,6 +17,7 @@ import java.util.List;
 
 import javax.swing.Action;
 
+import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.GraphicalCompositeFigure;
 import org.jhotdraw.draw.ListFigure;
@@ -42,6 +43,7 @@ import edu.uwm.cs361.action.RemoveMethodAction;
 import edu.uwm.cs361.classdiagram.data.Attribute;
 import edu.uwm.cs361.classdiagram.data.Method;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
+import edu.uwm.cs361.classdiagram.data.UMLInterface;
 
 @SuppressWarnings("serial")
 public class ClassFigure extends GraphicalCompositeFigure
@@ -60,8 +62,11 @@ public class ClassFigure extends GraphicalCompositeFigure
 		@Override
 		public void attributeChanged(FigureEvent e) {
 			willChange();
-			data.setName(e.getNewValue().toString());
-			nameFig.setText(e.getNewValue().toString());
+			if (e.getAttribute() == AttributeKeys.TEXT)
+				{
+					data.setName(e.getNewValue().toString());
+					nameFig.setText(e.getNewValue().toString());
+				}
 			changed();
 		}
 	}
@@ -162,11 +167,20 @@ public class ClassFigure extends GraphicalCompositeFigure
 		container.setAttributeEnabled(STROKE_COLOR, false);
 		container.set(FILL_COLOR, null);
 		container.setAttributeEnabled(FILL_COLOR, false);
-		ListFigure nameList = new ListFigure(container);
+		ListFigure nameList = new ListFigure();
 		ListFigure attrList = new ListFigure();
 		ListFigure methodList = new ListFigure();
 		SeparatorLineFigure separator1 = new SeparatorLineFigure();
 		SeparatorLineFigure separator2 = new SeparatorLineFigure();
+
+		add(nameList);
+		if (!(data instanceof UMLInterface))
+			{
+				add(separator1);
+				add(attrList);
+			}
+		add(separator2);
+		add(methodList);
 
 		Insets2D.Double insets = new Insets2D.Double(4, 8, 4, 8);
 		nameList.set(LAYOUT_INSETS, insets);
@@ -174,14 +188,14 @@ public class ClassFigure extends GraphicalCompositeFigure
 		methodList.set(LAYOUT_INSETS, insets);
 
 		nameFig = createTextFigure("Class");
+		if (data.isAbstractClass())
+			{
+				nameFig.set(FONT_ITALIC, true);
+				nameFig.setAttributeEnabled(FONT_ITALIC, false);
+			}
 		nameFig.addFigureListener(new NameAdapter());
 		nameList.add(nameFig);
 
-		add(nameList);
-		add(separator1);
-		add(attrList);
-		add(separator2);
-		add(methodList);
 	}
 
 	@Override
@@ -241,10 +255,10 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 		boolean added = data.addAttribute(attr);
 
-		willChange();
 		String tmpText = attr.toString();
 		tmpText = (attr.isFinal()) ? tmpText.toUpperCase() : tmpText;
-		tmpFig = createTextFigure(tmpText);
+		tmpFig = new TextFigure();
+		tmpFig.setText(tmpText);
 		if (attr.isStatic())
 			{
 				tmpFig.set(FONT_UNDERLINE, true);
@@ -254,6 +268,8 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 		willChange();
 		boolean added_fig = attrList.add(tmpFig);
+		attrList.fireFigureChanged();
+		tmpFig.invalidate();
 		changed();
 
 		dprint(tmpFig.getText());
@@ -301,6 +317,13 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 		willChange();
 		methodList.add(tmpFig);
+
+		if (data.isAbstract() && !data.isAbstractClass())
+			{
+				nameFig.setAttributeEnabled(FONT_ITALIC, true);
+				nameFig.set(FONT_ITALIC, true);
+				nameFig.invalidate();
+			}
 		changed();
 	}
 
@@ -448,9 +471,8 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 	@Override
 	public ClassFigure clone() {
-		ClassFigure fig = new ClassFigure();
+		ClassFigure fig = new ClassFigure((UMLClass) data.clone());
 
-		fig.data = (UMLClass) this.data.clone();
 		return fig;
 	}
 }
