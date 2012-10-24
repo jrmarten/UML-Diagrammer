@@ -2,6 +2,8 @@ package edu.uwm.cs361.classdiagram.data;
 
 import static edu.uwm.cs361.Util.*;
 
+import java.util.LinkedList;
+
 @SuppressWarnings("serial")
 public class UMLInterface extends UMLClass
 {
@@ -63,5 +65,17 @@ public class UMLInterface extends UMLClass
 			}
 
 		return "interface " + getName() + buffer;
+	}
+
+	@Override
+	public Object clone() {
+		UMLClass result = new UMLInterface(getName());
+		result.generics = (LinkedList<String>) generics.clone();
+		result.myAttributes = (LinkedList<Attribute>) myAttributes.clone();
+		result.myAssociatedClasses = (LinkedList<UMLClass>) myAssociatedClasses
+				.clone();
+		result.myDependClasses = (LinkedList<UMLClass>) myDependClasses.clone();
+		result.myInterfaces = (LinkedList<UMLClass>) myInterfaces.clone();
+		return result;
 	}
 }
