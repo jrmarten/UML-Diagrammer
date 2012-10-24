@@ -3,7 +3,6 @@ package edu.uwm.cs361.action;
 import static edu.uwm.cs361.Util.dprint;
 
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -17,6 +16,7 @@ import edu.uwm.cs361.classdiagram.data.Attribute;
 import edu.uwm.cs361.classdiagram.data.Method;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
 
+@SuppressWarnings("unused")
 public class DebugSnapShotAction extends AbstractAction
 {
 
