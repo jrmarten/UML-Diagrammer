@@ -38,10 +38,11 @@ import edu.uwm.cs361.action.AddAttributeAction;
 import edu.uwm.cs361.action.AddMethodAction;
 import edu.uwm.cs361.action.DebugSnapShotAction;
 import edu.uwm.cs361.action.JavaGenerationAction;
-import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.AssociationFigure;
+import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.InheritanceFigure;
 import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
+import edu.uwm.cs361.classdiagram.data.UMLInterface;
 import edu.uwm.cs361.sequencediagram.ActivationFigure;
 import edu.uwm.cs361.sequencediagram.LifelineFigure;
 import edu.uwm.cs361.tool.ClickTool;
@@ -157,16 +158,23 @@ public class UMLApplicationModel extends DefaultApplicationModel
 				attributes), "edit.createClass", labels);
 
 		attributes = new HashMap<AttributeKey, Object>();
-		attributes.put(AttributeKeys.FILL_COLOR, Color.yellow);
+		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
 		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
 		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
 		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ClassFigure(
 				new UMLAbstractClass()), attributes), "edit.createAbstractClass",
 				labels);
 
+		attributes = new HashMap<AttributeKey, Object>();
+		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
+		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
+		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
+		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ClassFigure(
+				new UMLInterface()), attributes), "edit.createInterface", labels);
+
 		ButtonFactory.addToolTo(tb, edit, new SingleSelectionTool(
 				new AddAttributeAction(null)), "edit.addAttribute", labels);
-		
+
 		ButtonFactory.addToolTo(tb, edit, new SingleSelectionTool(
 				new AddMethodAction(null)), "edit.addMethod", labels);
 
