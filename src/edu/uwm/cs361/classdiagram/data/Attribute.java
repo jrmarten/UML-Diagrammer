@@ -54,10 +54,18 @@ public class Attribute
 	public static Attribute Create(String str) {
 		if (str == null)
 			return null;
-		if (str.contains(":"))
-			return fromUML(str);
-		else
-			return fromSignature(str);
+		if (str.trim().equals(""))
+			return null;
+		try
+			{
+				if (str.contains(":"))
+					return fromUML(str);
+				else
+					return fromSignature(str);
+			} catch (Exception e)
+			{
+				return null;
+			}
 	}
 
 	private static Attribute fromUML(String str) {
