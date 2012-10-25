@@ -66,6 +66,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 				{
 					data.setName(e.getNewValue().toString());
 					nameFig.setText(e.getNewValue().toString());
+					nameFig.invalidate();
 				}
 			changed();
 		}
@@ -167,7 +168,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 		container.setAttributeEnabled(STROKE_COLOR, false);
 		container.set(FILL_COLOR, null);
 		container.setAttributeEnabled(FILL_COLOR, false);
-		ListFigure nameList = new ListFigure();
+		ListFigure nameList = new ListFigure(container);
 		ListFigure attrList = new ListFigure();
 		ListFigure methodList = new ListFigure();
 		SeparatorLineFigure separator1 = new SeparatorLineFigure();
@@ -195,6 +196,29 @@ public class ClassFigure extends GraphicalCompositeFigure
 			}
 		nameFig.addFigureListener(new NameAdapter());
 		nameList.add(nameFig);
+	}
+
+	public void update() {
+		removeAllChildren();
+
+		if (data.isAbstract())
+			nameFig.set(FONT_ITALIC, true);
+		nameFig.addFigureListener(new NameAdapter());
+
+		nameList.removeAllChildren();
+		nameList.add(nameFig);
+		add(nameList);
+
+		SeparatorLineFigure sep1 = new SeparatorLineFigure();
+		SeparatorLineFigure sep2 = new SeparatorLineFigure();
+
+		if (!(data instanceof UMLInterface))
+			{
+				add(sep1);
+				add(attrList);
+			}
+		add(sep2);
+		add(methodList);
 
 	}
 
@@ -268,8 +292,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 		willChange();
 		boolean added_fig = attrList.add(tmpFig);
-		attrList.fireFigureChanged();
-		tmpFig.invalidate();
+		update();
 		changed();
 
 		dprint(tmpFig.getText());
@@ -305,10 +328,10 @@ public class ClassFigure extends GraphicalCompositeFigure
 		if (meth == null)
 			return; // throw an error popup
 
-		willChange();
 		data.addMethod(meth);
 
-		TextFigure tmpFig = createTextFigure(meth.toString());
+		TextFigure tmpFig = new TextFigure();// createTextFigure(meth.toString());
+		tmpFig.setText(meth.toString());
 		if (meth.isStatic())
 			tmpFig.set(FONT_UNDERLINE, true);
 		if (meth.isAbstract())
@@ -320,10 +343,9 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 		if (data.isAbstract() && !data.isAbstractClass())
 			{
-				nameFig.setAttributeEnabled(FONT_ITALIC, true);
 				nameFig.set(FONT_ITALIC, true);
-				nameFig.invalidate();
 			}
+		update();
 		changed();
 	}
 
