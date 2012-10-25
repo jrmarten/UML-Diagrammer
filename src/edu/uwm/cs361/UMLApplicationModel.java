@@ -177,11 +177,15 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ClassFigure(
 				new UMLInterface()), attributes), "edit.createInterface", labels);
 
+		tb.addSeparator();
+
 		ButtonFactory.addToolTo(tb, edit, new SingleSelectionTool(
 				new AddAttributeAction(null)), "edit.addAttribute", labels);
 
 		ButtonFactory.addToolTo(tb, edit, new SingleSelectionTool(
 				new AddMethodAction(null)), "edit.addMethod", labels);
+
+		tb.addSeparator();
 
 		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
 				new AssociationFigure()), "edit.createAssociation", labels);
@@ -189,8 +193,16 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
 				new InheritanceFigure()), "edit.createInheritance", labels);
 
-		ButtonFactory.addToolTo(tb, edit, new ClickTool(new DebugSnapShotAction(
-				edit.getActiveView())), "edit.DebugSnapShot", labels);
+		if (Util.debug())
+			{
+				tb.addSeparator();
+
+				ButtonFactory.addToolTo(tb, edit, new ClickTool(
+						new DebugSnapShotAction(edit.getActiveView())),
+						"edit.DebugSnapShot", labels);
+
+			}
+		tb.addSeparator();
 
 		ButtonFactory.addToolTo(tb, edit, new ClickTool(new JavaGenerationAction(
 				edit.getActiveView())), "edit.javaGenerator", getProjectResources());
