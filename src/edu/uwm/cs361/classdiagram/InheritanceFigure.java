@@ -54,7 +54,6 @@ public class InheritanceFigure extends AssociationFigure
 	protected void handleDisconnect(Connector start, Connector end) {
 		UMLClass child = ((ClassFigure) start.getOwner()).getData();
 		UMLClass par = ((ClassFigure) end.getOwner()).getData();
-
 		child.removeSuperclass(par);
 	}
 
