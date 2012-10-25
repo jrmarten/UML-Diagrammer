@@ -51,6 +51,14 @@ public class JavaGenerator
 			}
 	}
 
+	public static String getFileName(String name) {
+		if (name.contains("<"))
+			{
+				name = name.substring(name.indexOf('<'));
+			}
+		return name + ".java";
+	}
+
 	public static void write(String directiory, UMLClass umlclass) {
 
 		File java_src;
@@ -58,8 +66,9 @@ public class JavaGenerator
 
 		try
 			{
+
 				java_src = new File(directiory + System.getProperty("file.separator")
-						+ umlclass.getName() + ".java");
+						+ getFileName(umlclass.getName()));
 				genny = new JavaGenerator(java_src);
 			} catch (Exception e)
 			{
@@ -75,13 +84,6 @@ public class JavaGenerator
 
 		for (Attribute attr : umlclass.getAttributes())
 			{
-				/*
-				 * String sig = ""; sig += attr.getAccess().toString() + " "; sig +=
-				 * (attr.isStatic()) ? "static " : ""; sig += (attr.isFinal()) ?
-				 * "final " : ""; sig += attr.getType() + " "; sig += attr.getName() +
-				 * ";\n\n";
-				 */
-
 				String sig = attr.getSignature();
 				sig += ";\n\n";
 				genny.write(sig);
@@ -89,16 +91,6 @@ public class JavaGenerator
 
 		for (Method meth : umlclass.getMethods())
 			{
-				/*
-				 * String sig = ""; sig += meth.getAccess().toString() + " "; sig +=
-				 * (meth.isStatic()) ? "static " : ""; sig += (meth.isAbstract()) ?
-				 * "abstract " : ""; sig += meth.getType() + " "; sig += meth.getName()
-				 * + " ( ";
-				 * 
-				 * Iterator<String> it1 = meth.getParameters().iterator(); int index =
-				 * 0; for (; it1.hasNext();) { sig += it1.next() + " arg" + index++; if
-				 * (!it1.hasNext()) break; sig += ", "; }
-				 */
 				String sig = meth.getSignature();
 				sig += start;
 				sig += " return " + genny.getDefault(meth.getType()) + ";" + end;
