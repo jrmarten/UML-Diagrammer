@@ -2,6 +2,8 @@ package edu.uwm.cs361.classdiagram.io;
 
 import java.io.*;
 
+import edu.uwm.cs361.UMLApplicationModel;
+import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.data.*;
 
 public class JavaGenerator
@@ -56,13 +58,16 @@ public class JavaGenerator
 
 		try
 			{
-				java_src = new File(directiory + System.getProperty("path.separator")
+				java_src = new File(directiory + System.getProperty("file.separator")
 						+ umlclass.getName() + ".java");
 				genny = new JavaGenerator(java_src);
 			} catch (Exception e)
 			{
+				UMLApplicationModel.error("file.JavaGeneration.error", "IO Error");
 				return;
 			}
+
+		Util.dprint(java_src.getAbsolutePath());
 
 		String start = "\n{\n", end = "\n}\n\n";
 
