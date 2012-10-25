@@ -300,8 +300,7 @@ public class UMLClass implements Serializable
 
 	// helps java generator
 
-	// TODO: add implement and extends functionallity
-	public String getDeclaration() {
+	protected String getInheritence() {
 		String buffer = "";
 
 		buffer += (superClass == null) ? "" : (" extends " + superClass.getName());
@@ -310,8 +309,13 @@ public class UMLClass implements Serializable
 			{
 				buffer += " implements " + join(myInterfaces, ", ");
 			}
+		return buffer;
+	}
 
-		return ((abstractp) ? "abstract " : "") + "class " + getName() + buffer;
+	// TODO: add implement and extends functionallity
+	public String getDeclaration() {
+		return ((abstractp) ? "abstract " : "") + "class " + getName()
+				+ getInheritence();
 	}
 
 	@Override

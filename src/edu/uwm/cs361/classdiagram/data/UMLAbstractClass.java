@@ -37,7 +37,7 @@ public class UMLAbstractClass extends UMLClass
 
 	@Override
 	public String getDeclaration() {
-		return "abstract class " + getName();
+		return "abstract class " + getName() + getInheritence();
 	}
 
 	@Override
