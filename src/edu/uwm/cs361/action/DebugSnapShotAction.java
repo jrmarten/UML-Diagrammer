@@ -39,9 +39,9 @@ public class DebugSnapShotAction extends AbstractAction
 		List<Figure> d = data.getDrawing().getFiguresFrontToBack();
 		for (Figure fig : d)
 			{
-				dprint(delim);
 				if (fig instanceof ClassFigure)
 					{
+						dprint(delim);
 						classfigure_hook((ClassFigure) fig);
 					} else
 					{
