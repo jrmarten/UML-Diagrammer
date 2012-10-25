@@ -19,5 +19,5 @@ Dependencies :
 	handle dependencies at ClassFigure level.	
 	
 Make Inheritance Decorations:
-	extend LineDecoration some how.
+	Make Inheritance look like Inheritance
 	
