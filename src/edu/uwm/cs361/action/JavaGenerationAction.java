@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
@@ -28,27 +29,22 @@ public class JavaGenerationAction extends AbstractAction
 
 	public void actionPerformed(ActionEvent e) {
 
-		Util.dprint("To Be Implemented");
-		if (Util.debug())
-			return;
+		// Util.dprint("To Be Implemented");
+		// if (Util.debug())
+		// return;
 
 		List<Figure> figs = data.getDrawing().getFiguresFrontToBack();
 
 		JFileURIChooser c = new JFileURIChooser();
+		c.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-		FileFilter phil = new FileFilter()
+		int result = c.showDialog(null, "Generate");
+
+		if (result != JFileChooser.APPROVE_OPTION)
 			{
-				public boolean accept(File f) {
-					return f.isDirectory();
-				}
-
-				@Override
-				public String getDescription() {
-					return "Directory Filter";
-				}
-			};
-
-		c.addChoosableFileFilter(phil);
+				Util.dprint("JFileChooser failed to return properly");
+				return;
+			}
 
 		File file = c.getSelectedFile();
 
@@ -56,16 +52,20 @@ public class JavaGenerationAction extends AbstractAction
 			{
 				JOptionPane.showMessageDialog(null, "Selection was not a directory",
 						"Choose error", JOptionPane.ERROR_MESSAGE);
-
+				return;
 			}
+
+		Util.dprint(file.getAbsolutePath());
 
 		for (Figure fig : figs)
 			{
 				if (fig instanceof ClassFigure)
 					{
+						ClassFigure cfig = (ClassFigure) fig;
 
-						JavaGenerator.write(file.getAbsolutePath(),
-								((ClassFigure) fig).getData());
+						Util.dprint(cfig.getData().getDeclaration());
+
+						JavaGenerator.write(file.getAbsolutePath(), cfig.getData());
 					}
 			}
 
