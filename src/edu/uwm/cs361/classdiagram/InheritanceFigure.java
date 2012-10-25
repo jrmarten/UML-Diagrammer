@@ -1,14 +1,20 @@
 package edu.uwm.cs361.classdiagram;
 
+import static edu.uwm.cs361.Util.dprint;
+import static org.jhotdraw.draw.AttributeKeys.END_DECORATION;
+import static org.jhotdraw.draw.AttributeKeys.FONT_ITALIC;
+import static org.jhotdraw.draw.AttributeKeys.FONT_UNDERLINE;
+import static org.jhotdraw.draw.AttributeKeys.START_DECORATION;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_DASHES;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_WIDTH;
+
 import java.awt.Color;
 
 import org.jhotdraw.draw.connector.Connector;
 
 import edu.uwm.cs361.classdiagram.data.UMLClass;
 import edu.uwm.cs361.classdiagram.decorations.InheritenceDecoration;
-
-import static org.jhotdraw.draw.AttributeKeys.*;
-import static edu.uwm.cs361.Util.dprint;
 
 public class InheritanceFigure extends AssociationFigure
 {
@@ -56,5 +62,4 @@ public class InheritanceFigure extends AssociationFigure
 		UMLClass par = ((ClassFigure) end.getOwner()).getData();
 		child.removeSuperclass(par);
 	}
-
 }
