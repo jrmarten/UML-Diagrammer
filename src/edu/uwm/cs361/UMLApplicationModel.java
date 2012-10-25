@@ -70,6 +70,11 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		return JOptionPane.showInputDialog(getProjectResources().getString(id));
 	}
 
+	public static void error(String id, String title) {
+		JOptionPane.showMessageDialog(null, getProjectResources().getString(id),
+				title, JOptionPane.ERROR_MESSAGE);
+	}
+
 	// TODO: FINISH
 	@Override
 	public ActionMap createActionMap(Application a, @Nullable View v) {
