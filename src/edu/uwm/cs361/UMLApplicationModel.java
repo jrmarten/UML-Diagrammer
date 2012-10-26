@@ -155,6 +155,8 @@ public class UMLApplicationModel extends DefaultApplicationModel
 
 		ButtonFactory.addSelectionToolTo(tb, edit);
 
+		tb.addSeparator();
+
 		attributes = new HashMap<AttributeKey, Object>();
 		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
 		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
