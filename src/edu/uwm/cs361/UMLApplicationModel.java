@@ -6,6 +6,7 @@ import java.awt.event.ItemListener;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
@@ -18,6 +19,7 @@ import org.jhotdraw.app.DefaultMenuBuilder;
 import org.jhotdraw.app.MenuBuilder;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.ActionUtil;
+import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.DefaultDrawingEditor;
@@ -31,6 +33,7 @@ import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.gui.JFileURIChooser;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
+import org.jhotdraw.samples.pert.PertView;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -76,13 +79,20 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		JOptionPane.showMessageDialog(null, getProjectResources().getString(id),
 				title, JOptionPane.ERROR_MESSAGE);
 	}
+	
 
 	// TODO: FINISH
 	@Override
 	public ActionMap createActionMap(Application a, @Nullable View v) {
 		ActionMap m = super.createActionMap(a, v);
-		m.put(DebugSnapShotAction.ID, new DebugSnapShotAction(getSharedEditor()
-				.getActiveView()));
+		AbstractAction aa;
+		
+    m.put("view.toggleGrid", aa = new ToggleViewPropertyAction(a, v, UMLView.GRID_VISIBLE_PROPERTY));
+    getProjectResources().configureAction(aa, "view.toggleGrid");
+		
+//		DebugSnapShotAction debug = new DebugSnapShotAction ( getSharedEditor ( ).getActiveView() );
+//		getProjectResources().configureAction( debug, debug.ID);
+//		m.put(debug.ID, debug);
 		return m;
 
 	}
