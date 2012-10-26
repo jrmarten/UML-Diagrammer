@@ -36,6 +36,7 @@ import org.jhotdraw.geom.Insets2D;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 
+import edu.uwm.cs361.Util;
 import edu.uwm.cs361.action.AddAttributeAction;
 import edu.uwm.cs361.action.AddMethodAction;
 import edu.uwm.cs361.action.RemoveAttributeAction;
@@ -226,9 +227,9 @@ public class ClassFigure extends GraphicalCompositeFigure
 	@Override
 	public Collection<Action> getActions(Point2D.Double p) {
 		Collection<Action> col = new ArrayList<Action>();
-		col.add(new AddAttributeAction(this));
+		if (!( data instanceof UMLInterface)) col.add(new AddAttributeAction(this));
 		col.add(new AddMethodAction(this));
-		col.add(new RemoveAttributeAction(this));
+		if (!(data instanceof UMLInterface)) col.add(new RemoveAttributeAction(this));
 		col.add(new RemoveMethodAction(this));
 		return col;
 	}
@@ -345,12 +346,12 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 	@Override
 	public void read(DOMInput in) throws IOException {
+		dprint ( "Reading ClassFigure" );
+		
 		double x = in.getAttribute("x", 0d);
 		double y = in.getAttribute("y", 0d);
 		double w = in.getAttribute("w", 0d);
 		double h = in.getAttribute("h", 0d);
-
-		dprint ( toString ( ) );
 		
 		setBounds(new Point2D.Double(x, y), new Point2D.Double(x + w, y + h));
 
@@ -369,9 +370,10 @@ public class ClassFigure extends GraphicalCompositeFigure
 		
 		try
 			{
+				int i = 0;
 				while (true)
 					{
-						in.openElement("attribute");
+						in.openElement("attribute", i++);
 						String attr_sig = "";
 						attr_sig += in.getAttribute("access", "default") + " ";
 						attr_sig += (in.getAttribute("static", false)) ? "static " : "";
@@ -379,37 +381,59 @@ public class ClassFigure extends GraphicalCompositeFigure
 						attr_sig += in.getAttribute("name", "attr_name") + " ";
 						attr_sig += " : ";
 						attr_sig += in.getAttribute("type", "void*") + " ";// XXX:
-						proto.addAttribute(Attribute.Create(attr_sig));
+						
+						addAttribute ( Attribute.Create( attr_sig ) );
 						dprint ( attr_sig );
 						in.closeElement();
 					}
 			} catch (IOException e)
 			{
-				dprint ( "No attribute's left" );
 			}
-
+		
+		dprint ( in.getTagName() );
+		
 		try
 			{
+				int i = 0;
 				while (true)
 					{
-						in.openElement("method");
+						in.openElement("method", i++);
 						String meth_sig = "";
 						meth_sig += in.getAttribute("access", "default") + " ";
 						meth_sig += (in.getAttribute("static", false)) ? "static " : "";
 						meth_sig += (in.getAttribute("abstract", false)) ? "abstract " : "";
 						meth_sig += in.getAttribute("name", "meth_name") + " ";
+						
+						LinkedList<String> params = new LinkedList ( );
+						int n = 0;
+						int i_params = in.getElementCount("param");
+						while ( n < i_params )
+							{
+								in.openElement("param", n++);
+								String tmp = in.getAttribute("name", "");
+								if ( !tmp.equals("") ) continue;
+								params.add( tmp );
+							}
+						
+						meth_sig += "(" + Util.join( params, ", ") + ")";
+						
 						meth_sig += " : ";
 						meth_sig += in.getAttribute("type", "void*") + " "; // XXX:joke
 																																// :D
-						data.addMethod(Method.Create(meth_sig));
+						dprint ( meth_sig );
+						addMethod (meth_sig );
 						in.closeElement();
 					}
 			} catch (Exception e)
 			{
+				dprint ( "Methods are done" );
 			}
-
-
+		
+		dprint ( toString() );
+		
 		readAttributes(in);
+		
+		//update();
 		
 		in.closeElement();
 	}
@@ -443,6 +467,14 @@ public class ClassFigure extends GraphicalCompositeFigure
 				out.addAttribute("access", meth.getAccess().toString());
 				out.addAttribute("abstract", (meth.isAbstract()) ? "true" : "false");
 				out.addAttribute("static", (meth.isStatic()) ? "true" : "false");
+				
+				for ( String tmp : meth.getParameters() )
+					{
+						out.openElement( "param" );
+						out.addAttribute("name", tmp);
+						out.closeElement();
+					}
+				
 				out.closeElement();
 			}
 		out.closeElement();
@@ -496,9 +528,9 @@ public class ClassFigure extends GraphicalCompositeFigure
 	}
 
 	public String toString() {
-		String buffer = "" + hashCode();
+		String buffer =  "0x" + String.format("%x", hashCode ( ) ).toUpperCase();
 		buffer += "\n" + snapShot();
-
+		
 		return buffer;
 	}
 
