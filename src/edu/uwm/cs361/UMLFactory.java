@@ -16,9 +16,11 @@ import org.jhotdraw.xml.DefaultDOMFactory;
 import com.sun.org.apache.bcel.internal.classfile.Attribute;
 import com.sun.org.apache.bcel.internal.classfile.Method;
 
+import edu.uwm.cs361.classdiagram.AssociationFigure;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.InheritanceFigure;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
+import edu.uwm.cs361.classdiagram.decorations.InheritenceDecoration;
 
 //TODO: Change this stuff to be UML related instead of Pert related...
 public class UMLFactory extends DefaultDOMFactory
@@ -29,18 +31,20 @@ public class UMLFactory extends DefaultDOMFactory
 			{ UMLClass.class, "class" }, // for lack of a better tag currently
 			{ Method.class, "method" }, 
 			{ Attribute.class, "attribute" },
-			{ DependencyFigure.class, "dep" },
-			{ InheritanceFigure.class, "inherit" },
+			{ DependencyFigure.class, "depfigure" },
+			{ InheritanceFigure.class, "inheritfigure" },
 			{ ListFigure.class, "list" },
 			{ TextFigure.class, "text" },
 			{ GroupFigure.class, "g" },
 			{ TextAreaFigure.class, "ta" },
 			{ SeparatorLineFigure.class, "separator" },
-
+			{ AssociationFigure.class, "associationFigure" },
 			{ ChopRectangleConnector.class, "rectConnector" },
 			{ LocatorConnector.class, "locConnector" },
 			{ RelativeLocator.class, "relativeLocator" },
-			{ ArrowTip.class, "arrowTip" }						};
+			{ ArrowTip.class, "arrowTip" },					
+			{ InheritenceDecoration.class, "inheritancedec" }
+	};
 
 	/** Creates a new instance. */
 	public UMLFactory()
