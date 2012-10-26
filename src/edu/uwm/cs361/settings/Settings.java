@@ -57,14 +57,17 @@ public class Settings
 		return glob;
 	}
 	
+	
+	
+	private static final String home = System.getProperty("user.home");
+	private static final String sep = System.getProperty("file.seperator");
+	private static final String os = System.getProperty("os.name");
+	
 	static
 	{
 		getSettings();
 	}
 	
-	private static final String home = System.getProperty("user.home");
-	private static final String sep = System.getProperty("file.seperator");
-	private static final String os = System.getProperty("os.name");
 	
 	private static void getSettings ( )
 	{
