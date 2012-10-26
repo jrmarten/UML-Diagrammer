@@ -130,6 +130,9 @@ public class Attribute
 					return (Attribute) report("Invalid Modifier in Attribute Declaration: "
 							+ mod);
 			}
+		
+		if ( Keywords.keywordp( type ) )
+			return (Attribute) report ( "Invalid return type Attribute: " + type );
 
 		boolean let = false;
 		boolean sym = false;
