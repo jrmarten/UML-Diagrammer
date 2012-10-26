@@ -8,21 +8,21 @@ import org.jhotdraw.draw.decoration.AbstractLineDecoration;
 
 import edu.uwm.cs361.Util;
 
-public class InheritenceDecoration extends AbstractLineDecoration
+public class InheritanceDecoration extends AbstractLineDecoration
 {
 	private double	angle, outerRadius, innerRadius;
 
-	public InheritenceDecoration()
+	public InheritanceDecoration()
 	{
 		this(.35, 12, 11.3);
 	}
 
-	public InheritenceDecoration(double angle, double outer, double inner)
+	public InheritanceDecoration(double angle, double outer, double inner)
 	{
 		this(angle, outer, inner, false, false, false);
 	}
 
-	public InheritenceDecoration(double angle, double outer, double inner,
+	public InheritanceDecoration(double angle, double outer, double inner,
 			boolean isFilled, boolean isStroked, boolean isSolid)
 	{
 		super(isFilled, isStroked, isSolid);
@@ -73,11 +73,11 @@ public class InheritenceDecoration extends AbstractLineDecoration
 	}
 
 	@Override
-	public InheritenceDecoration clone ( )
+	public InheritanceDecoration clone ( )
 	{
 		try
 			{
-				return (InheritenceDecoration) super.clone();
+				return (InheritanceDecoration) super.clone();
 			} catch (CloneNotSupportedException e)
 			{
 				return null;

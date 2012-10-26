@@ -383,7 +383,7 @@ public class ConnectionTool extends AbstractTool {
     }
 
     /**
-     * This method allows subclasses to do perform additonal user interactions
+     * This method allows subclasses to do perform additional user interactions
      * after the new figure has been created.
      * The implementation of this class just invokes fireToolDone.
      */

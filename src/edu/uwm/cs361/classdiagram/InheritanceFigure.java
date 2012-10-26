@@ -15,18 +15,24 @@ import org.jhotdraw.draw.connector.Connector;
 
 import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
-import edu.uwm.cs361.classdiagram.decorations.InheritenceDecoration;
+import edu.uwm.cs361.classdiagram.decorations.InheritanceDecoration;
 
 public class InheritanceFigure extends AssociationFigure
 {
 
+	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 5339743993660576339L;
+
 	public InheritanceFigure()
 	{
-		set(STROKE_COLOR, new Color ( 0xFF0000 ) );
+		set(STROKE_COLOR, Color.red );
 		set(STROKE_WIDTH, 1d);
-		set(END_DECORATION, new InheritenceDecoration());
-		set(START_DECORATION, new InheritenceDecoration ( ) );
+		set(END_DECORATION, new InheritanceDecoration());
+		set(START_DECORATION, new InheritanceDecoration ( ) );
 		
+		setAttributeEnabled(STROKE_COLOR, false);
 		setAttributeEnabled(END_DECORATION, false);
 		setAttributeEnabled(START_DECORATION, false);
 		setAttributeEnabled(STROKE_DASHES, false);
@@ -47,7 +53,7 @@ public class InheritanceFigure extends AssociationFigure
 
 		boolean isSuper = UMLClass.isSuper(par, child);
 
-		dprint((isSuper) ? "Cannot have cyclic inheritence" : "");
+		dprint((isSuper) ? "Cannot have cyclic inheritance" : "");
 
 		return !isSuper;
 	}
