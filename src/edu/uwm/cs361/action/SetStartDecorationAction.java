@@ -6,8 +6,8 @@ import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.decoration.ArrowTip;
 
 import edu.uwm.cs361.UMLApplicationModel;
-import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.AssociationFigure;
+import edu.uwm.cs361.classdiagram.LineDecorationChooser;
 
 @SuppressWarnings("serial")
 public class SetStartDecorationAction extends AssociationFigureAction
@@ -22,9 +22,9 @@ public class SetStartDecorationAction extends AssociationFigureAction
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		
 		data.willChange();
+		LineDecorationChooser chooser = new LineDecorationChooser("start");
+		chooser.setVisible(true);
 		data.setAttributeEnabled(AttributeKeys.START_DECORATION, true);
 		data.set(AttributeKeys.START_DECORATION, new ArrowTip());
 		data.setAttributeEnabled(AttributeKeys.START_DECORATION, false);
