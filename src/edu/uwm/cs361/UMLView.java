@@ -4,18 +4,26 @@ import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.util.LinkedList;
 
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import org.jhotdraw.app.*;
+import org.jhotdraw.app.AbstractView;
 import org.jhotdraw.app.action.edit.RedoAction;
 import org.jhotdraw.app.action.edit.UndoAction;
 import org.jhotdraw.draw.DefaultDrawing;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DefaultDrawingView;
+import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.DrawingEditor;
+import org.jhotdraw.draw.io.DOMStorableInputOutputFormat;
+import org.jhotdraw.draw.io.ImageOutputFormat;
+import org.jhotdraw.draw.io.InputFormat;
+import org.jhotdraw.draw.io.OutputFormat;
 import org.jhotdraw.gui.PlacardScrollPaneLayout;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.undo.UndoRedoManager;
@@ -82,7 +90,18 @@ public class UMLView extends AbstractView
 	protected DefaultDrawing createDrawing ( )
 	{
 		DefaultDrawing drawing = new DefaultDrawing ( );
-		//io blah
+		DOMStorableInputOutputFormat ioFormat = 
+				new DOMStorableInputOutputFormat ( new UMLFactory ( ) );
+		
+		
+		LinkedList<InputFormat> inputFormats = new LinkedList<InputFormat>();
+    inputFormats.add(ioFormat);
+    drawing.setInputFormats(inputFormats);
+    LinkedList<OutputFormat> outputFormats = new LinkedList<OutputFormat>();
+    outputFormats.add(ioFormat);
+    outputFormats.add(new ImageOutputFormat());
+    drawing.setOutputFormats(outputFormats);
+		
 		return drawing;
 	}
 
@@ -98,18 +117,59 @@ public class UMLView extends AbstractView
 	}
 
 	@Override public void clear() {
-		// TODO Auto-generated method stub
+		 final Drawing newDrawing = createDrawing();
+     try {
+         SwingUtilities.invokeAndWait(new Runnable() {
 
+             @Override
+             public void run() {
+                 view.getDrawing().removeUndoableEditListener(undo);
+                 view.setDrawing(newDrawing);
+                 view.getDrawing().addUndoableEditListener(undo);
+                 undo.discardAllEdits();
+             }
+         });
+     } catch (InvocationTargetException ex) {
+         ex.printStackTrace();
+     } catch (InterruptedException ex) {
+         ex.printStackTrace();
+     }
 	}
 
 	@Override public void write(URI uri, @Nullable URIChooser chooser) throws IOException {
-		// TODO Auto-generated method stub
-
+		Drawing draw = view.getDrawing();
+		draw.getOutputFormats().get(0).write ( uri, draw );
 	}
 
 	@Override public void read(URI uri, @Nullable URIChooser chooser) throws IOException {
-		// TODO Auto-generated method stub
+		try
+			{
+				final Drawing draw = createDrawing();
+				draw.getInputFormats().get(0).read(uri, draw, true);
 
+				SwingUtilities.invokeAndWait(new Runnable()
+					{
+
+						@Override
+						public void run() {
+							view.getDrawing().removeUndoableEditListener( undo );
+							view.setDrawing(draw);
+              view.getDrawing().addUndoableEditListener(undo);
+              undo.discardAllEdits();
+						}
+
+					});
+			} catch (InterruptedException e)
+			{
+				InternalError error = new InternalError();
+				e.initCause(e);
+				throw error;
+			} catch (InvocationTargetException e)
+			{
+				InternalError error = new InternalError();
+				e.initCause(e);
+				throw error;
+			}
 	}
 
 	public DrawingEditor getEditor() {
