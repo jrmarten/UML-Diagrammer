@@ -35,6 +35,8 @@ public class InheritanceFigure extends AssociationFigure
 	public boolean canConnect(Connector start, Connector end) {
 		if (!(start.getOwner() instanceof ClassFigure && end.getOwner() instanceof ClassFigure))
 			return false;
+		if (start.getOwner() == end.getOwner())
+			return false;
 
 		UMLClass child = ((ClassFigure) start.getOwner()).getData();
 		UMLClass par = ((ClassFigure) end.getOwner()).getData();
