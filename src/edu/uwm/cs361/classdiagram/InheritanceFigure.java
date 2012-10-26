@@ -18,7 +18,6 @@ import org.jhotdraw.draw.decoration.ArrowTip;
 
 import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
-import edu.uwm.cs361.classdiagram.decorations.InheritanceDecoration;
 
 public class InheritanceFigure extends LineConnectionFigure
 {

@@ -20,7 +20,7 @@ import edu.uwm.cs361.classdiagram.AssociationFigure;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.InheritanceFigure;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
-import edu.uwm.cs361.classdiagram.decorations.InheritanceDecoration;
+
 
 //TODO: Change this stuff to be UML related instead of Pert related...
 public class UMLFactory extends DefaultDOMFactory
@@ -43,7 +43,6 @@ public class UMLFactory extends DefaultDOMFactory
 			{ LocatorConnector.class, "locConnector" },
 			{ RelativeLocator.class, "relativeLocator" },
 			{ ArrowTip.class, "arrowTip" },					
-			{ InheritanceDecoration.class, "inheritancedec" }
 	};
 
 	/** Creates a new instance. */
