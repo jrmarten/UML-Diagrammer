@@ -42,7 +42,9 @@ import java.util.*;
  */
 public class ConnectionTool extends AbstractTool {
 
-    /** FIXME - The ANCHOR_WIDTH value must be retrieved from the DrawingEditor */
+	private static final long	serialVersionUID	= -8275030954879482729L;
+	
+		/** FIXME - The ANCHOR_WIDTH value must be retrieved from the DrawingEditor */
     private final static int ANCHOR_WIDTH = 6;
     /**
      * Attributes to be applied to the created ConnectionFigure.
@@ -281,7 +283,12 @@ public class ConnectionTool extends AbstractTool {
             final Drawing addedDrawing = getDrawing();
             getDrawing().fireUndoableEditHappened(new AbstractUndoableEdit() {
 
-                @Override
+                /**
+							 * 
+							 */
+							private static final long	serialVersionUID	= -4492470426289240177L;
+
+								@Override
                 public String getPresentationName() {
                     return presentationName;
                 }

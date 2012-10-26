@@ -62,7 +62,8 @@ import org.jhotdraw.xml.DOMOutput;
  */
 public class BezierFigure extends AbstractAttributedFigure {
 
-    /**
+	private static final long	serialVersionUID	= 6715905982289346517L;
+		/**
      * The BezierPath.
      */
     protected BezierPath path;
@@ -657,7 +658,12 @@ public class BezierFigure extends AbstractAttributedFigure {
                 final BezierPath.Node newNode = getNode(index);
                 fireUndoableEditHappened(new AbstractUndoableEdit() {
 
-                    @Override
+                    /**
+									 * 
+									 */
+									private static final long	serialVersionUID	= 4063263448774832051L;
+
+										@Override
                     public String getPresentationName() {
                         ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
                         return labels.getString("edit.bezierPath.splitSegment.text");
