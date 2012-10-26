@@ -22,7 +22,6 @@ import edu.uwm.cs361.classdiagram.InheritanceFigure;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
 import edu.uwm.cs361.classdiagram.decorations.InheritanceDecoration;
 
-//TODO: Change this stuff to be UML related instead of Pert related...
 public class UMLFactory extends DefaultDOMFactory
 {
 	private final static Object[][]	classTagArray	= {
