@@ -21,3 +21,8 @@ Dependencies :
 Make Inheritance Decorations:
 	Make Inheritance look like Inheritance
 	
+Inheritance figure deletion :
+	when inheriting B class A should delete that figure
+	when trying to inherit class C.
+	
+	
