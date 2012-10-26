@@ -51,6 +51,8 @@ import edu.uwm.cs361.tool.SingleSelectionTool;
 public class UMLApplicationModel extends DefaultApplicationModel
 {
 
+	private static final long	serialVersionUID	= 5744235372635623155L;
+	
 	private DefaultDrawingEditor	sharedEditor;
 
 	public UMLApplicationModel()

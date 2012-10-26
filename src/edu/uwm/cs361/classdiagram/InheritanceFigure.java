@@ -11,13 +11,15 @@ import static org.jhotdraw.draw.AttributeKeys.STROKE_WIDTH;
 
 import java.awt.Color;
 
+import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.connector.Connector;
+
+import org.jhotdraw.draw.decoration.ArrowTip;
 
 import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
-import edu.uwm.cs361.classdiagram.decorations.InheritanceDecoration;
 
-public class InheritanceFigure extends AssociationFigure
+public class InheritanceFigure extends LineConnectionFigure
 {
 
 	/**
@@ -29,8 +31,8 @@ public class InheritanceFigure extends AssociationFigure
 	{
 		set(STROKE_COLOR, Color.red );
 		set(STROKE_WIDTH, 1d);
-		set(END_DECORATION, new InheritanceDecoration());
-		set(START_DECORATION, new InheritanceDecoration ( ) );
+		set(END_DECORATION, new ArrowTip(0.60, 20.0 , 20.0));
+		set(START_DECORATION, null);
 		
 		setAttributeEnabled(STROKE_COLOR, false);
 		setAttributeEnabled(END_DECORATION, false);
