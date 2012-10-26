@@ -29,9 +29,9 @@ public class InheritanceFigure extends LineConnectionFigure
 
 	public InheritanceFigure()
 	{
-		set(STROKE_COLOR, Color.red );
+		set(STROKE_COLOR, Color.black );
 		set(STROKE_WIDTH, 1d);
-		set(END_DECORATION, new ArrowTip(0.60, 20.0 , 20.0));
+		set(END_DECORATION, new ArrowTip(0.30, 20.0 , 20.0, false, true, false));
 		set(START_DECORATION, null);
 		
 		setAttributeEnabled(STROKE_COLOR, false);
