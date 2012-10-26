@@ -23,8 +23,9 @@ public class SetEndDecorationAction extends AssociationFigureAction
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		data.willChange();
-		Util.dprint("Clicked SetEndDecoration");
-		data.set(AttributeKeys.END_DECORATION, new ArrowTip(0.80, 20.0, 20.0));
+		data.setAttributeEnabled(AttributeKeys.END_DECORATION, true);
+		data.set(AttributeKeys.END_DECORATION, new ArrowTip());
+		data.setAttributeEnabled(AttributeKeys.END_DECORATION, false);
 		data.changed();
 	}
 }

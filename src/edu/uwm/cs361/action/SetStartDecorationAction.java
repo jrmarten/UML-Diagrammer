@@ -22,9 +22,12 @@ public class SetStartDecorationAction extends AssociationFigureAction
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
+		
 		data.willChange();
-		Util.dprint("Clicked SetStartDecoration");
-		data.set(AttributeKeys.START_DECORATION, new ArrowTip(0.80, 20.0, 20.0));
+		data.setAttributeEnabled(AttributeKeys.START_DECORATION, true);
+		data.set(AttributeKeys.START_DECORATION, new ArrowTip());
+		data.setAttributeEnabled(AttributeKeys.START_DECORATION, false);
 		data.changed();
 	}
 }
