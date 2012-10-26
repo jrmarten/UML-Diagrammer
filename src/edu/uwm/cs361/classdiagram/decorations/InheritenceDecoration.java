@@ -6,6 +6,8 @@ import java.awt.geom.Path2D.Double;
 import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.decoration.AbstractLineDecoration;
 
+import edu.uwm.cs361.Util;
+
 public class InheritenceDecoration extends AbstractLineDecoration
 {
 	private double	angle, outerRadius, innerRadius;
@@ -27,10 +29,15 @@ public class InheritenceDecoration extends AbstractLineDecoration
 		this.angle = angle;
 		innerRadius = inner;
 		outerRadius = outer;
+		
+		Util.dprint ( "Inheritance Decoration created" );
 	}
 
 	@Override
 	protected Double getDecoratorPath(Figure f) {
+		
+		Util.dprint( "Entered getDecoratorPath" );
+		
 		double offset = (isStroked()) ? 1 : 0;
 
 		Path2D.Double path = new Path2D.Double();
@@ -38,16 +45,16 @@ public class InheritenceDecoration extends AbstractLineDecoration
 		path.moveTo((outerRadius * Math.sin(-angle)),
 				(offset + outerRadius * Math.cos(-angle)));
 		path.lineTo(0, offset);
-		path.lineTo((outerRadius * Math.sin(angle)),
-				(offset + outerRadius * Math.cos(angle)));
-
-		path.moveTo((outerRadius * Math.sin(angle)),
-				(offset + outerRadius * Math.cos(angle)));
-
-		path.lineTo(0, offset + 2 * Math.sin(angle));
-
-		path.lineTo(outerRadius * Math.sin(-angle),
-				offset + outerRadius * Math.cos(-angle));
+//		path.lineTo((outerRadius * Math.sin(angle)),
+//				(offset + outerRadius * Math.cos(angle)));
+//
+//		path.moveTo((outerRadius * Math.sin(angle)),
+//				(offset + outerRadius * Math.cos(angle)));
+//
+//		path.lineTo(0, offset + 2 * Math.sin(angle));
+//
+//		path.lineTo(outerRadius * Math.sin(-angle),
+//				offset + outerRadius * Math.cos(-angle));
 
 		if (innerRadius != 0)
 			{
@@ -65,4 +72,16 @@ public class InheritenceDecoration extends AbstractLineDecoration
 		return innerRadius + offset;
 	}
 
+	@Override
+	public InheritenceDecoration clone ( )
+	{
+		try
+			{
+				return (InheritenceDecoration) super.clone();
+			} catch (CloneNotSupportedException e)
+			{
+				return null;
+			}
+	}
+	
 }

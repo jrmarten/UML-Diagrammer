@@ -13,6 +13,7 @@ import java.awt.Color;
 
 import org.jhotdraw.draw.connector.Connector;
 
+import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
 import edu.uwm.cs361.classdiagram.decorations.InheritenceDecoration;
 
@@ -21,15 +22,18 @@ public class InheritanceFigure extends AssociationFigure
 
 	public InheritanceFigure()
 	{
-		set(STROKE_COLOR, Color.BLUE);
+		set(STROKE_COLOR, new Color ( 0xFF0000 ) );
 		set(STROKE_WIDTH, 1d);
 		set(END_DECORATION, new InheritenceDecoration());
-
+		set(START_DECORATION, new InheritenceDecoration ( ) );
+		
 		setAttributeEnabled(END_DECORATION, false);
 		setAttributeEnabled(START_DECORATION, false);
 		setAttributeEnabled(STROKE_DASHES, false);
 		setAttributeEnabled(FONT_ITALIC, false);
 		setAttributeEnabled(FONT_UNDERLINE, false);
+		
+		Util.dprint( "Creating Inheritance" );
 	}
 
 	public boolean canConnect(Connector start, Connector end) {
@@ -56,7 +60,15 @@ public class InheritanceFigure extends AssociationFigure
 		UMLClass child = ((ClassFigure) start.getOwner()).getData();
 		UMLClass par = ((ClassFigure) end.getOwner()).getData();
 
+		Util.dprint( "Connecting" );
+		
 		child.addSuperclass(par);
+	}
+	
+	@Override
+	public int getLayer ( )
+	{
+		return 1;
 	}
 
 	protected void handleDisconnect(Connector start, Connector end) {

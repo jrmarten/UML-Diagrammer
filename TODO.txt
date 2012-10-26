@@ -15,9 +15,6 @@ feel free to put tasks up as you need them.
 Update MenuToolBars:
 	Update menu so that only one has focus at a time.
 	
-Dependencies :
-	handle dependencies at ClassFigure level.	
-	
 Make Inheritance Decorations:
 	Make Inheritance look like Inheritance
 	
