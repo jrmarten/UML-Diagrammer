@@ -247,6 +247,9 @@ public class UMLClass implements Serializable
 		if (par == null || child == null)
 			return false;
 
+		if (par == child)
+			return false;
+
 		for (UMLClass tmp : child.getSuperclasses())
 			{
 				if (tmp.equals(par))
@@ -316,6 +319,11 @@ public class UMLClass implements Serializable
 	public String getDeclaration() {
 		return ((abstractp) ? "abstract " : "") + "class " + getName()
 				+ getInheritence();
+	}
+	
+	public String getType ( )
+	{
+		return "class";
 	}
 
 	@Override

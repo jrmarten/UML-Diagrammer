@@ -52,4 +52,9 @@ public class UMLAbstractClass extends UMLClass
 		result.myInterfaces = (LinkedList<UMLClass>) myInterfaces.clone();
 		return result;
 	}
+	
+	public String getType ( )
+	{
+		return "abstract";
+	}
 }
