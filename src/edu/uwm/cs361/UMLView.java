@@ -73,8 +73,7 @@ public class UMLView extends AbstractView
 		scrollpane.setViewportView ( view );
 		setLayout( new BorderLayout( ) );
 		add ( scrollpane );
-
-
+		
 		scrollpane.setLayout(new PlacardScrollPaneLayout());
 		scrollpane.setBorder ( new EmptyBorder ( 0, 0, 0, 0 ));
 	}

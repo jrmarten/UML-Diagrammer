@@ -3,6 +3,7 @@ package edu.uwm.cs361;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -10,6 +11,7 @@ import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 
@@ -33,7 +35,6 @@ import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.gui.JFileURIChooser;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
-import org.jhotdraw.samples.pert.PertView;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
@@ -48,6 +49,7 @@ import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
 import edu.uwm.cs361.classdiagram.data.UMLInterface;
 import edu.uwm.cs361.sequencediagram.ActivationFigure;
 import edu.uwm.cs361.sequencediagram.LifelineFigure;
+import edu.uwm.cs361.settings.Settings;
 import edu.uwm.cs361.tool.ClickTool;
 import edu.uwm.cs361.tool.SingleSelectionTool;
 
@@ -89,10 +91,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		
     m.put("view.toggleGrid", aa = new ToggleViewPropertyAction(a, v, UMLView.GRID_VISIBLE_PROPERTY));
     getProjectResources().configureAction(aa, "view.toggleGrid");
-		
-//		DebugSnapShotAction debug = new DebugSnapShotAction ( getSharedEditor ( ).getActiveView() );
-//		getProjectResources().configureAction( debug, debug.ID);
-//		m.put(debug.ID, debug);
 		return m;
 
 	}
@@ -260,6 +258,42 @@ public class UMLApplicationModel extends DefaultApplicationModel
 
 	private static class UMLMenuBuilder extends DefaultMenuBuilder
 	{
+		
+		@Override
+		public void addLoadFileItems ( JMenu menu, Application app,
+				@Nullable View view )
+		{
+			//ActionMap am = app.getActionMap( view );
+			
+			JMenu sub = new JMenu ( "Load Template" );
+			
+			for ( File tmp : getTemplates() )
+				{
+					JMenuItem template = new JMenuItem ( );
+					template.setText( tmp.getName() );
+					
+					sub.add( template );
+				}
+			
+			menu.add( sub );
+		}
+		
+		public LinkedList<File> getTemplates ( )
+		{
+			LinkedList<File> templates = new LinkedList<File> ( );
+			Settings s = Settings.getGlobal();
+			String dir_name = s.getString("Template Directory", Settings.getProgDir() + "Templates" );
+			File templateDir = new File ( dir_name );
+			
+			if ( !templateDir.isDirectory() ) return templates;
+			
+			for ( File tmp : templateDir.listFiles() )
+				{
+					templates.add( tmp );
+				}
+			
+			return templates;
+		}
 
 		@Override
 		public void addOtherViewItems(JMenu menu, Application app,
@@ -268,6 +302,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 			JCheckBoxMenuItem check;
 			check = new JCheckBoxMenuItem(am.get("view.toggleGrid"));
 			ActionUtil.configureJCheckBoxMenuItem(check, am.get("view.toggleGrid"));
+			check.setText( getProjectResources().getString( "view.toggleGrid.text" ) );
 			menu.add(check);
 		}
 
