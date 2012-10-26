@@ -68,6 +68,12 @@ public class Method
 	public static Method Create(String str) {
 		if (str == null)
 			return null;
+		if ( str.trim().equals( "" ) )
+			return null;
+		
+		if ( !(str.contains("(") && str.contains(")") ) )
+			return null;
+		
 		if (str.contains(":"))
 			return fromUML(str);
 		else
@@ -146,6 +152,15 @@ public class Method
 					return (Method) report("Invalid Modifier in Method Declaration: "
 							+ mod);
 			}
+		
+		for ( String param_type : params )
+			{
+				if ( Keywords.reservedp( param_type ) )
+					return (Method) report ( "Invalid parameter type" );
+			}
+		
+		if ( Keywords.reservedp ( type ) )
+			return (Method) report ( "Invalid return type" );
 
 		boolean let = false;
 		boolean sym = false;
