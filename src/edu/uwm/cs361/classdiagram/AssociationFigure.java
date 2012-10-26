@@ -1,10 +1,26 @@
 package edu.uwm.cs361.classdiagram;
 
+import static org.jhotdraw.draw.AttributeKeys.END_DECORATION;
+import static org.jhotdraw.draw.AttributeKeys.FONT_ITALIC;
+import static org.jhotdraw.draw.AttributeKeys.FONT_UNDERLINE;
+import static org.jhotdraw.draw.AttributeKeys.START_DECORATION;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_DASHES;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_WIDTH;
+
+import java.awt.Color;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.swing.Action;
+
+import org.jhotdraw.draw.Drawing;
+import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.connector.Connector;
-import org.jhotdraw.draw.decoration.ArrowTip;
-import java.awt.*;
-import static org.jhotdraw.draw.AttributeKeys.*;
-import org.jhotdraw.draw.*;
+
+import edu.uwm.cs361.action.SetEndDecorationAction;
+import edu.uwm.cs361.action.SetStartDecorationAction;
 
 /**
  * AssociationFigure.
@@ -17,7 +33,8 @@ public class AssociationFigure extends LineConnectionFigure
 	{
 		set(STROKE_COLOR, new Color(0x000099));
 		set(STROKE_WIDTH, 1d);
-		set(END_DECORATION, new ArrowTip());
+		set(END_DECORATION, null);
+		set(START_DECORATION, null);
 
 		setAttributeEnabled(END_DECORATION, false);
 		setAttributeEnabled(START_DECORATION, false);
@@ -102,5 +119,13 @@ public class AssociationFigure extends LineConnectionFigure
 				((ClassFigure) getEndFigure()).removeDependency(this);
 			}
 		super.removeNotify(d);
+	}
+	
+	@Override
+	public Collection<Action> getActions(Point2D.Double p) {
+		Collection<Action> col = new ArrayList<Action>();
+		col.add(new SetStartDecorationAction(this));
+		col.add(new SetEndDecorationAction(this));
+		return col;
 	}
 }
