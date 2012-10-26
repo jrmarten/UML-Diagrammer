@@ -22,7 +22,3 @@ Inheritance figure deletion :
 	when inheriting B class A should delete that figure
 	when trying to inherit class C.
 	
-EXCEPTIONS TO HANDLE:
-    Add Method : when a user doesn't enter any text and hits ok
-    Remove Attribute/Method : when a user doesn't enter any text and hits ok
-    

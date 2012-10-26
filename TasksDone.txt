@@ -13,3 +13,8 @@ Clone in Interface: Max
 	when and if UMLInterface gets integrated clone must be implemented
 
 	
+	
+EXCEPTIONS TO HANDLE:Max
+    Add Method : when a user doesn't enter any text and hits ok
+    Remove Attribute/Method : when a user doesn't enter any text and hits ok
+    
