@@ -42,6 +42,7 @@ import edu.uwm.cs361.action.RemoveAttributeAction;
 import edu.uwm.cs361.action.RemoveMethodAction;
 import edu.uwm.cs361.classdiagram.data.Attribute;
 import edu.uwm.cs361.classdiagram.data.Method;
+import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
 import edu.uwm.cs361.classdiagram.data.UMLInterface;
 
@@ -307,18 +308,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 		addMethod(tmp);
 	}
 
-	public void x() {
-		dprint("\n");
-		dprint("Attribute List");
-		for (Figure x : attrList.getChildren())
-			{
-				if (x instanceof TextFigure)
-					{
-						dprint(((TextFigure) x).getText());
-					}
-			}
-	}
-
 	@Override
 	public int getLayer() {
 		return 0;
@@ -361,17 +350,28 @@ public class ClassFigure extends GraphicalCompositeFigure
 		double w = in.getAttribute("w", 0d);
 		double h = in.getAttribute("h", 0d);
 
+		dprint ( toString ( ) );
+		
 		setBounds(new Point2D.Double(x, y), new Point2D.Double(x + w, y + h));
 
-		readAttributes(in);
-
+		//readAttributes(in);
+		
 		in.openElement("class");
-		UMLClass umlclass = new UMLClass(in.getAttribute("name", "class"));
-
+		
+		UMLClass proto;
+		String type = in.getAttribute("type", "class");
+		proto = (type.equals("class")? new UMLClass ( ) : (type.equals("abstract"))?
+				new UMLAbstractClass ( ) : new UMLInterface ( ));
+		data = (UMLClass) proto.clone();
+		
+		data.setName( in.getAttribute ( "name", "Class") );
+		nameFig.set( AttributeKeys.TEXT, data.getName() );
+		
 		try
 			{
 				while (true)
 					{
+						in.openElement("attribute");
 						String attr_sig = "";
 						attr_sig += in.getAttribute("access", "default") + " ";
 						attr_sig += (in.getAttribute("static", false)) ? "static " : "";
@@ -379,16 +379,20 @@ public class ClassFigure extends GraphicalCompositeFigure
 						attr_sig += in.getAttribute("name", "attr_name") + " ";
 						attr_sig += " : ";
 						attr_sig += in.getAttribute("type", "void*") + " ";// XXX:
-						umlclass.addAttribute(Attribute.Create(attr_sig));
+						proto.addAttribute(Attribute.Create(attr_sig));
+						dprint ( attr_sig );
+						in.closeElement();
 					}
-			} catch (Exception e)
+			} catch (IOException e)
 			{
+				dprint ( "No attribute's left" );
 			}
 
 		try
 			{
 				while (true)
 					{
+						in.openElement("method");
 						String meth_sig = "";
 						meth_sig += in.getAttribute("access", "default") + " ";
 						meth_sig += (in.getAttribute("static", false)) ? "static " : "";
@@ -397,12 +401,17 @@ public class ClassFigure extends GraphicalCompositeFigure
 						meth_sig += " : ";
 						meth_sig += in.getAttribute("type", "void*") + " "; // XXX:joke
 																																// :D
-						umlclass.addMethod(Method.Create(meth_sig));
+						data.addMethod(Method.Create(meth_sig));
+						in.closeElement();
 					}
 			} catch (Exception e)
 			{
 			}
 
+
+		readAttributes(in);
+		
+		in.closeElement();
 	}
 
 	@Override
@@ -411,8 +420,11 @@ public class ClassFigure extends GraphicalCompositeFigure
 		out.addAttribute("x", r.x);
 		out.addAttribute("y", r.y);
 		writeAttributes(out);
+		
 		out.openElement("class");
 		out.addAttribute("name", data.getName());
+		out.addAttribute("type", data.getType());
+		
 		for (Attribute attr : data.getAttributes())
 			{
 				out.openElement("attribute");
@@ -421,6 +433,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 				out.addAttribute("access", attr.getAccess().toString());
 				out.addAttribute("final", (attr.isFinal()) ? "true" : "false");
 				out.addAttribute("static", (attr.isStatic()) ? "true" : "false");
+				out.closeElement();
 			}
 		for (Method meth : data.getMethods())
 			{
@@ -430,7 +443,9 @@ public class ClassFigure extends GraphicalCompositeFigure
 				out.addAttribute("access", meth.getAccess().toString());
 				out.addAttribute("abstract", (meth.isAbstract()) ? "true" : "false");
 				out.addAttribute("static", (meth.isStatic()) ? "true" : "false");
+				out.closeElement();
 			}
+		out.closeElement();
 	}
 
 	public void removeDependency(AssociationFigure fig) {
