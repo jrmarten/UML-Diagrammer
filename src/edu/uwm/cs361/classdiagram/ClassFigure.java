@@ -36,6 +36,7 @@ import org.jhotdraw.geom.Insets2D;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 
+import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.Util;
 import edu.uwm.cs361.action.AddAttributeAction;
 import edu.uwm.cs361.action.AddMethodAction;
@@ -261,9 +262,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 					
 					handles.add( new ConnectorHandle ( new LocatorConnector ( this, RelativeLocator.north()) ,
 							new InheritanceFigure( ) ));
-					// ConnectorHandle ch;
-					//handles.add(new ConnectorHandle(new LocatorConnector(this,
-					//		RelativeLocator.east()), new AssociationFigure()));
 				break;
 			}
 		return handles;
@@ -319,8 +317,11 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 	private void addMethod(Method meth) {
 		if (meth == null)
-			return; // throw an error popup
-
+			{
+				UMLApplicationModel.error( "error.Method.null", "Format Error" ) ;
+				return;
+			}
+		
 		data.addMethod(meth);
 
 		TextFigure tmpFig = new TextFigure();// createTextFigure(meth.toString());
@@ -407,7 +408,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 						meth_sig += (in.getAttribute("abstract", false)) ? "abstract " : "";
 						meth_sig += in.getAttribute("name", "meth_name") + " ";
 						
-						LinkedList<String> params = new LinkedList ( );
+						LinkedList<String> params = new LinkedList<String> ( );
 						int n = 0;
 						int i_params = in.getElementCount("param");
 						while ( n < i_params )
@@ -436,7 +437,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 		
 		readAttributes(in);
 		
-		//update();
+		update();
 		
 		in.closeElement();
 	}

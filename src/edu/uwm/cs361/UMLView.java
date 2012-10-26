@@ -33,6 +33,8 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 
 public class UMLView extends AbstractView
 {
+	public final static String GRID_VISIBLE_PROPERTY = "gridVisible";
+	
 	private JScrollPane scrollpane = new JScrollPane ( );
 	private DefaultDrawingView view = new DefaultDrawingView ( );
 	private DrawingEditor edit;
@@ -104,6 +106,18 @@ public class UMLView extends AbstractView
 		
 		return drawing;
 	}
+	
+	public boolean isGridVisible ( )
+	{
+		return view.isConstrainerVisible();
+	}
+	
+	public void setGridVisible(boolean newValue) {
+    boolean oldValue = isGridVisible();
+    view.setConstrainerVisible(newValue);
+    firePropertyChange(GRID_VISIBLE_PROPERTY, oldValue, newValue);
+    preferences.putBoolean("view.gridVisible", newValue);
+}
 
 	public boolean canSaveTo( URI uri )
 	{
