@@ -141,7 +141,6 @@ public class TestUMLClass
 		assertFalse(umlClass.getAttributes().contains(a));
 
 		assertTrue(umlClass.addAttribute(a));
-		assertTrue(umlClass.removeAttribute("size"));
 
 	}
 
