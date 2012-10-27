@@ -1,6 +1,7 @@
 package edu.uwm.cs361;
 
 import java.util.Iterator;
+import java.util.List;
 
 public class Util
 {
@@ -43,15 +44,32 @@ public class Util
 			}
 		return result;
 	}
+	
+	public static <T> boolean equals ( Iterable<T> a, Iterable<T> b )
+	{
+		Iterator<T> ait = a.iterator();
+		Iterator<T> bit = b.iterator();
+		
+		while ( bit.hasNext() && ait.hasNext() )
+			{
+				if (!ait.next().equals( bit.next() ) ) return false;
+			}
+		
+		return ! ( bit.hasNext() || ait.hasNext() );
+	}
 
 	public static Object report(String line) {
 		System.out.println(line);
 		return null;
+	}
+	
+	public static boolean isEmpty ( String str )
+	{
+		return str.trim().equals ( "" );
 	}
 
 	public static void dprint(String line, boolean debug) {
 		if (debug)
 			System.out.println(line);
 	}
-
 }
