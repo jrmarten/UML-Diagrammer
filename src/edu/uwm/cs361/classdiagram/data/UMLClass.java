@@ -130,17 +130,6 @@ public class UMLClass implements Serializable
 		return myAttributes.remove(oldAttribute);
 	}
 
-	public boolean removeAttribute(String attrname) {
-		if (attrname == null)
-			return false;
-		for (Attribute attr : myAttributes)
-			{
-				if (attr.getName().equals(attrname))
-					return myAttributes.remove(attr);
-			}
-		return false;
-	}
-
 	public Collection<Attribute> getAttributes() {
 		return myAttributes;
 	}

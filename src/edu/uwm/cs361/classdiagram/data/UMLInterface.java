@@ -28,11 +28,6 @@ public class UMLInterface extends UMLClass
 	}
 
 	@Override
-	public boolean removeAttribute(String str) {
-		return false;
-	}
-
-	@Override
 	public boolean addAssociation(UMLClass c) {
 		return false;
 	}
