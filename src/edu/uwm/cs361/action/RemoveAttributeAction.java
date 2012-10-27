@@ -17,7 +17,7 @@ public class RemoveAttributeAction extends ClassFigureAction
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		data.removeMethod(UMLApplicationModel.prompt(attribute_prompt));
+		data.removeAttribute(UMLApplicationModel.prompt(attribute_prompt));
 	}
 
 }
