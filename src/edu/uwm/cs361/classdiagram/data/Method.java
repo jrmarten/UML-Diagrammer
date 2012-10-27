@@ -108,6 +108,12 @@ public class Method
 
 		return filter(mods, type, name, params);
 	}
+	
+	public static String[] extractParams ( String str )
+	{
+		String list = parseModParam(str)[1];
+		return list.split(",");
+	}
 
 	private static Method fromSignature(String str) {
 
