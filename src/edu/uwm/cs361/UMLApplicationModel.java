@@ -270,7 +270,11 @@ public class UMLApplicationModel extends DefaultApplicationModel
 			for ( File tmp : getTemplates() )
 				{
 					JMenuItem template = new JMenuItem ( );
-					template.setText( tmp.getName() );
+					String filename = tmp.getName();
+					
+					if ( filename.contains(".") ) filename = filename.substring(0, filename.indexOf ( "." ) );
+					
+					template.setText( filename );
 					
 					sub.add( template );
 				}
@@ -282,7 +286,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		{
 			LinkedList<File> templates = new LinkedList<File> ( );
 			Settings s = Settings.getGlobal();
-			String dir_name = s.getString("Template Directory", Settings.getProgDir() + "Templates" );
+			String dir_name = s.getString("templateDir", Settings.getProgDir() + "Templates" );
 			File templateDir = new File ( dir_name );
 			
 			if ( !templateDir.isDirectory() ) return templates;
