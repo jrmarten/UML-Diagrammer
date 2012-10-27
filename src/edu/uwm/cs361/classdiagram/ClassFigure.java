@@ -12,6 +12,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -343,9 +344,123 @@ public class ClassFigure extends GraphicalCompositeFigure
 		changed();
 	}
 
-	public void removeMethod(String methtxt) {
-		Method meth = Method.Create(methtxt);
-		data.removeMethod(meth);
+	public void removeMethod(String methTxt) {
+		if ( methTxt == null ) return;
+		methTxt = methTxt.trim();
+		if ( Util.isEmpty ( methTxt ) )
+			{
+				UMLApplicationModel.error("edit.removeMethod.blankError", "Input Error");
+				return;
+			}
+		
+		boolean hasParams = ( methTxt.contains("(") && methTxt.contains(")") );
+		
+		if ( !methTxt.contains(" ") && !hasParams ) //just the name is present
+			{
+				Iterator<Method> it = data.getMethods().iterator();
+				while ( it.hasNext() )
+					{
+						Method meth = it.next();
+						if ( meth.getName().equals(methTxt) )
+							{
+								removeMethod ( meth );
+								it.remove();
+							}
+					}
+				return;
+			}
+		
+		if ( !hasParams ) return;
+		
+		
+		String name = methTxt.substring(0, methTxt.indexOf("(")).trim();
+		String[] list = Method.extractParams( methTxt );
+		List<String> params = new LinkedList<String> ( );
+		
+		for ( String param : list )
+			{
+				param = param.trim();
+				if ( params.equals( "" ) ) continue;
+				params.add ( param );
+			}
+		
+		Iterator<Method> it = data.getMethods().iterator();
+		while ( it.hasNext() )
+			{
+				Method meth = it.next();
+				
+				if ( meth.getName().equals( name ) 
+						&& Util.equals( params, meth.getParameters()))
+					{
+						removeMethod ( meth );
+						it.remove();
+					}
+					
+			}
+	}
+	
+	public void removeAttribute ( String attrTxt )
+	{
+		attrTxt = attrTxt.trim();
+		if ( Util.isEmpty( attrTxt ) ) return;
+		
+		if ( !attrTxt.contains( " " ) )
+			{
+				for ( Attribute attr : data.getAttributes() )
+					{
+						if ( attr.getName().equals(attrTxt) )
+							{
+								removeAttribute ( attr );
+								return;
+							}	
+					}
+			}
+		Attribute attr = Attribute.Create( attrTxt );
+		removeAttribute( attr );
+	}
+	
+	private void removeAttribute ( Attribute attr )
+	{
+		willChange();
+		data.removeAttribute( attr );
+		for ( int i = 0; i < attrList.getChildCount(); i++ )
+			{
+				Figure fig = attrList.getChild(i);
+				if ( fig instanceof TextFigure )
+					{
+						TextFigure tfig = (TextFigure) fig;
+						
+						if ( attr.toString().equals( tfig.getText() ) )
+							{
+								attrList.remove( tfig );
+								i--;
+							}
+					}
+			}
+		changed();
+		
+	}
+	
+	private void removeMethod ( Method meth )
+	{
+		willChange ( );
+		
+		for ( int i = 0; i < methodList.getChildCount(); i++ )
+			{
+				Figure fig = methodList.getChild( i );
+				if ( fig instanceof TextFigure )
+					{
+						TextFigure tfig = (TextFigure) fig;
+						
+						if ( meth.toString().equals( tfig.getText() ) )
+							{
+								methodList.remove ( tfig );
+								i--;
+							}
+					}
+			}
+		
+		changed();
 	}
 
 	@Override
@@ -358,8 +473,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 		double h = in.getAttribute("h", 0d);
 		
 		setBounds(new Point2D.Double(x, y), new Point2D.Double(x + w, y + h));
-
-		//readAttributes(in);
 		
 		in.openElement("class");
 		
@@ -372,74 +485,63 @@ public class ClassFigure extends GraphicalCompositeFigure
 		data.setName( in.getAttribute ( "name", "Class") );
 		nameFig.set( AttributeKeys.TEXT, data.getName() );
 		
-		try
+		int i = 0;
+		int max = in.getElementCount( "attribute" );
+		while ( i < max )
 			{
-				int i = 0;
-				while (true)
-					{
-						in.openElement("attribute", i++);
-						String attr_sig = "";
-						attr_sig += in.getAttribute("access", "default") + " ";
-						attr_sig += (in.getAttribute("static", false)) ? "static " : "";
-						attr_sig += (in.getAttribute("final", false)) ? "final " : "";
-						attr_sig += in.getAttribute("name", "attr_name") + " ";
-						attr_sig += " : ";
-						attr_sig += in.getAttribute("type", "void*") + " ";// XXX:
-						
-						addAttribute ( Attribute.Create( attr_sig ) );
-						dprint ( attr_sig );
-						in.closeElement();
-					}
-			} catch (IOException e)
-			{
+				in.openElement("attribute", i++);
+				String attr_sig = "";
+				attr_sig += in.getAttribute("access", "default") + " ";
+				attr_sig += (in.getAttribute("static", false)) ? "static " : "";
+				attr_sig += (in.getAttribute("final", false)) ? "final " : "";
+				attr_sig += in.getAttribute("name", "attr_name") + " ";
+				attr_sig += " : ";
+				attr_sig += in.getAttribute("type", "void*") + " ";// XXX:
+				
+				addAttribute ( Attribute.Create( attr_sig ) );
+				dprint ( attr_sig );
+				in.closeElement();
 			}
 		
-		dprint ( in.getTagName() );
-		
-		try
+		i = 0;
+		max = in.getElementCount( "method" );
+		while ( i < max )
 			{
-				int i = 0;
-				while (true)
+				in.openElement("method", i++);
+				String meth_sig = "";
+				meth_sig += in.getAttribute("access", "default") + " ";
+				meth_sig += (in.getAttribute("static", false)) ? "static " : "";
+				meth_sig += (in.getAttribute("abstract", false)) ? "abstract " : "";
+				meth_sig += in.getAttribute("type", "void*" ) + " ";
+				meth_sig += in.getAttribute("name", "meth_name") + " ";
+				
+				LinkedList<String> params = new LinkedList<String> ( );
+				int n = 0;
+				int i_params = in.getElementCount("param");
+				while ( n < i_params )
 					{
-						in.openElement("method", i++);
-						String meth_sig = "";
-						meth_sig += in.getAttribute("access", "default") + " ";
-						meth_sig += (in.getAttribute("static", false)) ? "static " : "";
-						meth_sig += (in.getAttribute("abstract", false)) ? "abstract " : "";
-						meth_sig += in.getAttribute("name", "meth_name") + " ";
-						
-						LinkedList<String> params = new LinkedList<String> ( );
-						int n = 0;
-						int i_params = in.getElementCount("param");
-						while ( n < i_params )
-							{
-								in.openElement("param", n++);
-								String tmp = in.getAttribute("name", "");
-								if ( !tmp.equals("") ) continue;
-								params.add( tmp );
-							}
-						
-						meth_sig += "(" + Util.join( params, ", ") + ")";
-						
-						meth_sig += " : ";
-						meth_sig += in.getAttribute("type", "void*") + " "; // XXX:joke
-																																// :D
-						dprint ( meth_sig );
-						addMethod (meth_sig );
+						in.openElement("param", n++);
+						String tmp = in.getAttribute("name", "");
+						if ( !tmp.equals("") )
+							params.add( tmp );
 						in.closeElement();
 					}
-			} catch (Exception e)
-			{
-				dprint ( "Methods are done" );
+				
+				meth_sig += "(" + Util.join( params, ", ") + ")";
+				dprint ( meth_sig );
+				addMethod (meth_sig );
+				in.closeElement();
 			}
 		
 		dprint ( toString() );
 		
 		readAttributes(in);
 		
+		in.closeElement();
+		
 		update();
 		
-		in.closeElement();
+		//in.closeElement();
 	}
 
 	@Override
