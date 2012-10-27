@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -21,6 +22,7 @@ import org.jhotdraw.app.DefaultMenuBuilder;
 import org.jhotdraw.app.MenuBuilder;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.ActionUtil;
+import org.jhotdraw.app.action.file.LoadRecentFileAction;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.AttributeKeys;
@@ -42,6 +44,7 @@ import edu.uwm.cs361.action.AddAttributeAction;
 import edu.uwm.cs361.action.AddMethodAction;
 import edu.uwm.cs361.action.DebugSnapShotAction;
 import edu.uwm.cs361.action.JavaGenerationAction;
+import edu.uwm.cs361.action.SaveTemplateAction;
 import edu.uwm.cs361.classdiagram.AssociationFigure;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.InheritanceFigure;
@@ -66,6 +69,11 @@ public class UMLApplicationModel extends DefaultApplicationModel
 
 	private static ResourceBundleUtil	projectLabels	= null;
 
+	public static String getProperty ( String id )
+	{
+		return getProjectResources().getString( id );
+	}
+	
 	public static ResourceBundleUtil getProjectResources() {
 		if (projectLabels == null)
 			projectLabels = ResourceBundleUtil.getBundle("edu.uwm.cs361.Labels");
@@ -75,6 +83,10 @@ public class UMLApplicationModel extends DefaultApplicationModel
 
 	public static String prompt(String id) {
 		return JOptionPane.showInputDialog(getProjectResources().getString(id));
+	}
+	
+	public static String prompt(String id, String title) {
+		return JOptionPane.showInputDialog(getProjectResources().getString(id), title);
 	}
 
 	public static void error(String id, String title) {
@@ -265,21 +277,35 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		{
 			//ActionMap am = app.getActionMap( view );
 			
-			JMenu sub = new JMenu ( "Load Template" );
+			JMenu sub = new JMenu ( getProperty ( "file.openTemplate.text" ) );
 			
 			for ( File tmp : getTemplates() )
 				{
 					JMenuItem template = new JMenuItem ( );
 					String filename = tmp.getName();
 					
-					if ( filename.contains(".") ) filename = filename.substring(0, filename.indexOf ( "." ) );
-					
-					template.setText( filename );
-					
-					sub.add( template );
+					if ( filename.endsWith(".xml"))
+						{
+							filename = filename.substring(0, filename.lastIndexOf( "." ) );
+							template.setText( filename );
+							URI uri = URI.create( "file://" + tmp.getAbsolutePath() );
+							template.addActionListener( new LoadRecentFileAction ( app, view, uri ) );
+							sub.add( template );
+						}
 				}
 			
 			menu.add( sub );
+		}
+		
+		public void addSaveFileItems ( JMenu menu, Application app,
+				@Nullable View view )
+		{
+			super.addSaveFileItems ( menu, app, view );
+			
+			JMenuItem template = new JMenuItem (  );
+			template.setText( getProperty ( "file.saveTemplate.text" ) );
+			template.addActionListener( new SaveTemplateAction ( app, view ) );
+			menu.add( template );
 		}
 		
 		public LinkedList<File> getTemplates ( )
