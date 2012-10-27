@@ -127,7 +127,8 @@ public class Settings
 	
 	public static String getProgDir ( )
 	{
-		return home + sep + ".uml-diagrammer" + sep;
+		String hide = (os.equalsIgnoreCase("linux") || os.equalsIgnoreCase("unix"))? ".":"";
+		return home + sep + hide + "uml-diagrammer" + sep;
 	}
 	
 	private static void setDefaultPreferences()
@@ -158,6 +159,6 @@ public class Settings
 	//defaults if no settings file on computer
 	private static String[][] defaults = 
 		{
-				{"templateDir", getProgDir() + "Templates" }	
+				{"templateDir", getProgDir() + "Templates/" }	
 		};
 }
