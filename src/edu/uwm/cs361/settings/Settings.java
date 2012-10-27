@@ -159,6 +159,6 @@ public class Settings
 	//defaults if no settings file on computer
 	private static String[][] defaults = 
 		{
-				{"templateDir", getProgDir() + "Templates/" }	
+				{"templateDir", getProgDir() + "Templates" + sep }	
 		};
 }
