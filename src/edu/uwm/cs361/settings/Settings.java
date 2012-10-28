@@ -127,8 +127,14 @@ public class Settings
 	
 	public static String getProgDir ( )
 	{
-		String hide = (os.equalsIgnoreCase("linux") || os.equalsIgnoreCase("unix"))? ".":"";
-		return home + sep + hide + "uml-diagrammer" + sep;
+		if ( Util.containsIgnoreCase ( os, "win" ) ) // if windows
+			{
+				return System.getenv( "LOACLAPPDATA") + "uml-diagrammer" + sep;
+			}
+		else //assume unix based
+			{
+				return home + sep + ".uml-diagrammer" + sep;
+			}
 	}
 	
 	private static void setDefaultPreferences()

@@ -1,6 +1,8 @@
 package edu.uwm.cs361;
 
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 public class Util
 {
@@ -70,5 +72,27 @@ public class Util
 	public static void dprint(String line, boolean debug) {
 		if (debug)
 			System.out.println(line);
+	}
+	
+	
+	//XXX:TEST!!!!
+	public static boolean containsIgnoreCase ( String full, String part )
+	{
+		int part_cur = 0;
+		for ( int full_cur = 0; full_cur < full.length(); full_cur++ )
+			{
+				char full_val = full.charAt ( full_cur );
+				
+				if ( equalsIgnoreCase ( full_val, part.charAt( part_cur ) ) ) part_cur++;
+				
+				if ( part_cur == part.length() ) return true;
+				
+			}
+		return false;
+	}
+	
+	private static boolean equalsIgnoreCase ( char a, char b )
+	{
+		return Character.toLowerCase(a) == Character.toLowerCase(b); 
 	}
 }
