@@ -129,7 +129,11 @@ public class Settings
 	{
 		if ( Util.containsIgnoreCase ( os, "win" ) ) // if windows
 			{
-				return System.getenv( "LOACLAPPDATA") + "uml-diagrammer" + sep;
+				String loc = System.getenv( "LOCALAPPDATA" );
+				if ( loc == null ) loc = System.getenv( "APPDATA" );
+				if ( loc == null ) loc = System.getenv( "HOMEPATH" );
+				
+				return loc + "uml-diagrammer" + sep;
 			}
 		else //assume unix based
 			{
