@@ -40,8 +40,6 @@ public class InheritanceFigure extends LineConnectionFigure
 		setAttributeEnabled(STROKE_DASHES, false);
 		setAttributeEnabled(FONT_ITALIC, false);
 		setAttributeEnabled(FONT_UNDERLINE, false);
-		
-		Util.dprint( "Creating Inheritance" );
 	}
 
 	public boolean canConnect(Connector start, Connector end) {
