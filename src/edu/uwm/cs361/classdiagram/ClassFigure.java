@@ -282,11 +282,10 @@ public class ClassFigure extends GraphicalCompositeFigure
 		TextFigure tmpFig;
 
 		boolean added = data.addAttribute(attr);
+		if ( !added ) return false;
 
-		String tmpText = attr.toString();
-		tmpText = (attr.isFinal()) ? tmpText.toUpperCase() : tmpText;
 		tmpFig = new TextFigure();
-		tmpFig.setText(tmpText);
+		tmpFig.setText(attr.toString());
 		if (attr.isStatic())
 			{
 				tmpFig.set(FONT_UNDERLINE, true);

@@ -12,7 +12,7 @@ public class Attribute
 	private boolean								finalp	= false;
 
 	private static final String[]	mods		= { "private", "-", "public", "+",
-			"default", "~", "protected", "#", "static", "final" };
+			"default", "~", "protected", "#", "static", "final", "s", "f" };
 
 	public Attribute()
 	{
@@ -49,6 +49,8 @@ public class Attribute
 							access = Access.fromString(perm);
 					}
 			}
+		if ( finalp )
+			this.name = this.name.toUpperCase();
 	}
 
 	public static Attribute Create(String str) {
