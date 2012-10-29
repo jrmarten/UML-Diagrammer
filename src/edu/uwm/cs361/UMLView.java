@@ -107,15 +107,12 @@ public class UMLView extends AbstractView
     outputFormats.add(new ImageOutputFormat());
     drawing.setOutputFormats(outputFormats);
     
-  	//older way
-//		Settings prefs = Settings.getGlobal();
-//		int back = prefs.getInt( "Background" , 0xFFFFFF );
-//		Color back_color = new Color ( back );
-//		drawing.set( AttributeKeys.CANVAS_FILL_COLOR, back_color );
-//		
-    //new way
     Style style = Style.get( "Drawing" );
     if ( style == null ) return drawing;
+    
+    int val = style.getInt( "selector-color", 0x000000);
+    drawing.set( AttributeKeys.STROKE_COLOR, new Color ( val ) );
+    drawing.setAttributeEnabled(AttributeKeys.STROKE_COLOR, false);
     
     
     int background_val = style.getInt( "background-color", 0xFFFFFF);
