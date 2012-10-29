@@ -1,0 +1,12 @@
+Just to remember what settings do
+and where they are in the code as to not forget them.
+
+templateDir: 
+	#			sets the directory for the templates
+	${code}		UMLApplicationModel.UMLMenuBuilder.getTemplates()
+	
+Background:
+	#			sets the background to to a integer value
+	${code}		UMLView.createDrawing( )
+	
+	
