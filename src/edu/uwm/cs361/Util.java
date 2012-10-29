@@ -12,10 +12,31 @@ public class Util
 	}
 
 	public static void dprint(String line) {
+		if ( !DEBUG ) return;
+		if ( line == null ) 
+			return;
 		if (line.equals(""))
 			return;
-		if (DEBUG)
-			System.out.println(line);
+		
+		System.out.println(line);
+	}
+	
+	public static void dprint ( Object o )
+	{
+		if ( ! DEBUG ) return;
+		if ( o == null )
+			System.out.println ( o );
+	}
+	
+	public static <T> void dprint ( Iterable<T> it )
+	{
+		if ( ! DEBUG ) return;
+		if ( it == null ) return;
+		
+		for ( T cur : it )
+			{
+				System.out.print( cur );
+			}
 	}
 
 	public static <E> void printIterable(Iterable<E> col) {
@@ -92,5 +113,15 @@ public class Util
 	private static boolean equalsIgnoreCase ( char a, char b )
 	{
 		return Character.toLowerCase(a) == Character.toLowerCase(b); 
+	}
+	
+	public static int countInstancesOf ( String str, char ch )
+	{
+		int i = 0;
+		for ( int n = 0; n < str.length(); n++ )
+			{
+				if ( str.charAt( n ) == ch ) i++;
+			}
+		return i;
 	}
 }
