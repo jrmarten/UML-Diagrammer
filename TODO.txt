@@ -22,3 +22,40 @@ Inheritance figure deletion :
 	when inheriting B class A should delete that figure
 	when trying to inherit class C.
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+:::::Possible Bugs:::::
+Creating diagram:
+
+When adding methods without type, throws significant number of exceptions, 
+should generate an error message similar to when you enter in nothing.
+
+
+Formatting from string to String in attributes and methods.
+
+
+Null pointer exception if creating inheritance without a correct end pointer to a valid class.
+
+Note: Creating new inheritance leaves extra pointer to be deleted by the user, otherwise it will result in null pointer exc.
+
+
+Changing the access modifier to an invalid digit or symbol in a METHOD results in :
+Class representation changed
+Invalid name in Method Declaration
+Can not rename
+... but it still renames the METHOD in diagram, however it does not generate any code or representation.
+Could it revert back to its old state? (I'll look into that).
+
+Window of text box fails to re-size when text is enlarged, not a big issue, just a window re-size (will update).
+
+
+
+
+
