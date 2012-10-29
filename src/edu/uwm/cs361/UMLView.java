@@ -32,6 +32,7 @@ import org.jhotdraw.undo.UndoRedoManager;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.uwm.cs361.settings.Settings;
+import edu.uwm.cs361.settings.Style;
 
 
 public class UMLView extends AbstractView
@@ -106,14 +107,21 @@ public class UMLView extends AbstractView
     outputFormats.add(new ImageOutputFormat());
     drawing.setOutputFormats(outputFormats);
     
-  	
-		Settings prefs = Settings.getGlobal();
-		int back = prefs.getInt( "Background" , 0xFFFFFF );
-		
-		Color back_color = new Color ( back );
-		
-		drawing.set( AttributeKeys.CANVAS_FILL_COLOR, back_color );
-		
+  	//older way
+//		Settings prefs = Settings.getGlobal();
+//		int back = prefs.getInt( "Background" , 0xFFFFFF );
+//		Color back_color = new Color ( back );
+//		drawing.set( AttributeKeys.CANVAS_FILL_COLOR, back_color );
+//		
+    //new way
+    Style style = Style.get( "Drawing" );
+    if ( style == null ) return drawing;
+    
+    
+    int background_val = style.getInt( "background-color", 0xFFFFFF);
+    Color background_color = new Color ( background_val );
+    drawing.set( AttributeKeys.CANVAS_FILL_COLOR, background_color );
+    
 		return drawing;
 	}
 	
