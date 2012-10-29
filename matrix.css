@@ -1,0 +1,24 @@
+
+
+ClassFigure
+{
+    background-color:0x000000;
+    forground-color:0x00FF00;
+    border-color:0x00FF00;
+}
+
+InheritanceFigure
+{
+    forground-color:0x00FF00;
+}
+
+AssociationFigure
+{
+    forground-color:0x00FF00;
+}
+
+Drawing
+{
+    background-color:0x000000;
+    selector-color:0x00FF00;
+}
