@@ -1,7 +1,11 @@
 package edu.uwm.cs361.settings;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.LinkedList;
+import java.util.Scanner;
+
+import edu.uwm.cs361.Util;
 
 public class Style extends Settings
 {
@@ -17,14 +21,11 @@ public class Style extends Settings
 		return selector;
 	}
 	
-	
-	public static Style getStyleObj ( String identifier )
+	@Override
+	public String toString ( )
 	{
-		
-		
-		return null;
+		return getName ( );
 	}
-	
 	
 	private static LinkedList<Style> styleMods = new LinkedList<Style> ( );
 	public static Style get ( String selector )
@@ -50,8 +51,74 @@ public class Style extends Settings
 		
 		if ( stylesheet.equals( "File not found") || !cssfile.exists() ) return;
 		
+		try
+			{
+				Scanner in = new Scanner ( cssfile );
+				String buffer = "";
+				String input = "";
+				
+				while ( in.hasNext() )
+					{
+						input = in.nextLine();
+						
+						
+						if ( Util.countInstancesOf(input, '}' ) == 1 )
+							{
+								if ( Util.countInstancesOf( buffer, '{' ) != 1 )
+									{
+										Util.dprint( "Stylesheet malformed" );
+										input = "";
+									}
+								buffer += input.substring ( 0, input.indexOf('}' ) + 1);
+								Style next = make ( buffer );
+								if ( next != null ) styleMods.add( next );
+								buffer = input.substring( input.indexOf('}') + 1);
+							}
+							
+						buffer += input;
+					}
+				
+				
+			} catch (FileNotFoundException e)
+			{
+				Util.dprint( "File not found: Stylesheet" );
+			}
 		
-		//more code to extract
-		// information in css fashion.
+		Util.dprint ( styleMods );
+	
+	}
+	
+	private static Style make ( String in )
+	{
+		if ( Util.countInstancesOf(in, '{') != 1 ) return null;
+		if ( Util.countInstancesOf(in, '}') != 1 ) return null;
+		
+		String name = in.substring( 0, in.indexOf ( '{' ) );
+		String def = in.substring( in.indexOf( '{' ) + 1, in.indexOf('}') );
+		
+		//User input correction
+		//can be dropped if performance suffers.
+		name.trim();
+		LinkedList<String> li = new LinkedList<String> ( );
+		for ( String tmp : name.split ( " " ) )
+			{
+				li.add( tmp );
+			}
+		name = Util.join( li, " ");
+		
+		Style ret = new Style ( name );
+		
+		String[] entries = def.split( ";" );
+		for ( String entry : entries )
+			{
+				String[] parts = entry.split( ":" );
+				if ( parts.length != 2 ) continue;
+				
+				String key = parts[0].trim();
+				String val = parts[1].trim();
+				
+				ret.set( key, val);
+			}
+		return ret;
 	}
 }
