@@ -44,9 +44,26 @@ public class Settings
 	public int getInt ( String key, int defaultVal )
 	{
 		String dat = props.get( key );
+		if ( dat == null || dat.length() == 0 ) return defaultVal; 
+		
+		int base = 0;
+		if ( dat.charAt( 0 ) == '0' )
+			{
+			if ( dat.length() > 2 && dat.charAt(1) == 'x' )
+				{
+					base = 16;
+					dat = dat.substring( 2 );
+				}
+			else
+				{
+					base = 8;
+					dat = dat.substring( 0 );
+				}
+			}
+		
 		int val = 0;
 		if ( dat == null ) val = defaultVal;
-		else val = Integer.parseInt( dat );
+		else val = Integer.parseInt( dat, base );
 		return val;
 	}
 	
@@ -100,6 +117,7 @@ public class Settings
 				while ( in.hasNext() )
 					{
 						input = in.nextLine();
+						if ( input.contains( "#" ) ) input.substring( input.indexOf( '#' ) ); 
 						
 						String[] entries = input.split(ENTRY_DELIM);
 						
