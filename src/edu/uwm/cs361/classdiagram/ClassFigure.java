@@ -5,8 +5,8 @@ import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
 import static org.jhotdraw.draw.AttributeKeys.FONT_BOLD;
 import static org.jhotdraw.draw.AttributeKeys.FONT_ITALIC;
 import static org.jhotdraw.draw.AttributeKeys.FONT_UNDERLINE;
-import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
 
+import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -48,6 +48,7 @@ import edu.uwm.cs361.classdiagram.data.Method;
 import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
 import edu.uwm.cs361.classdiagram.data.UMLInterface;
+import edu.uwm.cs361.settings.Style;
 
 @SuppressWarnings("serial")
 public class ClassFigure extends GraphicalCompositeFigure
@@ -61,6 +62,9 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 	private UMLClass					data;
 
+	private static Color forColor = Color.black;
+	private static Color backColor = Color.white;
+	
 	private class NameAdapter extends FigureAdapter
 	{
 		@Override
@@ -75,7 +79,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 			changed();
 		}
 	}
-
 	private abstract class SimpleAdapter extends FigureAdapter
 	{
 		protected abstract boolean add(String n);
@@ -109,7 +112,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 				}
 		}
 	}
-
 	private class AttributeAdapter extends SimpleAdapter
 	{
 		@Override
@@ -132,7 +134,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 		}
 
 	}
-
 	private class MethodAdapter extends SimpleAdapter
 	{
 		@Override
@@ -156,28 +157,35 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 	}
 
+	
+	
 	public ClassFigure()
 	{
 		this(new UMLClass());
 	}
-
 	public ClassFigure(UMLClass proto)
 	{
 		super(new RectangleFigure());
 
 		data = (UMLClass) proto.clone();
 		setLayouter(new VerticalLayouter());
-
-		container.set(STROKE_COLOR, null);
-		container.setAttributeEnabled(STROKE_COLOR, false);
-		container.set(FILL_COLOR, null);
-		container.setAttributeEnabled(FILL_COLOR, false);
+		
 		ListFigure nameList = new ListFigure(container);
 		ListFigure attrList = new ListFigure();
 		ListFigure methodList = new ListFigure();
 		SeparatorLineFigure separator1 = new SeparatorLineFigure();
 		SeparatorLineFigure separator2 = new SeparatorLineFigure();
 
+		container.set(FILL_COLOR, backColor );
+		container.setAttributeEnabled(FILL_COLOR, false);
+		container.set(AttributeKeys.TEXT_COLOR, forColor );
+		container.setAttributeEnabled(AttributeKeys.TEXT_COLOR, false);
+		
+		set( AttributeKeys.FILL_COLOR, backColor );
+		nameList.set( AttributeKeys.FILL_COLOR, backColor );
+		attrList.set( AttributeKeys.FILL_COLOR, backColor );
+		methodList.set( AttributeKeys.FILL_COLOR, backColor );
+		
 		add(nameList);
 		if (!(data instanceof UMLInterface))
 			{
@@ -192,7 +200,9 @@ public class ClassFigure extends GraphicalCompositeFigure
 		attrList.set(LAYOUT_INSETS, insets);
 		methodList.set(LAYOUT_INSETS, insets);
 
-		nameFig = createTextFigure("Class");
+		nameFig = new TextFigure ( "Class" );//createTextFigure("Class");
+		nameFig.set( AttributeKeys.FILL_COLOR, backColor );
+		nameFig.set( AttributeKeys.TEXT_COLOR, forColor );
 		if (data.isAbstractClass())
 			{
 				nameFig.set(FONT_ITALIC, true);
@@ -200,6 +210,33 @@ public class ClassFigure extends GraphicalCompositeFigure
 			}
 		nameFig.addFigureListener(new NameAdapter());
 		nameList.add(nameFig);
+	}
+	
+	static { readConfig( ); }
+	
+	private static void readConfig( )
+	{
+		Style style = Style.get( "ClassFigure" );
+		if ( style == null ) return;
+		
+		
+		forColor = getColor ( style.getInt( "forground-color", -1) );
+		Util.dprint( "ClassFigure.forground-color: " + forColor );
+		backColor = getColor ( style.getInt( "background-color", -1) );
+		Util.dprint( "ClassFigure.background-color: " + backColor );
+		
+//		
+//		color = getColor ( style.getInt( "background-color", -1) );
+//		container.set(FILL_COLOR, null);
+//		container.setAttributeEnabled(FILL_COLOR, false);
+//		Util.dprint( "ClassFigure.background-color: " + color );
+		
+	}
+	
+	private static Color getColor ( int val )
+	{
+		if ( val == -1 ) return null;
+		return new Color ( val );
 	}
 
 	public void update() {
@@ -286,6 +323,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 		tmpFig = new TextFigure();
 		tmpFig.setText(attr.toString());
+		tmpFig.set( AttributeKeys.TEXT_COLOR, forColor );
 		if (attr.isStatic())
 			{
 				tmpFig.set(FONT_UNDERLINE, true);
@@ -330,6 +368,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 			tmpFig.set(FONT_UNDERLINE, true);
 		if (meth.isAbstract())
 			tmpFig.set(FONT_ITALIC, true);
+		tmpFig.set( AttributeKeys.TEXT_COLOR, forColor );
 		tmpFig.addFigureListener(new MethodAdapter());
 
 		willChange();
