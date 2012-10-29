@@ -19,8 +19,10 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.connector.Connector;
 
+import edu.uwm.cs361.Util;
 import edu.uwm.cs361.action.SetEndDecorationAction;
 import edu.uwm.cs361.action.SetStartDecorationAction;
+import edu.uwm.cs361.settings.Style;
 
 /**
  * AssociationFigure.
@@ -28,19 +30,34 @@ import edu.uwm.cs361.action.SetStartDecorationAction;
 public class AssociationFigure extends LineConnectionFigure
 {
 
+	private static Color for_color = Color.black;
+	
 	/** Creates a new instance. */
 	public AssociationFigure()
 	{
-		set(STROKE_COLOR, new Color(0x000099));
+		set(STROKE_COLOR, for_color);
 		set(STROKE_WIDTH, 1d);
 		set(END_DECORATION, null);
 		set(START_DECORATION, null);
 
+		setAttributeEnabled(STROKE_COLOR, false);
 		setAttributeEnabled(END_DECORATION, false);
 		setAttributeEnabled(START_DECORATION, false);
 		setAttributeEnabled(STROKE_DASHES, false);
 		setAttributeEnabled(FONT_ITALIC, false);
 		setAttributeEnabled(FONT_UNDERLINE, false);
+	}
+	
+	static { config(); }
+	private static void config ( )
+	{
+		Style s = Style.get( "AssociationFigure" );
+		if ( s == null ) return;
+		
+		int val = s.getInt( "forground-color", -1);
+		if ( val != -1 ) for_color = new Color ( val );
+		
+		Util.dprint( "AssociationFigure.forground-color:" + for_color );
 	}
 
 	/**
