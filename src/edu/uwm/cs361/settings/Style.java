@@ -61,6 +61,12 @@ public class Style extends Settings
 					{
 						input = in.nextLine();
 						
+						if ( input.contains( "//" ) )
+							{
+								input = input.substring ( 0, input.indexOf( "//" ) );
+							}
+						
+						
 						if ( Util.countInstancesOf(input, '}' ) == 1 )
 							{
 								if ( Util.countInstancesOf( buffer, '{' ) != 1 )
@@ -99,8 +105,6 @@ public class Style extends Settings
 		String name = in.substring( 0, in.indexOf ( '{' ) );
 		String def = in.substring( in.indexOf( '{' ) + 1, in.indexOf('}') );
 		
-		//User input correction
-		//can be dropped if performance suffers.
 		name.trim();
 		LinkedList<String> li = new LinkedList<String> ( );
 		for ( String tmp : name.split ( " " ) )
