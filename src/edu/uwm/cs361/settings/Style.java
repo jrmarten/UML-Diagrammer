@@ -61,7 +61,6 @@ public class Style extends Settings
 					{
 						input = in.nextLine();
 						
-						
 						if ( Util.countInstancesOf(input, '}' ) == 1 )
 							{
 								if ( Util.countInstancesOf( buffer, '{' ) != 1 )
@@ -74,8 +73,8 @@ public class Style extends Settings
 								if ( next != null ) styleMods.add( next );
 								buffer = input.substring( input.indexOf('}') + 1);
 							}
-							
-						buffer += input;
+						else
+							buffer += input;
 					}
 				
 				
@@ -90,8 +89,12 @@ public class Style extends Settings
 	
 	private static Style make ( String in )
 	{
-		if ( Util.countInstancesOf(in, '{') != 1 ) return null;
-		if ( Util.countInstancesOf(in, '}') != 1 ) return null;
+		if ( Util.countInstancesOf(in, '{') != 1 ) 
+			return (Style) Util.report ( "Error Style definintion: " + in ) ;
+		if ( Util.countInstancesOf(in, '}') != 1 ) 
+			return (Style) Util.report ( "Error Style definintion: " + in );
+		
+		Util.dprint( "Sytle works: " + in );
 		
 		String name = in.substring( 0, in.indexOf ( '{' ) );
 		String def = in.substring( in.indexOf( '{' ) + 1, in.indexOf('}') );
