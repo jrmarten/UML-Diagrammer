@@ -1,6 +1,7 @@
 package edu.uwm.cs361;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import javax.swing.border.EmptyBorder;
 import org.jhotdraw.app.AbstractView;
 import org.jhotdraw.app.action.edit.RedoAction;
 import org.jhotdraw.app.action.edit.UndoAction;
+import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.DefaultDrawing;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DefaultDrawingView;
@@ -29,6 +31,7 @@ import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.undo.UndoRedoManager;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
+import edu.uwm.cs361.settings.Settings;
 
 
 public class UMLView extends AbstractView
@@ -102,6 +105,14 @@ public class UMLView extends AbstractView
     outputFormats.add(ioFormat);
     outputFormats.add(new ImageOutputFormat());
     drawing.setOutputFormats(outputFormats);
+    
+  	
+		Settings prefs = Settings.getGlobal();
+		int back = prefs.getInt( "Background" , 0xFFFFFF );
+		
+		Color back_color = new Color ( back );
+		
+		drawing.set( AttributeKeys.CANVAS_FILL_COLOR, back_color );
 		
 		return drawing;
 	}
