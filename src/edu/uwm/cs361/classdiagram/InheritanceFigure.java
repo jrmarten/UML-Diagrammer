@@ -13,11 +13,11 @@ import java.awt.Color;
 
 import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.connector.Connector;
-
 import org.jhotdraw.draw.decoration.ArrowTip;
 
 import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
+import edu.uwm.cs361.settings.Style;
 
 public class InheritanceFigure extends LineConnectionFigure
 {
@@ -27,9 +27,11 @@ public class InheritanceFigure extends LineConnectionFigure
 	 */
 	private static final long	serialVersionUID	= 5339743993660576339L;
 
+	private static Color for_color = Color.black;
+	
 	public InheritanceFigure()
 	{
-		set(STROKE_COLOR, Color.black );
+		set(STROKE_COLOR, for_color );
 		set(STROKE_WIDTH, 1d);
 		set(END_DECORATION, new ArrowTip(0.60, 20.0 , 16.5, false, true, false));
 		set(START_DECORATION, null);
@@ -42,6 +44,19 @@ public class InheritanceFigure extends LineConnectionFigure
 		setAttributeEnabled(FONT_UNDERLINE, false);
 	}
 
+	static { config(); }
+	private static void config ( )
+	{
+		Style s = Style.get( "InheritanceFigure" );
+		if ( s == null ) return;
+		
+		int val = s.getInt ( "forground-color", -1 );
+		if ( val != -1 )
+			{
+				for_color = new Color ( val );
+			}
+	}
+	
 	public boolean canConnect(Connector start, Connector end) {
 		if (!(start.getOwner() instanceof ClassFigure && end.getOwner() instanceof ClassFigure))
 			return false;
