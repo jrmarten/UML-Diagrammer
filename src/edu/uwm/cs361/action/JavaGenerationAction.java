@@ -7,7 +7,6 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
 
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
@@ -27,12 +26,7 @@ public class JavaGenerationAction extends AbstractAction
 		data = view;
 	}
 
-	public void actionPerformed(ActionEvent e) {
-
-		// Util.dprint("To Be Implemented");
-		// if (Util.debug())
-		// return;
-
+	public void actionPerformed(ActionEvent e) { 
 		List<Figure> figs = data.getDrawing().getFiguresFrontToBack();
 
 		JFileURIChooser c = new JFileURIChooser();
