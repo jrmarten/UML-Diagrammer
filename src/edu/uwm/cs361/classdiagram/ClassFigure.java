@@ -64,6 +64,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 	private static Color forColor = Color.black;
 	private static Color backColor = Color.white;
+	private static Color stroke_color = Color.black;
 	
 	private class NameAdapter extends FigureAdapter
 	{
@@ -174,17 +175,18 @@ public class ClassFigure extends GraphicalCompositeFigure
 		ListFigure attrList = new ListFigure();
 		ListFigure methodList = new ListFigure();
 		SeparatorLineFigure separator1 = new SeparatorLineFigure();
+		separator1.set( AttributeKeys.STROKE_COLOR, stroke_color);
 		SeparatorLineFigure separator2 = new SeparatorLineFigure();
+		separator2.set( AttributeKeys.STROKE_COLOR, stroke_color);
 
 		container.set(FILL_COLOR, backColor );
 		container.setAttributeEnabled(FILL_COLOR, false);
-		container.set(AttributeKeys.TEXT_COLOR, forColor );
-		container.setAttributeEnabled(AttributeKeys.TEXT_COLOR, false);
 		
 		set( AttributeKeys.FILL_COLOR, backColor );
-		nameList.set( AttributeKeys.FILL_COLOR, backColor );
-		attrList.set( AttributeKeys.FILL_COLOR, backColor );
-		methodList.set( AttributeKeys.FILL_COLOR, backColor );
+		setAttributeEnabled ( AttributeKeys.FILL_COLOR, false );
+		set( AttributeKeys.STROKE_COLOR, stroke_color );
+		setAttributeEnabled ( AttributeKeys.STROKE_COLOR, false );
+		
 		
 		add(nameList);
 		if (!(data instanceof UMLInterface))
@@ -203,6 +205,8 @@ public class ClassFigure extends GraphicalCompositeFigure
 		nameFig = new TextFigure ( "Class" );//createTextFigure("Class");
 		nameFig.set( AttributeKeys.FILL_COLOR, backColor );
 		nameFig.set( AttributeKeys.TEXT_COLOR, forColor );
+		nameFig.set( AttributeKeys.STROKE_COLOR, null);
+		
 		if (data.isAbstractClass())
 			{
 				nameFig.set(FONT_ITALIC, true);
@@ -224,7 +228,8 @@ public class ClassFigure extends GraphicalCompositeFigure
 		Util.dprint( "ClassFigure.forground-color: " + forColor );
 		backColor = getColor ( style.getInt( "background-color", -1) );
 		Util.dprint( "ClassFigure.background-color: " + backColor );
-		
+		stroke_color = getColor ( style.getInt( "border-color", -1) );
+		Util.dprint( "ClassFigure.border-color: " + stroke_color );
 //		
 //		color = getColor ( style.getInt( "background-color", -1) );
 //		container.set(FILL_COLOR, null);
@@ -251,12 +256,15 @@ public class ClassFigure extends GraphicalCompositeFigure
 		add(nameList);
 
 		SeparatorLineFigure sep1 = new SeparatorLineFigure();
+		sep1.set( AttributeKeys.STROKE_COLOR, forColor);
 		SeparatorLineFigure sep2 = new SeparatorLineFigure();
+		sep2.set( AttributeKeys.STROKE_COLOR, forColor);
 
 		if (!(data instanceof UMLInterface))
 			{
 				add(sep1);
 				add(attrList);
+				
 			}
 		add(sep2);
 		add(methodList);
