@@ -125,10 +125,16 @@ public class Method
 		int index = mods.length - 1;
 
 		String name = mods[index];
-		String type = mods[index - 1];
-
-		mods[index] = "";
-		mods[index - 1] = "";
+		mods [ index ] = "";
+		String type;
+		if ( mods.length > 1 ) 
+			{
+				type = mods[index - 1];
+				mods[index - 1] = "";
+			}
+		else type = "void";
+		
+		//could check the type if access is given but type is not.
 
 		Access a = Access.fromSymbol(name.charAt(0));
 		if (a != null)
