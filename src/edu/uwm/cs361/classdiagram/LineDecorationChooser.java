@@ -1,16 +1,13 @@
 package edu.uwm.cs361.classdiagram;
 
-import java.awt.GridLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JRadioButton;
-import javax.swing.WindowConstants;
+import java.awt.*;
+import java.awt.event.*;
 
-public class LineDecorationChooser extends JFrame{
-	
+import javax.swing.*;
+
+public class LineDecorationChooser extends JFrame implements ActionListener
+{
+
 	private static final long	serialVersionUID	= 553854446330611986L;
 
 	public LineDecorationChooser(String startOrEnd)
@@ -18,43 +15,72 @@ public class LineDecorationChooser extends JFrame{
 		super();
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setSize(200, 200);
-		setLayout(new GridLayout(0,2));
+		setLayout(new BorderLayout(10, 10));
 		addComponents(startOrEnd);
 	}
 
 	private void addComponents(String startOrEnd) {
+		JLabel instructions, blank;
 		JRadioButton composition, aggregation, arrow;
-		JLabel instructions = new JLabel("Select the " + startOrEnd + " decoration:");
-		JButton ok = new JButton("Ok");
-		JButton cancel = new JButton("Cancel");
+		JButton ok, cancel;
+
+		instructions = new JLabel("Select the " + startOrEnd + " decoration:");
+		blank = new JLabel("");
+
 		composition = new JRadioButton("Compostion");
 		aggregation = new JRadioButton("Aggregation");
 		arrow = new JRadioButton("Arrow-Tip");
+
+		ok = new JButton("Ok");
+		cancel = new JButton("Cancel");
+		ok.setActionCommand("ok");
+		cancel.setActionCommand("cancel");
+		ok.addActionListener(this);
+		cancel.addActionListener(this);		
+
 		ButtonGroup group = new ButtonGroup();
 		group.add(composition);
 		group.add(aggregation);
-		group.add(arrow);new JLabel(createImageIcon("/edu/uwm/cs361/images/tmpButton.png", "Composition"));
-		add(instructions);
-		add(new JLabel(""));
-		add(composition);
-		add(new JLabel(createImageIcon("/edu/uwm/cs361/images/tmpButton.png", "Composition")));
-		add(aggregation);
-		add(new JLabel(createImageIcon("/edu/uwm/cs361/images/tmpButton.png", "Composition")));
-		add(arrow);
-		add(new JLabel(createImageIcon("/edu/uwm/cs361/images/tmpButton.png", "Composition")));
-		add(ok);
-		add(cancel);
+		group.add(arrow);
+
+		JPanel items = new JPanel();
+		items.setLayout(new GridLayout(0, 2));
+		items.add(composition);
+		items.add(new JLabel(createImageIcon("/edu/uwm/cs361/images/compositionDecoration.png",
+						"Composition")));
+		items.add(aggregation);
+		items.add(new JLabel(createImageIcon("/edu/uwm/cs361/images/aggregationDecoration.png",
+						"Aggregation")));
+		items.add(arrow);
+		items.add(new JLabel(createImageIcon("/edu/uwm/cs361/images/arrowTipDecoration.png",
+						"Arrow")));
+		items.add(ok, BorderLayout.PAGE_END);
+		items.add(cancel, BorderLayout.PAGE_END);
+
+		add(instructions, BorderLayout.PAGE_START);
+		add(blank, BorderLayout.LINE_START);
+		add(items, BorderLayout.CENTER);
+		add(blank, BorderLayout.LINE_END);
 	}
-	
+
+	public void actionPerformed(ActionEvent e) {
+		String ac = e.getActionCommand();
+		if (ac.equals("ok") || ac.equals("cancel")) {
+			if (ac.equals("ok")) System.out.println("You clicked ok!");
+			if (ac.equals("cancel")) System.out.println("You clicked cancel.");
+		}
+	}
+
 	/** Returns an ImageIcon, or null if the path was invalid. */
-	protected ImageIcon createImageIcon(String path,
-	                                           String description) {
-	    java.net.URL imgURL = getClass().getResource(path);
-	    if (imgURL != null) {
-	        return new ImageIcon(imgURL, description);
-	    } else {
-	        System.err.println("Couldn't find file: " + path);
-	        return null;
-	    }
+	protected ImageIcon createImageIcon(String path, String description) {
+		java.net.URL imgURL = getClass().getResource(path);
+		if (imgURL != null)
+			{
+				return new ImageIcon(imgURL, description);
+			} else
+				{
+					System.err.println("Couldn't find file: " + path);
+					return null;
+				}
 	}
 }
