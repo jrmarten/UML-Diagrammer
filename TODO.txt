@@ -38,8 +38,8 @@ When adding methods without type, throws significant number of exceptions,
 should generate an error message similar to when you enter in nothing.
 
 
-Formatting from string to String in attributes and methods.
-
+Formatting from string to String in attributes and methods. (METHOD line 128)
+ 
 
 Null pointer exception if creating inheritance without a correct end pointer to a valid class.
 
@@ -54,6 +54,8 @@ Can not rename
 Could it revert back to its old state? (I'll look into that).
 
 Window of text box fails to re-size when text is enlarged, not a big issue, just a window re-size (will update).
+
+Duplicate does not work from the right click menu, only creates a new empty class.  Copy and pasting the class works, however.
 
 
 
