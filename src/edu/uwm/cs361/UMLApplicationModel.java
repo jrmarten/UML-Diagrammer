@@ -1,8 +1,6 @@
 package edu.uwm.cs361;
 
 import java.awt.Color;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
 import java.net.URI;
 import java.util.HashMap;
@@ -33,7 +31,6 @@ import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.draw.tool.ConnectionTool;
 import org.jhotdraw.draw.tool.CreationTool;
 import org.jhotdraw.draw.tool.TextAreaCreationTool;
-import org.jhotdraw.draw.tool.Tool;
 import org.jhotdraw.gui.JFileURIChooser;
 import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
@@ -267,34 +264,35 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		c.addChoosableFileFilter(new ExtensionFileFilter("UML Diagram", "xml"));
 		return c;
 	}
-
+	
 	private static class UMLMenuBuilder extends DefaultMenuBuilder
 	{
+		
+		private JMenu templateButtons;
 		
 		@Override
 		public void addLoadFileItems ( JMenu menu, Application app,
 				@Nullable View view )
 		{
-			//ActionMap am = app.getActionMap( view );
-			
-			JMenu sub = new JMenu ( getProperty ( "file.openTemplate.text" ) );
+			templateButtons = new JMenu ( getProperty ( "file.openTemplate.text" ) );
 			
 			for ( File tmp : getTemplates() )
 				{
 					JMenuItem template = new JMenuItem ( );
 					String filename = tmp.getName();
 					
-					if ( filename.endsWith(".xml"))
-						{
-							filename = filename.substring(0, filename.lastIndexOf( "." ) );
-							template.setText( filename );
-							URI uri = URI.create( "file://" + tmp.getAbsolutePath() );
-							template.addActionListener( new LoadRecentFileAction ( app, view, uri ) );
-							sub.add( template );
-						}
+					URI uri = URI.create( "file://" + tmp.getAbsolutePath() ); //get ( tmp.getAbsolutePath() );
+					if ( uri == null ) continue;
+					
+					if ( filename.endsWith ( ".xml" ) ) 
+						filename = filename.substring(0, filename.indexOf( ".xml" ));
+
+					template.setText( filename );
+					template.addActionListener ( new LoadRecentFileAction ( app, view, uri ) );
+					templateButtons.add( template );
 				}
 			
-			menu.add( sub );
+			menu.add( templateButtons );
 		}
 		
 		public void addSaveFileItems ( JMenu menu, Application app,
@@ -304,8 +302,28 @@ public class UMLApplicationModel extends DefaultApplicationModel
 			
 			JMenuItem template = new JMenuItem (  );
 			template.setText( getProperty ( "file.saveTemplate.text" ) );
-			template.addActionListener( new SaveTemplateAction ( app, view ) );
+			template.addActionListener( new SaveTemplateActionMod ( app, view ) );
 			menu.add( template );
+		}
+		
+		private class SaveTemplateActionMod extends SaveTemplateAction 
+		{
+			public SaveTemplateActionMod(Application app, View view)
+			{
+				super(app, view);
+			}
+
+			@Override
+			protected void end_hook ( )
+			{
+				File newF = new File ( uri.getPath() );			
+				JMenuItem template = new JMenuItem ( );
+				String tmpTxt = newF.getName();
+				tmpTxt = tmpTxt.substring ( 0, tmpTxt.indexOf( ".xml" ) );
+				template.setText( tmpTxt );
+				template.addActionListener( new LoadRecentFileAction ( a, v, uri ) );
+				templateButtons.add( template );
+			}
 		}
 		
 		public LinkedList<File> getTemplates ( )
@@ -319,7 +337,8 @@ public class UMLApplicationModel extends DefaultApplicationModel
 			
 			for ( File tmp : templateDir.listFiles() )
 				{
-					templates.add( tmp );
+					if ( tmp.getName().endsWith( ".xml" ) ) //filtering for xml
+						templates.add( tmp );
 				}
 			
 			return templates;
@@ -336,26 +355,5 @@ public class UMLApplicationModel extends DefaultApplicationModel
 			menu.add(check);
 		}
 
-	}
-
-	private static class ToolButtonListener implements ItemListener
-	{
-
-		private Tool					tool;
-		private DrawingEditor	editor;
-
-		public ToolButtonListener(Tool t, DrawingEditor e)
-		{
-			tool = t;
-			editor = e;
-		}
-
-		@Override
-		public void itemStateChanged(ItemEvent e) {
-			if (e.getStateChange() == ItemEvent.SELECTED)
-				{
-					editor.setTool(tool);
-				}
-		}
 	}
 }
