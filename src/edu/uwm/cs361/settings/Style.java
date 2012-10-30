@@ -65,6 +65,18 @@ public class Style extends Settings
 							{
 								input = input.substring ( 0, input.indexOf( "//" ) );
 							}
+						if ( input.contains( "/*") )
+							{
+								input = input.substring( 0, input.indexOf ( "/*" ) );
+								String xinput = input.substring( input.indexOf("/*") + 1);
+								
+								while ( !xinput.contains( "*/" ) )
+									{
+										xinput = in.nextLine();
+									}
+								
+								input = xinput.substring( input.indexOf( "*/" ) + 3);
+							}
 						
 						
 						if ( Util.countInstancesOf(input, '}' ) == 1 )
