@@ -92,11 +92,14 @@ public class Settings
 	
 	//operating dependent code
 	
-	private static String home = System.getProperty("user.home");
-	private static String sep = System.getProperty("file.separator");
-	private static String os = System.getProperty("os.name");
+	private final static String home = System.getProperty("user.home");
+	private final static String sep = System.getProperty("file.separator");
+	private final static String os = System.getProperty("os.name");
 	
-	
+	public static String getFileSeparator ( )
+	{
+		return sep;
+	}
 	
 	private static void getSettings ( )
 	{
