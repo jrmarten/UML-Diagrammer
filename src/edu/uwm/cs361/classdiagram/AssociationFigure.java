@@ -50,7 +50,7 @@ public class AssociationFigure extends LineConnectionFigure
 	static { config(); }
 	private static void config ( )
 	{
-		Style s = Style.get( "AssociationFigure" );
+		Style s = Style.get( "Association" );
 		if ( s == null ) return;
 		
 		for_color = s.getColor( "forground-color", Color.black);

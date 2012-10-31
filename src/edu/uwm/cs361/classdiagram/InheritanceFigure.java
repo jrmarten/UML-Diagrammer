@@ -49,7 +49,7 @@ public class InheritanceFigure extends LineConnectionFigure
 	static { config(); }
 	private static void config ( )
 	{
-		Style s = Style.get( "InheritanceFigure" );
+		Style s = Style.get( "Inheritance" );
 		if ( s == null ) return;
 		
 		for_color = s.getColor( "forground-color" , null);

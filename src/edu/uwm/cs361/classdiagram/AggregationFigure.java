@@ -12,7 +12,6 @@ import java.awt.Color;
 
 import org.jhotdraw.draw.decoration.ArrowTip;
 
-import edu.uwm.cs361.Util;
 import edu.uwm.cs361.settings.Style;
 
 public class AggregationFigure extends AssociationFigure {
@@ -36,7 +35,7 @@ public class AggregationFigure extends AssociationFigure {
   static { config(); }
 	private static void config ( )
 	{
-		Style s = Style.get( "AssociationFigure" );
+		Style s = Style.get( "Aggregation" );
 		if ( s == null ) return;
 		
 		for_color = s.getColor( "forground-color", Color.black);
