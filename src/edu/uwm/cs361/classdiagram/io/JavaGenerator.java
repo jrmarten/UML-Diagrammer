@@ -45,7 +45,6 @@ public class JavaGenerator
 		for (String line : lines)
 			{
 				tab_count += -count(line, '}');
-
 				fout.println(get_indent() + line.trim());
 				tab_count += (count(line, '{'));
 			}
