@@ -2,7 +2,6 @@ package edu.uwm.cs361.classdiagram;
 
 import static edu.uwm.cs361.Util.dprint;
 import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
-import static org.jhotdraw.draw.AttributeKeys.FONT_BOLD;
 import static org.jhotdraw.draw.AttributeKeys.FONT_ITALIC;
 import static org.jhotdraw.draw.AttributeKeys.FONT_UNDERLINE;
 
@@ -54,111 +53,27 @@ import edu.uwm.cs361.settings.Style;
 public class ClassFigure extends GraphicalCompositeFigure
 {
 
-	protected ListFigure			nameList		= new ListFigure();
+	protected ListFigure			nameList;
 	protected TextFigure			nameFig;
 	protected ListFigure			attrList		= new ListFigure();
 	protected ListFigure			methodList	= new ListFigure();
 	protected RectangleFigure	container		= new RectangleFigure();
-
+	
+	protected SeparatorLineFigure sep1 = new SeparatorLineFigure();
+	protected SeparatorLineFigure sep2 = new SeparatorLineFigure();
 	private UMLClass					data;
 
-	private static Color forColor = Color.black;
-	private static Color backColor = Color.white;
-	private static Color stroke_color = Color.black;
+	private static class ColorSet 
+	{
+		public Color for_color 			= Color.black,
+									back_color 		= Color.white,
+									stroke_color 	= Color.black;
+		} 
 	
-	private class NameAdapter extends FigureAdapter
-	{
-		@Override
-		public void attributeChanged(FigureEvent e) {
-			willChange();
-			if (e.getAttribute() == AttributeKeys.TEXT)
-				{
-					data.setName(e.getNewValue().toString());
-					nameFig.setText(e.getNewValue().toString());
-					nameFig.invalidate();
-				}
-			changed();
-		}
-	}
-	private abstract class SimpleAdapter extends FigureAdapter
-	{
-		protected abstract boolean add(String n);
-
-		protected abstract boolean rename(String old, String n);
-
-		protected abstract boolean remove(String old);
-
-		@Override
-		public void attributeChanged(FigureEvent evt) {
-			String n = (String) evt.getNewValue();
-			String old = (String) evt.getOldValue();
-
-			dprint("Class representation changed");
-
-			if (((String) evt.getNewValue()).trim().equals(""))
-				{
-					dprint((remove(old)) ? "removing element" : "Cannot remove element");
-				}
-			if (evt.getOldValue().equals(""))
-				{
-					dprint("Source is "
-							+ ((evt.getSource() instanceof ListFigure) ? "" : "not ")
-							+ "a ListFigure");
-					boolean added = add(n);
-					dprint((added) ? "" : "Can not add new Attribute");
-					dprint((added) ? "" : "New: " + n + "\nOld: " + old);
-				} else
-				{
-					dprint((rename(old, n)) ? "" : "Can not rename");
-				}
-		}
-	}
-	private class AttributeAdapter extends SimpleAdapter
-	{
-		@Override
-		protected boolean add(String n) {
-			Attribute attr = Attribute.Create(n);
-			return data.addAttribute(attr);
-		}
-
-		@Override
-		protected boolean rename(String old, String n) {
-			Attribute newAttr = Attribute.Create(n);
-			Attribute oldAttr = Attribute.Create(old);
-			return data.removeAttribute(oldAttr) && data.addAttribute(newAttr);
-		}
-
-		@Override
-		protected boolean remove(String old) {
-			Attribute attr = Attribute.Create(old);
-			return data.removeAttribute(attr);
-		}
-
-	}
-	private class MethodAdapter extends SimpleAdapter
-	{
-		@Override
-		protected boolean add(String n) {
-			Method meth = Method.Create(n);
-			return data.addMethod(meth);
-		}
-
-		@Override
-		protected boolean rename(String old, String n) {
-			Method newMeth = Method.Create(n);
-			Method oldMeth = Method.Create(old);
-			return data.removeMethod(oldMeth) && data.addMethod(newMeth);
-		}
-
-		@Override
-		protected boolean remove(String old) {
-			Method meth = Method.Create(old);
-			return data.removeMethod(meth);
-		}
-
-	}
-
-	
+	private static ColorSet CLASSCOLORS = new ColorSet ( );
+	private static ColorSet ABSTRACTCOLORS = new ColorSet ( );
+	private static ColorSet INTERFACECOLORS = new ColorSet ( );
+	private ColorSet _colors;
 	
 	public ClassFigure()
 	{
@@ -171,30 +86,22 @@ public class ClassFigure extends GraphicalCompositeFigure
 		data = (UMLClass) proto.clone();
 		setLayouter(new VerticalLayouter());
 		
-		ListFigure nameList = new ListFigure(container);
-		ListFigure attrList = new ListFigure();
-		ListFigure methodList = new ListFigure();
-		SeparatorLineFigure separator1 = new SeparatorLineFigure();
-		separator1.set( AttributeKeys.STROKE_COLOR, stroke_color);
-		SeparatorLineFigure separator2 = new SeparatorLineFigure();
-		separator2.set( AttributeKeys.STROKE_COLOR, stroke_color);
-
-		container.set(FILL_COLOR, backColor );
-		container.setAttributeEnabled(FILL_COLOR, false);
+		nameList = new ListFigure(container);
+		nameFig = new TextFigure ( "Class" );
 		
-		set( AttributeKeys.FILL_COLOR, backColor );
-		setAttributeEnabled ( AttributeKeys.FILL_COLOR, false );
-		set( AttributeKeys.STROKE_COLOR, stroke_color );
-		setAttributeEnabled ( AttributeKeys.STROKE_COLOR, false );
+		if ( data instanceof UMLAbstractClass )	_colors = ABSTRACTCOLORS;
+		else if ( data instanceof UMLInterface)	_colors = INTERFACECOLORS;
+		else 																			_colors = CLASSCOLORS;
 		
+		setColors ( _colors );
 		
 		add(nameList);
 		if (!(data instanceof UMLInterface))
 			{
-				add(separator1);
+				add(sep1);
 				add(attrList);
 			}
-		add(separator2);
+		add(sep2);
 		add(methodList);
 
 		Insets2D.Double insets = new Insets2D.Double(4, 8, 4, 8);
@@ -202,10 +109,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 		attrList.set(LAYOUT_INSETS, insets);
 		methodList.set(LAYOUT_INSETS, insets);
 
-		nameFig = new TextFigure ( "Class" );//createTextFigure("Class");
-		nameFig.set( AttributeKeys.FILL_COLOR, backColor );
-		nameFig.set( AttributeKeys.TEXT_COLOR, forColor );
-		nameFig.set( AttributeKeys.STROKE_COLOR, null);
+		
 		
 		if (data.isAbstractClass())
 			{
@@ -216,43 +120,65 @@ public class ClassFigure extends GraphicalCompositeFigure
 		nameList.add(nameFig);
 	}
 	
-	static { readConfig( ); }
 	
+	private void setColors ( ColorSet colors )
+	{
+		
+		sep1.set( AttributeKeys.STROKE_COLOR, colors.stroke_color);
+		sep2.set( AttributeKeys.STROKE_COLOR, colors.stroke_color);
+		
+		container.set(FILL_COLOR, colors.back_color );
+		container.setAttributeEnabled(FILL_COLOR, false);
+		
+		set( AttributeKeys.FILL_COLOR, colors.back_color );
+		setAttributeEnabled ( AttributeKeys.FILL_COLOR, false );
+		set( AttributeKeys.STROKE_COLOR, colors.stroke_color );
+		setAttributeEnabled ( AttributeKeys.STROKE_COLOR, false );
+		nameFig = new TextFigure ( "Class" );
+		nameFig.set( AttributeKeys.FILL_COLOR, colors.back_color );
+		nameFig.set( AttributeKeys.TEXT_COLOR, colors.for_color );
+	}
+	
+	static { readConfig( ); }
 	private static void readConfig( )
 	{
-		Style style = Style.get( "ClassFigure" );
-		if ( style == null ) return;
+		Style class_style = Style.get( "Class" );
+		Style abstract_style = Style.get( "AbstractClass" );
+		Style interface_style = Style.get( "Interface" );
 		
-		forColor = style.getColor( "forground-color", null);
-		backColor = style.getColor( "background-color", null);
-		stroke_color = style.getColor ( "border-color", null );
-	}
-
-	public void update() {
-		removeAllChildren();
-
-		if (data.isAbstract())
-			nameFig.set(FONT_ITALIC, true);
-		nameFig.addFigureListener(new NameAdapter());
-
-		nameList.removeAllChildren();
-		nameList.add(nameFig);
-		add(nameList);
-
-		SeparatorLineFigure sep1 = new SeparatorLineFigure();
-		sep1.set( AttributeKeys.STROKE_COLOR, forColor);
-		SeparatorLineFigure sep2 = new SeparatorLineFigure();
-		sep2.set( AttributeKeys.STROKE_COLOR, forColor);
-
-		if (!(data instanceof UMLInterface))
+		if ( class_style != null )
 			{
-				add(sep1);
-				add(attrList);
-				
+				CLASSCOLORS.for_color = class_style.getColor( "forground-color", Color.black );
+				CLASSCOLORS.back_color = class_style.getColor( "background-color", Color.white );
+				CLASSCOLORS.stroke_color = class_style.getColor( "border-color", Color.black );
 			}
-		add(sep2);
-		add(methodList);
-
+		
+		if ( abstract_style != null )
+			{
+				ABSTRACTCOLORS.for_color = abstract_style.getColor( "forground-color", CLASSCOLORS.for_color );
+				ABSTRACTCOLORS.back_color = abstract_style.getColor( "background-color", CLASSCOLORS.back_color );
+				ABSTRACTCOLORS.stroke_color = abstract_style.getColor( "border-color", CLASSCOLORS.stroke_color );
+			}
+		else
+			{
+				ABSTRACTCOLORS.for_color = CLASSCOLORS.for_color;
+				ABSTRACTCOLORS.back_color = CLASSCOLORS.back_color;
+				ABSTRACTCOLORS.stroke_color = CLASSCOLORS.stroke_color;
+			}
+		
+		if ( interface_style != null )
+			{
+				INTERFACECOLORS.for_color = interface_style.getColor( "forground-color", CLASSCOLORS.for_color );
+				INTERFACECOLORS.back_color = interface_style.getColor( "background-color", CLASSCOLORS.back_color );
+				INTERFACECOLORS.stroke_color = interface_style.getColor( "border-color", CLASSCOLORS.stroke_color );
+			}
+		else
+			{
+				INTERFACECOLORS.for_color = CLASSCOLORS.for_color;
+				INTERFACECOLORS.back_color = CLASSCOLORS.back_color;
+				INTERFACECOLORS.stroke_color = CLASSCOLORS.stroke_color;
+			}
+		
 	}
 
 	@Override
@@ -263,14 +189,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 		if (!(data instanceof UMLInterface)) col.add(new RemoveAttributeAction(this));
 		col.add(new RemoveMethodAction(this));
 		return col;
-	}
-
-	private static TextFigure createTextFigure(String text) {
-		TextFigure result = new TextFigure();
-		result.setText(text);
-		result.set(FONT_BOLD, true);
-		result.setAttributeEnabled(FONT_BOLD, false);
-		return result;
 	}
 
 	@Override
@@ -315,17 +233,16 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 		tmpFig = new TextFigure();
 		tmpFig.setText(attr.toString());
-		tmpFig.set( AttributeKeys.TEXT_COLOR, forColor );
+		tmpFig.set( AttributeKeys.TEXT_COLOR, _colors.for_color );
 		if (attr.isStatic())
 			{
 				tmpFig.set(FONT_UNDERLINE, true);
 				tmpFig.setAttributeEnabled(FONT_UNDERLINE, false);
 			}
-		tmpFig.addFigureListener(new AttributeAdapter());
+		tmpFig.addFigureListener(new AttributeAdapter(tmpFig));
 
 		willChange();
 		boolean added_fig = attrList.add(tmpFig);
-		update();
 		changed();
 
 		dprint(tmpFig.getText());
@@ -360,8 +277,8 @@ public class ClassFigure extends GraphicalCompositeFigure
 			tmpFig.set(FONT_UNDERLINE, true);
 		if (meth.isAbstract())
 			tmpFig.set(FONT_ITALIC, true);
-		tmpFig.set( AttributeKeys.TEXT_COLOR, forColor );
-		tmpFig.addFigureListener(new MethodAdapter());
+		tmpFig.set( AttributeKeys.TEXT_COLOR, _colors.for_color );
+		tmpFig.addFigureListener(new MethodAdapter(tmpFig));
 
 		willChange();
 		methodList.add(tmpFig);
@@ -370,7 +287,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 			{
 				nameFig.set(FONT_ITALIC, true);
 			}
-		update();
+		//update();
 		changed();
 	}
 
@@ -569,7 +486,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 		
 		in.closeElement();
 		
-		update();
+		//update();
 		
 		//in.closeElement();
 	}
@@ -679,5 +596,117 @@ public class ClassFigure extends GraphicalCompositeFigure
 		ClassFigure fig = new ClassFigure((UMLClass) data.clone());
 
 		return fig;
+	}
+	
+	
+	
+	
+	private class NameAdapter extends FigureAdapter
+	{
+		@Override
+		public void attributeChanged(FigureEvent e) {
+			willChange();
+			if (e.getAttribute() == AttributeKeys.TEXT)
+				{
+					data.setName(e.getNewValue().toString());
+					nameFig.setText(e.getNewValue().toString());
+					nameFig.invalidate();
+				}
+			changed();
+		}
+	}
+	private abstract class SimpleAdapter extends FigureAdapter
+	{
+		protected Figure fig;
+		
+		public SimpleAdapter ( Figure fig )
+		{
+			this.fig = fig;
+		}
+		
+		protected abstract boolean add(String n);
+
+		protected abstract boolean rename(String old, String n);
+
+		protected abstract boolean remove(String old);
+
+		@Override
+		public void attributeChanged(FigureEvent evt) {
+			String n = (String) evt.getNewValue();
+			String old = (String) evt.getOldValue();
+
+			dprint("Class representation changed");
+
+			boolean ret = false;
+			
+			if (((String) evt.getNewValue()).trim().equals(""))
+				{
+					ret = remove ( old );
+					dprint((ret) ? "removing element" : "Cannot remove element");
+				}
+			if (evt.getOldValue().equals(""))
+				{
+					ret = add(n);
+					dprint((ret) ? "" : "Can not add new Attribute");
+					dprint((ret) ? "" : "New: " + n + "\nOld: " + old);
+				} else
+				{
+					ret = rename ( old, n );
+					dprint((ret) ? "" : "Can not rename");
+				}
+			
+			if ( ret )
+				{
+					fig.set( AttributeKeys.TEXT, Attribute.Create( n ).toString() );
+				}
+		}
+	}
+	private class AttributeAdapter extends SimpleAdapter
+	{
+		public AttributeAdapter ( Figure f ) { super ( f ); }
+		
+		@Override
+		protected boolean add(String n) {
+			Attribute attr = Attribute.Create(n);
+			return data.addAttribute ( attr );
+		}
+
+		@Override
+		protected boolean rename(String old, String n) {
+			Attribute newAttr = Attribute.Create(n);
+			Attribute oldAttr = Attribute.Create(old);
+			return data.removeAttribute(oldAttr) && data.addAttribute(newAttr);
+		}
+
+		@Override
+		protected boolean remove(String old) {
+			Attribute attr = Attribute.Create(old);
+			return data.removeAttribute(attr);
+		}
+
+	}
+	private class MethodAdapter extends SimpleAdapter
+	{
+		public MethodAdapter ( Figure f ) { super ( f ); }
+		
+		@Override
+		protected boolean add(String n) {
+			Method meth = Method.Create(n);
+			return data.addMethod(meth);
+		}
+
+		@Override
+		protected boolean rename(String old, String n) {
+			Method newMeth = Method.Create(n);
+			Method oldMeth = Method.Create(old);
+			return data.removeMethod(oldMeth) && data.addMethod(newMeth);
+		}
+
+		@Override
+		protected boolean remove(String old) {
+			Method meth = Method.Create(old);
+			return data.removeMethod(meth);
+		}
+
 	}
 }
