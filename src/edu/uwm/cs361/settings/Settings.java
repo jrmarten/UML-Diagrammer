@@ -14,7 +14,7 @@ public class Settings
 	private static final String ENTRY_DELIM = ";";
 	private static final String KEYVAL_DELIM = ":";
 	
-	private HashMap<String, String> props = new HashMap<String, String>();
+	protected HashMap<String, String> props = new HashMap<String, String>();
 	
 	//******************************************************************************
 	
