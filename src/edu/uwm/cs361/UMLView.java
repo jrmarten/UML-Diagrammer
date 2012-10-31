@@ -110,14 +110,14 @@ public class UMLView extends AbstractView
     Style style = Style.get( "Drawing" );
     if ( style == null ) return drawing;
     
-    int val = style.getInt( "selector-color", 0x000000);
-    drawing.set( AttributeKeys.STROKE_COLOR, new Color ( val ) );
+    //int val = style.getInt( "selector-color", 0x000000);
+    drawing.set( AttributeKeys.STROKE_COLOR, style.getColor( "selector-color", Color.black) );
     drawing.setAttributeEnabled(AttributeKeys.STROKE_COLOR, false);
     
     
-    int background_val = style.getInt( "background-color", 0xFFFFFF);
-    Color background_color = new Color ( background_val );
-    drawing.set( AttributeKeys.CANVAS_FILL_COLOR, background_color );
+    //int background_val = style.getInt( "background-color", 0xFFFFFF);
+    //Color background_color = new Color ( background_val );
+    drawing.set( AttributeKeys.CANVAS_FILL_COLOR, style.getColor("background-color", Color.white) );
     
 		return drawing;
 	}
