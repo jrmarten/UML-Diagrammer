@@ -11,12 +11,14 @@ import static org.jhotdraw.draw.AttributeKeys.STROKE_WIDTH;
 
 import java.awt.Color;
 
+import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.decoration.ArrowTip;
 
 import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
+import edu.uwm.cs361.classdiagram.data.UMLInterface;
 import edu.uwm.cs361.settings.Style;
 
 public class InheritanceFigure extends LineConnectionFigure
@@ -50,11 +52,7 @@ public class InheritanceFigure extends LineConnectionFigure
 		Style s = Style.get( "InheritanceFigure" );
 		if ( s == null ) return;
 		
-		int val = s.getInt ( "forground-color", -1 );
-		if ( val != -1 )
-			{
-				for_color = new Color ( val );
-			}
+		for_color = s.getColor( "forground-color" , null);
 	}
 	
 	public boolean canConnect(Connector start, Connector end) {
@@ -81,7 +79,15 @@ public class InheritanceFigure extends LineConnectionFigure
 		UMLClass child = ((ClassFigure) start.getOwner()).getData();
 		UMLClass par = ((ClassFigure) end.getOwner()).getData();
 
-		Util.dprint( "Connecting" );
+		boolean dashed = ( child instanceof UMLInterface ) 
+				||  ( par instanceof UMLInterface );
+		
+		if ( dashed )
+			{
+				Util.dprint( "Dashing" );
+				set( AttributeKeys.STROKE_DASH_PHASE , 25.0);
+				setAttributeEnabled ( AttributeKeys.STROKE_DASH_PHASE, false );
+			}
 		
 		child.addSuperclass(par);
 	}

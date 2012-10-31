@@ -39,10 +39,7 @@ public class AggregationFigure extends AssociationFigure {
 		Style s = Style.get( "AssociationFigure" );
 		if ( s == null ) return;
 		
-		int val = s.getInt( "forground-color", -1);
-		if ( val != -1 ) for_color = new Color ( val );
-		
-		Util.dprint( "AssociationFigure.forground-color:" + for_color );
+		for_color = s.getColor( "forground-color", Color.black);
 	}
 
 }

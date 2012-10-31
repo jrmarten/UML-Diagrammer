@@ -223,25 +223,9 @@ public class ClassFigure extends GraphicalCompositeFigure
 		Style style = Style.get( "ClassFigure" );
 		if ( style == null ) return;
 		
-		
-		forColor = getColor ( style.getInt( "forground-color", -1) );
-		Util.dprint( "ClassFigure.forground-color: " + forColor );
-		backColor = getColor ( style.getInt( "background-color", -1) );
-		Util.dprint( "ClassFigure.background-color: " + backColor );
-		stroke_color = getColor ( style.getInt( "border-color", -1) );
-		Util.dprint( "ClassFigure.border-color: " + stroke_color );
-//		
-//		color = getColor ( style.getInt( "background-color", -1) );
-//		container.set(FILL_COLOR, null);
-//		container.setAttributeEnabled(FILL_COLOR, false);
-//		Util.dprint( "ClassFigure.background-color: " + color );
-		
-	}
-	
-	private static Color getColor ( int val )
-	{
-		if ( val == -1 ) return null;
-		return new Color ( val );
+		forColor = style.getColor( "forground-color", null);
+		backColor = style.getColor( "background-color", null);
+		stroke_color = style.getColor ( "border-color", null );
 	}
 
 	public void update() {

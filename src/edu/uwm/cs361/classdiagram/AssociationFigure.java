@@ -19,7 +19,6 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.connector.Connector;
 
-import edu.uwm.cs361.Util;
 import edu.uwm.cs361.action.SetEndDecorationAction;
 import edu.uwm.cs361.action.SetStartDecorationAction;
 import edu.uwm.cs361.settings.Style;
@@ -54,10 +53,8 @@ public class AssociationFigure extends LineConnectionFigure
 		Style s = Style.get( "AssociationFigure" );
 		if ( s == null ) return;
 		
-		int val = s.getInt( "forground-color", -1);
-		if ( val != -1 ) for_color = new Color ( val );
+		for_color = s.getColor( "forground-color", Color.black);
 		
-		Util.dprint( "AssociationFigure.forground-color:" + for_color );
 	}
 
 	/**
