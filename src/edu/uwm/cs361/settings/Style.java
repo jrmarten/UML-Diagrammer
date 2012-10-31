@@ -140,36 +140,68 @@ public class Style extends Settings
 			}
 		return ret;
 	}
+	
+	private static final Object[][] COLORS =
+		{
+				{ "red",			Color.red },
+				{ "pink",			Color.pink },
+				{ "orange",		Color.orange },
+				{ "yellow",		Color.yellow },
+				{ "green",		Color.green },
+				{ "magenta",	Color.magenta },
+				{ "cyan",			Color.cyan },
+				{ "blue",			Color.blue },
+				{ "white",		Color.white },
+				{ "black",		Color.black },
+				
+				//can be spelled both ways in css
+				{ "lightgray",	Color.lightGray },
+				{ "lightgrey",	Color.lightGray },
+				{ "gray",				Color.gray },
+				{ "grey",				Color.gray },
+				{ "darkgray",		Color.darkGray },
+				{ "darkgrey",		Color.darkGray }
+		};
+	
 	public Color getColor ( String key, Color defaultValue ) {
-		/**
-		 * Does this need to check for "background-color" and "foreground-color"
-		 * as how you have it in the style sheet?  I believe the built-in decode function achieves this.
-		 
-		if(key.contains("0x")){
-			
-		}
-		*/
-		//checking for all colors in the Color. library
-		if (key.equalsIgnoreCase("red")) return Color.red;
-		if (key.equalsIgnoreCase("pink")) return Color.pink;
-		if (key.equalsIgnoreCase("orange")) return Color.orange;
-		if (key.equalsIgnoreCase("yellow")) return Color.yellow;
-		if (key.equalsIgnoreCase("green")) return Color.green;
-		if (key.equalsIgnoreCase("magenta")) return Color.magenta;
-		if (key.equalsIgnoreCase("cyan")) return Color.cyan;
-		if (key.equalsIgnoreCase("blue")) return Color.blue;
-		if (key.equalsIgnoreCase("white")) return Color.white;
-		if (key.equalsIgnoreCase("lightGray")) return Color.lightGray;
-		if (key.equalsIgnoreCase("gray")) return Color.gray;
-		if (key.equalsIgnoreCase("darkGray")) return Color.darkGray;
-		if (key.equalsIgnoreCase("black")) return Color.black;		
-		try { 
-			return Color.decode(key); //built-in function of Color class
-		}
-		catch (Exception nfe) {
-			System.out.println("Invalid color code or color: " + key);
-			return defaultValue;	
-		}
+		String val = props.get( key );
+		
+		
+		//cuz I like writing code
+		boolean hexNotation = false;
+		if ( val.startsWith( "#" ) | (hexNotation = val.startsWith ( "0x" ) ) )
+			{
+				if ( hexNotation ) val = val.substring( 2 );
+				else val = val.substring( 1 );
+				
+				int hex_val = Integer.parseInt( val, 16);
+				
+				return new Color ( hex_val );
+			}
+		
+		//simpler checking
+		//can add colors by c
+		for ( Object[] tmp : COLORS )
+			{
+				if ( val.equalsIgnoreCase( (String) tmp[0] ) ) return (Color) tmp[1];
+			}
+		
+		return defaultValue;
+		
+//		//checking for all colors in the Color. library
+//		if (key.equalsIgnoreCase("red")) return Color.red;
+//		if (key.equalsIgnoreCase("pink")) return Color.pink;
+//		if (key.equalsIgnoreCase("orange")) return Color.orange;
+//		if (key.equalsIgnoreCase("yellow")) return Color.yellow;
+//		if (key.equalsIgnoreCase("green")) return Color.green;
+//		if (key.equalsIgnoreCase("magenta")) return Color.magenta;
+//		if (key.equalsIgnoreCase("cyan")) return Color.cyan;
+//		if (key.equalsIgnoreCase("blue")) return Color.blue;
+//		if (key.equalsIgnoreCase("white")) return Color.white;
+//		if (key.equalsIgnoreCase("lightGray")) return Color.lightGray;
+//		if (key.equalsIgnoreCase("gray")) return Color.gray;
+//		if (key.equalsIgnoreCase("darkGray")) return Color.darkGray;
+//		if (key.equalsIgnoreCase("black")) return Color.black;		
 	}
 
 }
