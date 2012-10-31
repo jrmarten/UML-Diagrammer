@@ -3,6 +3,7 @@ package edu.uwm.cs361.settings;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -27,8 +28,22 @@ public class Style extends Settings
 	{
 		return getName ( );
 	}
+	
+	/*
+	 * kinda weird but should work
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals ( Object o )
+	{
+		if ( ! ( o instanceof Style ) ) return false;
+		
+		Style s = (Style)o;
+		return s.getName().equals( getName() );
+	}
 
 	private static LinkedList<Style> styleMods = new LinkedList<Style> ( );
+	
 	public static Style get ( String selector )
 	{
 		for ( Style s : styleMods )
@@ -39,11 +54,7 @@ public class Style extends Settings
 		return null;
 	}
 
-	static
-	{
-		init();
-	}
-
+	static { init(); }
 	private static void init ( )
 	{
 		Settings pref = Settings.getGlobal();
@@ -60,36 +71,25 @@ public class Style extends Settings
 				
 				while ( in.hasNext() )
 					{
-						input = in.nextLine();
-						
-						if ( input.contains( "//" ) )
-							{
-								input = input.substring ( 0, input.indexOf( "//" ) );
-							}
-						if ( input.contains( "/*") )
-							{
-								input = input.substring( 0, input.indexOf ( "/*" ) );
-								String xinput = input.substring( input.indexOf("/*") + 1);
-								
-								while ( !xinput.contains( "*/" ) )
-									{
-										xinput = in.nextLine();
-									}
-								
-								input = xinput.substring( input.indexOf( "*/" ) + 3);
-							}
-						
+						input = handleComments ( in.nextLine(), in ).trim();
 						
 						if ( Util.countInstancesOf(input, '}' ) == 1 )
 							{
-								if ( Util.countInstancesOf( buffer, '{' ) != 1 )
-									{
-										Util.dprint( "Stylesheet malformed" );
-										input = "";
-									}
 								buffer += input.substring ( 0, input.indexOf('}' ) + 1);
-								Style next = make ( buffer );
-								if ( next != null ) styleMods.add( next );
+								Style[]  rule = make ( buffer );
+								for ( Style next : rule )
+									{
+										if ( !styleMods.contains( next ) ) styleMods.add( next );
+										else
+											{
+												
+												Style existing = styleMods.get( styleMods.indexOf(next));
+												for ( String tmpKey : next.props.keySet() )
+													{
+														existing.set( tmpKey , next.props.get( tmpKey) );
+													}
+											}
+									}
 								buffer = input.substring( input.indexOf('}') + 1);
 							}
 						else
@@ -104,29 +104,58 @@ public class Style extends Settings
 		Util.dprint ( styleMods );
 
 	}
+	
+	private static String handleComments ( String input, Scanner in )
+	{
+		
+		if ( input.contains( "//" ) )
+			{
+				return input.substring ( 0, input.indexOf( "//" ) );
+			}
+		if ( input.contains( "/*") )
+			{
+				String xinput = input.substring( input.indexOf("/*") + 2);
+				input = input.substring( 0, input.indexOf ( "/*" ) );
+				
+				while ( !xinput.contains( "*/" ) )
+					{
+						if ( !in.hasNext() ) break;
+						xinput = in.nextLine();
+					}				
+				input = xinput.substring( xinput.indexOf( "*/") + 2 );
+			}
+		
+		return input;
+	}
 
-	private static Style make ( String in )
+	private static Style[] make ( String in )
 	{
 		if ( Util.countInstancesOf(in, '{') != 1 ) 
-			return (Style) Util.report ( "Error Style definintion: " + in ) ;
+			return (Style[]) Util.report ( "Error Style definintion: " + in ) ;
 		if ( Util.countInstancesOf(in, '}') != 1 ) 
-			return (Style) Util.report ( "Error Style definintion: " + in );
-
-		Util.dprint( "Sytle works: " + in );
-
+			return (Style[]) Util.report ( "Error Style definintion: " + in );
+		
 		String name = in.substring( 0, in.indexOf ( '{' ) );
 		String def = in.substring( in.indexOf( '{' ) + 1, in.indexOf('}') );
+		HashMap<String, String> map = new HashMap<String, String> ( );
+		
+		name = name.trim();
+//		LinkedList<String> li = new LinkedList<String> ( );
+//		for ( String tmp : name.split ( " " ) )
+//			{
+//				li.add( tmp );
+//			}
+		
+		
+		//Set selectors
+		String[] ids = name.split( " " );
+		Style[] ret = new Style[ids.length];
 
-		name.trim();
-		LinkedList<String> li = new LinkedList<String> ( );
-		for ( String tmp : name.split ( " " ) )
+		for ( int i = 0; i < ids.length; i++ )
 			{
-				li.add( tmp );
+				ret[i] = new Style ( ids[i] );
 			}
-		name = Util.join( li, " ");
-
-		Style ret = new Style ( name );
-
+		
 		String[] entries = def.split( ";" );
 		for ( String entry : entries )
 			{
@@ -136,13 +165,22 @@ public class Style extends Settings
 				String key = parts[0].trim();
 				String val = parts[1].trim();
 
-				ret.set( key, val);
+				map.put( key, val);
 			}
+		
+		for ( Style tmp : ret )
+			{
+				for ( String key : map.keySet() )
+					{
+						tmp.set( key, map.get(key));
+					}
+			}
+		
 		return ret;
 	}
 	
 	private static final Object[][] COLORS =
-		{
+		{ 
 				{ "red",			Color.red },
 				{ "pink",			Color.pink },
 				{ "orange",		Color.orange },
@@ -165,7 +203,10 @@ public class Style extends Settings
 	
 	public Color getColor ( String key, Color defaultValue ) {
 		String val = props.get( key );
+		if ( val == null ) return defaultValue; //may be problem later
 		
+		//for reporting purposes only
+		Util.dprint( getName( ) + "." + key + ":" + val );
 		
 		//cuz I like writing code
 		boolean hexNotation = false;
@@ -187,21 +228,6 @@ public class Style extends Settings
 			}
 		
 		return defaultValue;
-		
-//		//checking for all colors in the Color. library
-//		if (key.equalsIgnoreCase("red")) return Color.red;
-//		if (key.equalsIgnoreCase("pink")) return Color.pink;
-//		if (key.equalsIgnoreCase("orange")) return Color.orange;
-//		if (key.equalsIgnoreCase("yellow")) return Color.yellow;
-//		if (key.equalsIgnoreCase("green")) return Color.green;
-//		if (key.equalsIgnoreCase("magenta")) return Color.magenta;
-//		if (key.equalsIgnoreCase("cyan")) return Color.cyan;
-//		if (key.equalsIgnoreCase("blue")) return Color.blue;
-//		if (key.equalsIgnoreCase("white")) return Color.white;
-//		if (key.equalsIgnoreCase("lightGray")) return Color.lightGray;
-//		if (key.equalsIgnoreCase("gray")) return Color.gray;
-//		if (key.equalsIgnoreCase("darkGray")) return Color.darkGray;
-//		if (key.equalsIgnoreCase("black")) return Color.black;		
 	}
 
 }
