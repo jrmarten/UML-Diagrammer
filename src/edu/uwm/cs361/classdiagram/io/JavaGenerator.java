@@ -54,7 +54,7 @@ public class JavaGenerator
 	public static String getFileName(String name) {
 		if (name.contains("<"))
 			{
-				name = name.substring(name.indexOf('<'));
+				name = name.substring(0, name.indexOf('<'));
 			}
 		return name + ".java";
 	}
