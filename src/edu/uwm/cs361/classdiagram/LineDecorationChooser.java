@@ -63,6 +63,7 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 		add(blank, BorderLayout.LINE_END);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		String ac = e.getActionCommand();
 		if (ac.equals("ok") || ac.equals("cancel")) {
