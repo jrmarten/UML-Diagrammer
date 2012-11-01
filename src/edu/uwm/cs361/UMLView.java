@@ -31,7 +31,7 @@ import org.jhotdraw.gui.URIChooser;
 import org.jhotdraw.undo.UndoRedoManager;
 
 import edu.umd.cs.findbugs.annotations.Nullable;
-import edu.uwm.cs361.settings.Settings;
+import edu.uwm.cs361.settings.CSSRule;
 import edu.uwm.cs361.settings.Style;
 
 
@@ -107,17 +107,19 @@ public class UMLView extends AbstractView
     outputFormats.add(new ImageOutputFormat());
     drawing.setOutputFormats(outputFormats);
     
-    Style style = Style.get( "Drawing" );
+    Style style = UMLApplicationModel.getProgramStyle();
+    if ( style == null ) return drawing;
+    CSSRule drawing_style = style.get( "Drawing" );
     if ( style == null ) return drawing;
     
-    //int val = style.getInt( "selector-color", 0x000000);
-    drawing.set( AttributeKeys.STROKE_COLOR, style.getColor( "selector-color", Color.black) );
+    //trying to get selection box, may not work. XXX:
+    drawing.set( AttributeKeys.STROKE_COLOR, 
+    		drawing_style.getColor( "selector-color", Color.black) );
     drawing.setAttributeEnabled(AttributeKeys.STROKE_COLOR, false);
     
     
-    //int background_val = style.getInt( "background-color", 0xFFFFFF);
-    //Color background_color = new Color ( background_val );
-    drawing.set( AttributeKeys.CANVAS_FILL_COLOR, style.getColor("background-color", Color.white) );
+    drawing.set( AttributeKeys.CANVAS_FILL_COLOR, 
+    		drawing_style.getColor("background-color", Color.white) );
     
 		return drawing;
 	}
@@ -132,8 +134,9 @@ public class UMLView extends AbstractView
     view.setConstrainerVisible(newValue);
     firePropertyChange(GRID_VISIBLE_PROPERTY, oldValue, newValue);
     preferences.putBoolean("view.gridVisible", newValue);
-}
+	}
 
+	@Override
 	public boolean canSaveTo( URI uri )
 	{
 		return uri.getPath().endsWith(".xml");
