@@ -19,8 +19,10 @@ import org.jhotdraw.draw.Drawing;
 import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.connector.Connector;
 
+import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.action.SetEndDecorationAction;
 import edu.uwm.cs361.action.SetStartDecorationAction;
+import edu.uwm.cs361.settings.CSSRule;
 import edu.uwm.cs361.settings.Style;
 
 /**
@@ -50,10 +52,12 @@ public class AssociationFigure extends LineConnectionFigure
 	static { config(); }
 	private static void config ( )
 	{
-		Style s = Style.get( "Association" );
-		if ( s == null ) return;
+		Style style = UMLApplicationModel.getProgramStyle();
+		if ( style == null ) return;
+		CSSRule association_rule = style.get( "Association" );
+		if ( association_rule == null ) return;
 		
-		for_color = s.getColor( "forground-color", Color.black);
+		for_color = association_rule.getColor( "forground-color", Color.black);
 		
 	}
 

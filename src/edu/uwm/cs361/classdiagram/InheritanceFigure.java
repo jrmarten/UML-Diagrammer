@@ -16,9 +16,11 @@ import org.jhotdraw.draw.LineConnectionFigure;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.decoration.ArrowTip;
 
+import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
 import edu.uwm.cs361.classdiagram.data.UMLInterface;
+import edu.uwm.cs361.settings.CSSRule;
 import edu.uwm.cs361.settings.Style;
 
 public class InheritanceFigure extends LineConnectionFigure
@@ -49,12 +51,16 @@ public class InheritanceFigure extends LineConnectionFigure
 	static { config(); }
 	private static void config ( )
 	{
-		Style s = Style.get( "Inheritance" );
-		if ( s == null ) return;
 		
-		for_color = s.getColor( "forground-color" , null);
+		Style style = UMLApplicationModel.getProgramStyle();
+		if ( style == null ) return;
+		CSSRule inher_rule = style.get ( "Inheritance" );
+		
+		
+		for_color = inher_rule.getColor( "forground-color" , null);
 	}
 	
+	@Override
 	public boolean canConnect(Connector start, Connector end) {
 		if (!(start.getOwner() instanceof ClassFigure && end.getOwner() instanceof ClassFigure))
 			return false;
@@ -71,10 +77,12 @@ public class InheritanceFigure extends LineConnectionFigure
 		return !isSuper;
 	}
 
+	@Override
 	public boolean canConnect(Connector end) {
 		return (end.getOwner() instanceof ClassFigure);
 	}
 
+	@Override
 	protected void handleConnect(Connector start, Connector end) {
 		UMLClass child = ((ClassFigure) start.getOwner()).getData();
 		UMLClass par = ((ClassFigure) end.getOwner()).getData();
@@ -98,6 +106,7 @@ public class InheritanceFigure extends LineConnectionFigure
 		return 1;
 	}
 
+	@Override
 	protected void handleDisconnect(Connector start, Connector end) {
 		UMLClass child = ((ClassFigure) start.getOwner()).getData();
 		UMLClass par = ((ClassFigure) end.getOwner()).getData();
