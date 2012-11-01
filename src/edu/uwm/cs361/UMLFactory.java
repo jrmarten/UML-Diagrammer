@@ -27,7 +27,7 @@ public class UMLFactory extends DefaultDOMFactory
 	private final static Object[][]	classTagArray	= {
 			{ DefaultDrawing.class, "UMLDiagram" },
 			{ ClassFigure.class, "ClassFigure" },
-			{ UMLClass.class, "class" }, // for lack of a better tag currently
+			{ UMLClass.class, "class" },
 			{ Method.class, "method" }, 
 			{ Attribute.class, "attribute" },
 			{ DependencyFigure.class, "depfigure" },
