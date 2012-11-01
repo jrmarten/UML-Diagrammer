@@ -26,6 +26,7 @@ public class JavaGenerationAction extends AbstractAction
 		data = view;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) { 
 		List<Figure> figs = data.getDrawing().getFiguresFrontToBack();
 

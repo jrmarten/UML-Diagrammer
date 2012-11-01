@@ -53,6 +53,7 @@ public class UMLAbstractClass extends UMLClass
 		return result;
 	}
 	
+	@Override
 	public String getType ( )
 	{
 		return "abstract";

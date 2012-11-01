@@ -11,6 +11,7 @@ import org.jhotdraw.draw.DefaultDrawingEditor;
 public class UMLDrawingEditor extends DefaultDrawingEditor
 {
 
+	@Override
 	protected InputMap createInputMap() {
 		InputMap iMaps = super.createInputMap(); // lolz
 

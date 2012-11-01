@@ -24,6 +24,7 @@ public class ClickTool extends AbstractTool
 		fireToolDone();
 	}
 
+	@Override
 	public void deactivate(DrawingEditor edit) {
 		super.deactivate(edit);
 

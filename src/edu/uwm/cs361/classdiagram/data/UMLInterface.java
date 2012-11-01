@@ -74,6 +74,7 @@ public class UMLInterface extends UMLClass
 		return result;
 	}
 	
+	@Override
 	public String getType ( )
 	{
 		return "interface";
