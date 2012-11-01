@@ -11,7 +11,6 @@ import org.jhotdraw.app.action.file.SaveFileAction;
 import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.Util;
-import edu.uwm.cs361.settings.Settings;
 
 public class SaveTemplateAction extends SaveFileAction
 {
@@ -24,10 +23,12 @@ public class SaveTemplateAction extends SaveFileAction
 		
 	}
 	
+	@Override
 	public void actionPerformed ( ActionEvent e )
 	{
 		String filename = UMLApplicationModel.prompt ( "file.saveTemplate.prompt", "Save Template" );
-		String dirName = Settings.getGlobal().getString( "templateDir", Settings.getProgDir() + "Template" + Settings.getFileSeparator() );
+		String dirName = UMLApplicationModel.getProjectSettings().getString( "templateDir", 
+				UMLApplicationModel.getProgramDirectory() + "Template" + System.getProperty( "file.separator" ) );
 		File dir = new File ( dirName );
 		if ( !dir.exists() ) dir.mkdir();
 		Util.dprint( dirName );
