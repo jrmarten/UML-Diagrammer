@@ -2,7 +2,6 @@ package edu.uwm.cs361.settings;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -10,7 +9,6 @@ import edu.uwm.cs361.Util;
 
 public class Settings
 {
-	private static Settings glob;
 	private static final String ENTRY_DELIM = ";";
 	private static final String KEYVAL_DELIM = ":";
 	
@@ -76,39 +74,19 @@ public class Settings
 		return val;
 	}
 	
-	
-	//***********************************************************
-	
-	//gets the Global settings
-	
-	public static Settings getGlobal()
-	{
-		if ( glob == null ) getSettings ( );
-		return glob;
-	}
-	
-	
 	//***********************************************************
 	
 	//operating dependent code
+
 	
-	private final static String home = System.getProperty("user.home");
-	private final static String sep = System.getProperty("file.separator");
-	private final static String os = System.getProperty("os.name");
-	
-	public static String getFileSeparator ( )
+	public static Settings getSettings ( File f )
 	{
-		return sep;
-	}
-	
-	private static void getSettings ( )
-	{
-		Util.dprint ( "Retreiving settings on " + os );
-		
-		File pref = new File ( getProgDir() + "perferences.txt" );
-		glob = new Settings ();
-		
-		if ( !pref.exists() ) setDefaultPreferences();
+		if ( !f.exists ( ) )
+			{
+				Util.dprint ( "Failed to read preferences: " + f.getAbsolutePath() );
+			}
+		File pref = f;
+		Settings glob = new Settings ();
 		
 		Util.dprint( "Reading file: " + pref.getAbsolutePath() );
 		
@@ -131,7 +109,8 @@ public class Settings
 								String[] keyval = entry.split(KEYVAL_DELIM);
 								
 								if ( keyval.length < 2 ) continue;
-								if ( isEmpty(keyval[0]) || isEmpty ( keyval[1] ) ) continue;
+								if ( keyval[0].trim().equals("") || 
+										 keyval[1].trim().equals("") ) continue;
 								glob.set( keyval[0].trim(), keyval[1].trim());
 							}
 					}
@@ -139,57 +118,7 @@ public class Settings
 			{
 				Util.dprint( "File Not Found" );
 			}
-	}
-	
-	private static boolean isEmpty ( String x )
-	{
-		return x.trim().equals("");
-	}
-	
-	public static String getProgDir ( )
-	{
-		if ( Util.containsIgnoreCase ( os, "win" ) ) // if windows
-			{
-				String loc = System.getenv( "LOCALAPPDATA" );
-				if ( loc == null ) loc = System.getenv( "APPDATA" );
-				if ( loc == null ) loc = System.getenv( "HOMEPATH" );
-				
-				return loc + "uml-diagrammer" + sep;
-			}
-		else //assume unix based
-			{
-				return home + sep + ".uml-diagrammer" + sep;
-			}
-	}
-	
-	private static void setDefaultPreferences()
-	{
-		File prefs = new File ( getProgDir() + "perferences.txt" );
-		File progDir = new File ( getProgDir() );
-		if ( !progDir.exists() ) progDir.mkdir();
 		
-		Util.dprint("attempting to write to " + prefs.getAbsolutePath());
-		try
-			{
-				PrintWriter out = new PrintWriter ( prefs );
-				
-				for ( String[] keyval : defaults )
-					{
-						String entry = keyval[0] + " : " + keyval[1] + ";";
-						Util.dprint ( entry );
-						out.println ( entry ); 
-					}
-				
-				out.close();
-			} catch (FileNotFoundException e) { Util.dprint( "Can't find file for writing" ); }
+		return glob;
 	}
-	
-	
-	//*********************************************************
-	
-	//defaults if no settings file on computer
-	private static String[][] defaults = 
-		{
-				{"templateDir", getProgDir() + "Templates" + sep }	
-		};
 }
