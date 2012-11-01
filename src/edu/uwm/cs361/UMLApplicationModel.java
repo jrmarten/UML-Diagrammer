@@ -50,6 +50,7 @@ import edu.uwm.cs361.classdiagram.data.UMLInterface;
 import edu.uwm.cs361.sequencediagram.ActivationFigure;
 import edu.uwm.cs361.sequencediagram.LifelineFigure;
 import edu.uwm.cs361.settings.Settings;
+import edu.uwm.cs361.settings.Style;
 import edu.uwm.cs361.tool.ClickTool;
 import edu.uwm.cs361.tool.SingleSelectionTool;
 
@@ -64,32 +65,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	{
 	}
 
-	private static ResourceBundleUtil	projectLabels	= null;
-
-	public static String getProperty ( String id )
-	{
-		return getProjectResources().getString( id );
-	}
-	
-	public static ResourceBundleUtil getProjectResources() {
-		if (projectLabels == null)
-			projectLabels = ResourceBundleUtil.getBundle("edu.uwm.cs361.Labels");
-
-		return projectLabels;
-	}
-
-	public static String prompt(String id) {
-		return JOptionPane.showInputDialog(getProjectResources().getString(id));
-	}
-	
-	public static String prompt(String id, String title) {
-		return JOptionPane.showInputDialog(getProjectResources().getString(id), title);
-	}
-
-	public static void error(String id, String title) {
-		JOptionPane.showMessageDialog(null, getProjectResources().getString(id),
-				title, JOptionPane.ERROR_MESSAGE);
-	}
 	
 
 	// TODO: FINISH
@@ -143,7 +118,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		return list;
 	}
 
-	// NOTE:might not make sense for this application
 	@Override
 	public void initView(Application a, @Nullable View p) {
 		if (a.isSharingToolsAmongViews())
@@ -156,8 +130,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	}
 
 	private void addGeneralButtonsTo(JToolBar tb, final DrawingEditor edit) {
-		HashMap<AttributeKey, Object> attributes;
-
 		ResourceBundleUtil labels = getProjectResources();
 
 		ButtonFactory.addSelectionToolTo(tb, edit);
@@ -295,6 +267,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 			menu.add( templateButtons );
 		}
 		
+		@Override
 		public void addSaveFileItems ( JMenu menu, Application app,
 				@Nullable View view )
 		{
@@ -329,8 +302,8 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		public LinkedList<File> getTemplates ( )
 		{
 			LinkedList<File> templates = new LinkedList<File> ( );
-			Settings s = Settings.getGlobal();
-			String dir_name = s.getString("templateDir", Settings.getProgDir() + "Templates" );
+			Settings s = getProjectSettings();
+			String dir_name = s.getString("templateDir", getProgramDirectory() + "Templates" );
 			File templateDir = new File ( dir_name );
 			
 			if ( !templateDir.isDirectory() ) return templates;
@@ -356,4 +329,79 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		}
 
 	}
+	
+	
+	//Global resources
+	
+	private static ResourceBundleUtil	projectLabels	= null;
+
+	public static String getProperty ( String id )
+	{
+		return getProjectResources().getString( id );
+	}
+	
+	public static ResourceBundleUtil getProjectResources() {
+		if (projectLabels == null)
+			projectLabels = ResourceBundleUtil.getBundle("edu.uwm.cs361.Labels");
+
+		return projectLabels;
+	}
+	
+	private static Settings pref = null;
+	public static Settings getProjectSettings ( ) 
+	{
+		if ( pref == null )
+			pref = Settings.getSettings ( new File ( getProgramDirectory ( ) + "preferences.config" ) );
+		return pref;
+	}
+
+	private static Style style = null;
+	public static Style getProgramStyle ( )
+	{
+		if ( style == null )
+			{
+				Settings pref = getProjectSettings();
+				String filename = pref.getString ( "StyleSheet", null );
+				if ( filename == null ) return null;
+				File cssfile = new File ( filename );
+				if ( cssfile == null ) return null;
+				
+				style = Style.extractStyle( cssfile );
+			}
+		return style;
+	}
+	
+	public static String getProgramDirectory ( )
+	{
+		String os = System.getProperty( "os.name" );
+		String home = System.getProperty( "user.home");
+		String sep = System.getProperty ( "file.separator" );
+		
+		if ( Util.containsIgnoreCase ( os, "win" ) ) // if windows
+			{
+				String loc = System.getenv( "LOCALAPPDATA" );
+				if ( loc == null ) loc = System.getenv( "APPDATA" );
+				if ( loc == null ) loc = System.getenv( "HOMEPATH" );
+				
+				return loc + "uml-diagrammer" + sep;
+			}
+		else //assume unix based
+			{
+				return home + sep + ".uml-diagrammer" + sep;
+			}
+	}
+
+	public static String prompt(String id) {
+		return JOptionPane.showInputDialog(getProjectResources().getString(id));
+	}
+	
+	public static String prompt(String id, String title) {
+		return JOptionPane.showInputDialog(getProjectResources().getString(id), title);
+	}
+
+	public static void error(String id, String title) {
+		JOptionPane.showMessageDialog(null, getProjectResources().getString(id),
+				title, JOptionPane.ERROR_MESSAGE);
+	}
+	
 }
