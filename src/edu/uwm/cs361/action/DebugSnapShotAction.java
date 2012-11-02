@@ -19,7 +19,7 @@ import edu.uwm.cs361.classdiagram.data.UMLClass;
 @SuppressWarnings("unused")
 public class DebugSnapShotAction extends AbstractAction
 {
-
+	private static final long	serialVersionUID	= 3246670173154654804L;
 	public static final String	delim	= "________________________";
 	public static final String	ID		= "edit.DebugSnapShot";
 	DrawingView									data;

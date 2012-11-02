@@ -279,6 +279,8 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		
 		private class SaveTemplateActionMod extends SaveTemplateAction 
 		{
+			private static final long	serialVersionUID	= -8018751927333468798L;
+
 			public SaveTemplateActionMod(Application app, View view)
 			{
 				super(app, view);

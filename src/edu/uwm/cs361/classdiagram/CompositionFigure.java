@@ -14,7 +14,9 @@ import org.jhotdraw.draw.decoration.ArrowTip;
 
 public class CompositionFigure extends AssociationFigure {
 
-  /** Creates a new instance. */
+	private static final long	serialVersionUID	= 6868637997660267173L;
+
+	/** Creates a new instance. */
   public CompositionFigure() {
       set(STROKE_COLOR, new Color(0x000099));
       set(STROKE_WIDTH, 1d);

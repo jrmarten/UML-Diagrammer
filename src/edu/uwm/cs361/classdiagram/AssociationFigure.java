@@ -31,6 +31,7 @@ import edu.uwm.cs361.settings.Style;
 public class AssociationFigure extends LineConnectionFigure
 {
 
+	private static final long	serialVersionUID	= -1729547106413248257L;
 	private static Color for_color = Color.black;
 	
 	/** Creates a new instance. */

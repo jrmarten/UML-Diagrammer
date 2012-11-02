@@ -17,6 +17,7 @@ import edu.uwm.cs361.classdiagram.ClassFigure;
 
 public class SingleSelectionTool extends SelectionTool
 {
+	private static final long	serialVersionUID	= -822275011885177964L;
 	Action	p_func;
 
 	public SingleSelectionTool(AbstractAction aa)

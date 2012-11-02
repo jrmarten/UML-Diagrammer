@@ -329,6 +329,7 @@ public class UMLClass implements Serializable
 		return getName();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone() {
 		UMLClass result = new UMLClass(getName());

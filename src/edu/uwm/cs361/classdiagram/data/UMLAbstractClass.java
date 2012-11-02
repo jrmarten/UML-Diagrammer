@@ -40,6 +40,7 @@ public class UMLAbstractClass extends UMLClass
 		return "abstract class " + getName() + getInheritence();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone() {
 		UMLClass result = new UMLAbstractClass(getName());
