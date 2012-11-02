@@ -455,14 +455,16 @@ public class ClassFigure extends GraphicalCompositeFigure
 		
 		in.openElement("class");
 		
+		String name = in.getAttribute( "name", "Class" );
+		data.setName( name );
+		nameFig.setText( name );
+		Util.dprint(name);
+		
 		UMLClass proto;
 		String type = in.getAttribute("type", "class");
 		proto = (type.equals("class")? new UMLClass ( ) : (type.equals("abstract"))?
 				new UMLAbstractClass ( ) : new UMLInterface ( ));
 		data = (UMLClass) proto.clone();
-		
-		data.setName( in.getAttribute ( "name", "Class") );
-		nameFig.set( AttributeKeys.TEXT, data.getName() );
 		
 		int i = 0;
 		int max = in.getElementCount( "attribute" );
@@ -513,7 +515,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 			}
 		
 		readAttributes(in);
-		
 		
 		willChange ( );
 		setElements ( );
