@@ -94,12 +94,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		LinkedList<JToolBar> list = new LinkedList<JToolBar>();
 
 		JToolBar tmp = new JToolBar();
-		addGeneralButtonsTo(tmp, edit);
-		tmp.setName(Labels.getString("window.generalToolBar.title"));
-
-		list.add(tmp);
-
-		tmp = new JToolBar();
 		addClassButtonsTo(tmp, edit);
 		tmp.setName(Labels.getString("window.classToolBar.title"));
 
@@ -117,16 +111,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	@Override
 	protected MenuBuilder createMenuBuilder() {
 		return new UMLMenuBuilder();
-	}
-
-	private void addGeneralButtonsTo(JToolBar tb, final DrawingEditor edit) {
-		ResourceBundleUtil labels = getProjectResources();
-
-		ButtonFactory.addSelectionToolTo(tb, edit);
-
-		ButtonFactory.addToolTo(tb, edit, new TextAreaCreationTool(
-				new TextAreaFigure()), "edit.createTextArea", labels);
-
 	}
 
 	private void addClassButtonsTo(JToolBar tb, final DrawingEditor edit) {
@@ -175,6 +159,9 @@ public class UMLApplicationModel extends DefaultApplicationModel
 
 		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
 				new InheritanceFigure()), "edit.createInheritance", labels);
+		
+		ButtonFactory.addToolTo(tb, edit, new TextAreaCreationTool(
+				new TextAreaFigure()), "edit.createTextArea", labels);
 
 		if (Util.debug())
 			{
