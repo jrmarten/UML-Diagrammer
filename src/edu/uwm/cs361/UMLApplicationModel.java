@@ -63,11 +63,9 @@ public class UMLApplicationModel extends DefaultApplicationModel
 
 	public UMLApplicationModel()
 	{
+		
 	}
 
-	
-
-	// TODO: FINISH
 	@Override
 	public ActionMap createActionMap(Application a, @Nullable View v) {
 		ActionMap m = super.createActionMap(a, v);
