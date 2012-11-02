@@ -11,7 +11,6 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,6 +41,7 @@ import edu.uwm.cs361.action.AddAttributeAction;
 import edu.uwm.cs361.action.AddMethodAction;
 import edu.uwm.cs361.action.RemoveAttributeAction;
 import edu.uwm.cs361.action.RemoveMethodAction;
+import edu.uwm.cs361.classdiagram.data.Argument;
 import edu.uwm.cs361.classdiagram.data.Attribute;
 import edu.uwm.cs361.classdiagram.data.Method;
 import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
@@ -289,7 +289,11 @@ public class ClassFigure extends GraphicalCompositeFigure
 				return;
 			}
 		
-		data.addMethod(meth);
+		if ( !data.addMethod(meth) )
+			{
+				UMLApplicationModel.error( "id" , "Not Overloading"); //TODO:make Overloaded error message
+				return;
+			}
 
 		TextFigure tmpFig = new TextFigure();// createTextFigure(meth.toString());
 		tmpFig.setText(meth.toString());
@@ -321,18 +325,18 @@ public class ClassFigure extends GraphicalCompositeFigure
 				return;
 			}
 		
+		
 		boolean hasParams = ( methTxt.contains("(") && methTxt.contains(")") );
 		
 		if ( !methTxt.contains(" ") && !hasParams ) //just the name is present
 			{
-				Iterator<Method> it = data.getMethods().iterator();
-				while ( it.hasNext() )
+				for ( int i = 0; i < data.getMethods().size(); i++ )
 					{
-						Method meth = it.next();
+						
+						Method meth = data.getMethods().get(i);
 						if ( meth.getName().equals(methTxt) )
 							{
 								removeMethod ( meth );
-								it.remove();
 							}
 					}
 				return;
@@ -342,26 +346,23 @@ public class ClassFigure extends GraphicalCompositeFigure
 		
 		
 		String name = methTxt.substring(0, methTxt.indexOf("(")).trim();
-		String[] list = Method.extractParams( methTxt );
-		List<String> params = new LinkedList<String> ( );
+		Argument[] list = Method.extractParams( methTxt );
+		List<Argument> params = new LinkedList<Argument> ( );
 		
-		for ( String param : list )
+		for ( Argument param : list )
 			{
-				param = param.trim();
-				if ( params.equals( "" ) ) continue;
+				if ( params == null ) continue;
 				params.add ( param );
 			}
 		
-		Iterator<Method> it = data.getMethods().iterator();
-		while ( it.hasNext() )
+		for ( int i = 0; i < data.getMethods().size(); i++ )
 			{
-				Method meth = it.next();
+				Method meth = data.getMethods().get(i);
 				
 				if ( meth.getName().equals( name ) 
 						&& Util.equals( params, meth.getParameters()))
 					{
 						removeMethod ( meth );
-						it.remove();
 					}
 					
 			}
@@ -369,6 +370,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 	
 	public void removeAttribute ( String attrTxt )
 	{
+		if ( attrTxt == null ) return;
 		attrTxt = attrTxt.trim();
 		if ( Util.isEmpty( attrTxt ) ) return;
 		
@@ -413,6 +415,8 @@ public class ClassFigure extends GraphicalCompositeFigure
 	{
 		willChange ( );
 		
+		boolean abstractp = data.isAbstract();
+		
 		for ( int i = 0; i < methodList.getChildCount(); i++ )
 			{
 				Figure fig = methodList.getChild( i );
@@ -423,9 +427,16 @@ public class ClassFigure extends GraphicalCompositeFigure
 						if ( meth.toString().equals( tfig.getText() ) )
 							{
 								methodList.remove ( tfig );
+								data.removeMethod ( meth );
 								i--;
 							}
 					}
+			}
+		if ( abstractp && !data.isAbstract() )
+			{
+				Util.dprint( "changing colors from abstract to concrete" );
+				_colors = CLASSCOLORS;
+				setColors ( _colors );
 			}
 		
 		changed();
@@ -541,10 +552,11 @@ public class ClassFigure extends GraphicalCompositeFigure
 				out.addAttribute("abstract", (meth.isAbstract()) ? "true" : "false");
 				out.addAttribute("static", (meth.isStatic()) ? "true" : "false");
 				
-				for ( String tmp : meth.getParameters() )
+				for ( Argument tmp : meth.getParameters() )
 					{
 						out.openElement( "param" );
-						out.addAttribute("name", tmp);
+						out.addAttribute("name", tmp.getName() );
+						out.addAttribute( "type", tmp.getName() );
 						out.closeElement();
 					}
 				
