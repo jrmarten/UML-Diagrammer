@@ -25,8 +25,19 @@ Inheritance figure deletion :
 	
 	
 	
-	
-	
+Happened when clicking the Inheritance Button.
+	Exception in thread "AWT-EventQueue-0" java.lang.NullPointerException
+		at org.jhotdraw.draw.handle.ConnectorHandle.findConnectableConnector(ConnectorHandle.java:227)
+		at org.jhotdraw.draw.handle.ConnectorHandle.trackEnd(ConnectorHandle.java:144)
+		at org.jhotdraw.draw.event.HandleMulticaster.trackEnd(HandleMulticaster.java:69)
+		at org.jhotdraw.draw.tool.DefaultHandleTracker.mouseReleased(DefaultHandleTracker.java:211)
+		at org.jhotdraw.draw.tool.SelectionTool.mouseReleased(SelectionTool.java:215)
+		at org.jhotdraw.draw.tool.DelegationSelectionTool.mouseReleased(DelegationSelectionTool.java:138)
+		at java.awt.AWTEventMulticaster.mouseReleased(AWTEventMulticaster.java:290)
+		at java.awt.Component.processMouseEvent(Component.java:6389)
+		at javax.swing.JComponent.processMouseEvent(JComponent.java:3268)
+		at java.awt.Component.processEvent(Component.java:6154)
+		at java.awt.Container.processEvent(Container.java:2045)
 	
 	
 	
