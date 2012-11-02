@@ -71,10 +71,7 @@ public class TestMethod
 		assertTrue ( attr.getParameters ( ).contains ( "int" ) );
 		assertTrue ( attr.getParameters ( ).size ( ) == 2 );
 
-		for ( String arg : attr.getParameters ( ) )
-			{
-				assertTrue ( arg.equals ( "int" ) );
-			}
+	
 
 		passed ( );
 	}
