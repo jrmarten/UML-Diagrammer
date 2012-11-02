@@ -139,8 +139,9 @@ public class UMLView extends AbstractView
 	@Override
 	public boolean canSaveTo( URI uri )
 	{
-		return uri.getPath().endsWith(".xml");
+		return uri.getPath().endsWith(".xml") || uri.getPath().endsWith( ".png" );
 	}
+	
 
 	@Override protected void setHasUnsavedChanges ( boolean newValue)
 	{
@@ -170,10 +171,28 @@ public class UMLView extends AbstractView
 
 	@Override public void write(URI uri, @Nullable URIChooser chooser) throws IOException {
 		Drawing draw = view.getDrawing();
-		draw.getOutputFormats().get(0).write ( uri, draw );
+		
+		int format_index = -1;
+		if ( uri.getPath().endsWith( ".xml" ) )
+			format_index = 0;
+		
+		if ( uri.getPath().endsWith ( ".png" ) )
+			format_index = 1;
+		
+		if ( format_index == -1 )
+			{
+				UMLApplicationModel.error( "file.saveformat.filename.error", "Filename Error" );
+			}
+			
+		draw.getOutputFormats().get(format_index).write ( uri, draw );
 	}
 
 	@Override public void read(URI uri, @Nullable URIChooser chooser) throws IOException {
+		if ( uri.getPath().endsWith( ".png" ) )
+			{
+				UMLApplicationModel.error( "read.invalid.format.error" , "Invalid Format" );
+				return;
+			}
 		try
 			{
 				final Drawing draw = createDrawing();
