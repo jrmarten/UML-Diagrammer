@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import edu.uwm.cs361.Util;
 import static edu.uwm.cs361.Util.*;
 
 public class UMLClass implements Serializable
@@ -163,25 +165,32 @@ public class UMLClass implements Serializable
 		if (oldMethod == null)
 			return false;
 		boolean result = myMethods.remove(oldMethod);
-
+		
+		Util.dprint( oldMethod + " is abstract: " + oldMethod.isAbstract() );
+		
 		if (oldMethod.isAbstract() && abstractp)
 			{
+				Util.dprint( "Checking for non-abstractness" );
 				boolean is_abstract = false;
 				for (Method m : myMethods)
 					{
+						Util.dprint( m );
 						if (m.isAbstract())
 							{
-								is_abstract = false;
+								is_abstract = true;
 								break;
 							}
 					}
 				if (!is_abstract)
-					abstractp = false;
+					{
+						Util.dprint( "droping abstractness" );
+						abstractp = false;
+					}
 			}
 		return result;
 	}
 
-	public Collection<Method> getMethods() {
+	public LinkedList<Method> getMethods() {
 		return myMethods;
 	}
 
