@@ -105,12 +105,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 
 		list.add(tmp);
 
-		tmp = new JToolBar();
-		addSequenceButtonsTo(tmp, edit);
-		tmp.setName(Labels.getString("window.sequenceToolBar.title"));
-
-		list.add(tmp);
-
 		return list;
 	}
 
@@ -195,28 +189,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 
 		ButtonFactory.addToolTo(tb, edit, new ClickTool(new JavaGenerationAction(
 				edit.getActiveView())), "edit.javaGenerator", getProjectResources());
-	}
-
-	private void addSequenceButtonsTo(JToolBar tb, final DrawingEditor edit) {
-		HashMap<AttributeKey, Object> attributes;
-
-		ResourceBundleUtil labels = getProjectResources();
-
-		ButtonFactory.addSelectionToolTo(tb, edit);
-
-		attributes = new HashMap<AttributeKey, Object>();
-		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
-		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
-		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
-		ButtonFactory.addToolTo(tb, edit, new CreationTool(new LifelineFigure(),
-				attributes), "edit.createLifeline", labels);
-
-		attributes = new HashMap<AttributeKey, Object>();
-		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
-		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
-		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
-		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ActivationFigure(),
-				attributes), "edit.createActivation", labels);
 	}
 
 	@Override
