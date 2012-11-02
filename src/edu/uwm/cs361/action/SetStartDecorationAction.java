@@ -22,12 +22,7 @@ public class SetStartDecorationAction extends AssociationFigureAction
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		data.willChange();
-		LineDecorationChooser chooser = new LineDecorationChooser("start");
+		LineDecorationChooser chooser = new LineDecorationChooser(data, "start");
 		chooser.setVisible(true);
-		data.setAttributeEnabled(AttributeKeys.START_DECORATION, true);
-		data.set(AttributeKeys.START_DECORATION, new ArrowTip());
-		data.setAttributeEnabled(AttributeKeys.START_DECORATION, false);
-		data.changed();
 	}
 }
