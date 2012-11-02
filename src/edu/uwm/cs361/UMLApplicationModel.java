@@ -384,7 +384,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 				if ( loc == null ) loc = System.getenv( "APPDATA" );
 				if ( loc == null ) loc = System.getenv( "HOMEPATH" );
 				
-				return loc + "uml-diagrammer" + sep;
+				return loc + sep + "uml-diagrammer" + sep;
 			}
 		else //assume unix based
 			{
