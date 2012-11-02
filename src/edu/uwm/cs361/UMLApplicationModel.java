@@ -349,7 +349,10 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	public static Settings getProjectSettings ( ) 
 	{
 		if ( pref == null )
-			pref = Settings.getSettings ( new File ( getProgramDirectory ( ) + "preferences.config" ) );
+			{
+				pref = Settings.getSettings ( new File ( getProgramDirectory ( ) + "preferences.config" ) );
+				Util.dprint( "Gettings settings form: " + getProgramDirectory ( ) + "preferences.config");
+			}
 		return pref;
 	}
 
