@@ -8,20 +8,20 @@ public class Attribute
 	private String								name;
 	private String								type;
 	private Access								access	= Access.DEFAULT;
-	private boolean								staticp	= false;
-	private boolean								finalp	= false;
+	private String								val;
+	private boolean							staticp	= false;
+	private boolean							finalp	= false;
 
 	private static final String[]	mods		= { "private", "-", "public", "+",
 			"default", "~", "protected", "#", "static", "final", "s", "f" };
 
-	public Attribute()
-	{
-	}
+	public Attribute() { }
 
-	private Attribute(String[] perms, String name, String type)
+	private Attribute(String[] perms, String name, String type, String val)
 	{
 		this.name = name;
 		this.type = type;
+		this.val  = val;
 
 		for (String perm : perms)
 			{
@@ -71,7 +71,17 @@ public class Attribute
 	}
 
 	private static Attribute fromUML(String str) {
-		String[] parts = str.split(":");
+		String[] parts;
+		
+		String val = null;
+		if ( str.contains( "=" ) )
+			{
+				parts = str.split( "=" );
+				str = parts[0].trim();
+				val = parts[1].trim();
+			}
+		
+		parts = str.split(":");
 		if (parts.length != 2)
 			return (Attribute) report("More than one colon in attribute declaration");
 
@@ -91,11 +101,21 @@ public class Attribute
 				name = name.substring(1);
 			}
 
-		return filter(parts, name, type);
+		return filter(parts, name, type, val);
 	}
 
 	private static Attribute fromSignature(String str) {
-		String[] parts = str.split(" ");
+		String[] parts;
+		
+		String val = null;
+		if ( str.contains( "=" ) )
+			{
+				parts = str.split( "=" );
+				str = parts[0].trim();
+				val = parts[1].trim();
+			}
+		
+		parts = str.split(" ");
 
 		int nameIndex = parts.length - 1;
 
@@ -111,7 +131,7 @@ public class Attribute
 				parts[nameIndex] = a.toString();
 				name = name.substring(1);
 			}
-		return filter(parts, name, type);
+		return filter(parts, name, type, val);
 	}
 
 	private static boolean isValid(String in) {
@@ -125,7 +145,7 @@ public class Attribute
 		return false;
 	}
 
-	private static Attribute filter(String[] mods, String name, String type) {
+	private static Attribute filter(String[] mods, String name, String type, String val) {
 		for (String mod : mods)
 			{
 				if (!isValid(mod))
@@ -155,7 +175,7 @@ public class Attribute
 					}
 			}
 
-		return new Attribute(mods, name, type);
+		return new Attribute(mods, name, type, val);
 	}
 
 	@Override
@@ -171,12 +191,14 @@ public class Attribute
 
 	@Override
 	public String toString() {
-		return access.getSymbol() + name + ":" + type;
+		return access.getSymbol() + name + ":" + type +
+				((val != null)? " = " + val: "");
 	}
 
 	public String getSignature() {
 		return access.toString() + " " + ((staticp) ? "static " : "")
-				+ ((finalp) ? "final " : "") + type + " " + name;
+				+ ((finalp) ? "final " : "") + type + " " + name + 
+				((val != null)? " = " + val: "" );
 	}
 
 	public boolean sigEquals(Attribute attr) {
