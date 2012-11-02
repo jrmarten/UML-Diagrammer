@@ -42,11 +42,10 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 	}
 
 	private void addComponents() {
-		JLabel instructions, blank;
+		JLabel instructions;
 		JButton ok, cancel;
 
 		instructions = new JLabel("Select the " + _startOrEnd + " decoration:");
-		blank = new JLabel("");
 
 		_composition = new JRadioButton("Compostion");
 		_aggregation = new JRadioButton("Aggregation");
