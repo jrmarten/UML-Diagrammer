@@ -47,8 +47,6 @@ import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.InheritanceFigure;
 import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
 import edu.uwm.cs361.classdiagram.data.UMLInterface;
-import edu.uwm.cs361.sequencediagram.ActivationFigure;
-import edu.uwm.cs361.sequencediagram.LifelineFigure;
 import edu.uwm.cs361.settings.Settings;
 import edu.uwm.cs361.settings.Style;
 import edu.uwm.cs361.tool.ClickTool;
