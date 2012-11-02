@@ -37,6 +37,7 @@ public class InheritanceFigure extends LineConnectionFigure
 	{
 		set(STROKE_COLOR, for_color );
 		set(STROKE_WIDTH, 1d);
+		
 		set(END_DECORATION, new ArrowTip(0.60, 20.0 , 16.5, false, true, false));
 		set(START_DECORATION, null);
 		
@@ -93,9 +94,15 @@ public class InheritanceFigure extends LineConnectionFigure
 		if ( dashed )
 			{
 				Util.dprint( "Dashing" );
-				set( AttributeKeys.STROKE_DASH_PHASE , 25.0);
-				setAttributeEnabled ( AttributeKeys.STROKE_DASH_PHASE, false );
+				setAttributeEnabled ( AttributeKeys.STROKE_DASHES, true );
+				double[] x = { 3.0 };
+				set( AttributeKeys.STROKE_DASHES , x );
+				setAttributeEnabled ( AttributeKeys.STROKE_DASHES, false );
 			}
+		
+		setAttributeEnabled ( AttributeKeys.END_DECORATION, true );
+		set ( AttributeKeys.END_DECORATION, new ArrowTip(0.60, 20.0 , 16.5, false, true, true) );
+		setAttributeEnabled ( AttributeKeys.END_DECORATION, false);
 		
 		child.addSuperclass(par);
 	}
