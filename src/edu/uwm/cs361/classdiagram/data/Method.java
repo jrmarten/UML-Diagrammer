@@ -11,13 +11,13 @@ public class Method
 
 	private String								name;
 	private String								type;
-	private LinkedList<String>		params		= new LinkedList<String>();
+	private LinkedList<Argument>		params		= new LinkedList<Argument>();
 	private Access								access		= Access.DEFAULT;
 	private boolean								abstractp	= false;
 	private boolean								staticp		= false;
 
 	private static final String[]	mods			= { "private", "public", "protected",
-			"default", "abstract", "static", "#", "+", "-", "~" };
+			"default", "abstract", "static", "#", "+", "-", "~", "a", "s" };
 
 	private Method()
 	{
@@ -25,15 +25,14 @@ public class Method
 		name = "";
 	}
 
-	private Method(String[] mods, String type, String name, String[] arglist)
+	private Method(String[] mods, String type, String name, Argument[] arglist)
 	{
 		this.name = name;
 		this.type = type;
 
-		for (String arg : arglist)
+		for (Argument arg : arglist)
 			{
-				arg = arg.trim();
-				if (!arg.equals(""))
+				if (arg != null)
 					params.add(arg);
 			}
 
@@ -74,7 +73,8 @@ public class Method
 		if ( !(str.contains("(") && str.contains(")") ) )
 			return null;
 		
-		if (str.contains(":"))
+		String tmp = str.substring( str.indexOf( ')' ) );
+		if (tmp.contains(":"))
 			return fromUML(str);
 		else
 			return fromSignature(str);
@@ -94,6 +94,14 @@ public class Method
 
 		String[] mods = parts[0].split(" ");
 		String[] params = parts[1].split(", ");
+		
+		Argument[] args = new Argument [ params.length ];
+		
+		int i = 0;
+		for ( String param_str : params )
+			{
+				args[i++] = Argument.Create( param_str );
+			}
 
 		int index = mods.length - 1;
 		String name = mods[index];
@@ -106,22 +114,38 @@ public class Method
 				name = name.substring(1);
 			}
 
-		return filter(mods, type, name, params);
+		return filter(mods, type, name, args);
 	}
 	
-	public static String[] extractParams ( String str )
+	
+	public static Argument[] extractParams ( String str )
 	{
-		String list = parseModParam(str)[1];
-		return list.split(",");
+		String[] args = str.split( "," );
+		
+		Argument[] ret = new Argument [ args.length ];
+		
+		int i = 0;
+		for ( String arg : args )
+			{
+				ret[i++] = Argument.Create( arg );
+			}
+		return ret;
 	}
-
+	
 	private static Method fromSignature(String str) {
 
 		String[] parts = parseModParam(str);
 
 		String[] mods = parts[0].split(" ");
-		String[] params = parts[1].split(", ");
-
+		String[] params_str = parts[1].split(", ");
+		Argument[] args = new Argument [ params_str.length ];
+		
+		int i = 0;
+		for ( String param_str : params_str )
+			{
+				args[i++] = Argument.Create( param_str );
+			}
+		
 		int index = mods.length - 1;
 
 		String name = mods[index];
@@ -143,7 +167,7 @@ public class Method
 				name = name.substring(1);
 			}
 
-		return filter(mods, type, name, params);
+		return filter(mods, type, name, args);
 	}
 
 	private static String[] parseModParam(String in) {
@@ -156,7 +180,7 @@ public class Method
 	}
 
 	private static Method filter(String[] mods, String type, String name,
-			String[] params) {
+			Argument[] params) {
 
 		for (String mod : mods)
 			{
@@ -165,9 +189,11 @@ public class Method
 							+ mod);
 			}
 		
-		for ( String param_type : params )
+		for ( Argument param : params )
 			{
-				if ( Keywords.reservedp( param_type ) )
+				if ( param == null ) continue;
+				if ( Keywords.reservedp( param.getType ( ) ) ||
+							Keywords.reservedp( param.getName() ))
 					return (Method) report ( "Invalid parameter type" );
 			}
 		
@@ -216,8 +242,8 @@ public class Method
 		if (p.params.size() != q.params.size())
 			return true;
 
-		Iterator<String> pit = p.params.iterator();
-		Iterator<String> qit = q.params.iterator();
+		Iterator<Argument> pit = p.params.iterator();
+		Iterator<Argument> qit = q.params.iterator();
 
 		while (pit.hasNext())
 			{
@@ -236,7 +262,7 @@ public class Method
 		return type;
 	}
 
-	public LinkedList<String> getParameters() {
+	public LinkedList<Argument> getParameters() {
 		return params;
 	}
 
@@ -279,7 +305,7 @@ public class Method
 		result.staticp = staticp;
 		result.name = getName();
 		result.type = getType();
-		result.params = (LinkedList<String>) params.clone();
+		result.params = (LinkedList<Argument>) params.clone();
 		return result;
 	}
 
@@ -288,7 +314,20 @@ public class Method
 	}
 
 	public String getSignature() {
+		String buf = "(";
+		Iterator<Argument> it = params.iterator();
+		
+		while ( it.hasNext() )
+			{
+				Argument tmp = it.next();
+				buf += tmp.getType() + " " + tmp.getName();
+				if ( !it.hasNext() ) break;
+				buf += ",";
+			}
+		buf += ")";
+		
+		
 		return getAccess().toString() + " " + getModSig() + " " + getType() + " "
-				+ getName() + " ( " + join(params, ", ") + " ) ";
+				+ getName() + buf;
 	}
 }
