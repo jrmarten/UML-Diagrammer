@@ -8,10 +8,13 @@ import edu.uwm.cs361.classdiagram.data.*;
 
 public class JavaGenerator
 {
-	private String						tab				= "\t";
-	private int								tab_count	= 0;
+	private String						tab									= "\t";
+	private int							tab_count						= 0;
 	private PrintWriter				fout;
-
+	
+	private static String 		collection 					= null;
+	
+	
 	private static String[][]	defaults	= { { "byte", "0" }, { "int", "0" },
 			{ "double", "0.0" }, { "float", "0.0f" }, { "short", "0" },
 			{ "long", "0L" }, { "char", "0" }, { "boolean", "false" }, { "void", "" } };
@@ -62,6 +65,11 @@ public class JavaGenerator
 
 		File java_src;
 		JavaGenerator genny;
+		
+		if ( collection == null )
+			{
+				collection = UMLApplicationModel.getProjectSettings().getString("Collection", "Collection" );
+			}
 
 		try
 			{
@@ -87,6 +95,22 @@ public class JavaGenerator
 				sig += ";\n\n";
 				genny.write(sig);
 			}
+		
+		int i = 0;
+		for ( UMLClass tmp : umlclass.getAssociations())
+			{
+				String sig = "private " + tmp.getName() + "association" + i++;
+				sig += ";\n\n";
+				genny.write( sig );
+			}
+		
+		i = 0;
+		for ( UMLClass tmp : umlclass.getDependencies() ) //should be aggregations
+				{
+					String sig = "private " + collection + "<" + tmp.getName() + ">" +
+							"agg" + i++ + ";\n\n";
+					genny.write( sig );
+				}
 
 		for (Method meth : umlclass.getMethods())
 			{
