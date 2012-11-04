@@ -65,7 +65,6 @@ public class UMLInterface extends UMLClass
 	@Override
 	public Object clone() {
 		UMLClass result = new UMLInterface(getName());
-		result.generics = (LinkedList<String>) generics.clone();
 		result.myAttributes = (LinkedList<Attribute>) myAttributes.clone();
 		result.myAssociatedClasses = (LinkedList<UMLClass>) myAssociatedClasses
 				.clone();

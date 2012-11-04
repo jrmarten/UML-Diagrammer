@@ -43,7 +43,6 @@ public class UMLAbstractClass extends UMLClass
 	@Override
 	public Object clone() {
 		UMLClass result = new UMLAbstractClass(getName());
-		result.generics = (LinkedList<String>) generics.clone();
 		result.myAttributes = (LinkedList<Attribute>) myAttributes.clone();
 		result.myMethods = (LinkedList<Method>) myMethods.clone();
 		result.myAssociatedClasses = (LinkedList<UMLClass>) myAssociatedClasses
