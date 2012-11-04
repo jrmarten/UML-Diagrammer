@@ -17,7 +17,6 @@ import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.decoration.ArrowTip;
 
 import edu.uwm.cs361.UMLApplicationModel;
-import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
 import edu.uwm.cs361.classdiagram.data.UMLInterface;
 import edu.uwm.cs361.settings.CSSRule;
@@ -65,6 +64,11 @@ public class InheritanceFigure extends LineConnectionFigure
 	public boolean canConnect(Connector start, Connector end) {
 		if (!(start.getOwner() instanceof ClassFigure && end.getOwner() instanceof ClassFigure))
 			return false;
+		
+		if ( ((ClassFigure)start.getOwner()).getData() instanceof UMLInterface &&
+				(!(((ClassFigure)end.getOwner()).getData() instanceof UMLInterface)))
+			return false;
+		
 		if (start.getOwner() == end.getOwner())
 			return false;
 
@@ -93,7 +97,6 @@ public class InheritanceFigure extends LineConnectionFigure
 		
 		if ( dashed )
 			{
-				Util.dprint( "Dashing" );
 				setAttributeEnabled ( AttributeKeys.STROKE_DASHES, true );
 				double[] x = { 3.0 };
 				set( AttributeKeys.STROKE_DASHES , x );
