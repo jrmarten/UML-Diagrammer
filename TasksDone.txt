@@ -18,3 +18,5 @@ EXCEPTIONS TO HANDLE:Max
     Add Method : when a user doesn't enter any text and hits ok
     Remove Attribute/Method : when a user doesn't enter any text and hits ok
     
+Make Inheritance Decorations: Tony
+    Make Inheritance look like Inheritance

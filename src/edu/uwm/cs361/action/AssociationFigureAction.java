@@ -8,7 +8,7 @@ import edu.uwm.cs361.classdiagram.AssociationFigure;
 @SuppressWarnings("serial")
 public abstract class AssociationFigureAction extends AbstractAction
 {
-	protected AssociationFigure data;
+	protected AssociationFigure _data;
 
 //	public static final String	method_prompt			= "actions.method.prompt";
 //	public static final String	attribute_prompt	= "actions.attribute.prompt";
@@ -16,11 +16,11 @@ public abstract class AssociationFigureAction extends AbstractAction
 	public AssociationFigureAction(String str, AssociationFigure fig)
 	{
 		super(UMLApplicationModel.getProjectResources().getString(str));
-		data = fig;
+		_data = fig;
 	}
 
 	public void setData(AssociationFigure fig) {
-		data = fig;
+		_data = fig;
 	}
 
 }

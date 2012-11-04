@@ -47,8 +47,6 @@ import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.InheritanceFigure;
 import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
 import edu.uwm.cs361.classdiagram.data.UMLInterface;
-import edu.uwm.cs361.sequencediagram.ActivationFigure;
-import edu.uwm.cs361.sequencediagram.LifelineFigure;
 import edu.uwm.cs361.settings.Settings;
 import edu.uwm.cs361.settings.Style;
 import edu.uwm.cs361.tool.ClickTool;
@@ -96,20 +94,8 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		LinkedList<JToolBar> list = new LinkedList<JToolBar>();
 
 		JToolBar tmp = new JToolBar();
-		addGeneralButtonsTo(tmp, edit);
-		tmp.setName(Labels.getString("window.generalToolBar.title"));
-
-		list.add(tmp);
-
-		tmp = new JToolBar();
 		addClassButtonsTo(tmp, edit);
 		tmp.setName(Labels.getString("window.classToolBar.title"));
-
-		list.add(tmp);
-
-		tmp = new JToolBar();
-		addSequenceButtonsTo(tmp, edit);
-		tmp.setName(Labels.getString("window.sequenceToolBar.title"));
 
 		list.add(tmp);
 
@@ -125,16 +111,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	@Override
 	protected MenuBuilder createMenuBuilder() {
 		return new UMLMenuBuilder();
-	}
-
-	private void addGeneralButtonsTo(JToolBar tb, final DrawingEditor edit) {
-		ResourceBundleUtil labels = getProjectResources();
-
-		ButtonFactory.addSelectionToolTo(tb, edit);
-
-		ButtonFactory.addToolTo(tb, edit, new TextAreaCreationTool(
-				new TextAreaFigure()), "edit.createTextArea", labels);
-
 	}
 
 	private void addClassButtonsTo(JToolBar tb, final DrawingEditor edit) {
@@ -183,6 +159,9 @@ public class UMLApplicationModel extends DefaultApplicationModel
 
 		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
 				new InheritanceFigure()), "edit.createInheritance", labels);
+		
+		ButtonFactory.addToolTo(tb, edit, new TextAreaCreationTool(
+				new TextAreaFigure()), "edit.createTextArea", labels);
 
 		if (Util.debug())
 			{
@@ -197,28 +176,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 
 		ButtonFactory.addToolTo(tb, edit, new ClickTool(new JavaGenerationAction(
 				edit.getActiveView())), "edit.javaGenerator", getProjectResources());
-	}
-
-	private void addSequenceButtonsTo(JToolBar tb, final DrawingEditor edit) {
-		HashMap<AttributeKey, Object> attributes;
-
-		ResourceBundleUtil labels = getProjectResources();
-
-		ButtonFactory.addSelectionToolTo(tb, edit);
-
-		attributes = new HashMap<AttributeKey, Object>();
-		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
-		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
-		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
-		ButtonFactory.addToolTo(tb, edit, new CreationTool(new LifelineFigure(),
-				attributes), "edit.createLifeline", labels);
-
-		attributes = new HashMap<AttributeKey, Object>();
-		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
-		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
-		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
-		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ActivationFigure(),
-				attributes), "edit.createActivation", labels);
 	}
 
 	@Override
@@ -279,6 +236,8 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		
 		private class SaveTemplateActionMod extends SaveTemplateAction 
 		{
+			private static final long	serialVersionUID	= -8018751927333468798L;
+
 			public SaveTemplateActionMod(Application app, View view)
 			{
 				super(app, view);

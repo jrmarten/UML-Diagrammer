@@ -8,9 +8,10 @@ import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.geom.*;
 
-public class SeperationFigure
-extends RectangleFigure
+public class SeperationFigure extends RectangleFigure
 {
+	private static final long	serialVersionUID	= 7107507736906198727L;
+
 	public SeperationFigure ( ) { }
 
 	@Override public Dimension2DDouble getPreferredSize ( )

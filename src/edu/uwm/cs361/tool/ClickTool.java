@@ -10,6 +10,7 @@ import org.jhotdraw.draw.tool.AbstractTool;
 
 public class ClickTool extends AbstractTool
 {
+	private static final long	serialVersionUID	= 1105395865164917351L;
 	AbstractAction	p_func;
 
 	public ClickTool(AbstractAction a)

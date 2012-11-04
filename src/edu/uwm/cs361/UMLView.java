@@ -37,6 +37,8 @@ import edu.uwm.cs361.settings.Style;
 
 public class UMLView extends AbstractView
 {
+	private static final long	serialVersionUID	= -6334922908811740357L;
+
 	public final static String GRID_VISIBLE_PROPERTY = "gridVisible";
 	
 	private JScrollPane scrollpane = new JScrollPane ( );

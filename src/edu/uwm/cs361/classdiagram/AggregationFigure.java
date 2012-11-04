@@ -18,6 +18,7 @@ import edu.uwm.cs361.settings.Style;
 
 public class AggregationFigure extends AssociationFigure {
 
+	private static final long	serialVersionUID	= -8429620625245686470L;
 	private static Color for_color = Color.black;
 	
   /** Creates a new instance. */

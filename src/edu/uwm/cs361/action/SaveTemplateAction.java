@@ -14,6 +14,7 @@ import edu.uwm.cs361.Util;
 
 public class SaveTemplateAction extends SaveFileAction
 {
+	private static final long	serialVersionUID	= -5846294040633741021L;
 	protected URI uri;
 	protected Application a;
 	protected View v;

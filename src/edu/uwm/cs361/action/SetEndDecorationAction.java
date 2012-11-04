@@ -2,9 +2,6 @@ package edu.uwm.cs361.action;
 
 import java.awt.event.ActionEvent;
 
-import org.jhotdraw.draw.AttributeKeys;
-import org.jhotdraw.draw.decoration.ArrowTip;
-
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.classdiagram.AssociationFigure;
 import edu.uwm.cs361.classdiagram.LineDecorationChooser;
@@ -22,7 +19,7 @@ public class SetEndDecorationAction extends AssociationFigureAction
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		LineDecorationChooser chooser = new LineDecorationChooser(data, "end");
+		LineDecorationChooser chooser = new LineDecorationChooser(_data, "end");
 		chooser.setVisible(true);
 	}
 }

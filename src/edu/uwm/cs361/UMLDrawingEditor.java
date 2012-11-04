@@ -10,6 +10,7 @@ import org.jhotdraw.draw.DefaultDrawingEditor;
  */
 public class UMLDrawingEditor extends DefaultDrawingEditor
 {
+	private static final long	serialVersionUID	= -5551884955740023869L;
 
 	@Override
 	protected InputMap createInputMap() {

@@ -62,6 +62,7 @@ public class UMLInterface extends UMLClass
 		return "interface " + getName() + buffer;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone() {
 		UMLClass result = new UMLInterface(getName());

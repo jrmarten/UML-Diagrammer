@@ -27,9 +27,8 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 	private static final long	serialVersionUID	= 553854446330611986L;
 	private AssociationFigure _data;
 	private String _startOrEnd;
-	JRadioButton composition, aggregation, arrow;
+	private JRadioButton _composition, _aggregation, _arrow;
 	
-	@SuppressWarnings("deprecation")
 	public LineDecorationChooser(AssociationFigure data, String startOrEnd)
 	{
 		super();
@@ -43,15 +42,14 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 	}
 
 	private void addComponents() {
-		JLabel instructions, blank;
+		JLabel instructions;
 		JButton ok, cancel;
 
 		instructions = new JLabel("Select the " + _startOrEnd + " decoration:");
-		blank = new JLabel("");
 
-		composition = new JRadioButton("Compostion");
-		aggregation = new JRadioButton("Aggregation");
-		arrow = new JRadioButton("Arrow-Tip");
+		_composition = new JRadioButton("Compostion");
+		_aggregation = new JRadioButton("Aggregation");
+		_arrow = new JRadioButton("Arrow-Tip");
 		
 		ok = new JButton("Ok");
 		cancel = new JButton("Cancel");
@@ -61,28 +59,26 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 		cancel.addActionListener(this);		
 
 		ButtonGroup group = new ButtonGroup();
-		group.add(composition);
-		group.add(aggregation);
-		group.add(arrow);
+		group.add(_composition);
+		group.add(_aggregation);
+		group.add(_arrow);
 
 		JPanel items = new JPanel();
 		items.setLayout(new GridLayout(0, 2));
-		items.add(composition);
+		items.add(_composition);
 		items.add(new JLabel(createImageIcon("/edu/uwm/cs361/images/compositionDecoration.png",
 						"Composition")));
-		items.add(aggregation);
+		items.add(_aggregation);
 		items.add(new JLabel(createImageIcon("/edu/uwm/cs361/images/aggregationDecoration.png",
 						"Aggregation")));
-		items.add(arrow);
+		items.add(_arrow);
 		items.add(new JLabel(createImageIcon("/edu/uwm/cs361/images/arrowTipDecoration.png",
 						"Arrow")));
-		items.add(ok, BorderLayout.PAGE_END);
-		items.add(cancel, BorderLayout.PAGE_END);
+		items.add(ok);
+		items.add(cancel);
 
 		add(instructions, BorderLayout.PAGE_START);
-//		add(blank, BorderLayout.LINE_START);
 		add(items, BorderLayout.CENTER);
-//		add(blank, BorderLayout.LINE_END);
 	}
 
 	@Override
@@ -92,11 +88,11 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 			if (ac.equals("ok")) {
 				_data.willChange();
 				LineDecoration tip = new ArrowTip();
-				if (composition.isSelected()) tip = new ArrowTip(0.40, 15.0, 30.0);
-				else if (aggregation.isSelected()) {
+				if (_composition.isSelected()) tip = new ArrowTip(0.40, 15.0, 30.0);
+				else if (_aggregation.isSelected()) {
 					tip = new ArrowTip(0.40, 15.0, 30.0, false, true, true);
 				}
-				else if (arrow.isSelected()) tip = new ArrowTip(0.35, 20, 18.4);
+				else if (_arrow.isSelected()) tip = new ArrowTip(0.35, 20, 18.4);
 				AttributeKey<LineDecoration> key = AttributeKeys.START_DECORATION;
 				if (_startOrEnd.equals("end")) key = AttributeKeys.END_DECORATION;
 				_data.setAttributeEnabled(key, true);
