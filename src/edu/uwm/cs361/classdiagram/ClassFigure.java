@@ -446,6 +446,8 @@ public class ClassFigure extends GraphicalCompositeFigure
 	public void read(DOMInput in) throws IOException {
 		dprint ( "Reading ClassFigure" );
 		
+		willChange();
+		
 		double x = in.getAttribute("x", 0d);
 		double y = in.getAttribute("y", 0d);
 		double w = in.getAttribute("w", 0d);
@@ -458,6 +460,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 		String name = in.getAttribute( "name", "Class" );
 		data.setName( name );
 		nameFig.setText( name );
+		nameFig.invalidate();
 		Util.dprint(name);
 		
 		UMLClass proto;
@@ -515,8 +518,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 			}
 		
 		readAttributes(in);
-		
-		willChange ( );
 		setElements ( );
 		changed ( );
 		
