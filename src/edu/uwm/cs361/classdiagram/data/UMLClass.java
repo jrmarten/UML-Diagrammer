@@ -1,25 +1,27 @@
 package edu.uwm.cs361.classdiagram.data;
 
+import static edu.uwm.cs361.Util.dprint;
+import static edu.uwm.cs361.Util.join;
+
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.Comparator;
 import java.util.LinkedList;
 
 import edu.uwm.cs361.Util;
-import static edu.uwm.cs361.Util.*;
 
 public class UMLClass implements Serializable
 {
 
 	protected String								myName;
-	protected LinkedList<String>		generics;
 	protected LinkedList<Attribute>	myAttributes;
 	protected LinkedList<Method>		myMethods;
+	
+	
+	protected LinkedList<NamedType> aggregation;
 	protected LinkedList<UMLClass>	myAssociatedClasses;
-
 	protected UMLClass							superClass;
 	protected LinkedList<UMLClass>	myInterfaces;
-
 	protected LinkedList<UMLClass>	myDependClasses;
 	private boolean									abstractp					= false;
 
@@ -31,8 +33,8 @@ public class UMLClass implements Serializable
 	public UMLClass()
 	{
 		myName = "Class";
-		generics = new LinkedList<String>();
 		myAttributes = new LinkedList<Attribute>();
+		aggregation = new LinkedList<NamedType> ( );
 		myMethods = new LinkedList<Method>();
 		myAssociatedClasses = new LinkedList<UMLClass>();
 		myInterfaces = new LinkedList<UMLClass>();
@@ -63,21 +65,6 @@ public class UMLClass implements Serializable
 			return;
 
 		myName = newName;
-
-		// generics.clear();
-		// if (newName.contains("<"))
-		// {
-		// String tmp;
-		// myName = newName.substring(0, newName.indexOf("<"));
-		// tmp = newName.substring(newName.indexOf("<") + 1, newName.indexOf(">"));
-		// String[] classnames = tmp.split(" , ");
-		// for (String cl : classnames)
-		// {
-		// cl = cl.trim();
-		// if (!cl.equals(""))
-		// generics.add(cl);
-		// }
-		// }
 	}
 
 	/**
@@ -88,20 +75,7 @@ public class UMLClass implements Serializable
 	public String getName() {
 		return myName;
 	}
-
-	public String getGenerics() {
-		Iterator<String> it = generics.iterator();
-		String buf = "";
-		while (it.hasNext())
-			{
-				buf += it.next();
-				if (!it.hasNext())
-					break;
-				buf += ", ";
-			}
-		return "<" + buf + ">";
-	}
-
+	
 	public boolean isAbstractClass() {
 		return false;
 	}
@@ -109,7 +83,33 @@ public class UMLClass implements Serializable
 	public boolean isAbstract() {
 		return abstractp;
 	}
+	
+	//*********************************************************************
 
+	public LinkedList<NamedType> getAggregation ( )
+	{
+		return aggregation;
+	}
+
+
+	public Collection<UMLClass> getAssociations() {
+		return myAssociatedClasses;
+	}
+	
+
+	public Collection<UMLClass> getSuperclasses() {
+		LinkedList<UMLClass> result = new LinkedList<UMLClass>(myInterfaces);
+		if (superClass != null)
+			result.add(superClass);
+
+		return result;
+	}
+	
+
+	public Collection<UMLClass> getDependencies() {
+		return myDependClasses;
+	}
+	
 	// ************************************************************
 
 	// Attribute Methods
@@ -200,7 +200,7 @@ public class UMLClass implements Serializable
 
 	// not much to do
 
-	public boolean addAssociation(UMLClass newAssociatedClass) {
+	public boolean addAss(UMLClass newAssociatedClass) {
 		if (newAssociatedClass == null)
 			return false;
 		return myAssociatedClasses.add(newAssociatedClass);
@@ -210,10 +210,6 @@ public class UMLClass implements Serializable
 		if (oldAssociatedClass == null)
 			return false;
 		return myAssociatedClasses.remove(oldAssociatedClass);
-	}
-
-	public Collection<UMLClass> getAssociations() {
-		return myAssociatedClasses;
 	}
 
 	// *********************************************
@@ -269,14 +265,6 @@ public class UMLClass implements Serializable
 		return myInterfaces.remove(oldSuperclass);
 	}
 
-	public Collection<UMLClass> getSuperclasses() {
-		LinkedList<UMLClass> result = new LinkedList<UMLClass>(myInterfaces);
-		if (superClass != null)
-			result.add(superClass);
-
-		return result;
-	}
-
 	// *******************************************************************
 
 	// Dependencies
@@ -291,10 +279,6 @@ public class UMLClass implements Serializable
 		if (oldDependency == null)
 			return false;
 		return myDependClasses.remove(oldDependency);
-	}
-
-	public Collection<UMLClass> getDependencies() {
-		return myDependClasses;
 	}
 
 	// *********************************************************************
@@ -333,7 +317,7 @@ public class UMLClass implements Serializable
 	public Object clone() {
 		UMLClass result = new UMLClass(getName());
 		result.abstractp = abstractp;
-		result.generics = (LinkedList<String>) generics.clone();
+		result.aggregation = (LinkedList<NamedType>) aggregation.clone();
 		result.myAttributes = (LinkedList<Attribute>) myAttributes.clone();
 		result.myMethods = (LinkedList<Method>) myMethods.clone();
 		result.myAssociatedClasses = (LinkedList<UMLClass>) myAssociatedClasses
@@ -342,5 +326,86 @@ public class UMLClass implements Serializable
 		result.myInterfaces = (LinkedList<UMLClass>) myInterfaces.clone();
 
 		return result;
+	}
+
+	
+	public boolean add ( UMLClass type, Connection con )  { return add ( type, "", con ); }
+	public boolean add ( UMLClass type, String name, Connection con )
+	{
+		if ( type == null || name == null || con == null ) return false;
+		
+		if ( con == Connection.INHERITANCE )
+			{
+				return addSuper ( type );
+			}
+		if ( con == Connection.AGGREGATION )
+			{
+				return addAgg ( type, name );
+			}
+		if ( con == Connection.ASSOCIATION )
+			{
+				return addAss( type, name );
+			}
+		
+		
+		
+		return false;
+	}
+	
+	private boolean addSuper ( UMLClass type )
+	{
+		if ( type instanceof UMLInterface )
+			{
+				if ( myInterfaces.contains( type ) ) return false;
+				return myInterfaces.add( type );
+			}
+		else
+			{
+				if ( isSuper ( this, type ) ) return false;
+				superClass = type;
+				return true;
+			}
+	}
+	
+	private boolean addAgg ( UMLClass type, String name )
+	{
+		NamedType tmp = new NamedType();
+		tmp.type = type;
+		if ( Util.contains( aggregation, tmp , NamedType.getTypeComp()) ) return false;
+		tmp.name = name;
+		return aggregation.add( tmp );
+	}
+	
+	private boolean addAss(UMLClass type, String name) {
+		if (type == null)
+			return false;
+		return myAssociatedClasses.add(type);
+	}
+	
+	public static class NamedType 
+	{
+		public String name;
+		public UMLClass type;
+		
+		private static TypedComparer typeComp = new TypedComparer ( ); 
+		
+		public static Comparator getTypeComp ( ) { return typeComp; }
+		
+		private static class TypedComparer implements Comparator
+		{
+			public static int ERROR = -1;
+			
+			@Override
+			public int compare(Object a, Object b) {
+				if ( a instanceof NamedType && b instanceof NamedType )
+					{
+						NamedType aT = (NamedType) a;
+						NamedType bT = (NamedType) b;
+						
+						return (aT.type.getName().equals(bT.type.getName()))?0:-1;
+					}
+				return ERROR;
+			}
+		}
 	}
 }
