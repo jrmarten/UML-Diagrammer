@@ -1,10 +1,15 @@
 package edu.uwm.cs361.classdiagram.io;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.Util;
-import edu.uwm.cs361.classdiagram.data.*;
+import edu.uwm.cs361.classdiagram.data.Attribute;
+import edu.uwm.cs361.classdiagram.data.Method;
+import edu.uwm.cs361.classdiagram.data.UMLClass;
+import edu.uwm.cs361.classdiagram.data.UMLClass.NamedType;
 
 public class JavaGenerator
 {
@@ -105,10 +110,10 @@ public class JavaGenerator
 			}
 		
 		i = 0;
-		for ( UMLClass tmp : umlclass.getDependencies() ) //should be aggregations
+		for ( NamedType tmp : umlclass.getAggregation() ) //should be aggregations
 				{
-					String sig = "private " + collection + "<" + tmp.getName() + ">" +
-							"agg" + i++ + ";\n\n";
+					String sig = "private " + collection + "<" + tmp.type+ ">" +
+							tmp.name + ";\n\n";
 					genny.write( sig );
 				}
 
