@@ -1,5 +1,6 @@
 package edu.uwm.cs361;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 public class Util
@@ -113,6 +114,15 @@ public class Util
 	private static boolean equalsIgnoreCase ( char a, char b )
 	{
 		return Character.toLowerCase(a) == Character.toLowerCase(b); 
+	}
+	
+	public static <E> boolean contains ( Iterable<E> col, E element, Comparator<E> comp )
+	{
+		for ( E tmp : col )
+			{
+				if ( comp.compare( tmp, element ) == 0 ) return true;
+			}
+		return false;
 	}
 	
 	public static int countInstancesOf ( String str, char ch )
