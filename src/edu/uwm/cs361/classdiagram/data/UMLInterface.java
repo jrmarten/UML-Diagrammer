@@ -27,7 +27,6 @@ public class UMLInterface extends UMLClass
 		return false;
 	}
 
-	@Override
 	public boolean addAssociation(UMLClass c) {
 		return false;
 	}
