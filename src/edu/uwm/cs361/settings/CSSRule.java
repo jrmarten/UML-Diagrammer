@@ -47,7 +47,7 @@ public class CSSRule extends Settings
 		
 		//cuz I like writing code
 		boolean hexNotation = false;
-		if ( val.startsWith( "#" ) | (hexNotation = val.startsWith ( "0x" ) ) )
+		if ( val.startsWith( "#" ) || (hexNotation = val.startsWith ( "0x" ) ) )
 			{
 				if ( hexNotation ) val = val.substring( 2 );
 				else val = val.substring( 1 );
