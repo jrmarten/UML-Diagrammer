@@ -15,9 +15,13 @@ import java.util.Collection;
 
 import javax.swing.Action;
 
+import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.LineConnectionFigure;
+import org.jhotdraw.draw.LabeledLineConnectionFigure;
+import org.jhotdraw.draw.TextFigure;
 import org.jhotdraw.draw.connector.Connector;
+import org.jhotdraw.draw.layouter.LocatorLayouter;
+import org.jhotdraw.draw.locator.BezierLabelLocator;
 
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.action.SetEndDecorationAction;
@@ -28,20 +32,50 @@ import edu.uwm.cs361.settings.Style;
 /**
  * AssociationFigure.
  */
-public class AssociationFigure extends LineConnectionFigure
+public class AssociationFigure extends LabeledLineConnectionFigure
 {
 
 	private static final long	serialVersionUID	= -1729547106413248257L;
 	private static Color for_color = Color.black;
 	
+	private TextFigure a_mult;
+	private TextFigure b_mult;
+	private TextFigure role;
+	
 	/** Creates a new instance. */
 	public AssociationFigure()
 	{
+		//setLiner ( new ElbowLiner ( ) );
+		setLayouter ( new LocatorLayouter ( ) );
+		
 		set(STROKE_COLOR, for_color);
 		set(STROKE_WIDTH, 1d);
 		set(END_DECORATION, null);
 		set(START_DECORATION, null);
-
+		
+		a_mult = new TextFigure ( );
+		a_mult.setText( "A" );
+		a_mult.set( AttributeKeys.TEXT_COLOR, for_color );
+		a_mult.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 0, -Math.PI / 4, 8 ) );
+		a_mult.setAttributeEnabled( LocatorLayouter.LAYOUT_LOCATOR, false);
+		a_mult.setAttributeEnabled( AttributeKeys.TEXT_COLOR, false);
+		add ( a_mult );
+		
+		b_mult = new TextFigure ( );
+		b_mult.setText( "B" );
+		b_mult.set( AttributeKeys.TEXT_COLOR, for_color );
+		b_mult.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 1, -Math.PI / 4, 8 ) );
+		b_mult.setAttributeEnabled( AttributeKeys.TEXT_COLOR, false);
+		add ( b_mult );
+		
+		role = new TextFigure ( "role" );
+		
+		role.set( AttributeKeys.TEXT_COLOR, for_color );
+		role.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 0.5, Math.PI / 2, 1 ) );
+		role.setAttributeEnabled ( AttributeKeys.TEXT_COLOR, false );
+		add ( role );
+		
+		
 		setAttributeEnabled(STROKE_COLOR, false);
 		setAttributeEnabled(END_DECORATION, false);
 		setAttributeEnabled(START_DECORATION, false);
@@ -59,7 +93,6 @@ public class AssociationFigure extends LineConnectionFigure
 		if ( association_rule == null ) return;
 		
 		for_color = association_rule.getColor( "forground-color", Color.black);
-		
 	}
 
 	/**
@@ -101,7 +134,29 @@ public class AssociationFigure extends LineConnectionFigure
 		sf.removeDependency(this);
 		ef.removeDependency(this);
 	}
-
+/*	
+	@Override
+	public void changed ( )
+	{
+		Util.dprint( "Updating Association" );
+		Point2D.Double start = getStartPoint();
+		
+		a_mult.willChange();
+		Double rec = a_mult.getBounds();
+		rec.x = start.x + 5;
+		rec.y = start.y + 5;
+		
+		Util.dprint( "Multiplicty is " + ((a_mult.isVisible())? "" : "not ") + "visible" ); 
+		Util.dprint( a_mult.getText() );
+		Util.dprint( "X:" + rec.x + "\nY:" + rec.y );
+		
+		a_mult.setBounds( rec );
+		a_mult.invalidate();
+		a_mult.changed();
+		
+		super.changed();
+	}*/
+	
 	/**
 	 * Handles the connection of a connection. Override this method to handle this
 	 * event.
@@ -118,6 +173,8 @@ public class AssociationFigure extends LineConnectionFigure
 	@Override
 	public AssociationFigure clone() {
 		AssociationFigure that = (AssociationFigure) super.clone();
+		that.a_mult = (TextFigure) a_mult.clone();
+		that.b_mult = (TextFigure) b_mult.clone();
 
 		return that;
 	}
