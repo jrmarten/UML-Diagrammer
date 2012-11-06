@@ -26,8 +26,6 @@ public class CSSRule extends Settings
 
 	/*
 	 * kinda weird but should work
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object o) {

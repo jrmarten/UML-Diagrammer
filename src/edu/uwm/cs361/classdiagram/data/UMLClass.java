@@ -347,8 +347,21 @@ public class UMLClass implements Serializable
 			{
 				return addAss( type, name );
 			}
+		if ( con == Connection.COMPOSITION )
+			{
+				
+			}
+		if ( con == Connection.DEPENDANCY )
+			{
+				
+			}
 		
-		
+		return false;
+	}
+	
+	public boolean change ( Object Old, Object New ) { return change ( Old, New, null ); }
+	public boolean change ( Object Old, Object New, Connection con )
+	{
 		
 		return false;
 	}
