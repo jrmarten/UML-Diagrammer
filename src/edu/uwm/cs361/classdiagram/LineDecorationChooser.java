@@ -27,7 +27,7 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 	private static final long	serialVersionUID	= 553854446330611986L;
 	private AssociationFigure _data;
 	private String _startOrEnd;
-	private JRadioButton _composition, _aggregation, _arrow;
+	private JRadioButton _composition, _aggregation, _arrow, _none;
 	
 	public LineDecorationChooser(AssociationFigure data, String startOrEnd)
 	{
@@ -38,7 +38,6 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 		setSize(300, 300);
 		setLayout(new BorderLayout(0, 0));
 		addComponents();
-		
 	}
 
 	private void addComponents() {
@@ -50,6 +49,7 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 		_composition = new JRadioButton("Compostion");
 		_aggregation = new JRadioButton("Aggregation");
 		_arrow = new JRadioButton("Arrow-Tip");
+		_none = new JRadioButton("None");
 		
 		ok = new JButton("Ok");
 		cancel = new JButton("Cancel");
@@ -62,6 +62,7 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 		group.add(_composition);
 		group.add(_aggregation);
 		group.add(_arrow);
+		group.add(_none);
 
 		JPanel items = new JPanel();
 		items.setLayout(new GridLayout(0, 2));
@@ -74,6 +75,8 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 		items.add(_arrow);
 		items.add(new JLabel(createImageIcon("/edu/uwm/cs361/images/arrowTipDecoration.png",
 						"Arrow")));
+		items.add(_none);
+		items.add(new JLabel(""));
 		items.add(ok);
 		items.add(cancel);
 
@@ -88,11 +91,12 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 			if (ac.equals("ok")) {
 				_data.willChange();
 				LineDecoration tip = new ArrowTip();
+				
 				if (_composition.isSelected()) tip = new ArrowTip(0.40, 15.0, 30.0);
-				else if (_aggregation.isSelected()) {
-					tip = new ArrowTip(0.40, 15.0, 30.0, false, true, true);
-				}
+				else if (_aggregation.isSelected()) tip = new ArrowTip(0.40, 15.0, 30.0, false, true, true);
 				else if (_arrow.isSelected()) tip = new ArrowTip(0.35, 20, 18.4);
+				else tip = null;
+				
 				AttributeKey<LineDecoration> key = AttributeKeys.START_DECORATION;
 				if (_startOrEnd.equals("end")) key = AttributeKeys.END_DECORATION;
 				_data.setAttributeEnabled(key, true);
