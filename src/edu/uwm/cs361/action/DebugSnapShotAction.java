@@ -11,6 +11,7 @@ import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 
 import edu.uwm.cs361.UMLApplicationModel;
+import edu.uwm.cs361.classdiagram.AssociationFigure;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.data.Attribute;
 import edu.uwm.cs361.classdiagram.data.Method;
@@ -43,7 +44,13 @@ public class DebugSnapShotAction extends AbstractAction
 					{
 						dprint(delim);
 						classfigure_hook((ClassFigure) fig);
-					} else
+					}
+				else if ( fig instanceof AssociationFigure )
+					{
+						dprint ( delim );
+						conSnap ( (AssociationFigure) fig );
+					}
+				else
 					{
 						figure_hook(fig);
 					}
@@ -76,5 +83,10 @@ public class DebugSnapShotAction extends AbstractAction
 			}
 		buffer += "}\n";
 		dprint(buffer);
+	}
+	
+	private void conSnap ( AssociationFigure fig )
+	{
+		dprint ( fig.getRoleName() );
 	}
 }

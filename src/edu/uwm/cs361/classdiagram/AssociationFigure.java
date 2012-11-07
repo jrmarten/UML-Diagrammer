@@ -9,6 +9,7 @@ import static org.jhotdraw.draw.AttributeKeys.STROKE_DASHES;
 import static org.jhotdraw.draw.AttributeKeys.STROKE_WIDTH;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,8 +25,10 @@ import org.jhotdraw.draw.layouter.LocatorLayouter;
 import org.jhotdraw.draw.locator.BezierLabelLocator;
 
 import edu.uwm.cs361.UMLApplicationModel;
+import edu.uwm.cs361.action.AssociationFigureAction;
 import edu.uwm.cs361.action.SetEndDecorationAction;
 import edu.uwm.cs361.action.SetStartDecorationAction;
+import edu.uwm.cs361.locator.MiddleBezierLabelLocator;
 import edu.uwm.cs361.settings.CSSRule;
 import edu.uwm.cs361.settings.Style;
 
@@ -45,7 +48,6 @@ public class AssociationFigure extends LabeledLineConnectionFigure
 	/** Creates a new instance. */
 	public AssociationFigure()
 	{
-		//setLiner ( new ElbowLiner ( ) );
 		setLayouter ( new LocatorLayouter ( ) );
 		
 		set(STROKE_COLOR, for_color);
@@ -53,26 +55,25 @@ public class AssociationFigure extends LabeledLineConnectionFigure
 		set(END_DECORATION, null);
 		set(START_DECORATION, null);
 		
-		a_mult = new TextFigure ( );
-		a_mult.setText( "A" );
+		a_mult = new TextFigure ( "A" );
 		a_mult.set( AttributeKeys.TEXT_COLOR, for_color );
-		a_mult.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 0, -Math.PI / 4, 8 ) );
+		a_mult.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 0, Math.PI / 4, 1 ) );
 		a_mult.setAttributeEnabled( LocatorLayouter.LAYOUT_LOCATOR, false);
 		a_mult.setAttributeEnabled( AttributeKeys.TEXT_COLOR, false);
 		add ( a_mult );
 		
-		b_mult = new TextFigure ( );
-		b_mult.setText( "B" );
+		b_mult = new TextFigure ( "" );
 		b_mult.set( AttributeKeys.TEXT_COLOR, for_color );
-		b_mult.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 1, -Math.PI / 4, 8 ) );
+		b_mult.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 1, -Math.PI/4, 8) );
 		b_mult.setAttributeEnabled( AttributeKeys.TEXT_COLOR, false);
 		add ( b_mult );
 		
 		role = new TextFigure ( "role" );
 		
 		role.set( AttributeKeys.TEXT_COLOR, for_color );
-		role.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 0.5, Math.PI / 2, 1 ) );
+		role.set( LocatorLayouter.LAYOUT_LOCATOR, new MiddleBezierLabelLocator ( 0.5) );//new BezierLabelLocator ( 0.5, Math.PI / 2, 1 ) );
 		role.setAttributeEnabled ( AttributeKeys.TEXT_COLOR, false );
+		role.setEditable( false );
 		add ( role );
 		
 		
@@ -116,6 +117,21 @@ public class AssociationFigure extends LabeledLineConnectionFigure
 
 		return true;
 	}
+	
+	public String getRoleName ( )
+	{
+		return role.getText();
+	}
+	
+	public void setRoleName ( String str )
+	{
+		willChange ( );
+		role.willChange();
+		role.setText( str );
+		invalidate();
+		role.changed();
+		changed();
+	}
 
 	@Override
 	public boolean canConnect(Connector start) {
@@ -134,28 +150,6 @@ public class AssociationFigure extends LabeledLineConnectionFigure
 		sf.removeDependency(this);
 		ef.removeDependency(this);
 	}
-/*	
-	@Override
-	public void changed ( )
-	{
-		Util.dprint( "Updating Association" );
-		Point2D.Double start = getStartPoint();
-		
-		a_mult.willChange();
-		Double rec = a_mult.getBounds();
-		rec.x = start.x + 5;
-		rec.y = start.y + 5;
-		
-		Util.dprint( "Multiplicty is " + ((a_mult.isVisible())? "" : "not ") + "visible" ); 
-		Util.dprint( a_mult.getText() );
-		Util.dprint( "X:" + rec.x + "\nY:" + rec.y );
-		
-		a_mult.setBounds( rec );
-		a_mult.invalidate();
-		a_mult.changed();
-		
-		super.changed();
-	}*/
 	
 	/**
 	 * Handles the connection of a connection. Override this method to handle this
@@ -202,6 +196,25 @@ public class AssociationFigure extends LabeledLineConnectionFigure
 		Collection<Action> col = new ArrayList<Action>();
 		col.add(new SetStartDecorationAction(this));
 		col.add(new SetEndDecorationAction(this));
+		col.add(new EditRoleAction ( this ) );
 		return col;
+	}
+	
+	private class EditRoleAction extends AssociationFigureAction
+	{
+		public static final String ID = "actions.editRoleAction";
+		
+		public EditRoleAction ( AssociationFigure c )
+		{
+			super ( ID, c );
+			UMLApplicationModel.getProjectResources().configureAction(this, ID);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			String name = UMLApplicationModel.prompt( "actions.editRoleAction.prompt", "Edit Role name" );
+			_data.setRoleName( name );
+		}
+		
 	}
 }
