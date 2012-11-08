@@ -11,6 +11,7 @@ import static org.jhotdraw.draw.AttributeKeys.STROKE_WIDTH;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -23,6 +24,8 @@ import org.jhotdraw.draw.TextFigure;
 import org.jhotdraw.draw.connector.Connector;
 import org.jhotdraw.draw.layouter.LocatorLayouter;
 import org.jhotdraw.draw.locator.BezierLabelLocator;
+import org.jhotdraw.xml.DOMInput;
+import org.jhotdraw.xml.DOMOutput;
 
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.action.AssociationFigureAction;
@@ -55,26 +58,23 @@ public class AssociationFigure extends LabeledLineConnectionFigure
 		set(END_DECORATION, null);
 		set(START_DECORATION, null);
 		
-		a_mult = new TextFigure ( "A" );
+		a_mult = new TextFigure ( "" );
 		a_mult.set( AttributeKeys.TEXT_COLOR, for_color );
 		a_mult.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 0, Math.PI / 4, 1 ) );
 		a_mult.setAttributeEnabled( LocatorLayouter.LAYOUT_LOCATOR, false);
 		a_mult.setAttributeEnabled( AttributeKeys.TEXT_COLOR, false);
-		add ( a_mult );
 		
 		b_mult = new TextFigure ( "" );
 		b_mult.set( AttributeKeys.TEXT_COLOR, for_color );
 		b_mult.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 1, -Math.PI/4, 8) );
 		b_mult.setAttributeEnabled( AttributeKeys.TEXT_COLOR, false);
-		add ( b_mult );
 		
-		role = new TextFigure ( "role" );
+		role = new TextFigure ( "" );
 		
 		role.set( AttributeKeys.TEXT_COLOR, for_color );
 		role.set( LocatorLayouter.LAYOUT_LOCATOR, new MiddleBezierLabelLocator ( 0.5) );//new BezierLabelLocator ( 0.5, Math.PI / 2, 1 ) );
 		role.setAttributeEnabled ( AttributeKeys.TEXT_COLOR, false );
 		role.setEditable( false );
-		add ( role );
 		
 		
 		setAttributeEnabled(STROKE_COLOR, false);
@@ -83,6 +83,10 @@ public class AssociationFigure extends LabeledLineConnectionFigure
 		setAttributeEnabled(STROKE_DASHES, false);
 		setAttributeEnabled(FONT_ITALIC, false);
 		setAttributeEnabled(FONT_UNDERLINE, false);
+		
+		add ( a_mult );
+		add ( b_mult );
+		add ( role );
 	}
 	
 	static { config(); }
@@ -114,8 +118,10 @@ public class AssociationFigure extends LabeledLineConnectionFigure
 		 * 
 		 * // Disallow cyclic connections return !sf.isDependentOf(ef); }
 		 */
+		
+		return (start.getOwner() instanceof ClassFigure) &&
+				(end.getOwner() instanceof ClassFigure );
 
-		return true;
 	}
 	
 	public String getRoleName ( )
@@ -127,7 +133,9 @@ public class AssociationFigure extends LabeledLineConnectionFigure
 	{
 		willChange ( );
 		role.willChange();
-		role.setText( str );
+		role.setAttributeEnabled( AttributeKeys.TEXT, true);
+		role.set ( AttributeKeys.TEXT, str );
+		role.setAttributeEnabled( AttributeKeys.TEXT, false);
 		invalidate();
 		role.changed();
 		changed();
@@ -169,13 +177,18 @@ public class AssociationFigure extends LabeledLineConnectionFigure
 		AssociationFigure that = (AssociationFigure) super.clone();
 		that.a_mult = (TextFigure) a_mult.clone();
 		that.b_mult = (TextFigure) b_mult.clone();
+		that.role = (TextFigure) role.clone();
+		
+		that.add( that.a_mult );
+		that.add( that.b_mult );
+		that.add( that.role );
 
 		return that;
 	}
 
 	@Override
 	public int getLayer() {
-		return 1;
+		return -1;
 	}
 
 	@Override
@@ -200,7 +213,20 @@ public class AssociationFigure extends LabeledLineConnectionFigure
 		return col;
 	}
 	
-	private class EditRoleAction extends AssociationFigureAction
+	@Override
+	public void write ( DOMOutput out ) throws IOException
+	{
+		writeAttributes ( out );
+	}
+	
+	@Override
+	public void read ( DOMInput in ) throws IOException
+	{
+		readAttributes ( in );
+		
+	}
+	
+	private static class EditRoleAction extends AssociationFigureAction
 	{
 		public static final String ID = "actions.editRoleAction";
 		
