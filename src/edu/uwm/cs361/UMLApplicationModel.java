@@ -251,7 +251,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 				String tmpTxt = newF.getName();
 				tmpTxt = tmpTxt.substring ( 0, tmpTxt.indexOf( ".xml" ) );
 				template.setText( tmpTxt );
-				template.addActionListener( new LoadRecentFileAction ( a, v, uri ) );
+				template.addActionListener( new LoadRecentFileAction ( getApplication(), getActiveView(), uri ) );
 				templateButtons.add( template );
 			}
 		}
