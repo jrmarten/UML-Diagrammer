@@ -55,9 +55,9 @@ public class InheritanceFigure extends LineConnectionFigure
 		Style style = UMLApplicationModel.getProgramStyle();
 		if ( style == null ) return;
 		CSSRule inher_rule = style.get ( "Inheritance" );
+		if ( inher_rule == null ) return;
 		
-		
-		for_color = inher_rule.getColor( "forground-color" , null);
+		for_color = inher_rule.getColor( "forground-color" , for_color);
 	}
 	
 	@Override
