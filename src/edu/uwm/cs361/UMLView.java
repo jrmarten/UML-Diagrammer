@@ -114,12 +114,6 @@ public class UMLView extends AbstractView
     CSSRule drawing_style = style.get( "Drawing" );
     if ( style == null ) return drawing;
     
-    //trying to get selection box, may not work. XXX:
-    drawing.set( AttributeKeys.STROKE_COLOR, 
-    		drawing_style.getColor( "selector-color", Color.black) );
-    drawing.setAttributeEnabled(AttributeKeys.STROKE_COLOR, false);
-    
-    
     drawing.set( AttributeKeys.CANVAS_FILL_COLOR, 
     		drawing_style.getColor("background-color", Color.white) );
     
