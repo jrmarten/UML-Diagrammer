@@ -309,8 +309,18 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	{
 		if ( pref == null )
 			{
-				pref = Settings.getSettings ( new File ( getProgramDirectory ( ) + "preferences.config" ) );
-				Util.dprint( "Gettings settings form: " + getProgramDirectory ( ) + "preferences.config");
+				File pref_file = new File ( getProgramDirectory ( ) + "preferences.config" );
+				
+				if ( pref_file.exists() )
+					{
+						pref = Settings.getSettings ( pref_file );
+						Util.dprint( "Gettings settings form: " + getProgramDirectory ( ) + "preferences.config");
+					}
+				else
+					{
+						Util.dprint( "Failed to get Settings" );
+					}
+				
 			}
 		return pref;
 	}
