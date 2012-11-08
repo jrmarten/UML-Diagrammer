@@ -16,7 +16,7 @@ import org.jhotdraw.xml.DefaultDOMFactory;
 import com.sun.org.apache.bcel.internal.classfile.Attribute;
 import com.sun.org.apache.bcel.internal.classfile.Method;
 
-import edu.uwm.cs361.classdiagram.AssociationFigure;
+import edu.uwm.cs361.classdiagram.ConnectionFigure;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.InheritanceFigure;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
@@ -37,7 +37,7 @@ public class UMLFactory extends DefaultDOMFactory
 			{ GroupFigure.class, "g" },
 			{ TextAreaFigure.class, "ta" },
 			{ SeparatorLineFigure.class, "separator" },
-			{ AssociationFigure.class, "associationFigure" },
+			{ ConnectionFigure.class, "associationFigure" },
 			{ ChopRectangleConnector.class, "rectConnector" },
 			{ LocatorConnector.class, "locConnector" },
 			{ RelativeLocator.class, "relativeLocator" },

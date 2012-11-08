@@ -228,7 +228,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 					handles.add(new MoveHandle(this, RelativeLocator.southWest()));
 					handles.add(new MoveHandle(this, RelativeLocator.southEast()));
 
-					handles.add( new ConnectorHandle (new LocatorConnector ( this, RelativeLocator.center()), new AssociationFigure ( ) ) );
+					handles.add( new ConnectorHandle (new LocatorConnector ( this, RelativeLocator.center()), new ConnectionFigure ( ) ) );
 					handles.add( new ConnectorHandle ( new LocatorConnector ( this, RelativeLocator.north()) ,
 							new InheritanceFigure( ) ));
 				break;
@@ -568,7 +568,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 		out.closeElement();
 	}
 
-	public void removeDependency(AssociationFigure fig) {
+	public void removeDependency(ConnectionFigure fig) {
 		Figure other;
 		if (fig.getStartFigure() == this)
 			other = fig.getEndFigure();
@@ -583,7 +583,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 		data.addDependency(cfig.getData());
 	}
 
-	public void addDependency(AssociationFigure fig) {
+	public void addDependency(ConnectionFigure fig) {
 		Figure other;
 		if (fig.getStartFigure() == this)
 			other = fig.getEndFigure();
