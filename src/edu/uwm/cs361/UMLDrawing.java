@@ -1,5 +1,11 @@
 package edu.uwm.cs361;
 
-public class UMLDrawing {
+import org.jhotdraw.draw.DefaultDrawing;
 
+public class UMLDrawing extends DefaultDrawing
+{
+	public UMLDrawing ( )
+	{
+		
+	}
 }
