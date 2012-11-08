@@ -38,7 +38,7 @@ import edu.uwm.cs361.settings.Style;
 /**
  * AssociationFigure.
  */
-public class AssociationFigure extends LabeledLineConnectionFigure
+public class ConnectionFigure extends LabeledLineConnectionFigure
 {
 
 	private static final long	serialVersionUID	= -1729547106413248257L;
@@ -49,7 +49,7 @@ public class AssociationFigure extends LabeledLineConnectionFigure
 	private TextFigure role;
 	
 	/** Creates a new instance. */
-	public AssociationFigure()
+	public ConnectionFigure()
 	{
 		setLayouter ( new LocatorLayouter ( ) );
 		
@@ -173,8 +173,8 @@ public class AssociationFigure extends LabeledLineConnectionFigure
 	}
 
 	@Override
-	public AssociationFigure clone() {
-		AssociationFigure that = (AssociationFigure) super.clone();
+	public ConnectionFigure clone() {
+		ConnectionFigure that = (ConnectionFigure) super.clone();
 		that.a_mult = (TextFigure) a_mult.clone();
 		that.b_mult = (TextFigure) b_mult.clone();
 		that.role = (TextFigure) role.clone();
@@ -230,7 +230,7 @@ public class AssociationFigure extends LabeledLineConnectionFigure
 	{
 		public static final String ID = "actions.editRoleAction";
 		
-		public EditRoleAction ( AssociationFigure c )
+		public EditRoleAction ( ConnectionFigure c )
 		{
 			super ( ID, c );
 			UMLApplicationModel.getProjectResources().configureAction(this, ID);

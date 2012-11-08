@@ -3,7 +3,7 @@ package edu.uwm.cs361.action;
 import java.awt.event.ActionEvent;
 
 import edu.uwm.cs361.UMLApplicationModel;
-import edu.uwm.cs361.classdiagram.AssociationFigure;
+import edu.uwm.cs361.classdiagram.ConnectionFigure;
 import edu.uwm.cs361.classdiagram.LineDecorationChooser;
 
 @SuppressWarnings("serial")
@@ -11,7 +11,7 @@ public class SetStartDecorationAction extends AssociationFigureAction
 {
 	public static final String	ID	= "actions.setStartDecoration";
 
-	public SetStartDecorationAction(AssociationFigure c)
+	public SetStartDecorationAction(ConnectionFigure c)
 	{
 		super(ID, c);
 		UMLApplicationModel.getProjectResources().configureAction(this, ID);

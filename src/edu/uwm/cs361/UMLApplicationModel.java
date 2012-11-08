@@ -42,7 +42,7 @@ import edu.uwm.cs361.action.AddMethodAction;
 import edu.uwm.cs361.action.DebugSnapShotAction;
 import edu.uwm.cs361.action.JavaGenerationAction;
 import edu.uwm.cs361.action.SaveTemplateAction;
-import edu.uwm.cs361.classdiagram.AssociationFigure;
+import edu.uwm.cs361.classdiagram.ConnectionFigure;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.InheritanceFigure;
 import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
@@ -155,7 +155,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		tb.addSeparator();
 
 		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
-				new AssociationFigure()), "edit.createAssociation", labels);
+				new ConnectionFigure()), "edit.createAssociation", labels);
 
 		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
 				new InheritanceFigure()), "edit.createInheritance", labels);

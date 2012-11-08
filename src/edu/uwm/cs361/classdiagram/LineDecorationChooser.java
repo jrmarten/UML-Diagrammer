@@ -25,11 +25,11 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 {
 
 	private static final long	serialVersionUID	= 553854446330611986L;
-	private AssociationFigure _data;
+	private ConnectionFigure _data;
 	private String _startOrEnd;
 	private JRadioButton _composition, _aggregation, _arrow, _none;
 	
-	public LineDecorationChooser(AssociationFigure data, String startOrEnd)
+	public LineDecorationChooser(ConnectionFigure data, String startOrEnd)
 	{
 		super();
 		_data = data;
