@@ -15,6 +15,16 @@ public class Argument
 	public String getType ( ) { return type; }
 	public String getName ( ) { return name; }
 	
+//	@Override
+//	public boolean equals ( Object o )
+//	{
+//		if ( !( o instanceof Argument) ) return false;
+//		
+//		Argument that = (Argument) o;
+//		
+//		return that.name.equals(this.name) && that.type.equals(this.type);
+//	}
+	
 	@Override
 	public String toString ( )
 	{
@@ -31,14 +41,27 @@ public class Argument
 		return type.equals( that.type );
 	}
 	
+	@SuppressWarnings ( "all" )
 	public static Argument Create ( String str )
 	{
 		Argument arg = new Argument ( );
-		String[] parts = str.split( ":" );
+		String[] parts;
+		boolean uml = false;
+		str = str.trim();
+		if ( (uml = str.contains(":")) ) parts = str.split( ":" );
+		else parts = str.split( " " );
+		
 		try {
-			arg.name = parts[0].trim();
-			arg.type = parts[1].trim();
-
+			if ( uml )
+				{
+					arg.name = parts[0].trim();
+					arg.type = parts[1].trim();
+				}
+			else
+				{
+					arg.name = parts[1].trim();
+					arg.type = parts[0].trim();
+				}
 			
 			if ( arg.name.contains( " " ) ) return null;
 			if ( arg.type.contains( " " ) ) return null;

@@ -156,6 +156,9 @@ public class Attribute
 		if ( Keywords.keywordp( type ) )
 			return (Attribute) report ( "Invalid return type Attribute: " + type );
 
+		if ( Keywords.reservedp( name ) )
+			return (Attribute) report ( "Then name of an Attribute must not be a primitive or keyword: " + name );
+
 		boolean let = false;
 		boolean sym = false;
 		boolean num = false;

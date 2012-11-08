@@ -6,6 +6,8 @@ import static edu.uwm.cs361.Util.report;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import edu.uwm.cs361.Util;
+
 public class Method
 {
 
@@ -81,15 +83,17 @@ public class Method
 	}
 
 	private static Method fromUML(String str) {
-
+		int index = str.lastIndexOf( ':' );
+		String type = str.substring( index + 1).trim();
+		str = str.substring(0, index);
 		String[] parts = str.split(":");
-		if (parts.length != 2)
+/*		if (parts.length != 2)
 			return (Method) report("Too many colons in Method delcaration");
-		String type = parts[1].trim();
+		String type = parts[1].trim();*/
 		if (type.contains(" "))
 			return (Method) report("Type has space in Method delcaration");
 
-		String tmp = parts[0];
+		String tmp = str;
 		parts = parseModParam(tmp);
 
 		String[] mods = parts[0].split(" ");
@@ -103,7 +107,7 @@ public class Method
 				args[i++] = Argument.Create( param_str );
 			}
 
-		int index = mods.length - 1;
+		index = mods.length - 1;
 		String name = mods[index];
 		mods[index] = "";
 
@@ -133,7 +137,6 @@ public class Method
 	}
 	
 	private static Method fromSignature(String str) {
-
 		String[] parts = parseModParam(str);
 
 		String[] mods = parts[0].split(" ");
@@ -189,17 +192,43 @@ public class Method
 							+ mod);
 			}
 		
+		boolean abs = false;
+		boolean stat = false;
+		
+		for ( String tmp : mods )
+			{
+				if ( tmp.equals("") ) continue;
+				switch ( tmp.charAt(0) )
+				{
+					case 's':
+					case 'S':
+						stat = true;
+						break;
+						
+					case 'a':
+					case 'A':
+						abs = true;
+						break;
+				}
+			}
+		
+		if ( abs && stat )
+			return (Method) report ( "Method can not be static and abstract" );
+		
 		for ( Argument param : params )
 			{
 				if ( param == null ) continue;
-				if ( Keywords.reservedp( param.getType ( ) ) ||
+				if ( Keywords.keywordp( param.getType ( ) ) ||
 							Keywords.reservedp( param.getName() ))
-					return (Method) report ( "Invalid parameter type" );
+					return (Method) report ( "Invalid parameter type: " + param.getType() + " " + param.getName() );
 			}
 		
-		if ( Keywords.reservedp ( type ) )
-			return (Method) report ( "Invalid return type" );
+		if ( Keywords.keywordp ( type ) )
+			return (Method) report ( "Invalid return type: " + type );
 
+		if ( Keywords.reservedp( name ) )
+			return (Method) report ( "Invalid name: " + name );
+		
 		boolean let = false;
 		boolean sym = false;
 		boolean num = false;

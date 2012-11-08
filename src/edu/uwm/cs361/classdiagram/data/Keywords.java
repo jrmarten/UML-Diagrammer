@@ -92,7 +92,16 @@ public class Keywords
 			{
 				if ( word.equals ( tmp ) )
 					{
-						dprint ( word + ": " + tmp );
+						dprint ( "Blacklisted word: " + tmp );
+						return true;
+					}
+			}
+		
+		for ( String tmp : primitives )
+			{
+				if ( word.equals( tmp ) )
+					{
+						dprint ( "Blacklisted word: " + word );
 						return true;
 					}
 			}
