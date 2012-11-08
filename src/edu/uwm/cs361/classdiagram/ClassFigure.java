@@ -88,7 +88,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 		setLayouter(new VerticalLayouter());
 		
 		nameList = new ListFigure(container);
-		nameFig = new TextFigure ( "Class" );
+		nameFig = new TextFigure ( proto.getName() );
 				
 		setElements ( );
 
@@ -118,13 +118,11 @@ public class ClassFigure extends GraphicalCompositeFigure
 		add(nameList);
 		if (!(data instanceof UMLInterface))
 			{
-				add(sep1);
+				add( sep1 );
 				add(attrList);
 			}
 		add(sep2);
 		add(methodList);
-		
-		nameFig.setText( "Class" );
 	}
 	
 	
@@ -230,7 +228,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 					handles.add(new MoveHandle(this, RelativeLocator.southWest()));
 					handles.add(new MoveHandle(this, RelativeLocator.southEast()));
 
-					handles.add( new ConnectorHandle (new LocatorConnector ( this, RelativeLocator.east()), new AssociationFigure ( ) ) );
+					handles.add( new ConnectorHandle (new LocatorConnector ( this, RelativeLocator.center()), new AssociationFigure ( ) ) );
 					handles.add( new ConnectorHandle ( new LocatorConnector ( this, RelativeLocator.north()) ,
 							new InheritanceFigure( ) ));
 				break;
@@ -458,18 +456,18 @@ public class ClassFigure extends GraphicalCompositeFigure
 		
 		in.openElement("class");
 		
-		String name = in.getAttribute( "name", "Class" );
+		String type = in.getAttribute("type", "class");
+		data = (type.equals("class")? new UMLClass ( ) : (type.equals("abstract"))?
+				new UMLAbstractClass ( ) : new UMLInterface ( ));
+		
+		
+		String name = in.getAttribute( "name", "Opened" );
 		data.setName( name );
 		nameFig.setText( name );
-		nameFig.invalidate();
+		
+		changed();
+		
 		Util.dprint(name);
-		
-		UMLClass proto;
-		String type = in.getAttribute("type", "class");
-		proto = (type.equals("class")? new UMLClass ( ) : (type.equals("abstract"))?
-				new UMLAbstractClass ( ) : new UMLInterface ( ));
-		data = (UMLClass) proto.clone();
-		
 		int i = 0;
 		int max = in.getElementCount( "attribute" );
 		while ( i < max )
@@ -507,6 +505,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 					{
 						in.openElement("param", n++);
 						String tmp = in.getAttribute("name", "");
+						tmp += " : " + in.getAttribute( "type" , "");
 						if ( !tmp.equals("") )
 							params.add( tmp );
 						in.closeElement();
@@ -518,8 +517,9 @@ public class ClassFigure extends GraphicalCompositeFigure
 				in.closeElement();
 			}
 		
+		willChange();
 		readAttributes(in);
-		setElements ( );
+		setElements();
 		changed ( );
 		
 		in.closeElement();
