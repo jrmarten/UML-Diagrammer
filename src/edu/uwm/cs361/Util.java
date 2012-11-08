@@ -25,8 +25,8 @@ public class Util
 	public static void dprint ( Object o )
 	{
 		if ( ! DEBUG ) return;
-		if ( o == null )
-			System.out.println ( o );
+		if ( o != null )
+			System.out.println ( o.toString() );
 	}
 	
 	public static <T> void dprint ( Iterable<T> it )
@@ -92,6 +92,15 @@ public class Util
 	public static void dprint(String line, boolean debug) {
 		if (debug)
 			System.out.println(line);
+	}
+	
+	public static boolean contains ( Object[] objs, Object o )
+	{
+		for ( Object tmp : objs )
+			{
+				if ( o.equals( tmp ) ) return true;
+			}
+		return false;
 	}
 	
 	
