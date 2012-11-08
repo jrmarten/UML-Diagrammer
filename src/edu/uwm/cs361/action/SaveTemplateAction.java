@@ -16,12 +16,9 @@ public class SaveTemplateAction extends SaveFileAction
 {
 	private static final long	serialVersionUID	= -5846294040633741021L;
 	protected URI uri;
-	protected Application a;
-	protected View v;
 	
 	public SaveTemplateAction(Application app, @Nullable View view) {
 		super(app, view, false);
-		
 	}
 	
 	@Override
