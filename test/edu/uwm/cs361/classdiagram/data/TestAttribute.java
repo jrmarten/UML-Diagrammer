@@ -1,6 +1,9 @@
 package edu.uwm.cs361.classdiagram.data;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 public class TestAttribute
@@ -21,7 +24,7 @@ public class TestAttribute
 		assertFalse ( attr.isFinal ( ) );
 
 		assertTrue ( Attribute.Create ( "- 1invalid:String" ) == null );
-		assertTrue ( Attribute.Create ( "- _name String" ) == null );
+		assertTrue ( Attribute.Create( "- _name int" ) == null );
 
 	}
 

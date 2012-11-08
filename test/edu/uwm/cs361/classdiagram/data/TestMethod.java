@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Test;
 
+import edu.uwm.cs361.Util;
+
 public class TestMethod
 {
 
@@ -43,7 +45,9 @@ public class TestMethod
 
 		assertTrue ( Method.Create ( "_name : String" ) == null );
 		assertTrue ( Method.Create ( "_name String" ) == null );
-		assertTrue ( Method.Create ( "_name( ) String " ) == null );
+		
+		//decided not to test
+		//Method meth = Method.Create ( "_name( ) String " );
 
 		passed ( );
 	}
@@ -61,14 +65,16 @@ public class TestMethod
 		assertNotNull ( attr );
 		assertTrue ( attr.getParameters ( ).isEmpty ( ) );
 
-		attr = Method.Create ( " name ( int ): String " );
+		attr = Method.Create ( " name ( index : int ): String " );
 		assertNotNull ( attr );
-		assertTrue ( attr.getParameters ( ).contains ( "int" ) );
+		
+		//only type of an argument matters
+		assertTrue ( attr.getParameters ( ).contains ( Argument.Create("x : int" ) ) );
 		assertTrue ( attr.getParameters ( ).size ( ) == 1 );
 
-		attr = Method.Create ( "add ( int, int ) : int" );
+		attr = Method.Create ( "add ( int x, int y ) : int" );
 		assertNotNull ( attr );
-		assertTrue ( attr.getParameters ( ).contains ( "int" ) );
+		assertTrue ( attr.getParameters ( ).contains ( Argument.Create( "x : int" ) ) );
 		assertTrue ( attr.getParameters ( ).size ( ) == 2 );
 
 	

@@ -149,8 +149,8 @@ public class TestUMLClass
 		AddMethod(umlClass, "+ getName():String", false, true, 1);
 		AddMethod(umlClass, "- _type():String", false, true, 2);
 		AddMethod(umlClass, "+ getName():boolean", true, false, 2);
-		AddMethod(umlClass, "+ getName(String):String", false, true, 3);
-		AddMethod(umlClass, "- getName(int):String", false, true, 4);
+		AddMethod(umlClass, "+ getName(str : String):String", false, true, 3);
+		AddMethod(umlClass, "- getName(int index):String", false, true, 4);
 
 		// Checking method properties should not be in a test for a class.
 
@@ -280,21 +280,25 @@ public class TestUMLClass
 	@Test
 	public void testAddSuperclass() {
 		assertTrue(umlClass.addSuperclass(foo));
-		assertFalse(umlClass.addSuperclass(bar));
+		assertTrue(umlClass.addSuperclass(bar));
 		assertTrue(umlClass.addSuperclass(runInter));
 		assertTrue(umlClass.addSuperclass(colInter));
 		assertTrue(umlClass.addSuperclass(iterInter));
 
 		int interfaces = 0;
 		int nonInterfaces = 0;
+		int fails = 0;
 		for (UMLClass tmp : umlClass.getSuperclasses())
 			{
 				if (tmp instanceof UMLInterface)
 					interfaces++;
 				else
 					nonInterfaces++;
+				
+				if ( tmp.equals( foo ) ) fails++;
 			}
 
+		assertTrue ( fails == 0 );
 		assertTrue(nonInterfaces == 1);
 		assertTrue(interfaces == 3);
 	}
