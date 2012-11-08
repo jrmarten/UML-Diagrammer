@@ -63,7 +63,6 @@ public class UMLClass implements Serializable
 	public void setName(String newName) {
 		if (newName == null)
 			return;
-
 		myName = newName;
 	}
 
