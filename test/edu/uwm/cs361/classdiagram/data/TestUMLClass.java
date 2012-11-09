@@ -13,6 +13,8 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.uwm.cs361.Util;
+
 public class TestUMLClass
 {
 
@@ -254,7 +256,9 @@ public class TestUMLClass
 //		umlClass.addAssociation(abstractList);
 //		umlClass.addAssociation(colInter);
 //		umlClass.addAssociation(iterInter);
-
+		umlClass.addAss(abstractList);
+		umlClass.addAss(colInter);
+		umlClass.addAss(iterInter);
 		classList.add(abstractList);
 		classList.add(colInter);
 		classList.add(iterInter);
@@ -330,15 +334,16 @@ public class TestUMLClass
 	@Test
 	public void removeDependency() {
 		addDependency();
-
 		printIterable(umlClass.getDependencies());
-		rdepends(umlClass, foo);
+		umlClass.removeDependency(foo);
 		assertFalse(umlClass.removeDependency(foo));
-		rdepends(umlClass, bar);
-		rdepends(umlClass, newDependClass);
-		rdepends(umlClass, abstractList);
+		umlClass.removeDependency(bar);
+		umlClass.removeDependency(newDependClass);
+		umlClass.removeDependency(abstractList);
 
 		assertFalse(umlClass.removeDependency(null));
+		Util.dprint(umlClass.getDependencies()); // no dependencies
+		assertFalse(umlClass.removeDependency(foo)); //show it's already been removed
 	}
 
 	public void rdepends(UMLClass ca, UMLClass cb) {
