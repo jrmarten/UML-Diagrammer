@@ -2,6 +2,8 @@ package edu.uwm.cs361.classdiagram.data;
 
 import static edu.uwm.cs361.Util.*;
 
+//TODO: clean commented out segments
+
 import java.util.LinkedList;
 
 @SuppressWarnings("serial")
@@ -24,15 +26,6 @@ public class UMLInterface extends UMLClass
 
 	@Override
 	public boolean removeAttribute(Attribute attr) {
-		return false;
-	}
-
-	public boolean addAssociation(UMLClass c) {
-		return false;
-	}
-
-	@Override
-	public boolean removeAssociation(UMLClass c) {
 		return false;
 	}
 
@@ -66,9 +59,6 @@ public class UMLInterface extends UMLClass
 	public Object clone() {
 		UMLClass result = new UMLInterface(getName());
 		result.myAttributes = (LinkedList<Attribute>) myAttributes.clone();
-		result.myAssociatedClasses = (LinkedList<UMLClass>) myAssociatedClasses
-				.clone();
-		result.myDependClasses = (LinkedList<UMLClass>) myDependClasses.clone();
 		result.myInterfaces = (LinkedList<UMLClass>) myInterfaces.clone();
 		return result;
 	}
