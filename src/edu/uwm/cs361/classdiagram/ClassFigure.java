@@ -5,6 +5,7 @@ import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
 import static org.jhotdraw.draw.AttributeKeys.FONT_ITALIC;
 import static org.jhotdraw.draw.AttributeKeys.FONT_UNDERLINE;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -93,9 +94,15 @@ public class ClassFigure extends GraphicalCompositeFigure
 		setElements ( );
 
 		Insets2D.Double insets = new Insets2D.Double(4, 8, 4, 8);
-		nameList.set(LAYOUT_INSETS, insets);
+		
+		
 		attrList.set(LAYOUT_INSETS, insets);
 		methodList.set(LAYOUT_INSETS, insets);
+	// 
+	// added default params of Insets2D.Double() in order to remove the box around class
+	//
+		Insets2D.Double classInset = new Insets2D.Double();
+		nameList.set(LAYOUT_INSETS, classInset); 
 		
 		if (data.isAbstractClass())
 			{

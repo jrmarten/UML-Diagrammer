@@ -353,8 +353,9 @@ public class Method
 			}
 		buf += ")";
 		
+		String mods = getModSig();
 		
-		return getAccess().toString() + " " + getModSig() + " " + getType() + " "
+		return getAccess().toString() + " " + mods + getType() + " "
 				+ getName() + buf;
 	}
 }
