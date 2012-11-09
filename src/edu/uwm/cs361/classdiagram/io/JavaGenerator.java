@@ -7,9 +7,10 @@ import java.io.PrintWriter;
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.data.Attribute;
+import edu.uwm.cs361.classdiagram.data.Connection;
+import edu.uwm.cs361.classdiagram.data.ConnectionType;
 import edu.uwm.cs361.classdiagram.data.Method;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
-import edu.uwm.cs361.classdiagram.data.UMLClass.NamedType;
 
 public class JavaGenerator
 {
@@ -102,20 +103,20 @@ public class JavaGenerator
 			}
 		
 		int i = 0;
-		for ( UMLClass tmp : umlclass.getAssociations())
+		for ( Connection tmp : umlclass.getConnections() )
 			{
-				String sig = "private " + tmp.getName() + "association" + i++;
-				sig += ";\n\n";
+				String name = tmp.getRole( umlclass );
+				String type = tmp.getOther( umlclass ).getName();
+				
+				if ( tmp.getConnectionType( umlclass ) == ConnectionType.AGGREGATION )
+						type = collection + "<" + type + ">";
+				
+				if ( name.equals( "" ) )
+						name = Character.toLowerCase( type.charAt( 0 )) + type.substring( 1 ) + i;
+					
+				String sig = "private " + type +" " + name + ";\n\n";
 				genny.write( sig );
 			}
-		
-		i = 0;
-		for ( NamedType tmp : umlclass.getAggregation() ) //should be aggregations
-				{
-					String sig = "private " + collection + "<" + tmp.type+ ">" +
-							tmp.name + ";\n\n";
-					genny.write( sig );
-				}
 
 		for (Method meth : umlclass.getMethods())
 			{
