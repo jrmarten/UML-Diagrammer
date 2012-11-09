@@ -9,8 +9,9 @@ import static org.jhotdraw.draw.AttributeKeys.STROKE_DASHES;
 import static org.jhotdraw.draw.AttributeKeys.STROKE_WIDTH;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,54 +29,61 @@ import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 
 import edu.uwm.cs361.UMLApplicationModel;
-import edu.uwm.cs361.action.AssociationFigureAction;
+import edu.uwm.cs361.Util;
+import edu.uwm.cs361.action.EditRoleAction;
 import edu.uwm.cs361.action.SetEndDecorationAction;
 import edu.uwm.cs361.action.SetStartDecorationAction;
-import edu.uwm.cs361.locator.MiddleBezierLabelLocator;
+import edu.uwm.cs361.classdiagram.data.Connection;
+import edu.uwm.cs361.classdiagram.data.UMLClass;
 import edu.uwm.cs361.settings.CSSRule;
 import edu.uwm.cs361.settings.Style;
 
 /**
  * AssociationFigure.
  */
-public class ConnectionFigure extends LabeledLineConnectionFigure
+public class ConnectionFigure extends LabeledLineConnectionFigure implements PropertyChangeListener
 {
 
 	private static final long	serialVersionUID	= -1729547106413248257L;
 	private static Color for_color = Color.black;
 	
-	private TextFigure a_mult;
-	private TextFigure b_mult;
-	private TextFigure role;
+	private Connection con;
+	
+	private TextFigure a_role = new TextFigure ( );
+	private TextFigure b_role = new TextFigure ( );
 	
 	/** Creates a new instance. */
 	public ConnectionFigure()
 	{
+		a_role.addPropertyChangeListener( this );
+		b_role.addPropertyChangeListener( this );
+		
+		init();	
+	}
+	
+	private void init( )
+	{
 		setLayouter ( new LocatorLayouter ( ) );
+		
+		a_role.setEditable( false );
+		b_role.setEditable( false );
+		
+		a_role.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 0, -Math.PI / 4, 8 ) );
+		b_role.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 1, -Math.PI / 4, 8 ) );
+		
+		a_role.set( AttributeKeys.TEXT_COLOR, for_color );
+		b_role.set( AttributeKeys.TEXT_COLOR, for_color );
+		
+		a_role.setText( "" );
+		b_role.setText( "" );
+		
+		add ( a_role );
+		add ( b_role );
 		
 		set(STROKE_COLOR, for_color);
 		set(STROKE_WIDTH, 1d);
 		set(END_DECORATION, null);
 		set(START_DECORATION, null);
-		
-		a_mult = new TextFigure ( "" );
-		a_mult.set( AttributeKeys.TEXT_COLOR, for_color );
-		a_mult.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 0, Math.PI / 4, 1 ) );
-		a_mult.setAttributeEnabled( LocatorLayouter.LAYOUT_LOCATOR, false);
-		a_mult.setAttributeEnabled( AttributeKeys.TEXT_COLOR, false);
-		
-		b_mult = new TextFigure ( "" );
-		b_mult.set( AttributeKeys.TEXT_COLOR, for_color );
-		b_mult.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 1, -Math.PI/4, 8) );
-		b_mult.setAttributeEnabled( AttributeKeys.TEXT_COLOR, false);
-		
-		role = new TextFigure ( "" );
-		
-		role.set( AttributeKeys.TEXT_COLOR, for_color );
-		role.set( LocatorLayouter.LAYOUT_LOCATOR, new MiddleBezierLabelLocator ( 0.5) );//new BezierLabelLocator ( 0.5, Math.PI / 2, 1 ) );
-		role.setAttributeEnabled ( AttributeKeys.TEXT_COLOR, false );
-		role.setEditable( false );
-		
 		
 		setAttributeEnabled(STROKE_COLOR, false);
 		setAttributeEnabled(END_DECORATION, false);
@@ -83,10 +91,6 @@ public class ConnectionFigure extends LabeledLineConnectionFigure
 		setAttributeEnabled(STROKE_DASHES, false);
 		setAttributeEnabled(FONT_ITALIC, false);
 		setAttributeEnabled(FONT_UNDERLINE, false);
-		
-		add ( a_mult );
-		add ( b_mult );
-		add ( role );
 	}
 	
 	static { config(); }
@@ -106,39 +110,10 @@ public class ConnectionFigure extends LabeledLineConnectionFigure
 	 */
 	@Override
 	public boolean canConnect(Connector start, Connector end) {
-		/*
-		 * if ((start.getOwner() instanceof ClassFigure) && (end.getOwner()
-		 * instanceof ClassFigure)) {
-		 * 
-		 * ClassFigure sf = (ClassFigure) start.getOwner(); ClassFigure ef =
-		 * (ClassFigure) end.getOwner();
-		 * 
-		 * // Disallow multiple connections to same dependent if
-		 * (ef.getPredecessors().contains(sf)) { return false; }
-		 * 
-		 * // Disallow cyclic connections return !sf.isDependentOf(ef); }
-		 */
 		
 		return (start.getOwner() instanceof ClassFigure) &&
 				(end.getOwner() instanceof ClassFigure );
 
-	}
-	
-	public String getRoleName ( )
-	{
-		return role.getText();
-	}
-	
-	public void setRoleName ( String str )
-	{
-		willChange ( );
-		role.willChange();
-		role.setAttributeEnabled( AttributeKeys.TEXT, true);
-		role.set ( AttributeKeys.TEXT, str );
-		role.setAttributeEnabled( AttributeKeys.TEXT, false);
-		invalidate();
-		role.changed();
-		changed();
 	}
 
 	@Override
@@ -155,8 +130,8 @@ public class ConnectionFigure extends LabeledLineConnectionFigure
 		ClassFigure sf = (ClassFigure) start.getOwner();
 		ClassFigure ef = (ClassFigure) end.getOwner();
 
-		sf.removeDependency(this);
-		ef.removeDependency(this);
+		sf.getData().removeConnection( con );
+		ef.getData().removeConnection( con );
 	}
 	
 	/**
@@ -167,40 +142,45 @@ public class ConnectionFigure extends LabeledLineConnectionFigure
 	protected void handleConnect(Connector start, Connector end) {
 		ClassFigure sf = (ClassFigure) start.getOwner();
 		ClassFigure ef = (ClassFigure) end.getOwner();
-
-		sf.addDependency(this);
-		ef.addDependency(this);
+		
+		con = new Connection ( sf.getData(), ef.getData() );
+		
+		sf.getData().addConnection( con );
+		ef.getData().addConnection( con );
+	}
+	
+	public void setRoles ( String start_role, String end_role )
+	{
+		con.setRole( con.getStart(), start_role);
+		con.setRole( con.getEnd(), end_role);
+		
+		willChange();
+		a_role.setText( start_role );
+		b_role.setText( end_role );
+		changed();
 	}
 
 	@Override
 	public ConnectionFigure clone() {
-		ConnectionFigure that = (ConnectionFigure) super.clone();
-		that.a_mult = (TextFigure) a_mult.clone();
-		that.b_mult = (TextFigure) b_mult.clone();
-		that.role = (TextFigure) role.clone();
 		
-		that.add( that.a_mult );
-		that.add( that.b_mult );
-		that.add( that.role );
-
+		ConnectionFigure that = (ConnectionFigure) super.clone();
+		that.a_role = a_role.clone();
+		that.b_role = b_role.clone();
+		
+		that.add( that.a_role );
+		that.add( that.b_role );
 		return that;
 	}
 
 	@Override
 	public int getLayer() {
-		return -1;
+		return 1;
 	}
 
 	@Override
 	public void removeNotify(Drawing d) {
-		if (getStartFigure() != null)
-			{
-				((ClassFigure) getStartFigure()).removeDependency(this);
-			}
-		if (getEndFigure() != null)
-			{
-				((ClassFigure) getEndFigure()).removeDependency(this);
-			}
+		con.getStart().removeConnection( con );
+		con.getEnd().removeConnection( con );
 		super.removeNotify(d);
 	}
 	
@@ -225,22 +205,29 @@ public class ConnectionFigure extends LabeledLineConnectionFigure
 		readAttributes ( in );
 		
 	}
-	
-	private static class EditRoleAction extends AssociationFigureAction
-	{
-		public static final String ID = "actions.editRoleAction";
-		
-		public EditRoleAction ( ConnectionFigure c )
-		{
-			super ( ID, c );
-			UMLApplicationModel.getProjectResources().configureAction(this, ID);
-		}
 
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			String name = UMLApplicationModel.prompt( "actions.editRoleAction.prompt", "Edit Role name" );
-			_data.setRoleName( name );
-		}
+	@Override
+	public void propertyChange(PropertyChangeEvent e) {
+		if ( !(e.getNewValue() instanceof String) ) return;
 		
+		Util.dprint( "Check PropertyName in ConnectionFigure " + e.getPropertyName() );
+		
+		if ( e.getSource().equals( a_role ) )
+			{
+				con.setRole( con.getStart() , (String)e.getNewValue());
+			}
+		if ( e.getSource().equals( b_role ) )
+			{
+				con.setRole( con.getEnd(), (String) e.getNewValue() ); 
+			}
+	}
+	
+	public String debug ( )
+	{
+		UMLClass a = con.getStart();
+		UMLClass b = con.getEnd();
+		
+		return a.getName() + ": " + con.getRole( a ) + "\n" +
+		b.getName() + ": " + con.getRole( b );
 	}
 }
