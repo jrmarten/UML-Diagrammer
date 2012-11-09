@@ -1,7 +1,5 @@
 package edu.uwm.cs361;
 
-import java.awt.event.InputEvent;
-
 import javax.swing.InputMap;
 
 import org.jhotdraw.draw.DefaultDrawingEditor;
