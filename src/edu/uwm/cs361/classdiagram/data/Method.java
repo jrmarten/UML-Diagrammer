@@ -6,8 +6,6 @@ import static edu.uwm.cs361.Util.report;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import edu.uwm.cs361.Util;
-
 public class Method
 {
 
