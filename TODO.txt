@@ -38,3 +38,7 @@ The end decoration works just fine, so look at the code and see why half of the 
 When drawing a connection between two classes, if the line is drawn to an area outside of a class, it will break and throw exceptions
 
 When adding a role name, it gets added to one end of the line, not the middle
+
+A connection line is able to connect a class to itself. 
+    Draw two classes and connect them
+    Drag one end of the connection line to the middle of the class on its other end
