@@ -62,6 +62,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	public UMLApplicationModel()
 	{
 		
+		
 	}
 
 	@Override
