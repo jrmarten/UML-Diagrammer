@@ -290,11 +290,11 @@ public class ClassFigure extends GraphicalCompositeFigure
 		
 		if ( !data.addMethod(meth) )
 			{
-				UMLApplicationModel.error( "id" , "Not Overloading"); //TODO:make Overloaded error message
+				UMLApplicationModel.error( "id" , "Not Overloading");
 				return;
 			}
 
-		TextFigure tmpFig = new TextFigure();// createTextFigure(meth.toString());
+		TextFigure tmpFig = new TextFigure();
 		tmpFig.setText(meth.toString());
 		if (meth.isStatic())
 			tmpFig.set(FONT_UNDERLINE, true);
@@ -479,7 +479,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 				attr_sig += (in.getAttribute("final", false)) ? "final " : "";
 				attr_sig += in.getAttribute("name", "attr_name") + " ";
 				attr_sig += " : ";
-				attr_sig += in.getAttribute("type", "void*") + " ";// XXX:
+				attr_sig += in.getAttribute("type", "void*") + " ";
 				
 				addAttribute ( Attribute.Create( attr_sig ) );
 				dprint ( attr_sig );
@@ -568,35 +568,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 		out.closeElement();
 	}
 
-	public void removeDependency(ConnectionFigure fig) {
-		Figure other;
-		if (fig.getStartFigure() == this)
-			other = fig.getEndFigure();
-		else
-			other = fig.getStartFigure();
-
-		if (!(other instanceof ClassFigure))
-			return;
-
-		ClassFigure cfig = (ClassFigure) other;
-
-		data.addDependency(cfig.getData());
-	}
-
-	public void addDependency(ConnectionFigure fig) {
-		Figure other;
-		if (fig.getStartFigure() == this)
-			other = fig.getEndFigure();
-		else
-			other = fig.getStartFigure();
-
-		if (!(other instanceof ClassFigure))
-			return;
-
-		ClassFigure cfig = (ClassFigure) other;
-
-		data.addDependency(cfig.getData());
-	}
 
 	// XXX:FOR DEBUGING ONLY
 	public String snapShot() {
