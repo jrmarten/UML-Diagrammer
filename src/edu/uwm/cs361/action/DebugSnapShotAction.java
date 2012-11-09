@@ -11,6 +11,7 @@ import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 
 import edu.uwm.cs361.UMLApplicationModel;
+import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.ConnectionFigure;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.data.Attribute;
@@ -87,6 +88,6 @@ public class DebugSnapShotAction extends AbstractAction
 	
 	private void conSnap ( ConnectionFigure fig )
 	{
-		dprint ( fig.getRoleName() );
+		Util.dprint( fig.debug() );
 	}
 }
