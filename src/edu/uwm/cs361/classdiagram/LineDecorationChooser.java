@@ -1,7 +1,9 @@
 package edu.uwm.cs361.classdiagram;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -29,13 +31,31 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 	private String _startOrEnd;
 	private JRadioButton _composition, _aggregation, _arrow, _none;
 	
+	
+	private final static int WIDTH = 300;
+	private final static int HEIGHT = 300;
+	private static int standard_x;
+	private static int standard_y;
+	
+	static
+	{
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		Dimension d = tk.getScreenSize();
+		
+		standard_x = (d.width/2) - (WIDTH/2);
+		standard_y = (d.height/2) - (HEIGHT/2);
+	}
+	
 	public LineDecorationChooser(ConnectionFigure data, String startOrEnd)
 	{
 		super();
 		_data = data;
 		_startOrEnd = startOrEnd;
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setSize(300, 300);
+		
+		setBounds( standard_x, standard_y,
+				WIDTH, HEIGHT);
+		//setSize(300, 300);
 		setLayout(new BorderLayout(0, 0));
 		addComponents();
 	}
