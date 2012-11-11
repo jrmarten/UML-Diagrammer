@@ -18,6 +18,15 @@ public class Connection
 	public UMLClass getStart ( ) 	{ return a.class_type; }
 	public UMLClass getEnd ( )  	{ return b.class_type; }
 	
+	public void register ( )
+	{
+		if ( !a.class_type._cons.contains( this ) )
+			a.class_type._cons.add( this );
+		
+		if ( !b.class_type._cons.contains( this ) )
+			b.class_type._cons.add( this );
+	}
+	
 	
 	
 	public ConnectionType getConnectionType ( UMLClass ref )
