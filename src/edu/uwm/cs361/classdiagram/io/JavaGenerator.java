@@ -3,6 +3,7 @@ package edu.uwm.cs361.classdiagram.io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.LinkedList;
 
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.Util;
@@ -101,6 +102,19 @@ public class JavaGenerator
 				sig += ";\n\n";
 				genny.write(sig);
 			}
+		
+		LinkedList<Connection> agg = new LinkedList<Connection> ( );
+		LinkedList<Connection> ass = new LinkedList<Connection> ( );
+		LinkedList<Connection> comp = new LinkedList<Connection> ( );
+		
+		for ( Connection tmp : umlclass.getConnections() )
+			{
+				if ( tmp.getConnectionType( umlclass ) == ConnectionType.COMPOSITION ) comp.add( tmp ); 
+				if ( tmp.getConnectionType( umlclass ) == ConnectionType.AGGREGATION ) agg.add( tmp );
+				if ( tmp.getConnectionType( umlclass ) == ConnectionType.ASSOCIATION ) ass.add( tmp );
+			}
+		
+		
 		
 		int i = 0;
 		for ( Connection tmp : umlclass.getConnections() )
