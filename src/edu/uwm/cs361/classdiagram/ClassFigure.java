@@ -1,11 +1,9 @@
 package edu.uwm.cs361.classdiagram;
 
 import static edu.uwm.cs361.Util.dprint;
-import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
 import static org.jhotdraw.draw.AttributeKeys.FONT_ITALIC;
 import static org.jhotdraw.draw.AttributeKeys.FONT_UNDERLINE;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -59,7 +57,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 	protected TextFigure			nameFig;
 	protected ListFigure			attrList		= new ListFigure();
 	protected ListFigure			methodList	= new ListFigure();
-	protected RectangleFigure	container		= new RectangleFigure();
 	
 	protected SeparatorLineFigure sep1 = new SeparatorLineFigure();
 	protected SeparatorLineFigure sep2 = new SeparatorLineFigure();
@@ -88,7 +85,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 		data = (UMLClass) proto.clone();
 		setLayouter(new VerticalLayouter());
 		
-		nameList = new ListFigure(container);
+		nameList = new ListFigure(); //container);
 		nameFig = new TextFigure ( proto.getName() );
 				
 		setElements ( );
@@ -98,11 +95,7 @@ public class ClassFigure extends GraphicalCompositeFigure
 		
 		attrList.set(LAYOUT_INSETS, insets);
 		methodList.set(LAYOUT_INSETS, insets);
-	// 
-	// added default params of Insets2D.Double() in order to remove the box around class
-	//
-		Insets2D.Double classInset = new Insets2D.Double();
-		nameList.set(LAYOUT_INSETS, classInset); 
+		nameList.set(LAYOUT_INSETS, insets); 
 		
 		if (data.isAbstractClass())
 			{
@@ -139,13 +132,11 @@ public class ClassFigure extends GraphicalCompositeFigure
 		sep1.set( AttributeKeys.STROKE_COLOR, colors.stroke_color);
 		sep2.set( AttributeKeys.STROKE_COLOR, colors.stroke_color);
 		
-		container.set(FILL_COLOR, colors.back_color );
-		container.setAttributeEnabled(FILL_COLOR, false);
 		
 		set( AttributeKeys.FILL_COLOR, colors.back_color );
 		setAttributeEnabled ( AttributeKeys.FILL_COLOR, false );
 		
-		setAttributeEnabled ( AttributeKeys.STROKE_COLOR, true );
+		//setAttributeEnabled ( AttributeKeys.STROKE_COLOR, true );
 		set( AttributeKeys.STROKE_COLOR, colors.stroke_color );
 		setAttributeEnabled ( AttributeKeys.STROKE_COLOR, false );
 		
