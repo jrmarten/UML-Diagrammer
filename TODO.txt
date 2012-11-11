@@ -36,9 +36,14 @@ Cannot see the "SET START DECORATION" end of the line when you add any type of l
 The end decoration works just fine, so look at the code and see why half of the arrow is hidden.  (11/08/2012 JAMESON)
 
 When drawing a connection between two classes, if the line is drawn to an area outside of a class, it will break and throw exceptions
+     //Should be fixed now a null pointer was thrown if notify all be a connection was not made ( at this point connection is null )
+     //yet we where trying to remove the connection form the ends, which had not been connected.
 
 When adding a role name, it gets added to one end of the line, not the middle
+     //done intentionally use a : to seperate two roles to be used at oppisite ends.
+
 
 A connection line is able to connect a class to itself. 
     Draw two classes and connect them
     Drag one end of the connection line to the middle of the class on its other end
+    //Should be fixed.
