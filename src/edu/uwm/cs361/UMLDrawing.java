@@ -6,6 +6,5 @@ public class UMLDrawing extends DefaultDrawing
 {
 	public UMLDrawing ( )
 	{
-		
 	}
 }

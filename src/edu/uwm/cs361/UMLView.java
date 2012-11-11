@@ -52,7 +52,7 @@ public class UMLView extends AbstractView
 		initScroll ( );
 		initEditor ( );
 	}
-
+	
 	public void initEditor ( )
 	{
 		setEditor( new DefaultDrawingEditor());
@@ -96,7 +96,7 @@ public class UMLView extends AbstractView
 
 	protected DefaultDrawing createDrawing ( )
 	{
-		DefaultDrawing drawing = new DefaultDrawing ( );
+		DefaultDrawing drawing = new UMLDrawing ( );
 		DOMStorableInputOutputFormat ioFormat = 
 				new DOMStorableInputOutputFormat ( new UMLFactory ( ) );
 		

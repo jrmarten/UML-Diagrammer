@@ -27,6 +27,7 @@ public class UMLFactory extends DefaultDOMFactory
 	private final static Object[][]	classTagArray	= {
 			{ DefaultDrawing.class, "UMLDiagram" },
 			{ ClassFigure.class, "ClassFigure" },
+			{ ConnectionFigure.class, "ConnectionFigure" },
 			{ UMLClass.class, "class" },
 			{ Method.class, "method" }, 
 			{ Attribute.class, "attribute" },
@@ -37,7 +38,6 @@ public class UMLFactory extends DefaultDOMFactory
 			{ GroupFigure.class, "g" },
 			{ TextAreaFigure.class, "ta" },
 			{ SeparatorLineFigure.class, "separator" },
-			{ ConnectionFigure.class, "associationFigure" },
 			{ ChopRectangleConnector.class, "rectConnector" },
 			{ LocatorConnector.class, "locConnector" },
 			{ RelativeLocator.class, "relativeLocator" },
