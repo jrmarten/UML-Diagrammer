@@ -34,6 +34,7 @@ import edu.uwm.cs361.action.EditRoleAction;
 import edu.uwm.cs361.action.SetEndDecorationAction;
 import edu.uwm.cs361.action.SetStartDecorationAction;
 import edu.uwm.cs361.classdiagram.data.Connection;
+import edu.uwm.cs361.classdiagram.data.ConnectionType;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
 import edu.uwm.cs361.settings.CSSRule;
 import edu.uwm.cs361.settings.Style;
@@ -46,6 +47,7 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 
 	private static final long	serialVersionUID	= -1729547106413248257L;
 	private static Color for_color = Color.black;
+	private static final String DEFAULT_CONNECTION = "Association";
 	
 	private Connection con;
 	
@@ -202,6 +204,18 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 	public void write ( DOMOutput out ) throws IOException
 	{
 		writeAttributes ( out );
+		
+		out.openElement( "connection" );
+		
+		out.openElement( "connectionend" );
+		out.addAttribute( "role", con.getRole(con.getStart()));
+		out.addAttribute( "type" , con.getConnectionType( con.getStart() ).toString());
+		out.closeElement();
+		
+		out.openElement( "connectionend" );
+		out.addAttribute( "role", con.getRole(con.getEnd()));
+		out.addAttribute( "type", con.getConnectionType( con.getEnd() ).toString() );
+		
 	}
 	
 	@Override
@@ -209,6 +223,26 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 	{
 		readAttributes ( in );
 		
+		UMLClass a, b;
+		
+		a = ((ClassFigure)getStartFigure()).getData();
+		b = ((ClassFigure)getEndFigure()).getData();
+		con = new Connection ( a, b );
+		con.register();
+		
+		in.openElement( "connection" );
+		
+		in.openElement( "connectionend", 0 );
+		con.setRole( a, in.getAttribute( "role", "") );
+		con.setConnectionType(a, ConnectionType.parse( in.getAttribute("type", DEFAULT_CONNECTION)));
+		in.closeElement();
+		
+		in.openElement( "connectionend", 1 );
+		con.setRole( b, in.getAttribute ( "role", "" ) );
+		con.setConnectionType( b, ConnectionType.parse( in.getAttribute("type", DEFAULT_CONNECTION)));
+		in.closeElement();
+		
+		in.closeElement();
 	}
 
 	@Override
