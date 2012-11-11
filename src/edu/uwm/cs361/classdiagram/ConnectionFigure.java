@@ -178,9 +178,14 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 	}
 
 	@Override
-	public void removeNotify(Drawing d) {
-		con.getStart().removeConnection( con );
-		con.getEnd().removeConnection( con );
+	public void removeNotify(Drawing d) 
+	{
+		if  ( con != null ) 
+			{
+				//if not null connection will have endings.
+				con.getStart().removeConnection( con );
+				con.getEnd().removeConnection( con );
+			}
 		super.removeNotify(d);
 	}
 	
