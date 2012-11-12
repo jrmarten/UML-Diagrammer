@@ -716,6 +716,5 @@ public class ClassFigure extends GraphicalCompositeFigure
 			Method meth = Method.Create(old);
 			return data.removeMethod(meth);
 		}
-
 	}
 }
