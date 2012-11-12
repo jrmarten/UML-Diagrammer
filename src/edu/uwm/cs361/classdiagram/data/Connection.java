@@ -28,6 +28,17 @@ public class Connection
 	}
 	
 	
+	//Shallow copy is needed.
+	@Override
+	public Object clone ( )
+	{
+		Connection that = new Connection (a.class_type, b.class_type);
+		that.a.con_type = a.con_type;
+		that.b.con_type = b.con_type;
+		that.a.role_name = a.role_name;
+		that.b.role_name = b.role_name;
+		return that;
+	}
 	
 	public ConnectionType getConnectionType ( UMLClass ref )
 	{
