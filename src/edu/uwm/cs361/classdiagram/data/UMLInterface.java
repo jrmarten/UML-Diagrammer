@@ -2,8 +2,6 @@ package edu.uwm.cs361.classdiagram.data;
 
 import static edu.uwm.cs361.Util.*;
 
-//TODO: clean commented out segments
-
 import java.util.LinkedList;
 
 @SuppressWarnings("serial")

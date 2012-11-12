@@ -16,16 +16,16 @@ import edu.uwm.cs361.Util;
 public class UMLClass implements Serializable
 {
 
-	protected String								myName;
-	protected LinkedList<Attribute>	myAttributes;
-	protected LinkedList<Method>		myMethods;
-	protected UMLClass							superClass;
-	protected LinkedList<UMLClass>	myInterfaces;
-	private boolean									abstractp					= false;
+	protected String											myName;
+	protected LinkedList<Attribute>				myAttributes;
+	protected LinkedList<Method>					myMethods;
+	protected UMLClass										superClass;
+	protected LinkedList<UMLClass>				myInterfaces;
+	private boolean												abstractp					= false;
 	
-	protected LinkedList<Connection> _cons;
+	protected LinkedList<Connection> 			_cons;
 
-	static final long								serialVersionUID	= -3748332488864682801L;
+	static final long											serialVersionUID	= -3748332488864682801L;
 
 	/**
 	 * Create a new JModellerClass instance

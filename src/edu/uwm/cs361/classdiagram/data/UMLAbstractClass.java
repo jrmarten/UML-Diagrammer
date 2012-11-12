@@ -1,7 +1,6 @@
 package edu.uwm.cs361.classdiagram.data;
 
 import java.util.LinkedList;
-//TODO: clean commented out segments
 
 @SuppressWarnings("serial")
 public class UMLAbstractClass extends UMLClass

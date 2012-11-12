@@ -10,7 +10,6 @@ public enum ConnectionType
 	AGGREGATION, 
 	//INHERITANCE, Handled else where
 	COMPOSITION;
-
 	
 	private static final LineDecoration DEFAULT_DECORATOR = null;
 	private static final Object[][] DECORATOR_MAPPINGS = 
@@ -29,7 +28,6 @@ public enum ConnectionType
 			}
 		return DEFAULT_DECORATOR;
 	}
-	
 	@Override
 	public String toString()
 	{
@@ -40,7 +38,6 @@ public enum ConnectionType
 		
 		throw new IllegalStateException ( "ConnectionType is not in Mapping" );
 	}
-	
 	public static ConnectionType parse ( String str )
 	{
 		for ( Object[] info : DECORATOR_MAPPINGS )
