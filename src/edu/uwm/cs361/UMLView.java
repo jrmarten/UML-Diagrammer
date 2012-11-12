@@ -67,6 +67,8 @@ public class UMLView extends AbstractView
 		undo.addPropertyChangeListener ( new PropertyChangeListener() {
 			@Override public void propertyChange ( PropertyChangeEvent e )
 			{
+				Util.dprint( e.getSource() );
+				Util.dprint( "Something changed" );
 				setHasUnsavedChanges ( undo.hasSignificantEdits ( ) );
 			}
 		});
@@ -83,8 +85,7 @@ public class UMLView extends AbstractView
 		scrollpane.setLayout(new PlacardScrollPaneLayout());
 		scrollpane.setBorder ( new EmptyBorder ( 0, 0, 0, 0 ));
 	}
-
-
+	
 	public void setEditor ( DrawingEditor newEditor)
 	{
 		DrawingEditor old = edit;
@@ -137,7 +138,6 @@ public class UMLView extends AbstractView
 	{
 		return uri.getPath().endsWith(".xml") || uri.getPath().endsWith( ".png" );
 	}
-	
 
 	@Override protected void setHasUnsavedChanges ( boolean newValue)
 	{

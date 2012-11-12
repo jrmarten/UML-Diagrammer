@@ -20,6 +20,7 @@ import org.jhotdraw.app.DefaultMenuBuilder;
 import org.jhotdraw.app.MenuBuilder;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.ActionUtil;
+import org.jhotdraw.app.action.edit.UndoAction;
 import org.jhotdraw.app.action.file.LoadRecentFileAction;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.draw.AttributeKey;
@@ -42,8 +43,8 @@ import edu.uwm.cs361.action.AddMethodAction;
 import edu.uwm.cs361.action.DebugSnapShotAction;
 import edu.uwm.cs361.action.JavaGenerationAction;
 import edu.uwm.cs361.action.SaveTemplateAction;
-import edu.uwm.cs361.classdiagram.ConnectionFigure;
 import edu.uwm.cs361.classdiagram.ClassFigure;
+import edu.uwm.cs361.classdiagram.ConnectionFigure;
 import edu.uwm.cs361.classdiagram.InheritanceFigure;
 import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
 import edu.uwm.cs361.classdiagram.data.UMLInterface;
@@ -72,8 +73,10 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		
     m.put("view.toggleGrid", aa = new ToggleViewPropertyAction(a, v, UMLView.GRID_VISIBLE_PROPERTY));
     getProjectResources().configureAction(aa, "view.toggleGrid");
-		return m;
-
+		
+    //m.put( UndoAction.ID, new UndoAction ( a, v ) );
+    
+    return m;
 	}
 
 	public DefaultDrawingEditor getSharedEditor() {

@@ -1,7 +1,9 @@
 package edu.uwm.cs361;
 
+import javax.swing.ActionMap;
 import javax.swing.InputMap;
 
+import org.jhotdraw.app.action.edit.UndoAction;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 
 /*
@@ -19,6 +21,16 @@ public class UMLDrawingEditor extends DefaultDrawingEditor
 		//iMaps.put ( KeyStroke.getKeyStroke ( KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK ), 
 		
 		return iMaps;
+	}
+	
+	protected ActionMap createActionMap ( ) {
+		ActionMap m = super.createActionMap();
+		
+		
+		
+		//m.put( UndoAction.ID, new UndoAction ( ) );
+		
+		return m;
 	}
 
 }
