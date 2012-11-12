@@ -40,10 +40,12 @@ When drawing a connection between two classes, if the line is drawn to an area o
      //yet we where trying to remove the connection form the ends, which had not been connected.
 
 When adding a role name, it gets added to one end of the line, not the middle
-     //done intentionally use a : to seperate two roles to be used at oppisite ends.
-
+     //done intentionally use a : to separate two roles to be used at opposite ends.
+     >>But isn't that where the multiplicity labels should go? Each line has only one role, so shouldn't that be in the middle?
 
 A connection line is able to connect a class to itself. 
     Draw two classes and connect them
     Drag one end of the connection line to the middle of the class on its other end
     //Should be fixed.
+
+Now the connection lines start in the middle of the class figure, instead of the edge, only if using the middle handle to draw the connection
