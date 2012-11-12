@@ -142,6 +142,14 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 	 */
 	@Override
 	protected void handleConnect(Connector start, Connector end) {
+		
+		/*
+		 * after reading in from a file a connection will exist
+		 * but this method is still called after reading
+		 * 
+		 */
+		if ( con != null ) return;
+		
 		ClassFigure sf = (ClassFigure) start.getOwner();
 		ClassFigure ef = (ClassFigure) end.getOwner();
 		
@@ -166,6 +174,7 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 	public ConnectionFigure clone() {
 		
 		ConnectionFigure that = (ConnectionFigure) super.clone();
+		if ( con != null ) that.con = (Connection) con.clone();
 		that.a_role = a_role.clone();
 		that.b_role = b_role.clone();
 		
@@ -203,7 +212,8 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 	@Override
 	public void write ( DOMOutput out ) throws IOException
 	{
-		writeAttributes ( out );
+		super.write( out );
+		//writeAttributes ( out );
 		
 		out.openElement( "connection" );
 		
@@ -221,7 +231,10 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 	@Override
 	public void read ( DOMInput in ) throws IOException
 	{
-		readAttributes ( in );
+		Util.dprint( "Reading Connection Figure" );
+		
+		super.read( in );
+		//readAttributes ( in );
 		
 		UMLClass a, b;
 		
@@ -243,6 +256,14 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 		in.closeElement();
 		
 		in.closeElement();
+		
+		willChange();
+		a_role.setText( con.getRole ( a ) );
+		b_role.setText( con.getRole ( b ) );
+		changed();
+		
+		Util.dprint( a.getName() + ": " + con.getRole ( a ) );
+		Util.dprint( b.getName() + ": " + con.getRole ( b ) );
 	}
 
 	@Override
