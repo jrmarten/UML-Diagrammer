@@ -216,13 +216,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		@Override
 		public void addUndoItems ( JMenu menu, Application app, @Nullable View view )
 		{
-			Util.dprint( "Bind time View: " + view.getClass() + "#" + String.format( "%x", view.hashCode()).toUpperCase() );
-			
-			Util.dprint( "Map hash: " + String.format( "%x", view.getActionMap().hashCode() ).toUpperCase() );
-			
-			
-			Util.dprint( view.getActionMap().get( UndoAction.ID ).toString() );
-			
 			super.addUndoItems ( menu, app, view );
 		}
 		
