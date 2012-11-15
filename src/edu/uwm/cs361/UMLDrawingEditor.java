@@ -24,6 +24,7 @@ public class UMLDrawingEditor extends DefaultDrawingEditor
 		return iMaps;
 	}
 	
+	@Override
 	protected ActionMap createActionMap ( ) {
 		ActionMap m = super.createActionMap();
 		
