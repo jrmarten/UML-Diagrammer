@@ -40,6 +40,7 @@ import edu.uwm.cs361.action.AddAttributeAction;
 import edu.uwm.cs361.action.AddMethodAction;
 import edu.uwm.cs361.action.RemoveAttributeAction;
 import edu.uwm.cs361.action.RemoveMethodAction;
+import edu.uwm.cs361.action.edit.AttributeAddedEdit;
 import edu.uwm.cs361.classdiagram.data.Argument;
 import edu.uwm.cs361.classdiagram.data.Attribute;
 import edu.uwm.cs361.classdiagram.data.Method;
@@ -239,6 +240,9 @@ public class ClassFigure extends GraphicalCompositeFigure
 		boolean added_fig = attrList.add(tmpFig);
 		changed();
 
+		getDrawing().fireUndoableEditHappened( new AttributeAddedEdit ( data, attr ) );
+		Util.dprint( "firing UndoableEditHappend" );
+		
 		dprint(tmpFig.getText());
 
 		dprint((added_fig) ? "" : "TextFigure not added to attrList");
