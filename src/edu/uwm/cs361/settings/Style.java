@@ -1,5 +1,6 @@
 package edu.uwm.cs361.settings;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -10,7 +11,6 @@ import edu.uwm.cs361.Util;
 
 public class Style
 {
-
 	private LinkedList<CSSRule>	rules	= new LinkedList<CSSRule>();
 
 	public CSSRule get(String selector)
@@ -22,7 +22,19 @@ public class Style
 			}
 		return null;
 	}
-
+  public Color getColor ( String selector, Color defaultColor )
+	{
+		if ( Util.countInstancesOf(selector, '.') != 1 ) 
+			throw new IllegalArgumentException ( "selector.property is malformed: "  + selector);
+		
+		String[] parts = new String[2];
+		parts[0] = selector.substring( 0, selector.indexOf( '.' ) );
+		parts[1] = selector.substring( selector.indexOf('.') + 1 );
+		
+		CSSRule tmp_rule = get ( parts[0] );
+		return (tmp_rule!=null)?tmp_rule.getColor(parts[1], defaultColor):null;
+	}
+	
 	public static Style extractStyle(File file) {
 		if (!file.exists())
 			return null;
@@ -69,7 +81,6 @@ public class Style
 			}
 		return ret;
 	}
-
 	private static String handleComments(String input, Scanner in) {
 
 		if (input.contains("//"))
@@ -92,7 +103,6 @@ public class Style
 
 		return input;
 	}
-
 	private static CSSRule[] make(String in) {
 		if (Util.countInstancesOf(in, '{') != 1)
 			return (CSSRule[]) Util.report("Error Style definintion: " + in);
