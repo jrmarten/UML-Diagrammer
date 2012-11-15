@@ -2,8 +2,9 @@ package edu.uwm.cs361;
 
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
+import javax.swing.undo.UndoableEdit;
 
-import org.jhotdraw.app.action.edit.UndoAction;
+import org.jhotdraw.app.View;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 
 /*
@@ -28,9 +29,9 @@ public class UMLDrawingEditor extends DefaultDrawingEditor
 		
 		
 		
+		
 		//m.put( UndoAction.ID, new UndoAction ( ) );
 		
 		return m;
 	}
-
 }

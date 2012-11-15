@@ -12,6 +12,9 @@ import java.util.LinkedList;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.UndoableEdit;
 
 import org.jhotdraw.app.AbstractView;
 import org.jhotdraw.app.action.edit.RedoAction;
@@ -51,6 +54,8 @@ public class UMLView extends AbstractView
 	{
 		initScroll ( );
 		initEditor ( );
+		
+		view.getDrawing().addUndoableEditListener( new UndoListener ( ) );
 	}
 	
 	public void initEditor ( )
@@ -73,7 +78,7 @@ public class UMLView extends AbstractView
 			}
 		});
 	}
-
+	
 	public void initScroll ( )
 	{
 		scrollpane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -222,4 +227,16 @@ public class UMLView extends AbstractView
 	public DrawingEditor getEditor() {
 		return edit;
 	}
+
+	public class UndoListener implements UndoableEditListener
+	{
+
+		@Override
+		public void undoableEditHappened(UndoableEditEvent e) {
+			Util.dprint( e.getEdit() );
+			
+		}
+		
+	}
+
 }

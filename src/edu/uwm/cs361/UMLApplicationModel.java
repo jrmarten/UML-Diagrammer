@@ -20,7 +20,6 @@ import org.jhotdraw.app.DefaultMenuBuilder;
 import org.jhotdraw.app.MenuBuilder;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.ActionUtil;
-import org.jhotdraw.app.action.edit.UndoAction;
 import org.jhotdraw.app.action.file.LoadRecentFileAction;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.draw.AttributeKey;
@@ -73,8 +72,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		
     m.put("view.toggleGrid", aa = new ToggleViewPropertyAction(a, v, UMLView.GRID_VISIBLE_PROPERTY));
     getProjectResources().configureAction(aa, "view.toggleGrid");
-		
-    //m.put( UndoAction.ID, new UndoAction ( a, v ) );
     
     return m;
 	}
@@ -98,7 +95,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		LinkedList<JToolBar> list = new LinkedList<JToolBar>();
 
 		JToolBar tmp = new JToolBar();
-		addClassButtonsTo(tmp, edit);
+		addClassButtonsTo(tmp, edit, view);
 		tmp.setName(Labels.getString("window.classToolBar.title"));
 
 		list.add(tmp);
@@ -117,7 +114,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		return new UMLMenuBuilder();
 	}
 
-	private void addClassButtonsTo(JToolBar tb, final DrawingEditor edit) {
+	private void addClassButtonsTo(JToolBar tb, final DrawingEditor edit, @Nullable View view) {
 		HashMap<AttributeKey, Object> attributes;
 
 		ResourceBundleUtil labels = getProjectResources();
@@ -130,7 +127,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
 		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
 		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
-		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ClassFigure(),
+		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ClassFigure( ),
 				attributes), "edit.createClass", labels);
 
 		attributes = new HashMap<AttributeKey, Object>();
@@ -212,7 +209,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 					JMenuItem template = new JMenuItem ( );
 					String filename = tmp.getName();
 					
-					URI uri = URI.create( "file://" + tmp.getAbsolutePath() ); //get ( tmp.getAbsolutePath() );
+					URI uri = URI.create( "file://" + tmp.getAbsolutePath() ); 
 					if ( uri == null ) continue;
 					
 					if ( filename.endsWith ( ".xml" ) ) 
