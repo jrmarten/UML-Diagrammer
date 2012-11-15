@@ -20,7 +20,6 @@ import org.jhotdraw.app.DefaultMenuBuilder;
 import org.jhotdraw.app.MenuBuilder;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.ActionUtil;
-import org.jhotdraw.app.action.edit.UndoAction;
 import org.jhotdraw.app.action.file.LoadRecentFileAction;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.draw.AttributeKey;
@@ -66,6 +65,8 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		
 	}
 
+	
+	//XXX: May be the source of bugs if application switches to Multi-view 
 	@Override
 	public ActionMap createActionMap(Application a, @Nullable View v) {
 		ActionMap m = super.createActionMap(a, v);
@@ -76,12 +77,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 					{
 						m.put(key, v.getActionMap().get(key));
 					}
-			}
-		
-		
-		for ( Object key : m.allKeys() )
-			{
-				Util.dprint( "ActionMap(" + key+ ") = " + m.get(key) );
 			}
 		
 		AbstractAction aa;
