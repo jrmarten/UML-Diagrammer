@@ -40,7 +40,6 @@ import edu.uwm.cs361.action.AddAttributeAction;
 import edu.uwm.cs361.action.AddMethodAction;
 import edu.uwm.cs361.action.RemoveAttributeAction;
 import edu.uwm.cs361.action.RemoveMethodAction;
-import edu.uwm.cs361.action.edit.AttributeAddedEdit;
 import edu.uwm.cs361.classdiagram.data.Argument;
 import edu.uwm.cs361.classdiagram.data.Attribute;
 import edu.uwm.cs361.classdiagram.data.Method;
@@ -215,6 +214,12 @@ public class ClassFigure extends GraphicalCompositeFigure
 	public boolean addAttribute(String str) {
 		Attribute attr = Attribute.Create(str);
 		boolean result = addAttribute(attr);
+		
+		if ( result )
+			{				
+				getDrawing().fireUndoableEditHappened(
+						new AddAttributeAction.Edit(this, str));
+			}
 
 		return result;
 	}
@@ -240,14 +245,16 @@ public class ClassFigure extends GraphicalCompositeFigure
 		attrList.add(tmpFig);
 		changed();
 		
-		getDrawing().fireUndoableEditHappened( new AttributeAddedEdit ( data, attr ) );
-		
 		return added;
 	}
 
 	public void addMethod(String methtxt) {
 		Method tmp = Method.Create(methtxt);
-		addMethod(tmp);
+		if ( addMethod(tmp) )
+			{
+				getDrawing().fireUndoableEditHappened(
+						new AddMethodAction.Edit( this , methtxt ) );
+			}
 	}
 
 	@Override
@@ -255,17 +262,17 @@ public class ClassFigure extends GraphicalCompositeFigure
 		return 0;
 	}
 
-	private void addMethod(Method meth) {
+	private boolean addMethod(Method meth) {
 		if (meth == null)
 			{
 				UMLApplicationModel.error( "error.Method.null", "Format Error" ) ;
-				return;
+				return false;
 			}
 		
 		if ( !data.addMethod(meth) )
 			{
 				UMLApplicationModel.error( "id" , "Not Overloading");
-				return;
+				return false;
 			}
 
 		TextFigure tmpFig = new TextFigure();
@@ -287,6 +294,8 @@ public class ClassFigure extends GraphicalCompositeFigure
 				setColors ( _colors );
 			}
 		changed();
+		
+		return true;
 	}
 
 	public void removeMethod(String methTxt) {
