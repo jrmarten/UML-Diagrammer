@@ -6,10 +6,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
 
-import org.jhotdraw.app.View;
-
 import edu.uwm.cs361.UMLApplicationModel;
-import edu.uwm.cs361.UMLView;
 import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 
