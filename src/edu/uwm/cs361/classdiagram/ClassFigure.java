@@ -237,16 +237,11 @@ public class ClassFigure extends GraphicalCompositeFigure
 		tmpFig.addFigureListener(new AttributeAdapter(tmpFig));
 
 		willChange();
-		boolean added_fig = attrList.add(tmpFig);
+		attrList.add(tmpFig);
 		changed();
-
-		getDrawing().fireUndoableEditHappened( new AttributeAddedEdit ( data, attr ) );
-		Util.dprint( "firing UndoableEditHappend" );
 		
-		dprint(tmpFig.getText());
-
-		dprint((added_fig) ? "" : "TextFigure not added to attrList");
-		dprint((added) ? "" : "ATTRIBUTE NOT ADDED TO DATA");
+		getDrawing().fireUndoableEditHappened( new AttributeAddedEdit ( data, attr ) );
+		
 		return added;
 	}
 
