@@ -46,13 +46,11 @@ import edu.uwm.cs361.classdiagram.data.Method;
 import edu.uwm.cs361.classdiagram.data.UMLAbstractClass;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
 import edu.uwm.cs361.classdiagram.data.UMLInterface;
-import edu.uwm.cs361.settings.CSSRule;
 import edu.uwm.cs361.settings.Style;
 
 @SuppressWarnings("serial")
 public class ClassFigure extends GraphicalCompositeFigure
 {
-
 	protected ListFigure			nameList;
 	protected TextFigure			nameFig;
 	protected ListFigure			attrList		= new ListFigure();
@@ -64,19 +62,17 @@ public class ClassFigure extends GraphicalCompositeFigure
 
 	private static class ColorSet 
 	{
-		public Color for_color 			= Color.black,
-									back_color 		= Color.white,
-									stroke_color 	= Color.black;
-		} 
+		public Color for_color, back_color, stroke_color;
+	}
 	
 	private static ColorSet CLASSCOLORS = new ColorSet ( );
 	private static ColorSet ABSTRACTCOLORS = new ColorSet ( );
 	private static ColorSet INTERFACECOLORS = new ColorSet ( );
 	private ColorSet _colors;
 	
-	public ClassFigure()
+	public ClassFigure( )
 	{
-		this(new UMLClass());
+		this(new UMLClass() );
 	}
 	public ClassFigure(UMLClass proto)
 	{
@@ -158,45 +154,26 @@ public class ClassFigure extends GraphicalCompositeFigure
 	private static void readConfig( )
 	{
 		Style style = UMLApplicationModel.getProgramStyle();
-		if ( style == null ) return;
-		
-		CSSRule class_style = style.get( "Class" );
-		CSSRule abstract_style = style.get( "AbstractClass" );
-		CSSRule interface_style = style.get( "Interface" );
-		
-		if ( class_style != null )
+		if ( style != null )
 			{
-				CLASSCOLORS.for_color = class_style.getColor( "forground-color", Color.black );
-				CLASSCOLORS.back_color = class_style.getColor( "background-color", Color.white );
-				CLASSCOLORS.stroke_color = class_style.getColor( "border-color", Color.black );
-			}
+				CLASSCOLORS.for_color = style.getColor("Class.forground-color", Color.black );
+				CLASSCOLORS.back_color = style.getColor( "Class.background-color", Color.white );
+				CLASSCOLORS.stroke_color = style.getColor( "Class.border-color", Color.black );
 		
-		if ( abstract_style != null )
-			{
-				ABSTRACTCOLORS.for_color = abstract_style.getColor( "forground-color", CLASSCOLORS.for_color );
-				ABSTRACTCOLORS.back_color = abstract_style.getColor( "background-color", CLASSCOLORS.back_color );
-				ABSTRACTCOLORS.stroke_color = abstract_style.getColor( "border-color", CLASSCOLORS.stroke_color );
+				ABSTRACTCOLORS.for_color = style.getColor( "AbstractClass.forground-color", CLASSCOLORS.for_color );
+				ABSTRACTCOLORS.back_color = style.getColor( "AbstractClass.background-color", CLASSCOLORS.back_color );
+				ABSTRACTCOLORS.stroke_color = style.getColor( "AbstractClass.border-color", CLASSCOLORS.stroke_color );
+		
+				INTERFACECOLORS.for_color = style.getColor( "Interface.forground-color", CLASSCOLORS.for_color );
+				INTERFACECOLORS.back_color = style.getColor( "Interface.background-color", CLASSCOLORS.back_color );
+				INTERFACECOLORS.stroke_color = style.getColor( "Interface.border-color", CLASSCOLORS.stroke_color );
 			}
 		else
 			{
-				ABSTRACTCOLORS.for_color = CLASSCOLORS.for_color;
-				ABSTRACTCOLORS.back_color = CLASSCOLORS.back_color;
-				ABSTRACTCOLORS.stroke_color = CLASSCOLORS.stroke_color;
+				CLASSCOLORS.for_color = ABSTRACTCOLORS.for_color = INTERFACECOLORS.for_color = Color.black;
+				CLASSCOLORS.back_color = ABSTRACTCOLORS.back_color = INTERFACECOLORS.back_color = Color.white;
+				CLASSCOLORS.stroke_color = ABSTRACTCOLORS.stroke_color = INTERFACECOLORS.stroke_color = Color.black;
 			}
-		
-		if ( interface_style != null )
-			{
-				INTERFACECOLORS.for_color = interface_style.getColor( "forground-color", CLASSCOLORS.for_color );
-				INTERFACECOLORS.back_color = interface_style.getColor( "background-color", CLASSCOLORS.back_color );
-				INTERFACECOLORS.stroke_color = interface_style.getColor( "border-color", CLASSCOLORS.stroke_color );
-			}
-		else
-			{
-				INTERFACECOLORS.for_color = CLASSCOLORS.for_color;
-				INTERFACECOLORS.back_color = CLASSCOLORS.back_color;
-				INTERFACECOLORS.stroke_color = CLASSCOLORS.stroke_color;
-			}
-		
 	}
 
 	@Override
@@ -599,7 +576,6 @@ public class ClassFigure extends GraphicalCompositeFigure
 	@Override
 	public ClassFigure clone() {
 		ClassFigure fig = new ClassFigure((UMLClass) data.clone());
-
 		return fig;
 	}
 	
