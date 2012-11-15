@@ -63,14 +63,13 @@ public class UMLView extends AbstractView
 
 		view.getDrawing().addUndoableEditListener ( undo );
 
+		
 		getActionMap().put ( UndoAction.ID, undo.getUndoAction() );
 		getActionMap().put ( RedoAction.ID, undo.getRedoAction() );
-
+		
 		undo.addPropertyChangeListener ( new PropertyChangeListener() {
 			@Override public void propertyChange ( PropertyChangeEvent e )
 			{
-				Util.dprint( e.getSource() );
-				Util.dprint( "Something changed" );
 				setHasUnsavedChanges ( undo.hasSignificantEdits ( ) );
 			}
 		});
