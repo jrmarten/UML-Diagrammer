@@ -14,7 +14,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
-import javax.swing.undo.UndoableEdit;
 
 import org.jhotdraw.app.AbstractView;
 import org.jhotdraw.app.action.edit.RedoAction;
@@ -54,8 +53,6 @@ public class UMLView extends AbstractView
 	{
 		initScroll ( );
 		initEditor ( );
-		
-		view.getDrawing().addUndoableEditListener( new UndoListener ( ) );
 	}
 	
 	public void initEditor ( )
@@ -233,6 +230,8 @@ public class UMLView extends AbstractView
 
 		@Override
 		public void undoableEditHappened(UndoableEditEvent e) {
+			
+			Util.dprint( "Undoable Edit made: " );
 			Util.dprint( e.getEdit() );
 			
 		}
