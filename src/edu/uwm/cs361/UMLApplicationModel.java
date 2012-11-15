@@ -20,6 +20,7 @@ import org.jhotdraw.app.DefaultMenuBuilder;
 import org.jhotdraw.app.MenuBuilder;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.ActionUtil;
+import org.jhotdraw.app.action.edit.UndoAction;
 import org.jhotdraw.app.action.file.LoadRecentFileAction;
 import org.jhotdraw.app.action.view.ToggleViewPropertyAction;
 import org.jhotdraw.draw.AttributeKey;
@@ -68,6 +69,21 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	@Override
 	public ActionMap createActionMap(Application a, @Nullable View v) {
 		ActionMap m = super.createActionMap(a, v);
+		
+		if ( v!=null )
+			{
+				for ( Object key : v.getActionMap().allKeys() )
+					{
+						m.put(key, v.getActionMap().get(key));
+					}
+			}
+		
+		
+		for ( Object key : m.allKeys() )
+			{
+				Util.dprint( "ActionMap(" + key+ ") = " + m.get(key) );
+			}
+		
 		AbstractAction aa;
 		
     m.put("view.toggleGrid", aa = new ToggleViewPropertyAction(a, v, UMLView.GRID_VISIBLE_PROPERTY));
@@ -195,8 +211,20 @@ public class UMLApplicationModel extends DefaultApplicationModel
 	
 	private static class UMLMenuBuilder extends DefaultMenuBuilder
 	{
-		
 		private JMenu templateButtons;
+		
+		@Override
+		public void addUndoItems ( JMenu menu, Application app, @Nullable View view )
+		{
+			Util.dprint( "Bind time View: " + view.getClass() + "#" + String.format( "%x", view.hashCode()).toUpperCase() );
+			
+			Util.dprint( "Map hash: " + String.format( "%x", view.getActionMap().hashCode() ).toUpperCase() );
+			
+			
+			Util.dprint( view.getActionMap().get( UndoAction.ID ).toString() );
+			
+			super.addUndoItems ( menu, app, view );
+		}
 		
 		@Override
 		public void addLoadFileItems ( JMenu menu, Application app,
@@ -315,7 +343,6 @@ public class UMLApplicationModel extends DefaultApplicationModel
 				if ( pref_file.exists() )
 					{
 						pref = Settings.getSettings ( pref_file );
-						Util.dprint( "Gettings settings form: " + getProgramDirectory ( ) + "preferences.config");
 					}
 				else
 					{
