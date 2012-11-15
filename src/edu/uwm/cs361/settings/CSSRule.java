@@ -11,8 +11,6 @@ public class CSSRule extends Settings
 {
 	private String	selector;
 
-	private static final boolean DEBUG = false;
-	
 	public CSSRule(String name) {
 		selector = name;
 	}
@@ -43,7 +41,7 @@ public class CSSRule extends Settings
 		String val = props.get( key );
 		if ( val == null ) return defaultValue; 
 		
-		Util.dprint( getName( ) + "." + key + ":" + val, DEBUG );
+		Util.dprint( getName( ) + "." + key + ":" + val );
 		
 		//cuz I like writing code
 		boolean hexNotation = false;
