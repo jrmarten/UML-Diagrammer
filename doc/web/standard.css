@@ -1,0 +1,51 @@
+
+
+span.example
+{
+    font-weight:bold;
+}
+
+.bottom
+{
+    position:fixed;
+    bottom:0;
+    width:100%;
+}
+
+#footer
+{
+    border-top-style : solid;
+    border-top-color : black;
+    background-color : white;
+}
+
+#aside
+{
+    position:fixed;
+    left:0;
+    height:100%;
+}
+
+#buffer
+{
+    height:20px;
+}
+
+.center
+{
+    
+    margin-left:auto;
+    margin-right:auto;
+    width:0%; 
+}
+
+
+.a_right
+{
+    float:right;
+}
+
+.a_left
+{
+    float:left;
+}

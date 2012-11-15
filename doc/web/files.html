@@ -1,0 +1,183 @@
+<html>
+  <head>
+    <title>Significant Files</title>
+    <meta name="auther" content="Maximilian Werner Felgenhauer" />
+    <link rel="stylesheet" type="text/css" href="standard.css" />
+  </head>
+  <body>
+    <h1> Program Directory </h1>
+    <p> The settings file in windows is found in ${APPDATA}\UML-Diagrammer </p>
+    <p> The settings file in other operating systems can be found in ${HOME}/.config/UML-Diagrammer/ </p>
+    
+
+    <h1>Significant Files</h1>
+    <h2>Settings</h2>
+    <h3>Settings File Title</h3>
+    <p> the primary settings file is called preferences.config </p>
+    
+    <h3> Notes </h3>
+    <ul>
+      <li> This file contains a set of key:value; pairs </li>
+      <li> Comments are the same as unix config comments, a line comment that starts with # </li>
+    </ul>
+
+    <h3> Settings values </h3>
+    <table border="1">
+      <tr>
+	<td> Setting Variable </td>
+	<td> Default Value </td>
+	<td> Description </td>
+      <tr>
+      <tr>
+	<td class="key"> templateDir </td>
+	<td class="val"> ${progDir}/Templates/ </td>
+	<td class="dscp"> Where this program stores User-made templates <td>
+      </tr>
+      <tr>
+	<td class="key"> StyleSheet </td>
+	<td class="val"> </td>
+	<td class="dscp"> Which file to use as a style sheet </td> 
+      </tr>
+      <tr>
+	<td class="key"> Collection </td>
+	<td class="val"> Collection </td>
+	<td class="dscp"> Which collection class should be used by the Source Code Generator for aggregation </td>
+    </table>
+
+    <h2> Styles </h2>
+    <h3> Notes </h3>
+    <uL>
+      <li> The default name for this is nothing defining it in preferences makes the program look for a file. </li>
+      <li> This file should look like a regular CSS file </li>
+      <li> Class and id will not work in this program </li>
+      <li> Selectors do not have to be seperated by a comma </li>
+      <li> In addition to block comments ( /* ... */ ).  Line comments are availible </li>
+      <li> Colors can be specified by name like Green, red, BLACK </li>
+      <li> Colors can be defined by an Integer such as 0x00FF00, #0000FF</li>
+      <li> Currently all Properties recongized are colors </li>
+    </ul>
+
+
+    <h3> Selectors </h3>
+
+    <ul>
+      <li>
+	<a href="./class.html"> Class </a>
+	<table border="1">
+	  <tr>
+	    <td> Property </td>
+	    <td> Default Value </td>
+	    <td> Description </td>
+	  </tr>
+	  <tr>
+	    <td> forground-color </td>
+	    <td> Black </td>
+	    <td> Sets Text color for Classes </td>
+	  </tr>
+	  <tr>
+	    <td> background-color </td>
+	    <td> White </td>
+	    <td> Sets background for Classes </td>
+	  </tr>
+	  <tr>
+	    <td> border-color </td>
+	    <td> Black </td>
+	    <td> Sets the color for the box Classes are in </td>
+	  </tr>
+	</table>
+      </li>
+      <li>
+	<a href="class.html"> Abstract Class </a>
+	<table border="1">
+	  <tr>
+	    <td> Property </td>
+	    <td> Default Value </td>
+	    <td> Description </td>
+	  </tr>
+	  <tr>
+	    <td> forground-color </td>
+	    <td> Class.forground-color </td>
+	    <td> Sets Text color for Abstract Classes </td>
+	  </tr>
+	  <tr>
+	    <td> background-color </td>
+	    <td> Class.background-color </td>
+	    <td> Sets background for Abstract Classes </td>
+	  </tr>
+	  <tr>
+	    <td> border-color </td>
+	    <td> Class.border-color </td>
+	    <td> Sets the color for the box Abstract Classes are in </td>
+	  </tr>
+	</table>
+      </li>
+      <li>
+	<a href="class.html"> Iterface </a>
+	<table border="1">
+	  <tr>
+	    <td> Property </td>
+	    <td> Default Value </td>
+	    <td> Description </td>
+	  </tr>
+	  <tr>
+	    <td> forground-color </td>
+	    <td> Class.forground-color </td>
+	    <td> Sets Text color for Iterfaces </td>
+	  </tr>
+	  <tr>
+	    <td> background-color </td>
+	    <td> Class.background-color </td>
+	    <td> Sets background for Iterfaces </td>
+	  </tr>
+	  <tr>
+	    <td> border-color </td>
+	    <td> Class.border-color </td>
+	    <td> Sets the color for the box Iterfaces are in </td>
+	  </tr>
+	</table>
+      </li>
+      <li>
+	<a href="connection.html"> Inheritence </a>
+	<table border="1">
+	  <tr>
+	    <td> Property </td>
+	    <td> Default Vaule </td>
+	    <td> Description </td>
+	  </tr>
+	  <tr>
+	    <td> forground-color </td>
+	    <td> Black </td>
+	    <td> Sets all color on Inheritence </td>
+	  </tr>
+	</table>
+      </li>
+      <li>
+	<a href="connection.html"> Connection </a>
+	<table border="1">
+	  <tr>
+	    <td> Property </td>
+	    <td> Default Vaule </td>
+	    <td> Description </td>
+	  </tr>
+	  <tr>
+	    <td> forground-color </td>
+	    <td> Black </td>
+	    <td> Sets all color on Connections </td>
+	  </tr>
+	</table>
+      </li>
+    </ul>
+
+    
+
+    <div id="buffer" />
+
+    <div class="bottom" id="footer">      
+      <div class="center"> <a href="overview.html" class="center" > overview </a> </div>
+      <div>
+	<span class="a_left"> <a href="connection.html" > Connection </a> </span>
+      </div>      
+    </div>
+
+  </body>
+</html>
