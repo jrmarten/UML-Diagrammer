@@ -11,6 +11,8 @@ public class Settings
 {
 	private static final String ENTRY_DELIM = ";";
 	private static final String KEYVAL_DELIM = ":";
+	private static final boolean DEBUG = false;
+	
 	
 	protected HashMap<String, String> props = new HashMap<String, String>();
 	
@@ -88,7 +90,7 @@ public class Settings
 		File pref = f;
 		Settings glob = new Settings ();
 		
-		Util.dprint( "Reading file: " + pref.getAbsolutePath() );
+		Util.dprint( "Reading file: " + pref.getAbsolutePath(), DEBUG );
 		
 		try
 			{
