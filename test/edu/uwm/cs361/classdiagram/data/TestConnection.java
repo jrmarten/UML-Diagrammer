@@ -63,5 +63,34 @@ public class TestConnection
 	@Test
 	public void testConnectionType(){
 		//still need to implement, keep getting null pointer exception.
+		oneCon = new Connection(newClass, class_b);
+		assertFalse(newClass.getConnections().contains(oneCon));
+		
+		newClass.addConnection(oneCon);
+		assertTrue(newClass.getConnections().contains(oneCon));
+		oneType = ConnectionType.AGGREGATION;
+		oneCon.setConnectionType(newClass, oneType);
+		assertTrue(newClass._cons.contains(oneCon));
+		assertFalse(newClass._cons.contains(twoCon));
+		
+		//oneType == AGGREGATION
+		assertTrue(oneCon.getConnectionType(newClass).equals(oneType)); 
+		assertTrue(oneCon.getConnectionType(newClass).equals(ConnectionType.AGGREGATION));
+		
+		twoCon = new Connection(newClass, class_a);
+		assertFalse(newClass.getConnections().contains(twoCon));
+		assertTrue(newClass.getConnections().contains(oneCon));
+		newClass.addConnection(twoCon);
+		twoType = ConnectionType.COMPOSITION;
+		twoCon.setConnectionType(newClass,twoType);
+		
+		//twoType == COMPOSITION
+		assertTrue(newClass.getConnections().contains(twoCon));
+		assertTrue(newClass.getConnections().getLast().getConnectionType(newClass).equals(ConnectionType.COMPOSITION));
+		
+		//remove the first connection, leaving only twoType == COMPOSITION
+		newClass.removeConnection(oneCon);
+		assertFalse(newClass.getConnections().contains(oneCon));
+		assertTrue(newClass.getConnections().getFirst().getConnectionType(newClass).equals(ConnectionType.COMPOSITION));
 	}
 }
