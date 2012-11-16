@@ -75,10 +75,11 @@ public class UMLView extends AbstractView
 		});
 	}
 	
+	
 	public void initScroll ( )
 	{
-		scrollpane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollpane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollpane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollpane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollpane.setViewportView ( view );
 		setLayout( new BorderLayout( ) );
 		add ( scrollpane );
@@ -185,7 +186,7 @@ public class UMLView extends AbstractView
 	}
 
 	@Override public void read(URI uri, @Nullable URIChooser chooser) throws IOException {
-		if ( uri.getPath().endsWith( ".png" ) )
+		if ( !uri.getPath().endsWith( ".xml" ) )
 			{
 				UMLApplicationModel.error( "read.invalid.format.error" , "Invalid Format" );
 				return;
