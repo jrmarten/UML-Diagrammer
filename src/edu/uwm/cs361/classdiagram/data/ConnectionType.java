@@ -5,7 +5,7 @@ import org.jhotdraw.draw.decoration.LineDecoration;
 
 public enum ConnectionType
 {
-	DEPENDANCY, 
+	DEPENDENCY, 
 	ASSOCIATION, 
 	AGGREGATION, 
 	//INHERITANCE, Handled else where
@@ -17,7 +17,7 @@ public enum ConnectionType
 				{ COMPOSITION, new ArrowTip ( 0.4, 15.0, 30.0 ), "Composition" },
 				{ AGGREGATION, new ArrowTip ( 0.4, 15.0, 30.0, false, true, true ), "Aggregation" },
 				{ ASSOCIATION, new ArrowTip ( .35, 20, 18.4 ), "Association" },
-				{ DEPENDANCY, DEFAULT_DECORATOR, "Dependancy" }
+				{ DEPENDENCY, DEFAULT_DECORATOR, "Dependency" }
 		};
 	
 	public LineDecoration getDecoration ( )

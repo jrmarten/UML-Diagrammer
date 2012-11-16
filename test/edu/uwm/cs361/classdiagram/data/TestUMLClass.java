@@ -2,26 +2,24 @@ package edu.uwm.cs361.classdiagram.data;
 
 import static edu.uwm.cs361.Util.dprint;
 import static edu.uwm.cs361.Util.printIterable;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.uwm.cs361.Util;
-
 public class TestUMLClass
 {
 
 	private UMLClass							umlClass;
 	private LinkedList<UMLClass>	classList						= new LinkedList<UMLClass>();
-	private UMLClass							newAssociatedClass	= new UMLClass();
-	private UMLClass							newDependClass			= new UMLClass();
+/*	private UMLClass							connectingFrom			= new UMLClass();
+	private UMLClass							connectingTo				= new UMLClass();*/
 
 	private UMLClass							foo;
 	private UMLClass							bar;
@@ -76,7 +74,7 @@ public class TestUMLClass
 	}
 
 	@Test
-	public void testDeclairation() {
+	public void testDeclaration() {
 		assertFalse(foo.isAbstractClass());
 		assertFalse(bar.isAbstractClass());
 		assertFalse(widget.isAbstractClass());
@@ -159,8 +157,7 @@ public class TestUMLClass
 		assertFalse(umlClass.addMethod(null));
 	}
 
-	public void AddMethod(UMLClass c, String methStr, boolean isIn,
-			boolean inserted, int size) {
+	public void AddMethod(UMLClass c, String methStr, boolean isIn, boolean inserted, int size) {
 		Method m = Method.Create(methStr);
 		assertNotNull(m);
 		assertTrue(c.addMethod(m) != isIn); // TODO: verify
@@ -201,7 +198,7 @@ public class TestUMLClass
 	}
 
 	@Test
-	public void removeMethod() {
+	public void testRemoveMethod() {
 		// Don't have to test add, test remove.
 		Method meth1 = Method.Create("+ name(): String");
 		Method meth2 = Method.Create("+ type():String");
@@ -224,18 +221,65 @@ public class TestUMLClass
 	}
 
 	@Test
-	public void testAddAssociation() {
-//		assertTrue(umlClass.addAssociation(newAssociatedClass));
-//		classList.add(newAssociatedClass);
-//		checkItEqual(classList, umlClass.getAssociations());
-//
-//		assertTrue(umlClass.addAssociation(abstractList));
-//		classList.add(abstractList);
-//		checkItEqual(classList, umlClass.getAssociations());
-//
-//		assertTrue(umlClass.addAssociation(colInter));
-//		classList.add(colInter);
-//		checkItEqual(classList, umlClass.getAssociations());
+	public void testConnection() {
+		UMLClass origin = new UMLClass();
+		UMLClass classes[] = new UMLClass[4];
+		Connection cons[] = new Connection[4];
+		
+		for(int i = 0; i < 4; i++) {
+			classes[i] = new UMLClass();
+			cons[i] = new Connection(origin, classes[i]);
+		}
+		
+		/*
+		 * Check basic add/remove functionality
+		 */
+		assertTrue(origin.addConnection(cons[0]));
+		cons[0].register();
+		assertTrue(origin.addConnection(cons[1]));
+		cons[1].register();
+		
+		LinkedList<Connection> connections = origin.getConnections();
+		
+		assertTrue(connections.contains(cons[0]));
+		assertTrue(connections.contains(cons[1]));
+		assertFalse(connections.contains(cons[2]));
+		assertFalse(connections.contains(cons[3]));
+
+		assertTrue(origin.removeConnection(cons[0]));
+		assertTrue(origin.removeConnection(cons[1]));
+		assertFalse(origin.removeConnection(cons[2]));
+		assertFalse(origin.removeConnection(cons[3]));
+		
+		assertFalse(connections.contains(cons[0]));
+		assertFalse(connections.contains(cons[1]));
+		
+		/*
+		 * Check contains by type
+		 */
+		cons[0].setConnectionType(origin, ConnectionType.AGGREGATION);
+		cons[1].setConnectionType(origin, ConnectionType.ASSOCIATION);
+		cons[2].setConnectionType(origin, ConnectionType.COMPOSITION);
+		cons[3].setConnectionType(origin, ConnectionType.DEPENDENCY);
+		for (int i = 0; i < 4; i++) {
+			assertTrue(classes[i].addConnection(cons[i]));
+			cons[i].register();
+		}
+		
+		LinkedList<Connection> aggConnections = origin.getConnections(ConnectionType.AGGREGATION);
+		LinkedList<Connection> assConnections = origin.getConnections(ConnectionType.ASSOCIATION);
+		LinkedList<Connection> compConnections = origin.getConnections(ConnectionType.COMPOSITION);
+		LinkedList<Connection> depConnections = origin.getConnections(ConnectionType.DEPENDENCY);
+		
+		assertTrue(aggConnections.contains(cons[0]));
+		assertEquals(1, aggConnections.size());
+		assertTrue(assConnections.contains(cons[1]));
+		assertEquals(1, assConnections.size());
+		assertTrue(compConnections.contains(cons[2]));
+		assertEquals(1, compConnections.size());
+		assertTrue(depConnections.contains(cons[3]));
+		assertEquals(1, depConnections.size());
+		
 	}
 
 	public <E> void checkItEqual(Iterable<E> a, Iterable<E> b) {
@@ -250,118 +294,4 @@ public class TestUMLClass
 		assertFalse(ait.hasNext());
 		assertFalse(bit.hasNext());
 	}
-
-	/*
-	@Test
-	public void testRemoveAssociation() {
-//		umlClass.addAssociation(abstractList);
-//		umlClass.addAssociation(colInter);
-//		umlClass.addAssociation(iterInter);
-		umlClass.addAss(abstractList);
-		umlClass.addAss(colInter);
-		umlClass.addAss(iterInter);
-		classList.add(abstractList);
-		classList.add(colInter);
-		classList.add(iterInter);
-
-		checkItEqual(classList, umlClass.getAssociations());
-
-		assertTrue(umlClass.removeAssociation(iterInter));
-		classList.remove(iterInter);
-
-		assertFalse(umlClass.removeAssociation(iterInter));
-
-		assertTrue(umlClass.removeAssociation(abstractList));
-		classList.remove(abstractList);
-		checkItEqual(classList, umlClass.getAssociations());
-
-		assertTrue(umlClass.removeAssociation(colInter));
-		classList.remove(colInter);
-		checkItEqual(classList, umlClass.getAssociations());
-
-		assertTrue(umlClass.getAssociations().size() == 0);
-	}
-
-	@Test
-	public void testAddSuperclass() {
-		assertTrue(umlClass.addSuperclass(foo));
-		assertTrue(umlClass.addSuperclass(bar));
-		assertTrue(umlClass.addSuperclass(runInter));
-		assertTrue(umlClass.addSuperclass(colInter));
-		assertTrue(umlClass.addSuperclass(iterInter));
-
-		int interfaces = 0;
-		int nonInterfaces = 0;
-		int fails = 0;
-		for (UMLClass tmp : umlClass.getSuperclasses())
-			{
-				if (tmp instanceof UMLInterface)
-					interfaces++;
-				else
-					nonInterfaces++;
-				
-				if ( tmp.equals( foo ) ) fails++;
-			}
-
-		assertTrue ( fails == 0 );
-		assertTrue(nonInterfaces == 1);
-		assertTrue(interfaces == 3);
-	}
-
-	@Test
-	public void testRemoveSuperclass() {
-		assertTrue(abstractList.removeSuperclass(colInter));
-		assertFalse(abstractList.getSuperclasses().contains(colInter));
-
-		assertTrue(colInter.removeSuperclass(iterableInter));
-		assertFalse(colInter.getSuperclasses().contains(iterableInter));
-	}
-
-	@Test
-	public void addDependency() {
-		depends(umlClass, newDependClass);
-		depends(umlClass, foo);
-		depends(umlClass, bar);
-		depends(umlClass, abstractList);
-
-	}
-
-	public void depends(UMLClass ca, UMLClass cb) {
-		assertTrue(ca.addDependency(cb));
-		classList.add(cb);
-		checkItEqual(ca.getDependencies(), classList);
-	}
-
-	@Test
-	public void removeDependency() {
-		addDependency();
-		printIterable(umlClass.getDependencies());
-		umlClass.removeDependency(foo);
-		assertFalse(umlClass.removeDependency(foo));
-		umlClass.removeDependency(bar);
-		umlClass.removeDependency(newDependClass);
-		umlClass.removeDependency(abstractList);
-
-		assertFalse(umlClass.removeDependency(null));
-		Util.dprint(umlClass.getDependencies()); // no dependencies
-		assertFalse(umlClass.removeDependency(foo)); //show it's already been removed
-	}
-
-	public void rdepends(UMLClass ca, UMLClass cb) {
-		assertTrue(ca.removeDependency(cb));
-		classList.add(cb);
-		checkSetEqual(ca.getDependencies(), classList);
-	}
-
-	public <E> void checkSetEqual(Collection<E> a, Collection<E> b) {
-		assertTrue(a.size() == b.size());
-
-		Iterator<E> it = a.iterator();
-
-		while (it.hasNext())
-			{
-				assertTrue(b.contains(it.next()));
-			}
-	}
-	*/
 }
