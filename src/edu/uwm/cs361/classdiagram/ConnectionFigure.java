@@ -74,7 +74,9 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 		b_role.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 1, -Math.PI / 4, 8 ) );
 		
 		a_role.set( AttributeKeys.TEXT_COLOR, for_color );
+		a_role.setAttributeEnabled( AttributeKeys.TEXT_COLOR, false );
 		b_role.set( AttributeKeys.TEXT_COLOR, for_color );
+		b_role.setAttributeEnabled( AttributeKeys.TEXT_COLOR, false );
 		
 		a_role.setText( "" );
 		b_role.setText( "" );
@@ -161,6 +163,9 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 	
 	public void setRoles ( String start_role, String end_role )
 	{
+		String old_start_role = con.getRole( con.getStart() );
+		String old_end_role = con.getRole( con.getEnd() );
+		
 		con.setRole( con.getStart(), start_role);
 		con.setRole( con.getEnd(), end_role);
 		
@@ -168,6 +173,9 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 		a_role.setText( start_role );
 		b_role.setText( end_role );
 		changed();
+		
+		getDrawing().fireUndoableEditHappened(
+				new EditRoleAction.Edit( this, start_role, end_role, old_start_role, old_end_role ) );
 	}
 
 	@Override
@@ -183,6 +191,11 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 		return that;
 	}
 
+	public Connection getData ( )
+	{
+		return con;
+	}
+	
 	@Override
 	public int getLayer() {
 		return 1;
