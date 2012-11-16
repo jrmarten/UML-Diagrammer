@@ -2,6 +2,8 @@ package edu.uwm.cs361.action;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.undo.AbstractUndoableEdit;
+
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.ConnectionFigure;
@@ -27,13 +29,48 @@ public class EditRoleAction extends AssociationFigureAction
 				}
 			
 			int index = name.indexOf( ':' );
+			String role_a, role_b;
 			
-			if ( index == -1 ) _data.setRoles ( name, "" );
+			if ( index == -1 )
+			{
+				role_a = name;
+				role_b = "";
+			}
 			else
 				{
-					String role_a = name.substring( 0, index);
-					String role_b = name.substring( index + 1 );
-					_data.setRoles( role_a, role_b );
+					role_a = name.substring( 0, index);
+					role_b = name.substring( index + 1 );
 				}
+			
+			_data.setRoles( role_a, role_b);
+		}
+		
+		public static class Edit extends AbstractUndoableEdit
+		{
+			private String a, b, old_a, old_b;
+			private ConnectionFigure cfig;
+			
+			public Edit ( ConnectionFigure cfig, String a, String b, String old_a, String old_b )
+			{
+				this.cfig = cfig;
+				this.a = a;
+				this.b = b;
+				this.old_a = old_a;
+				this.old_b = old_b;
+			}
+			
+			@Override
+			public void undo ()
+			{
+				super.undo();
+				cfig.setRoles( old_a, old_b );
+			}
+			
+			@Override
+			public void redo()
+			{
+				super.redo();
+				cfig.setRoles( a, b);
+			}
 		}
 }
