@@ -250,6 +250,17 @@ public class UMLClass implements Serializable
 
 	// helps java generator
 
+	public LinkedList<Connection> getConnections( ConnectionType ct )
+	{
+		LinkedList<Connection> result = new LinkedList<Connection>();
+		for ( Connection con : _cons )
+			{
+				if ( con.getConnectionType( this ) == ct )
+					result.add( con );
+			}
+		return result;
+	}
+	
 	protected String getInheritence() {
 		String buffer = "";
 
