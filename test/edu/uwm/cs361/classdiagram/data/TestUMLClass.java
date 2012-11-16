@@ -16,21 +16,18 @@ import org.junit.Test;
 public class TestUMLClass
 {
 
-	private UMLClass							umlClass;
-	private LinkedList<UMLClass>	classList						= new LinkedList<UMLClass>();
-/*	private UMLClass							connectingFrom			= new UMLClass();
-	private UMLClass							connectingTo				= new UMLClass();*/
+	private UMLClass umlClass;
 
-	private UMLClass							foo;
-	private UMLClass							bar;
-	private UMLClass							widget;
-	private UMLClass							abs;
-	private UMLClass							abstractList;
+	private UMLClass foo;
+	private UMLClass bar;
+	private UMLClass widget;
+	private UMLClass abs;
+	private UMLClass abstractList;
 
-	private UMLClass							colInter;
-	private UMLClass							runInter;
-	private UMLClass							iterInter;
-	private UMLClass							iterableInter;
+	private UMLClass colInter;
+	private UMLClass runInter;
+	private UMLClass iterInter;
+	private UMLClass iterableInter;
 
 	@Before
 	public void setUp() throws Exception {
@@ -45,10 +42,10 @@ public class TestUMLClass
 		foo = new UMLClass("Foo");
 		bar = new UMLClass("Bar");
 
-		foo.addMethod(Method.Create("+ pity (  ) : void"));
-		foo.addMethod(Method.Create("+ fighter ( ) : Band"));
-		bar.addMethod(Method.Create("+ drink ( ): void "));
-		bar.addMethod(Method.Create("+ isLastCall ( ) : boolean "));
+		foo.addMethod(Method.Create("+ pity() : void"));
+		foo.addMethod(Method.Create("+ fighter() : Band"));
+		bar.addMethod(Method.Create("+ drink() : void"));
+		bar.addMethod(Method.Create("+ isLastCall() : boolean"));
 	}
 
 	public void setUpInterfaces() {
@@ -58,17 +55,17 @@ public class TestUMLClass
 		iterableInter = new UMLInterface("Iterable<E>");
 		abstractList = new UMLAbstractClass("List<E>");
 
-		iterableInter.addMethod(Method.Create("+ iterator ( ) : Iterator<E>"));
+		iterableInter.addMethod(Method.Create("+ iterator() : Iterator<E>"));
 
 		colInter.addSuperclass(iterableInter);
-		colInter.addMethod(Method.Create("+ add ( E ): boolean"));
-		colInter.addMethod(Method.Create("+ iterator ( ) : Iterator<E>"));
+		colInter.addMethod(Method.Create("+ add(E) : boolean"));
+		colInter.addMethod(Method.Create("+ iterator() : Iterator<E>"));
 
-		runInter.addMethod(Method.Create("+ run (  ) : void"));
+		runInter.addMethod(Method.Create("+ run() : void"));
 
-		iterInter.addMethod(Method.Create("+ hasNext ( ) : boolean"));
-		iterInter.addMethod(Method.Create("+ next ( ) : E"));
-		iterInter.addMethod(Method.Create("+ remove ( ) : void "));
+		iterInter.addMethod(Method.Create("+ hasNext() : boolean"));
+		iterInter.addMethod(Method.Create("+ next() : E"));
+		iterInter.addMethod(Method.Create("+ remove() : void"));
 
 		abstractList.addSuperclass(colInter);
 	}
@@ -146,11 +143,11 @@ public class TestUMLClass
 
 	@Test
 	public void testAddMethod() {
-		AddMethod(umlClass, "+ getName():String", false, true, 1);
-		AddMethod(umlClass, "- _type():String", false, true, 2);
-		AddMethod(umlClass, "+ getName():boolean", true, false, 2);
-		AddMethod(umlClass, "+ getName(str : String):String", false, true, 3);
-		AddMethod(umlClass, "- getName(int index):String", false, true, 4);
+		AddMethod(umlClass, "+ getName() : String", false, true, 1);
+		AddMethod(umlClass, "- _type() : String", false, true, 2);
+		AddMethod(umlClass, "+ getName() : boolean", true, false, 2);
+		AddMethod(umlClass, "+ getName(str : String) : String", false, true, 3);
+		AddMethod(umlClass, "- getName(int index) : String", false, true, 4);
 
 		// Checking method properties should not be in a test for a class.
 
@@ -171,20 +168,21 @@ public class TestUMLClass
 
 	@Test
 	public void testAbstractMethod() {
-		Method absMeth = Method.Create("+ abstract add ( E ): boolean");
+		Method absMeth = Method.Create("+ abstract add(E) : boolean");
 
-		// test to see if adding an abstract method
-		// makes a class abstract
-		// and removing it makes it non-abstract
+		/*
+		 * test to see if adding an abstract method makes a class abstract
+		 * and removing it makes it non-abstract
+		 */
 		testAbstractProperty(foo, false, false);
 		foo.addMethod(absMeth);
 		testAbstractProperty(foo, true, false);
 		foo.removeMethod(absMeth);
 		testAbstractProperty(foo, false, false);
 
-		// test to see if abstract declared class
-		// will remain abstract
-
+		/*
+		 * test to see if abstract declared class will remain abstract
+		 */
 		testAbstractProperty(abs, true, true);
 		abs.addMethod(absMeth);
 		testAbstractProperty(abs, true, true);
@@ -199,7 +197,6 @@ public class TestUMLClass
 
 	@Test
 	public void testRemoveMethod() {
-		// Don't have to test add, test remove.
 		Method meth1 = Method.Create("+ name(): String");
 		Method meth2 = Method.Create("+ type():String");
 		assertNotNull(meth1);
@@ -286,10 +283,9 @@ public class TestUMLClass
 		Iterator<E> ait = a.iterator();
 		Iterator<E> bit = b.iterator();
 
-		while (ait.hasNext() && bit.hasNext())
-			{
-				assertTrue(ait.next().equals(bit.next()));
-			}
+		while (ait.hasNext() && bit.hasNext()) {
+			assertTrue(ait.next().equals(bit.next()));
+		}
 
 		assertFalse(ait.hasNext());
 		assertFalse(bit.hasNext());
