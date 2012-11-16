@@ -2,7 +2,7 @@ package edu.uwm.cs361;
 
 import org.jhotdraw.app.*;
 
-public class Main {
+public class UMLDriver {
 	public static void main(String[] args) {
 		Application app = new SDIApplication();
 		DefaultApplicationModel model = new UMLApplicationModel();
