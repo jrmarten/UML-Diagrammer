@@ -1,5 +1,7 @@
 package edu.uwm.cs361.classdiagram.data;
 
+import edu.uwm.cs361.classdiagram.data.connection.Multiplicity;
+
 public class Connection
 {
 	private static final String ILLEGAL_ACCESS = "Object should not be able to access Connections internals";
@@ -60,6 +62,19 @@ public class Connection
 		getThisEnd ( ref ).role_name = new_role;
 	}
 	
+	public void setMultiplicity ( UMLClass ref, String new_mult )
+	{
+		if ( new_mult.equals ( "" ) ) getThisEnd ( ref ).mult = null;
+		else getThisEnd( ref ).mult = Multiplicity.Create( new_mult );
+	}
+	
+	public String getMultiplicity ( UMLClass ref )
+	{
+		Multiplicity mult = getThisEnd ( ref ).mult;
+		if ( mult == null ) return "";
+		return mult.toString();
+	}
+	
 	public UMLClass getOther ( UMLClass umlc )
 	{
 		return getOtherEnd ( umlc ).class_type;
@@ -89,5 +104,6 @@ public class Connection
 		public String role_name = "";
 		public UMLClass class_type;
 		public ConnectionType con_type = ConnectionType.ASSOCIATION;
+		public Multiplicity mult = null;
 	}
 }
