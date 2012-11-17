@@ -33,7 +33,6 @@ public class Multiplicity
 		
 		for ( String part : parts )
 			{
-				Util.dprint ( part );
 				tmp = MultiplicityRule.Create( part );
 				if ( tmp != null ) result.rules.add( tmp );
 			}
