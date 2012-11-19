@@ -2,13 +2,10 @@ package edu.uwm.cs361.classdiagram.data;
 
 import static org.junit.Assert.*;
 
-import java.util.LinkedList;
-
-import org.junit.Before;
 import org.junit.Test;
 
 import edu.uwm.cs361.Util;
-import edu.uwm.cs361.classdiagram.data.Connection.*;
+import edu.uwm.cs361.classdiagram.data.connection.Multiplicity;
 
 public class TestConnection
 {
@@ -92,5 +89,34 @@ public class TestConnection
 		newClass.removeConnection(oneCon);
 		assertFalse(newClass.getConnections().contains(oneCon));
 		assertTrue(newClass.getConnections().getFirst().getConnectionType(newClass).equals(ConnectionType.COMPOSITION));
+	}
+	
+	@Test
+	public void testMultiplicity ( )
+	{
+		Multiplicity mult = Multiplicity.Create( "0-2,5-7,9-15" );
+		
+		Util.dprint( "<" + mult + ">" );
+		
+		for ( int i = 0; i < 3; i++ )
+			{
+				assertTrue ( mult.inRange ( i ) );
+			}
+		
+		assertFalse ( mult.inRange( -1 ) );
+		assertFalse ( mult.inRange( 3 ) );
+		
+		mult = Multiplicity.Create( "*" );
+		assertTrue ( mult.inRange( 500 ) );
+		
+		mult = Multiplicity.Create( "5-*" );
+		for ( int i = 0; i < 5; i++ )
+			{
+				assertFalse ( mult.inRange ( i ) );
+			}
+		for ( int i = 5; i < 100;i++ )
+		{
+			assertTrue ( mult.inRange( i ) ); 
+		}
 	}
 }

@@ -3,7 +3,6 @@ package edu.uwm.cs361.classdiagram.io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.LinkedList;
 
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.Util;
@@ -16,15 +15,23 @@ import edu.uwm.cs361.classdiagram.data.UMLClass;
 public class JavaGenerator
 {
 	private String						tab									= "\t";
-	private int							tab_count						= 0;
+	private int								tab_count						= 0;
 	private PrintWriter				fout;
 	
 	private static String 		collection 					= null;
 	
 	
-	private static String[][]	defaults	= { { "byte", "0" }, { "int", "0" },
-			{ "double", "0.0" }, { "float", "0.0f" }, { "short", "0" },
-			{ "long", "0L" }, { "char", "0" }, { "boolean", "false" }, { "void", "" } };
+	private static String[][]	defaults	= { 
+				{ "byte", "0" }, 
+				{ "int", "0" },
+				{ "double", "0.0" }, 
+				{ "float", "0.0f" }, 
+				{ "short", "0" },
+				{ "long", "0L" }, 
+				{ "char", "0" }, 
+				{ "boolean", "false" }, 
+				{ "void", "" } 
+			};
 
 	public JavaGenerator(File file) throws FileNotFoundException
 	{
@@ -68,15 +75,19 @@ public class JavaGenerator
 		return name + ".java";
 	}
 
+	public static String getCollection ( )
+	{
+		if ( collection == null )
+			collection = UMLApplicationModel.getProjectSettings().getString("Collection", "Collection" );
+		return collection;
+	}
+	
 	public static void write(String directiory, UMLClass umlclass) {
 
 		File java_src;
 		JavaGenerator genny;
 		
-		if ( collection == null )
-			{
-				collection = UMLApplicationModel.getProjectSettings().getString("Collection", "Collection" );
-			}
+		getCollection();
 
 		try
 			{
@@ -103,33 +114,28 @@ public class JavaGenerator
 				genny.write(sig);
 			}
 		
-		LinkedList<Connection> agg = new LinkedList<Connection> ( );
-		LinkedList<Connection> ass = new LinkedList<Connection> ( );
-		LinkedList<Connection> comp = new LinkedList<Connection> ( );
-		
-		for ( Connection tmp : umlclass.getConnections() )
+		int i = 0;
+		for ( Connection tmp : umlclass.getConnections( ConnectionType.COMPOSITION ) )
 			{
-				if ( tmp.getConnectionType( umlclass ) == ConnectionType.COMPOSITION ) comp.add( tmp ); 
-				if ( tmp.getConnectionType( umlclass ) == ConnectionType.AGGREGATION ) agg.add( tmp );
-				if ( tmp.getConnectionType( umlclass ) == ConnectionType.ASSOCIATION ) ass.add( tmp );
+				String sig = "private " + tmp.getOther( umlclass ).getName() + " ";
+				
+				if ( tmp.getRole( umlclass ).equals( "" ) )
+						sig += "comp" + i++;
+				else sig += tmp.getRole( umlclass );
+				
+				genny.write( sig + ";\n\n" );
 			}
 		
-		
-		
-		int i = 0;
-		for ( Connection tmp : umlclass.getConnections() )
+		i = 0;
+		for ( Connection tmp : umlclass.getConnections( ConnectionType.AGGREGATION ) )
 			{
-				String name = tmp.getRole( umlclass );
-				String type = tmp.getOther( umlclass ).getName();
+				String sig = "private " + collection + "<" + tmp.getOther( umlclass ).getName() + "> ";
 				
-				if ( tmp.getConnectionType( umlclass ) == ConnectionType.AGGREGATION )
-						type = collection + "<" + type + ">";
+				if ( tmp.getRole( umlclass ).equals( "" ) )
+					sig += "agg" + i;
+				else sig += tmp.getRole( umlclass );
 				
-				if ( name.equals( "" ) )
-						name = Character.toLowerCase( type.charAt( 0 )) + type.substring( 1 ) + i;
-					
-				String sig = "private " + type +" " + name + ";\n\n";
-				genny.write( sig );
+				genny.write( sig + ";\n\n" );
 			}
 
 		for (Method meth : umlclass.getMethods())

@@ -30,6 +30,7 @@ import org.jhotdraw.xml.DOMOutput;
 
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.Util;
+import edu.uwm.cs361.action.EditMultiplicityAction;
 import edu.uwm.cs361.action.EditRoleAction;
 import edu.uwm.cs361.action.SetEndDecorationAction;
 import edu.uwm.cs361.action.SetStartDecorationAction;
@@ -53,12 +54,18 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 	
 	private TextFigure a_role = new TextFigure ( );
 	private TextFigure b_role = new TextFigure ( );
+	private TextFigure a_mult = new TextFigure ( );
+	private TextFigure b_mult = new TextFigure ( );
 	
 	/** Creates a new instance. */
 	public ConnectionFigure()
 	{
-		a_role.addPropertyChangeListener( this );
-		b_role.addPropertyChangeListener( this );
+		TextFigure[] figs = { a_role, b_role, a_mult, b_mult };
+		
+		for ( TextFigure fig : figs )
+			{
+				init ( fig );
+			}
 		
 		init();	
 	}
@@ -66,23 +73,12 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 	private void init( )
 	{
 		setLayouter ( new LocatorLayouter ( ) );
-		
-		a_role.setEditable( false );
-		b_role.setEditable( false );
-		
+	
 		a_role.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 0, -Math.PI / 4, 8 ) );
 		b_role.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 1, -Math.PI / 4, 8 ) );
+		a_mult.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 0, Math.PI / 4, 8 ) );
+		b_mult.set( LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator ( 1, Math.PI / 4, 8 ) );
 		
-		a_role.set( AttributeKeys.TEXT_COLOR, for_color );
-		a_role.setAttributeEnabled( AttributeKeys.TEXT_COLOR, false );
-		b_role.set( AttributeKeys.TEXT_COLOR, for_color );
-		b_role.setAttributeEnabled( AttributeKeys.TEXT_COLOR, false );
-		
-		a_role.setText( "" );
-		b_role.setText( "" );
-		
-		add ( a_role );
-		add ( b_role );
 		
 		set(STROKE_COLOR, for_color);
 		set(STROKE_WIDTH, 1d);
@@ -95,6 +91,15 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 		setAttributeEnabled(STROKE_DASHES, false);
 		setAttributeEnabled(FONT_ITALIC, false);
 		setAttributeEnabled(FONT_UNDERLINE, false);
+	}
+	
+	private void init ( TextFigure tfig )
+	{
+		tfig.setEditable( false );
+		tfig.set( AttributeKeys.TEXT_COLOR, for_color );
+		tfig.setAttributeEnabled( AttributeKeys.TEXT_COLOR, false);
+		tfig.setText( "" );
+		add ( tfig );
 	}
 	
 	static { config(); }
@@ -177,6 +182,29 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 		getDrawing().fireUndoableEditHappened(
 				new EditRoleAction.Edit( this, start_role, end_role, old_start_role, old_end_role ) );
 	}
+	
+	public void setMult ( String start_mult, String end_mult )
+	{
+		String old_start_mult = con.getMultiplicity( con.getStart() );
+		String old_end_mult = con.getMultiplicity( con.getEnd() );
+	
+		con.setMultiplicity( con.getStart(), start_mult);
+		con.setMultiplicity( con.getEnd(), end_mult );
+	
+		String new_start_mult = con.getMultiplicity( con.getStart() );
+		String new_end_mult = con.getMultiplicity( con.getEnd() );
+		
+		willChange ( );
+		a_mult.setText( new_start_mult );
+		b_mult.setText( new_end_mult );
+		changed();
+		
+		getDrawing().fireUndoableEditHappened(
+				new EditMultiplicityAction.Edit( this,
+						start_mult, end_mult, 
+						old_start_mult, old_end_mult)
+				);
+	}
 
 	@Override
 	public ConnectionFigure clone() {
@@ -185,9 +213,14 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 		if ( con != null ) that.con = (Connection) con.clone();
 		that.a_role = a_role.clone();
 		that.b_role = b_role.clone();
+		that.a_mult = a_mult.clone();
+		that.b_mult = b_mult.clone();
+		
 		
 		that.add( that.a_role );
 		that.add( that.b_role );
+		that.add( that.a_mult );
+		that.add( that.b_mult );
 		return that;
 	}
 
@@ -219,6 +252,7 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements Pro
 		col.add(new SetStartDecorationAction(this));
 		col.add(new SetEndDecorationAction(this));
 		col.add(new EditRoleAction ( this ) );
+		col.add(new EditMultiplicityAction ( this ) );
 		return col;
 	}
 	
