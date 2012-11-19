@@ -22,14 +22,19 @@ import org.jhotdraw.draw.decoration.ArrowTip;
 import org.jhotdraw.draw.decoration.LineDecoration;
 
 import edu.uwm.cs361.Util;
+import edu.uwm.cs361.classdiagram.data.Connection;
+import edu.uwm.cs361.classdiagram.data.ConnectionType;
 
 public class LineDecorationChooser extends JFrame implements ActionListener
 {
 
 	private static final long	serialVersionUID	= 553854446330611986L;
 	private ConnectionFigure _data;
-	private String _startOrEnd;
-	private JRadioButton _composition, _aggregation, _arrow, _none;
+	private boolean _isEnd;
+	private JRadioButton _composition, _aggregation, _association, _none;
+	private ArrowTip _compTip = new ArrowTip(0.40, 15.0, 30.0);
+	private ArrowTip _aggTip = new ArrowTip(0.40, 15.0, 30.0, false, true, true);
+	private ArrowTip _assTip = new ArrowTip(0.35, 20, 18.4);
 	
 	
 	private final static int WIDTH = 300;
@@ -46,11 +51,11 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 		standard_y = (d.height/2) - (HEIGHT/2);
 	}
 	
-	public LineDecorationChooser(ConnectionFigure data, String startOrEnd)
+	public LineDecorationChooser(ConnectionFigure data, boolean isEnd)
 	{
 		super();
 		_data = data;
-		_startOrEnd = startOrEnd;
+		_isEnd = isEnd;
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		
 		setBounds( standard_x, standard_y,
@@ -64,11 +69,11 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 		JLabel instructions;
 		JButton ok, cancel;
 
-		instructions = new JLabel("Select the " + _startOrEnd + " decoration:");
+		instructions = new JLabel("Select the " + (_isEnd ? "end" : "start") + " decoration:");
 
 		_composition = new JRadioButton("Compostion");
 		_aggregation = new JRadioButton("Aggregation");
-		_arrow = new JRadioButton("Arrow-Tip");
+		_association = new JRadioButton("Association");
 		_none = new JRadioButton("None");
 		
 		ok = new JButton("Ok");
@@ -81,7 +86,7 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 		ButtonGroup group = new ButtonGroup();
 		group.add(_composition);
 		group.add(_aggregation);
-		group.add(_arrow);
+		group.add(_association);
 		group.add(_none);
 
 		JPanel items = new JPanel();
@@ -92,7 +97,7 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 		items.add(_aggregation);
 		items.add(new JLabel(createImageIcon("/edu/uwm/cs361/images/aggregationDecoration.png",
 						"Aggregation")));
-		items.add(_arrow);
+		items.add(_association);
 		items.add(new JLabel(createImageIcon("/edu/uwm/cs361/images/arrowTipDecoration.png",
 						"Arrow")));
 		items.add(_none);
@@ -110,17 +115,22 @@ public class LineDecorationChooser extends JFrame implements ActionListener
 		if (ac.equals("ok") || ac.equals("cancel")) {
 			if (ac.equals("ok")) {
 				_data.willChange();
-				LineDecoration tip = new ArrowTip();
 				
-				if (_composition.isSelected()) tip = new ArrowTip(0.40, 15.0, 30.0);
-				else if (_aggregation.isSelected()) tip = new ArrowTip(0.40, 15.0, 30.0, false, true, true);
-				else if (_arrow.isSelected()) tip = new ArrowTip(0.35, 20, 18.4);
-				else tip = null;
+				ConnectionType conType = ConnectionType.AGGREGATION;
+				
+				if (_composition.isSelected()) conType = ConnectionType.COMPOSITION;
+				else if (_aggregation.isSelected()) conType = ConnectionType.AGGREGATION;
+				else if (_association.isSelected()) conType = ConnectionType.ASSOCIATION;
+				else conType = ConnectionType.DEPENDENCY;
+				
+				Connection con = _data.getData();
+				
+				con.setConnectionType( (_isEnd)? con.getEnd() : con.getStart(), conType);
 				
 				AttributeKey<LineDecoration> key = AttributeKeys.START_DECORATION;
-				if (_startOrEnd.equals("end")) key = AttributeKeys.END_DECORATION;
+				if (_isEnd) key = AttributeKeys.END_DECORATION;
 				_data.setAttributeEnabled(key, true);
-				_data.set(key, tip);
+				_data.set(key, conType.getDecoration());
 				_data.setAttributeEnabled(key, false);
 				Util.dprint( "modifying association tip.") ;
 				_data.changed();

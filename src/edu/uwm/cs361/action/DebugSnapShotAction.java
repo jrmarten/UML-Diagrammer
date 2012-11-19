@@ -88,6 +88,8 @@ public class DebugSnapShotAction extends AbstractAction
 	
 	private void conSnap ( ConnectionFigure fig )
 	{
+		Util.dprint ( "Start: " + fig.getData().getConnectionType( fig.getData().getStart()) );
+		Util.dprint ( "End: " + fig.getData().getConnectionType( fig.getData().getEnd()) );
 		Util.dprint( fig.debug() );
 	}
 }

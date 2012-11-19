@@ -19,7 +19,7 @@ public class SetEndDecorationAction extends AssociationFigureAction
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		LineDecorationChooser chooser = new LineDecorationChooser(_data, "end");
+		LineDecorationChooser chooser = new LineDecorationChooser(_data, true);
 		chooser.setVisible(true);
 	}
 }
