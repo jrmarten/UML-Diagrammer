@@ -7,7 +7,8 @@ public class JSONString extends AbstractJSONElement
 	public JSONString ( String val )
 	{
 		_val = val.substring(1).substring( 0, val.length() - 2);
-		_val.replaceAll( "\\n" , "\n" );
+		
+		_val = _val.replace( "\\n" , "\n" );
 	}
 	
 	@Override
@@ -26,5 +27,19 @@ public class JSONString extends AbstractJSONElement
 	public boolean isString ( )
 	{
 		return true;
+	}
+
+	@Override
+	public boolean equals ( Object o )
+	{
+		if ( o instanceof String )
+			{
+				return _val.equals ( o );
+			}
+		if ( o instanceof JSONString )
+			{
+				return _val.equals( ((JSONString)o)._val );
+			}
+		return false;
 	}
 }
