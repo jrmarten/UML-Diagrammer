@@ -2,6 +2,7 @@ package edu.uwm.cs361.settings.json.elements;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 
 import edu.uwm.cs361.Util;
@@ -12,27 +13,32 @@ public class JSONObject extends AbstractJSONElement
 {
 	private HashMap<String, JSONElement> mapping = new HashMap<String, JSONElement> ( );
 	
+	public final static boolean DEBUG = false;
 	
 	public JSONObject ( String val )
 	{
-		val = getKey (val ); 	//taking away {} functions the same as removing
+		val = val.trim();
+		val = getKey ( val ); 	//taking away {} functions the same as removing
 													//the "" from keys.
+		val = val.trim();
 		
-		String[] parts = val.split( "," );
+		//String[] parts = parseForAttributes( val );
 		String[] pair;
-		
+		Iterable<String> it = parseForAttributes ( val );
 		JSONFactory jFac = new JSONFactory ( );
 		
-		for ( String part : parts )
+		for ( String part : it )
 			{
-				part = part.trim();
-				pair = part.split ( ":" );
+				//Util.dprint( "parsed Attribute:\t" + part );
 				
-				if ( pair.length != 2 )
+				if ( !part.contains( ":" ) )
 					{
-						Util.dprint( "Malformed Attribute: " + part );
+						Util.dprint( "Parse error no colon: " + part );
 						continue;
 					}
+				part = part.trim();
+				pair = part.split ( ":", 2 );
+				
 				pair[0] = pair[0].trim();
 				pair[1] = pair[1].trim();
 				
@@ -44,6 +50,8 @@ public class JSONObject extends AbstractJSONElement
 					}
 				
 				pair[0] = getKey ( pair[0] );
+				
+				Util.dprint( "Data\t" + pair[0] + " : " + pair[1], DEBUG );
 				
 				try
 					{
@@ -96,7 +104,70 @@ public class JSONObject extends AbstractJSONElement
 	
 	public JSONElement get ( String key )
 	{
-		return mapping.get ( key );
+		JSONElement ret = mapping.get( key );
+		return (ret==null)? NULL : ret ;
+	}
+	
+	public JSONElement query ( String ref )
+	{		
+		String next_query = "";
+		String cur_ref = ref;
+		
+		if ( ref.contains( "." ) )
+			{
+				cur_ref = ref.substring( 0, ref.indexOf( '.' ) ) ;
+				next_query = ref.substring( ref.indexOf ( '.' ) + 1 );
+			}
+		
+		int index = getIndex ( cur_ref );
+		if ( index == -2 ) return JSONObject.NULL;
+		if ( index != -1 ) cur_ref = cur_ref.substring( 0, cur_ref.indexOf( '[' ) );
+		
+		JSONElement ret = get ( cur_ref );
+		
+		if ( ret.isArray() && index != -1 )
+			{
+				ret = ((JSONArray) ret).get( index );
+			}
+		
+		if ( next_query.isEmpty() )
+			{
+				return ret;
+			}
+		
+		if ( ret.isObject() )
+			{
+				return ((JSONObject)ret).query ( next_query );
+			}
+		
+		return JSONObject.NULL;
+	}
+	
+	private static int getIndex ( String str )
+	{
+		int start = str.indexOf( '[' );
+		int end = str.indexOf( ']' );
+		
+		if ( start == -1 && end == -1 )
+			{
+				return -1;
+			}
+		if ( start == -1 || end == -1 )
+			{
+				return -2;
+			}
+		if ( end < start ) return -2;
+		
+		String index = str.substring( start + 1, end );
+		
+		try
+		{
+			return Integer.parseInt( index );
+		}
+		catch ( NumberFormatException e )
+		{
+			return -2;
+		}
 	}
 	
 	public void set ( String key, JSONElement e )
@@ -108,5 +179,58 @@ public class JSONObject extends AbstractJSONElement
 	public boolean isObject ( )
 	{
 		return true;
+	}
+
+	public static Iterable<String> parseForAttributes ( String str )
+	{
+		int list_counter = 0;
+		int obj_counter = 0;
+		boolean in_str = false;
+		String found;
+		
+		int a = 0;
+		
+		LinkedList<String> attr = new LinkedList<String>();
+		
+		for ( int i = 0; i < str.length(); i++ )
+			{
+				char ch = str.charAt( i );
+				
+				switch ( ch )
+				{
+					case '[':
+						list_counter++;
+						break;
+					case ']':
+						list_counter--;
+						break;
+					case '{':
+						obj_counter++;
+						break;
+					case '}':
+						obj_counter--;
+						break;
+					case '\"':
+						if ( i != 0 && str.charAt( i - 1 ) != '\\' )
+							in_str = !in_str;
+				}
+				
+				if ( ch == ',' && 
+						list_counter == 0 &&
+						obj_counter == 0 )// && !in_str )
+					{
+						found = str.substring( a, i ).trim();
+						Util.dprint ( "Attribute Found:\t" +found, DEBUG );
+						
+						attr.add( found );
+						a = i + 1;
+					}
+			}
+		
+		found = str.substring( a ).trim();
+		Util.dprint( "Last:\t" + found, DEBUG );
+		attr.add( found );
+		
+		return attr;
 	}
 }
