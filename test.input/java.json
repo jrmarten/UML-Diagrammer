@@ -5,11 +5,13 @@
     "static_keyword" : "static",
     "abstract_keyword" : "abstract",
 
-    "file"
+    "base_array" : [ "apple", "orange" ],
+
+    "file" : 
     {
 	"header" : "package ${package};",
 	"import_statement" : "import ${filename};"
-    }
+    },
 
     "class" :
     {
