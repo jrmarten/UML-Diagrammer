@@ -20,6 +20,8 @@ public abstract class AbstractJSONElement implements JSONElement
 	@Override
 	public boolean isObject ( ) { return false; }
 
+	public final static JSONNull NULL = new JSONNull ( );
+	
 	
 	private static Object[][] CONTAINER_LIMITS = 
 		{
