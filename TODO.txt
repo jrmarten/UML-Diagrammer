@@ -44,3 +44,13 @@ When adding a role name, it gets added to one end of the line, not the middle
      >>But isn't that where the multiplicity labels should go? Each line has only one role, so shouldn't that be in the middle?
 
 Now the connection lines start in the middle of the class figure, instead of the edge, only if using the middle handle to draw the connection
+
+When removing attributes, if the name you supply for the attribute to remove doesn't exist, it will throw an exception and the program
+    will start to bug out. See stack trace below:
+    
+    Exception in thread "AWT-EventQueue-0" java.lang.NullPointerException
+        at edu.uwm.cs361.classdiagram.ClassFigure.removeAttribute(ClassFigure.java:385)
+        at edu.uwm.cs361.classdiagram.ClassFigure.removeAttribute(ClassFigure.java:371)
+        at edu.uwm.cs361.action.RemoveAttributeAction.actionPerformed(RemoveAttributeAction.java:21)
+        at javax.swing.AbstractButton.fireActionPerformed(Unknown Source)
+    ...

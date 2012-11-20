@@ -10,7 +10,7 @@ import edu.uwm.cs361.classdiagram.ConnectionFigure;
 
 public class EditMultiplicityAction extends AssociationFigureAction
 {
-	public static final String ID = "actions.editMultAction";
+	public static final String ID = "actions.editMult";
 	
 	public EditMultiplicityAction( ConnectionFigure fig)
 	{
@@ -22,7 +22,7 @@ public class EditMultiplicityAction extends AssociationFigureAction
 	public void actionPerformed ( ActionEvent e )
 	{
 		String name = UMLApplicationModel.prompt( 
-				"actions.editrole.Action.prompt", "Edit Multiplicity" );
+				"actions.editMult.prompt", "Edit Multiplicity" );
 		
 		if ( name == null )
 			{

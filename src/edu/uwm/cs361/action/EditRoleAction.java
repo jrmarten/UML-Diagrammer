@@ -10,7 +10,7 @@ import edu.uwm.cs361.classdiagram.ConnectionFigure;
 
 public class EditRoleAction extends AssociationFigureAction
 {
-		public static final String ID = "actions.editRoleAction";
+		public static final String ID = "actions.editRole";
 		
 		public EditRoleAction ( ConnectionFigure c )
 		{
@@ -20,7 +20,7 @@ public class EditRoleAction extends AssociationFigureAction
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String name = UMLApplicationModel.prompt( "actions.editRoleAction.prompt", "Edit Role name" );
+			String name = UMLApplicationModel.prompt( "actions.editRole.prompt", "Edit Role name" );
 			
 			if ( name == null )
 				{
