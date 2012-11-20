@@ -13,8 +13,9 @@ public class JSONArray extends AbstractJSONElement
 	
 	public JSONArray ( String val )
 	{
+		val = val.trim();
 		int len = val.length();
-		String trimmed = val.substring(1).substring( 0, len - 1);
+		String trimmed = val.substring(1).substring( 0, len - 2);
 		
 		JSONFactory jFact = new JSONFactory ( );
 		
@@ -52,7 +53,13 @@ public class JSONArray extends AbstractJSONElement
 		buf += " ]";
 		
 		return buf;
+	}
+	
+	public JSONElement get ( int i )
+	{
+		if ( i < 0 || i >= _val.size() ) return JSONNull.NULL;
 		
+		return _val.get( i );
 	}
 	
 	@Override
