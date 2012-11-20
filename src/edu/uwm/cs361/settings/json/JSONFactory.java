@@ -8,11 +8,13 @@ import edu.uwm.cs361.settings.json.elements.*;
 public class JSONFactory
 {
 	
+	private static final boolean DEBUG = false;
+	
 	private static Object[][] CONTAINER_LIMITS = 
 		{
-				{ '\"',	'\"', JSONString.class },
-				{ '[', 	']',	JSONArray.class },
-				{ '{',	'}',	JSONObject.class }
+				{ '\"',	'\"', JSONString.class, "String" },
+				{ '[', 	']',	JSONArray.class, "Array" },
+				{ '{',	'}',	JSONObject.class, "Object" }
 		};
 	
 	private static final String 		NEG = 				"-?", 
@@ -27,13 +29,25 @@ public class JSONFactory
 	public Class<? extends JSONElement> getType ( String str )
 	{
 		str = str.trim();
-		if ( str.equalsIgnoreCase("null") ) return JSONNull.class;
+		if ( str.equalsIgnoreCase("null") )
+			{
+				Util.dprint ( "Null found:\t" + str, DEBUG );
+				return JSONNull.class;
+			}
 		
 		if ( str.equalsIgnoreCase("true") ||
-				str.equalsIgnoreCase ( "false" ) ) return JSONBoolean.class;
+				str.equalsIgnoreCase ( "false" ) )
+			{
+				Util.dprint( "Boolean Literal Found:\t" + str, DEBUG );
+				return JSONBoolean.class;
+			}
 		
 		
-		if ( str.matches( JSON_NUMBER_LITERAL ) ) return JSONNumber.class;
+		if ( str.matches( JSON_NUMBER_LITERAL ) )
+			{
+				Util.dprint( "Number Literal Found:\t" + str, DEBUG );
+				return JSONNumber.class;
+			}
 		
 		char start = str.charAt( 0 );
 		char end = str.charAt( str.length() - 1 );
@@ -42,8 +56,13 @@ public class JSONFactory
 			{
 				if ( 	pair[0].equals( start ) &&
 							pair[1].equals( end ) )
-					return (Class<? extends JSONElement>) pair[2];
+					{
+						Util.dprint( (String)pair[3] + " Literal Found:\t" + str, DEBUG );
+						return (Class<? extends JSONElement>) pair[2];
+					}
 			}
+		
+		Util.dprint ( "Could not find a type:\t" + str, DEBUG );
 		
 		return JSONNull.class;
 	}
@@ -53,37 +72,21 @@ public class JSONFactory
 	 */
 	public JSONElement create ( String str ) throws JSONParseException
 	{
-		//if ( !str.contains( ":" ) ) throw new JSONParseException ( "Missing JSON Object attribute separator: :" );
 		str = str.trim();
-		
-		String key = "";
-		
-		if ( str.contains ( ":" ) )
-			{
-				key = str.substring(0, str.indexOf ( ":" ) ).trim();
-				if ( !key.matches( "\"\\w\"") ) throw new JSONParseException ( "Key malformed: missing \" or not made of [A-Za-z0-9]." );
-			}
-		
+
 		JSONElement ret = new JSONNull ( );
 		
-		String val = str.substring( str.indexOf(":") + 1 ).trim();
+		Class<? extends JSONElement> type = getType( str );
 		
+		if ( type.equals ( JSONNull.class ) ) return JSONNull.NULL;
 		
-		
-		Class<? extends JSONElement> type = getType( val );
-		
-		if ( type.equals ( JSONNull.class ) ) return ret;
-		
-		//can't parse string.
-		if ( type.equals ( JSONObject.class ) ) return ret; 
 		
 		Class<String> template = String.class;
 		
 		try
 			{
 				Constructor<? extends JSONElement> builder = type.getConstructor( template );
-				
-				return builder.newInstance( val);
+				return builder.newInstance( str );
 				
 			} 
 			//many exceptions caught
@@ -91,10 +94,12 @@ public class JSONFactory
 			{
 				String name = type.toString();
 				Util.dprint( "Cannot create class:\t" + 
-			name.substring( name.lastIndexOf( '.' ) + 1) );
+				name.substring( name.lastIndexOf( '.' ) + 1) );
 				Util.dprint( str );
 				e.printStackTrace();
 			}
+		
+		Util.dprint ( "Unable to parse:\t" + str );
 		
 		return ret;
 	}
