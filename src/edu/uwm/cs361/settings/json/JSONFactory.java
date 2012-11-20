@@ -74,7 +74,7 @@ public class JSONFactory
 	{
 		str = str.trim();
 
-		JSONElement ret = new JSONNull ( );
+		JSONElement ret = JSONObject.NULL;
 		
 		Class<? extends JSONElement> type = getType( str );
 		
