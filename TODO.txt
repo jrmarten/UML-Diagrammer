@@ -10,6 +10,10 @@ when you finish a tasks copy the task and put it in TasksDone.txt with your name
 
 feel free to put your name on any task that has not been claimed, or being worked on.
 feel free to put tasks up as you need them.
+
+
+add section functionality to Settings, and separate it from css classes.
+
 	
 Inheritance figure deletion :
 	when inheriting B class A should delete that figure
@@ -28,6 +32,7 @@ Happened when clicking the Inheritance Button.
 		at javax.swing.JComponent.processMouseEvent(JComponent.java:3268)
 		at java.awt.Component.processEvent(Component.java:6154)
 		at java.awt.Container.processEvent(Container.java:2045)
+
 	
 :::::Possible Bugs:::::
 Creating diagram:
