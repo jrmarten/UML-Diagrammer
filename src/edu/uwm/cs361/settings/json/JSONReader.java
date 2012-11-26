@@ -3,7 +3,6 @@ package edu.uwm.cs361.settings.json;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.Stack;
 
 import edu.uwm.cs361.settings.json.elements.JSONObject;
 
@@ -11,14 +10,13 @@ public class JSONReader
 {
 	
 	Scanner fin;
-	Stack<String> nests;
 	JSONObject base;
 	
+	
+	private JSONReader ( ) { }
 	private JSONReader ( Scanner stream )
 	{
 		fin = stream;
-		nests = new Stack<String> ( );
-		
 		read();
 	}
 	
@@ -27,6 +25,11 @@ public class JSONReader
 		return base;
 	}
 
+	public JSONQuerier query ( )
+	{
+		return new JSONQuerier ( base );
+	}
+	
 	private void read ( )
 	{
 		String content = "";
@@ -41,14 +44,17 @@ public class JSONReader
 	
 	public static JSONReader Create( String filename )
 	{
+		JSONReader ret;
 		try
 		{
 			Scanner input = new Scanner ( new File ( filename ) );
-			return new JSONReader ( input );
+		  ret = new JSONReader ( input );
 		}
 		catch ( FileNotFoundException e )
 		{
-			return null;
+			ret = new JSONReader ( );
+			ret.base = new JSONObject ( "{\n}" );
 		}
+		return ret;
 	}
 }
