@@ -66,6 +66,19 @@ public class Util
 		return result;
 	}
 	
+	public static String join ( Object[] objs, String sep )
+	{
+		String ret = "";
+		int i = 0;
+		for (;i < objs.length;)
+			{
+				ret += objs[i++];
+				if ( i == objs.length-1 ) break;
+				ret += sep;
+			}
+		return ret;
+	}
+	
 	public static <T> boolean equals ( Iterable<T> a, Iterable<T> b )
 	{
 		Iterator<T> ait = a.iterator();
