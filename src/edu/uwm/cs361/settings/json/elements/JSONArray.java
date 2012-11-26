@@ -7,7 +7,7 @@ import edu.uwm.cs361.Util;
 import edu.uwm.cs361.settings.json.JSONFactory;
 import edu.uwm.cs361.settings.json.JSONParseException;
 
-public class JSONArray extends AbstractJSONElement
+public class JSONArray extends AbstractJSONElement implements Iterable<JSONElement>
 {
 	private LinkedList<JSONElement> _val = new LinkedList<JSONElement> ( );
 	
@@ -15,11 +15,11 @@ public class JSONArray extends AbstractJSONElement
 	{
 		val = val.trim();
 		int len = val.length();
-		String trimmed = val.substring(1).substring( 0, len - 2);
+		val= val.substring(1).substring( 0, len - 2);
 		
 		JSONFactory jFact = new JSONFactory ( );
 		
-		for ( String element : trimmed.split( "," ) )
+		for ( String element : jFact.extractLiterals( val ) )
 			{
 				element = element.trim();
 				
@@ -32,6 +32,14 @@ public class JSONArray extends AbstractJSONElement
 						Util.dprint( "Error Creating Array: " + element );
 						e.printStackTrace();
 					}
+			}
+	}
+	
+	public JSONArray ( JSONElement... elements )
+	{
+		for ( JSONElement e : elements )
+			{
+				_val.add( e );
 			}
 	}
 	
@@ -64,6 +72,12 @@ public class JSONArray extends AbstractJSONElement
 	
 	@Override
 	public Object getElement ( )
+	{
+		return _val.iterator();
+	}
+	
+	@Override
+	public Iterator<JSONElement> iterator()
 	{
 		return _val.iterator();
 	}
