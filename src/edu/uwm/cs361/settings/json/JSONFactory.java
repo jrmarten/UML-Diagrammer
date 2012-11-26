@@ -1,6 +1,7 @@
 package edu.uwm.cs361.settings.json;
 
 import java.lang.reflect.Constructor;
+import java.util.LinkedList;
 
 import edu.uwm.cs361.Util;
 import edu.uwm.cs361.settings.json.elements.*;
@@ -19,8 +20,8 @@ public class JSONFactory
 	
 	private static final String 		NEG = 				"-?", 
 																	NUM = 				"[0-9]+",
-																	DECIMAL = 		"\\.?[0-9]*",
-																	EXP =					"((e|E)(\\+|-)?)[0-9]+";
+																	DECIMAL = 		"(\\.[0-9]*)?",
+																	EXP =					"((e|E)(\\+|-)?[0-9]+)?";
 	
 	
 	private static final String JSON_NUMBER_LITERAL = NEG + NUM + DECIMAL + EXP;
@@ -41,7 +42,6 @@ public class JSONFactory
 				Util.dprint( "Boolean Literal Found:\t" + str, DEBUG );
 				return JSONBoolean.class;
 			}
-		
 		
 		if ( str.matches( JSON_NUMBER_LITERAL ) )
 			{
@@ -94,8 +94,8 @@ public class JSONFactory
 			{
 				String name = type.toString();
 				Util.dprint( "Cannot create class:\t" + 
-				name.substring( name.lastIndexOf( '.' ) + 1) );
-				Util.dprint( str );
+				name.substring( name.lastIndexOf( '.' ) + 1) +
+				":\t" + str );
 				e.printStackTrace();
 			}
 		
@@ -104,5 +104,58 @@ public class JSONFactory
 		return ret;
 	}
 	
-	
+
+
+	public Iterable<String> extractLiterals( String str )
+	{
+		int list_counter = 0;
+		int obj_counter = 0;
+		boolean in_str = false;
+		String found;
+		
+		int a = 0;
+		
+		LinkedList<String> attr = new LinkedList<String>();
+		
+		for ( int i = 0; i < str.length(); i++ )
+			{
+				char ch = str.charAt( i );
+				
+				switch ( ch )
+				{
+					case '[':
+						list_counter++;
+						break;
+					case ']':
+						list_counter--;
+						break;
+					case '{':
+						obj_counter++;
+						break;
+					case '}':
+						obj_counter--;
+						break;
+					case '\"':
+						if ( i != 0 && str.charAt( i - 1 ) != '\\' )
+							in_str = !in_str;
+				}
+				
+				if ( ch == ',' && 
+						list_counter == 0 &&
+						obj_counter == 0 )// && !in_str )
+					{
+						found = str.substring( a, i ).trim();
+						Util.dprint ( "Attribute Found:\t" +found, DEBUG );
+						
+						attr.add( found );
+						a = i + 1;
+					}
+			}
+		
+		found = str.substring( a ).trim();
+		Util.dprint( "Last:\t" + found, DEBUG );
+		if ( !found.trim().isEmpty() ) attr.add( found );
+		
+		return attr;
+	}
 }
