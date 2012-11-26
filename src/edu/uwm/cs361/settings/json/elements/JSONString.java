@@ -1,14 +1,13 @@
 package edu.uwm.cs361.settings.json.elements;
 
+
 public class JSONString extends AbstractJSONElement
 {
 	private String _val;
 
 	public JSONString ( String val )
 	{
-		_val = val.substring(1).substring( 0, val.length() - 2);
-		
-		_val = _val.replace( "\\n" , "\n" );
+		_val = val.trim().substring(1).substring( 0, val.length() - 2);
 	}
 	
 	@Override
