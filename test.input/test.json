@@ -1,0 +1,45 @@
+{
+    "name" : "java",
+    "mode" : "CC",
+    
+    "static_keyword" : "static",
+    "abstract_keyword" : "abstract",
+
+    "bool" : true,
+
+    "base_array" : [ "apple", "orange" ],
+
+    "num" : 12.5,
+
+    "num_dat" : [ 12, 52.4, -2 ],
+
+    "grid" : [
+	[ "lu", "ru" ],
+	[ "ll", "rl" ] 
+    ],
+
+    "file" : 
+    {
+	"header" : "package ${package};",
+	"import_statement" : "import ${filename};"
+    },
+
+    "class" :
+    {
+	"header" : "${access} ${modifiers} class ${name}"
+    },
+
+    "attribute" : 
+    {
+	"header" : "${access} ${modifiers} ${name};",
+	"modifiers" : [ "static", "final" ]
+    },
+
+    "method" :
+    {
+	"header" : "${access} ${modifiers} ${name} (${params})",
+	"body" : "\n{\n${implementation}\n}",
+	"abstract_body" : ";\n",
+	"modifiers" : [ "abstract", "static", "final" ]
+    }
+}
