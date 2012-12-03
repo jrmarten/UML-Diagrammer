@@ -6,13 +6,11 @@ import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 
 @SuppressWarnings("serial")
-public class RemoveMethodAction extends ClassFigureAction
-{
+public class RemoveMethodAction extends ClassFigureAction {
 
-	public static final String	ID	= "actions.removeMethod";
+	public static final String ID = "actions.removeMethod";
 
-	public RemoveMethodAction(ClassFigure c)
-	{
+	public RemoveMethodAction(ClassFigure c) {
 		super(ID, c);
 		UMLApplicationModel.getProjectResources().configureAction(this, ID);
 	}

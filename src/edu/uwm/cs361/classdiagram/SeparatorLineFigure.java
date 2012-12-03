@@ -17,12 +17,14 @@ import org.jhotdraw.draw.AttributeKeys;
 import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.geom.*;
+
 /**
- * A horizontal line with a preferred size of 1,1 used for separating the ClassFigure's name, attributes and methods
+ * A horizontal line with a preferred size of 1,1 used for separating the
+ * ClassFigure's name, attributes and methods
  */
 public class SeparatorLineFigure extends RectangleFigure {
 
-	private static final long	serialVersionUID	= -5473799493856284516L;
+	private static final long serialVersionUID = -5473799493856284516L;
 
 	/** Creates a new instance. */
 	public SeparatorLineFigure() {
@@ -38,12 +40,13 @@ public class SeparatorLineFigure extends RectangleFigure {
 	protected void drawFill(Graphics2D g) {
 		// no fill
 	}
+
 	@Override
 	protected void drawStroke(Graphics2D g) {
 		Rectangle2D.Double r = (Rectangle2D.Double) rectangle.clone();
 		double grow = AttributeKeys.getPerpendicularDrawGrowth(this);
 		Geom.grow(r, grow, grow);
 
-		g.draw(new Line2D.Double(r.x,r.y,r.x+r.width-1,r.y));
+		g.draw(new Line2D.Double(r.x, r.y, r.x + r.width - 1, r.y));
 	}
 }

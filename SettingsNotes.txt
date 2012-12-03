@@ -6,7 +6,7 @@ templateDir:
 	${code}		UMLApplicationModel.UMLMenuBuilder.getTemplates()
 	
 Background:
-	#			sets the background to to a integer value
+	#			sets the background to to an integer value
 	${code}		UMLView.createDrawing( )
 	
 	

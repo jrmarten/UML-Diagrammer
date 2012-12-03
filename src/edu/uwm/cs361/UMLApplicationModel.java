@@ -52,39 +52,34 @@ import edu.uwm.cs361.settings.Style;
 import edu.uwm.cs361.tool.ClickTool;
 import edu.uwm.cs361.tool.SingleSelectionTool;
 
-public class UMLApplicationModel extends DefaultApplicationModel
-{
+public class UMLApplicationModel extends DefaultApplicationModel {
 
-	private static final long	serialVersionUID	= 5744235372635623155L;
-	
-	private DefaultDrawingEditor	sharedEditor;
+	private static final long serialVersionUID = 5744235372635623155L;
 
-	public UMLApplicationModel()
-	{
-		
-		
+	private DefaultDrawingEditor sharedEditor;
+
+	public UMLApplicationModel() {
+
 	}
 
-	
-	//XXX: May be the source of bugs if application switches to Multi-view 
+	// XXX: May be the source of bugs if application switches to Multi-view
 	@Override
 	public ActionMap createActionMap(Application a, @Nullable View v) {
 		ActionMap m = super.createActionMap(a, v);
-		
-		if ( v!=null )
-			{
-				for ( Object key : v.getActionMap().allKeys() )
-					{
-						m.put(key, v.getActionMap().get(key));
-					}
+
+		if (v != null) {
+			for (Object key : v.getActionMap().allKeys()) {
+				m.put(key, v.getActionMap().get(key));
 			}
-		
+		}
+
 		AbstractAction aa;
-		
-    m.put("view.toggleGrid", aa = new ToggleViewPropertyAction(a, v, UMLView.GRID_VISIBLE_PROPERTY));
-    getProjectResources().configureAction(aa, "view.toggleGrid");
-    
-    return m;
+
+		m.put("view.toggleGrid", aa = new ToggleViewPropertyAction(a, v,
+				UMLView.GRID_VISIBLE_PROPERTY));
+		getProjectResources().configureAction(aa, "view.toggleGrid");
+
+		return m;
 	}
 
 	public DefaultDrawingEditor getSharedEditor() {
@@ -125,7 +120,8 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		return new UMLMenuBuilder();
 	}
 
-	private void addClassButtonsTo(JToolBar tb, final DrawingEditor edit, @Nullable View view) {
+	private void addClassButtonsTo(JToolBar tb, final DrawingEditor edit,
+			@Nullable View view) {
 		HashMap<AttributeKey, Object> attributes;
 
 		ResourceBundleUtil labels = getProjectResources();
@@ -138,7 +134,7 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
 		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
 		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
-		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ClassFigure( ),
+		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ClassFigure(),
 				attributes), "edit.createClass", labels);
 
 		attributes = new HashMap<AttributeKey, Object>();
@@ -146,15 +142,16 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
 		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
 		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ClassFigure(
-				new UMLAbstractClass()), attributes), "edit.createAbstractClass",
-				labels);
+				new UMLAbstractClass()), attributes),
+				"edit.createAbstractClass", labels);
 
 		attributes = new HashMap<AttributeKey, Object>();
 		attributes.put(AttributeKeys.FILL_COLOR, Color.white);
 		attributes.put(AttributeKeys.STROKE_COLOR, Color.black);
 		attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
 		ButtonFactory.addToolTo(tb, edit, new CreationTool(new ClassFigure(
-				new UMLInterface()), attributes), "edit.createInterface", labels);
+				new UMLInterface()), attributes), "edit.createInterface",
+				labels);
 
 		tb.addSeparator();
 
@@ -171,23 +168,23 @@ public class UMLApplicationModel extends DefaultApplicationModel
 
 		ButtonFactory.addToolTo(tb, edit, new ConnectionTool(
 				new InheritanceFigure()), "edit.createInheritance", labels);
-		
+
 		ButtonFactory.addToolTo(tb, edit, new TextAreaCreationTool(
 				new TextAreaFigure()), "edit.createTextArea", labels);
 
-		if (Util.debug())
-			{
-				tb.addSeparator();
+		if (Util.debug()) {
+			tb.addSeparator();
 
-				ButtonFactory.addToolTo(tb, edit, new ClickTool(
-						new DebugSnapShotAction(edit.getActiveView())),
-						"edit.DebugSnapShot", labels);
+			ButtonFactory.addToolTo(tb, edit, new ClickTool(
+					new DebugSnapShotAction(edit.getActiveView())),
+					"edit.DebugSnapShot", labels);
 
-			}
+		}
 		tb.addSeparator();
 
-		ButtonFactory.addToolTo(tb, edit, new ClickTool(new JavaGenerationAction(
-				edit.getActiveView())), "edit.javaGenerator", getProjectResources());
+		ButtonFactory.addToolTo(tb, edit, new ClickTool(
+				new JavaGenerationAction(edit.getActiveView())),
+				"edit.javaGenerator", getProjectResources());
 	}
 
 	@Override
@@ -203,91 +200,87 @@ public class UMLApplicationModel extends DefaultApplicationModel
 		c.addChoosableFileFilter(new ExtensionFileFilter("UML Diagram", "xml"));
 		return c;
 	}
-	
-	private static class UMLMenuBuilder extends DefaultMenuBuilder
-	{
+
+	private static class UMLMenuBuilder extends DefaultMenuBuilder {
 		private JMenu templateButtons;
-		
-		@Override
-		public void addUndoItems ( JMenu menu, Application app, @Nullable View view )
-		{
-			super.addUndoItems ( menu, app, view );
-		}
-		
-		@Override
-		public void addLoadFileItems ( JMenu menu, Application app,
-				@Nullable View view )
-		{
-			templateButtons = new JMenu ( getProperty ( "file.openTemplate.text" ) );
-			
-			for ( File tmp : getTemplates() )
-				{
-					JMenuItem template = new JMenuItem ( );
-					String filename = tmp.getName();
-					
-					URI uri = URI.create( "file://" + tmp.getAbsolutePath() ); 
-					if ( uri == null ) continue;
-					
-					if ( filename.endsWith ( ".xml" ) ) 
-						filename = filename.substring(0, filename.indexOf( ".xml" ));
 
-					template.setText( filename );
-					template.addActionListener ( new LoadRecentFileAction ( app, view, uri ) );
-					templateButtons.add( template );
-				}
-			
-			menu.add( templateButtons );
-		}
-		
 		@Override
-		public void addSaveFileItems ( JMenu menu, Application app,
-				@Nullable View view )
-		{
-			super.addSaveFileItems ( menu, app, view );
-			
-			JMenuItem template = new JMenuItem (  );
-			template.setText( getProperty ( "file.saveTemplate.text" ) );
-			template.addActionListener( new SaveTemplateActionMod ( app, view ) );
-			menu.add( template );
+		public void addUndoItems(JMenu menu, Application app,
+				@Nullable View view) {
+			super.addUndoItems(menu, app, view);
 		}
-		
-		private class SaveTemplateActionMod extends SaveTemplateAction 
-		{
-			private static final long	serialVersionUID	= -8018751927333468798L;
 
-			public SaveTemplateActionMod(Application app, View view)
-			{
+		@Override
+		public void addLoadFileItems(JMenu menu, Application app,
+				@Nullable View view) {
+			templateButtons = new JMenu(getProperty("file.openTemplate.text"));
+
+			for (File tmp : getTemplates()) {
+				JMenuItem template = new JMenuItem();
+				String filename = tmp.getName();
+
+				URI uri = URI.create("file://" + tmp.getAbsolutePath());
+				if (uri == null)
+					continue;
+
+				if (filename.endsWith(".xml"))
+					filename = filename.substring(0, filename.indexOf(".xml"));
+
+				template.setText(filename);
+				template.addActionListener(new LoadRecentFileAction(app, view,
+						uri));
+				templateButtons.add(template);
+			}
+
+			menu.add(templateButtons);
+		}
+
+		@Override
+		public void addSaveFileItems(JMenu menu, Application app,
+				@Nullable View view) {
+			super.addSaveFileItems(menu, app, view);
+
+			JMenuItem template = new JMenuItem();
+			template.setText(getProperty("file.saveTemplate.text"));
+			template.addActionListener(new SaveTemplateActionMod(app, view));
+			menu.add(template);
+		}
+
+		private class SaveTemplateActionMod extends SaveTemplateAction {
+			private static final long serialVersionUID = -8018751927333468798L;
+
+			public SaveTemplateActionMod(Application app, View view) {
 				super(app, view);
 			}
 
 			@Override
-			protected void end_hook ( )
-			{
-				File newF = new File ( uri.getPath() );			
-				JMenuItem template = new JMenuItem ( );
+			protected void end_hook() {
+				File newF = new File(uri.getPath());
+				JMenuItem template = new JMenuItem();
 				String tmpTxt = newF.getName();
-				tmpTxt = tmpTxt.substring ( 0, tmpTxt.indexOf( ".xml" ) );
-				template.setText( tmpTxt );
-				template.addActionListener( new LoadRecentFileAction ( getApplication(), getActiveView(), uri ) );
-				templateButtons.add( template );
+				tmpTxt = tmpTxt.substring(0, tmpTxt.indexOf(".xml"));
+				template.setText(tmpTxt);
+				template.addActionListener(new LoadRecentFileAction(
+						getApplication(), getActiveView(), uri));
+				templateButtons.add(template);
 			}
 		}
-		
-		public LinkedList<File> getTemplates ( )
-		{
-			LinkedList<File> templates = new LinkedList<File> ( );
+
+		public LinkedList<File> getTemplates() {
+			LinkedList<File> templates = new LinkedList<File>();
 			Settings s = getProjectSettings();
-			String dir_name = s.getString("templateDir", getProgramDirectory() + "Templates" );
-			File templateDir = new File ( dir_name );
-			
-			if ( !templateDir.isDirectory() ) return templates;
-			
-			for ( File tmp : templateDir.listFiles() )
-				{
-					if ( tmp.getName().endsWith( ".xml" ) ) //filtering for xml
-						templates.add( tmp );
-				}
-			
+			String dir_name = s.getString("templateDir", getProgramDirectory()
+					+ "Templates");
+			File templateDir = new File(dir_name);
+
+			if (!templateDir.isDirectory())
+				return templates;
+
+			for (File tmp : templateDir.listFiles()) {
+				if (tmp.getName().endsWith(".xml")) // filtering for xml
+					templates.add(tmp);
+			}
+
 			return templates;
 		}
 
@@ -297,97 +290,97 @@ public class UMLApplicationModel extends DefaultApplicationModel
 			ActionMap am = app.getActionMap(view);
 			JCheckBoxMenuItem check;
 			check = new JCheckBoxMenuItem(am.get("view.toggleGrid"));
-			ActionUtil.configureJCheckBoxMenuItem(check, am.get("view.toggleGrid"));
-			check.setText( getProjectResources().getString( "view.toggleGrid.text" ) );
+			ActionUtil.configureJCheckBoxMenuItem(check,
+					am.get("view.toggleGrid"));
+			check.setText(getProjectResources().getString(
+					"view.toggleGrid.text"));
 			menu.add(check);
 		}
 
 	}
-	
-	
-	//Global resources
-	
-	private static ResourceBundleUtil	projectLabels	= null;
 
-	public static String getProperty ( String id )
-	{
-		return getProjectResources().getString( id );
+	// Global resources
+
+	private static ResourceBundleUtil projectLabels = null;
+
+	public static String getProperty(String id) {
+		return getProjectResources().getString(id);
 	}
-	
+
 	public static ResourceBundleUtil getProjectResources() {
 		if (projectLabels == null)
-			projectLabels = ResourceBundleUtil.getBundle("edu.uwm.cs361.Labels");
+			projectLabels = ResourceBundleUtil
+					.getBundle("edu.uwm.cs361.Labels");
 
 		return projectLabels;
 	}
-	
+
 	private static Settings pref = null;
-	public static Settings getProjectSettings ( ) 
-	{
-		if ( pref == null )
-			{
-				File pref_file = new File ( getProgramDirectory ( ) + "preferences.config" );
-				
-				if ( pref_file.exists() )
-					{
-						pref = Settings.getSettings ( pref_file );
-					}
-				else
-					{
-						Util.dprint( "Failed to get Settings" );
-					}
-				
+
+	public static Settings getProjectSettings() {
+		if (pref == null) {
+			File pref_file = new File(getProgramDirectory()
+					+ "preferences.config");
+
+			if (pref_file.exists()) {
+				pref = Settings.getSettings(pref_file);
+			} else {
+				Util.dprint("Failed to get Settings");
 			}
+		}
 		return pref;
 	}
 
 	private static Style style = null;
-	public static Style getProgramStyle ( )
-	{
-		if ( style == null )
-			{
-				Settings pref = getProjectSettings();
-				String filename = pref.getString ( "StyleSheet", null );
-				if ( filename == null ) return null;
-				File cssfile = new File ( filename );
-				if ( cssfile == null ) return null;
-				
-				style = Style.extractStyle( cssfile );
-			}
+
+	public static Style getProgramStyle() {
+		if (style == null) {
+			Settings pref = getProjectSettings();
+			String filename = pref.getString("StyleSheet", null);
+			if (filename == null)
+				return null;
+			File cssfile = new File(filename);
+			Util.dprint(cssfile.toString());
+			if (cssfile == null)
+				return null;
+
+			style = Style.extractStyle(cssfile);
+		}
 		return style;
 	}
-	
-	public static String getProgramDirectory ( )
-	{
-		String os = System.getProperty( "os.name" );
-		String home = System.getProperty( "user.home");
-		String sep = System.getProperty ( "file.separator" );
-		
-		if ( Util.containsIgnoreCase ( os, "win" ) ) // if windows
-			{
-				String loc = System.getenv( "LOCALAPPDATA" );
-				if ( loc == null ) loc = System.getenv( "APPDATA" );
-				if ( loc == null ) loc = System.getenv( "HOMEPATH" );
-				
-				return loc + sep + "uml-diagrammer" + sep;
-			}
-		else //assume unix based
-			{
-				return home + sep + ".uml-diagrammer" + sep;
-			}
+
+	public static String getProgramDirectory() {
+		String os = System.getProperty("os.name");
+		String home = System.getProperty("user.home");
+		String sep = System.getProperty("file.separator");
+
+		if (Util.containsIgnoreCase(os, "win")) { // If the system is Windows-based
+			String loc = System.getenv("LOCALAPPDATA");
+			if (loc == null)
+				loc = System.getenv("APPDATA");
+			if (loc == null)
+				loc = System.getenv("HOMEPATH");
+			String s = loc + sep + "uml-diagrammer" + sep;
+			Util.dprint(s);
+			return s;
+		} else { // Assume Unix-based
+			return home + sep + ".uml-diagrammer" + sep;
+		}
 	}
 
 	public static String prompt(String id) {
 		return JOptionPane.showInputDialog(getProjectResources().getString(id));
 	}
-	
+
 	public static String prompt(String id, String title) {
-		return JOptionPane.showInputDialog(getProjectResources().getString(id), title);
+		return JOptionPane.showInputDialog(getProjectResources().getString(id),
+				title);
 	}
 
 	public static void error(String id, String title) {
-		JOptionPane.showMessageDialog(null, getProjectResources().getString(id),
-				title, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null,
+				getProjectResources().getString(id), title,
+				JOptionPane.ERROR_MESSAGE);
 	}
-	
+
 }
