@@ -17,17 +17,15 @@ import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.io.JavaGenerator;
 
 @SuppressWarnings("serial")
-public class JavaGenerationAction extends AbstractAction
-{
-	DrawingView	data;
+public class JavaGenerationAction extends AbstractAction {
+	DrawingView data;
 
-	public JavaGenerationAction(DrawingView view)
-	{
+	public JavaGenerationAction(DrawingView view) {
 		data = view;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) { 
+	public void actionPerformed(ActionEvent e) {
 		List<Figure> figs = data.getDrawing().getFiguresFrontToBack();
 
 		JFileURIChooser c = new JFileURIChooser();
@@ -35,34 +33,31 @@ public class JavaGenerationAction extends AbstractAction
 
 		int result = c.showDialog(null, "Generate");
 
-		if (result != JFileChooser.APPROVE_OPTION)
-			{
-				Util.dprint("JFileChooser failed to return properly");
-				return;
-			}
+		if (result != JFileChooser.APPROVE_OPTION) {
+			Util.dprint("JFileChooser failed to return properly");
+			return;
+		}
 
 		File file = c.getSelectedFile();
 
-		if (!file.isDirectory())
-			{
-				JOptionPane.showMessageDialog(null, "Selection was not a directory",
-						"Choose error", JOptionPane.ERROR_MESSAGE);
-				return;
-			}
+		if (!file.isDirectory()) {
+			JOptionPane.showMessageDialog(null,
+					"Selection was not a directory", "Choose error",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 
 		Util.dprint(file.getAbsolutePath());
 
-		for (Figure fig : figs)
-			{
-				if (fig instanceof ClassFigure)
-					{
-						ClassFigure cfig = (ClassFigure) fig;
+		for (Figure fig : figs) {
+			if (fig instanceof ClassFigure) {
+				ClassFigure cfig = (ClassFigure) fig;
 
-						Util.dprint(cfig.getData().getDeclaration());
+				Util.dprint(cfig.getData().getDeclaration());
 
-						JavaGenerator.write(file.getAbsolutePath(), cfig.getData());
-					}
+				JavaGenerator.write(file.getAbsolutePath(), cfig.getData());
 			}
+		}
 
 	}
 }

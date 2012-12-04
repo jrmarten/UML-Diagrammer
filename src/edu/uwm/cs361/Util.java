@@ -3,48 +3,47 @@ package edu.uwm.cs361;
 import java.util.Comparator;
 import java.util.Iterator;
 
-public class Util
-{
+public class Util {
 
-	private static final boolean	DEBUG	= true;
+	private static final boolean DEBUG = true;
 
 	public static boolean debug() {
 		return DEBUG;
 	}
 
 	public static void dprint(String line) {
-		if ( !DEBUG ) return;
-		if ( line == null ) 
+		if (!DEBUG)
+			return;
+		if (line == null)
 			return;
 		if (line.equals(""))
 			return;
-		
+
 		System.out.println(line);
 	}
-	
-	public static void dprint ( Object o )
-	{
-		if ( ! DEBUG ) return;
-		if ( o != null )
-			System.out.println ( o.toString() );
+
+	public static void dprint(Object o) {
+		if (!DEBUG)
+			return;
+		if (o != null)
+			System.out.println(o.toString());
 	}
-	
-	public static <T> void dprint ( Iterable<T> it )
-	{
-		if ( ! DEBUG ) return;
-		if ( it == null ) return;
-		
-		for ( T cur : it )
-			{
-				System.out.print( cur );
-			}
+
+	public static <T> void dprint(Iterable<T> it) {
+		if (!DEBUG)
+			return;
+		if (it == null)
+			return;
+
+		for (T cur : it) {
+			System.out.print(cur);
+		}
 	}
 
 	public static <E> void printIterable(Iterable<E> col) {
-		for (E e : col)
-			{
-				System.out.println(e);
-			}
+		for (E e : col) {
+			System.out.println(e);
+		}
 	}
 
 	public static <E> void printIterable(Iterable<E> col, boolean debug) {
@@ -56,104 +55,96 @@ public class Util
 		Iterator<E> it = col.iterator();
 		String result = "";
 
-		while (it.hasNext())
-			{
-				result += it.next().toString();
-				if (!it.hasNext())
-					break;
-				result += sep;
-			}
+		while (it.hasNext()) {
+			result += it.next().toString();
+			if (!it.hasNext())
+				break;
+			result += sep;
+		}
 		return result;
 	}
-	
-	public static String join ( Object[] objs, String sep )
-	{
+
+	public static String join(Object[] objs, String sep) {
 		String ret = "";
 		int i = 0;
-		for (;i < objs.length;)
-			{
-				ret += objs[i++];
-				if ( i == objs.length-1 ) break;
-				ret += sep;
-			}
+		for (; i < objs.length;) {
+			ret += objs[i++];
+			if (i == objs.length - 1)
+				break;
+			ret += sep;
+		}
 		return ret;
 	}
-	
-	public static <T> boolean equals ( Iterable<T> a, Iterable<T> b )
-	{
+
+	public static <T> boolean equals(Iterable<T> a, Iterable<T> b) {
 		Iterator<T> ait = a.iterator();
 		Iterator<T> bit = b.iterator();
-		
-		while ( bit.hasNext() && ait.hasNext() )
-			{
-				if (!ait.next().equals( bit.next() ) ) return false;
-			}
-		
-		return ! ( bit.hasNext() || ait.hasNext() );
+
+		while (bit.hasNext() && ait.hasNext()) {
+			if (!ait.next().equals(bit.next()))
+				return false;
+		}
+
+		return !(bit.hasNext() || ait.hasNext());
 	}
 
 	public static Object report(String line) {
 		System.out.println(line);
 		return null;
 	}
-	
-	public static boolean isEmpty ( String str )
-	{
-		return str.trim().equals ( "" );
+
+	public static boolean isEmpty(String str) {
+		return str.trim().equals("");
 	}
 
 	public static void dprint(String line, boolean debug) {
 		if (debug)
 			System.out.println(line);
 	}
-	
-	public static boolean contains ( Object[] objs, Object o )
-	{
-		for ( Object tmp : objs )
-			{
-				if ( o.equals( tmp ) ) return true;
-			}
+
+	public static boolean contains(Object[] objs, Object o) {
+		for (Object tmp : objs) {
+			if (o.equals(tmp))
+				return true;
+		}
 		return false;
 	}
-	
-	
-	//XXX:TEST!!!!
-	public static boolean containsIgnoreCase ( String full, String part )
-	{
+
+	// XXX:TEST!!!!
+	public static boolean containsIgnoreCase(String full, String part) {
 		int part_cur = 0;
-		for ( int full_cur = 0; full_cur < full.length(); full_cur++ )
-			{
-				char full_val = full.charAt ( full_cur );
-				
-				if ( equalsIgnoreCase ( full_val, part.charAt( part_cur ) ) ) part_cur++;
-				
-				if ( part_cur == part.length() ) return true;
-				
-			}
+		for (int full_cur = 0; full_cur < full.length(); full_cur++) {
+			char full_val = full.charAt(full_cur);
+
+			if (equalsIgnoreCase(full_val, part.charAt(part_cur)))
+				part_cur++;
+
+			if (part_cur == part.length())
+				return true;
+
+		}
 		return false;
 	}
-	
-	private static boolean equalsIgnoreCase ( char a, char b )
-	{
-		return Character.toLowerCase(a) == Character.toLowerCase(b); 
+
+	private static boolean equalsIgnoreCase(char a, char b) {
+		return Character.toLowerCase(a) == Character.toLowerCase(b);
 	}
-	
-	public static <E> boolean contains ( Iterable<E> col, E element, Comparator<E> comp )
-	{
-		for ( E tmp : col )
-			{
-				if ( comp.compare( tmp, element ) == 0 ) return true;
-			}
+
+	public static <E> boolean contains(Iterable<E> col, E element,
+			Comparator<E> comp) {
+		for (E tmp : col) {
+			if (comp.compare(tmp, element) == 0)
+				return true;
+		}
 		return false;
 	}
-	
-	public static int countInstancesOf ( String str, char ch )
-	{
+
+	public static int countInstancesOf(String str, char ch) {
 		int i = 0;
-		for ( int n = 0; n < str.length(); n++ )
-			{
-				if ( str.charAt( n ) == ch ) i++;
-			}
+		for (int n = 0; n < str.length(); n++) {
+			if (str.charAt(n) == ch)
+				i++;
+		}
 		return i;
 	}
 }

@@ -7,12 +7,10 @@ import edu.uwm.cs361.classdiagram.ConnectionFigure;
 import edu.uwm.cs361.classdiagram.LineDecorationChooser;
 
 @SuppressWarnings("serial")
-public class SetStartDecorationAction extends AssociationFigureAction
-{
-	public static final String	ID	= "actions.setStartDecoration";
+public class SetStartDecorationAction extends AssociationFigureAction {
+	public static final String ID = "actions.setStartDecoration";
 
-	public SetStartDecorationAction(ConnectionFigure c)
-	{
+	public SetStartDecorationAction(ConnectionFigure c) {
 		super(ID, c);
 		UMLApplicationModel.getProjectResources().configureAction(this, ID);
 	}

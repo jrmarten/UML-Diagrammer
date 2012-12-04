@@ -10,13 +10,11 @@ import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.classdiagram.ClassFigure;
 
 @SuppressWarnings("serial")
-public class AddMethodAction extends ClassFigureAction
-{
+public class AddMethodAction extends ClassFigureAction {
 
-	public static final String	ID	= "actions.addMethod";
+	public static final String ID = "actions.addMethod";
 
-	public AddMethodAction(ClassFigure c)
-	{
+	public AddMethodAction(ClassFigure c) {
 		super(ID, c);
 		UMLApplicationModel.getProjectResources().configureAction(this, ID);
 	}
@@ -26,16 +24,12 @@ public class AddMethodAction extends ClassFigureAction
 		data.addMethod(UMLApplicationModel.prompt(method_prompt));
 	}
 
-
-	
-	//TODO:link
-	public static class Edit extends AbstractUndoableEdit
-	{
+	// TODO:link
+	public static class Edit extends AbstractUndoableEdit {
 		private ClassFigure cfig;
 		private String meth;
-		
-		public Edit ( ClassFigure cfig, String meth )
-		{
+
+		public Edit(ClassFigure cfig, String meth) {
 			this.cfig = cfig;
 			this.meth = meth;
 		}
@@ -43,15 +37,15 @@ public class AddMethodAction extends ClassFigureAction
 		@Override
 		public void redo() throws CannotRedoException {
 			super.redo();
-			cfig.addMethod( meth );
+			cfig.addMethod(meth);
 		}
 
 		@Override
 		public void undo() throws CannotUndoException {
 			super.undo();
-			cfig.removeMethod( meth );
+			cfig.removeMethod(meth);
 		}
-		
+
 	}
 
 }

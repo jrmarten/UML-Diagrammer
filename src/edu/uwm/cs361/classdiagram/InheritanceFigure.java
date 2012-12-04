@@ -22,24 +22,22 @@ import edu.uwm.cs361.classdiagram.data.UMLInterface;
 import edu.uwm.cs361.settings.CSSRule;
 import edu.uwm.cs361.settings.Style;
 
-public class InheritanceFigure extends LineConnectionFigure
-{
+public class InheritanceFigure extends LineConnectionFigure {
 
 	/**
 	 * 
 	 */
-	private static final long	serialVersionUID	= 5339743993660576339L;
+	private static final long serialVersionUID = 5339743993660576339L;
 
 	private static Color for_color = Color.black;
-	
-	public InheritanceFigure()
-	{
-		set(STROKE_COLOR, for_color );
+
+	public InheritanceFigure() {
+		set(STROKE_COLOR, for_color);
 		set(STROKE_WIDTH, 1d);
-		
-		set(END_DECORATION, new ArrowTip(0.60, 20.0 , 16.5, false, true, false));
+
+		set(END_DECORATION, new ArrowTip(0.60, 20.0, 16.5, false, true, false));
 		set(START_DECORATION, null);
-		
+
 		setAttributeEnabled(STROKE_COLOR, false);
 		setAttributeEnabled(END_DECORATION, false);
 		setAttributeEnabled(START_DECORATION, false);
@@ -48,27 +46,31 @@ public class InheritanceFigure extends LineConnectionFigure
 		setAttributeEnabled(FONT_UNDERLINE, false);
 	}
 
-	static { config(); }
-	private static void config ( )
-	{
-		
-		Style style = UMLApplicationModel.getProgramStyle();
-		if ( style == null ) return;
-		CSSRule inher_rule = style.get ( "Inheritance" );
-		if ( inher_rule == null ) return;
-		
-		for_color = inher_rule.getColor( "forground-color" , for_color);
+	static {
+		config();
 	}
-	
+
+	private static void config() {
+
+		Style style = UMLApplicationModel.getProgramStyle();
+		if (style == null)
+			return;
+		CSSRule inher_rule = style.get("Inheritance");
+		if (inher_rule == null)
+			return;
+
+		for_color = inher_rule.getColor("forground-color", for_color);
+	}
+
 	@Override
 	public boolean canConnect(Connector start, Connector end) {
 		if (!(start.getOwner() instanceof ClassFigure && end.getOwner() instanceof ClassFigure))
 			return false;
-		
-		if ( ((ClassFigure)start.getOwner()).getData() instanceof UMLInterface &&
-				(!(((ClassFigure)end.getOwner()).getData() instanceof UMLInterface)))
+
+		if (((ClassFigure) start.getOwner()).getData() instanceof UMLInterface
+				&& (!(((ClassFigure) end.getOwner()).getData() instanceof UMLInterface)))
 			return false;
-		
+
 		if (start.getOwner() == end.getOwner())
 			return false;
 
@@ -92,27 +94,26 @@ public class InheritanceFigure extends LineConnectionFigure
 		UMLClass child = ((ClassFigure) start.getOwner()).getData();
 		UMLClass par = ((ClassFigure) end.getOwner()).getData();
 
-		boolean dashed = ( child instanceof UMLInterface ) 
-				||  ( par instanceof UMLInterface );
-		
-		if ( dashed )
-			{
-				setAttributeEnabled ( AttributeKeys.STROKE_DASHES, true );
-				double[] x = { 3.0 };
-				set( AttributeKeys.STROKE_DASHES , x );
-				setAttributeEnabled ( AttributeKeys.STROKE_DASHES, false );
-			}
-		
-		setAttributeEnabled ( AttributeKeys.END_DECORATION, true );
-		set ( AttributeKeys.END_DECORATION, new ArrowTip(0.60, 20.0 , 16.5, false, true, true) );
-		setAttributeEnabled ( AttributeKeys.END_DECORATION, false);
-		
+		boolean dashed = (child instanceof UMLInterface)
+				|| (par instanceof UMLInterface);
+
+		if (dashed) {
+			setAttributeEnabled(AttributeKeys.STROKE_DASHES, true);
+			double[] x = { 3.0 };
+			set(AttributeKeys.STROKE_DASHES, x);
+			setAttributeEnabled(AttributeKeys.STROKE_DASHES, false);
+		}
+
+		setAttributeEnabled(AttributeKeys.END_DECORATION, true);
+		set(AttributeKeys.END_DECORATION, new ArrowTip(0.60, 20.0, 16.5, false,
+				true, true));
+		setAttributeEnabled(AttributeKeys.END_DECORATION, false);
+
 		child.addSuperclass(par);
 	}
-	
+
 	@Override
-	public int getLayer ( )
-	{
+	public int getLayer() {
 		return 1;
 	}
 

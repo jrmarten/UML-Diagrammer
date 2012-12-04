@@ -21,35 +21,27 @@ import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.InheritanceFigure;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
 
-
-public class UMLFactory extends DefaultDOMFactory
-{
-	private final static Object[][]	classTagArray	= {
+public class UMLFactory extends DefaultDOMFactory {
+	private final static Object[][] classTagArray = {
 			{ DefaultDrawing.class, "UMLDiagram" },
 			{ ClassFigure.class, "ClassFigure" },
 			{ ConnectionFigure.class, "ConnectionFigure" },
-			{ UMLClass.class, "class" },
-			{ Method.class, "method" }, 
+			{ UMLClass.class, "class" }, { Method.class, "method" },
 			{ Attribute.class, "attribute" },
 			{ DependencyFigure.class, "depfigure" },
 			{ InheritanceFigure.class, "inheritfigure" },
-			{ ListFigure.class, "list" },
-			{ TextFigure.class, "text" },
-			{ GroupFigure.class, "g" },
-			{ TextAreaFigure.class, "ta" },
+			{ ListFigure.class, "list" }, { TextFigure.class, "text" },
+			{ GroupFigure.class, "g" }, { TextAreaFigure.class, "ta" },
 			{ SeparatorLineFigure.class, "separator" },
 			{ ChopRectangleConnector.class, "rectConnector" },
 			{ LocatorConnector.class, "locConnector" },
 			{ RelativeLocator.class, "relativeLocator" },
-			{ ArrowTip.class, "arrowTip" },					
-	};
+			{ ArrowTip.class, "arrowTip" }, };
 
 	/** Creates a new instance. */
-	public UMLFactory()
-	{
-		for (Object[] o : classTagArray)
-			{
-				addStorableClass((String) o[1], (Class) o[0]);
-			}
+	public UMLFactory() {
+		for (Object[] o : classTagArray) {
+			addStorableClass((String) o[1], (Class) o[0]);
+		}
 	}
 }
