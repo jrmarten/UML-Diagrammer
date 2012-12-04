@@ -348,8 +348,7 @@ public class UMLApplicationModel extends DefaultApplicationModel {
 		}
 		return style;
 	}
-<<<<<<< HEAD
-	
+
 	public static String getProgramDirectory ( )
 	{
 		String os = System.getProperty( "os.name" );
@@ -368,9 +367,9 @@ public class UMLApplicationModel extends DefaultApplicationModel {
 			{
 				return home + sep + ".uml-diagrammer" + sep;
 			}
-=======
+	}
 
-	public static String getProgramDirectory() {
+/*	public static String getProgramDirectory() {
 		String os = System.getProperty("os.name");
 		String home = System.getProperty("user.home");
 		String sep = System.getProperty("file.separator");
@@ -389,7 +388,7 @@ public class UMLApplicationModel extends DefaultApplicationModel {
 		}
 >>>>>>> c9e663ba28d059a521d061544e336f30051dc260
 	}
-
+*/
 	public static String prompt(String id) {
 		return JOptionPane.showInputDialog(getProjectResources().getString(id));
 	}

@@ -47,7 +47,7 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 		PropertyChangeListener {
 
 	private static final long serialVersionUID = -1729547106413248257L;
-	private static Color for_color = Color.black;
+	private static Color fore_color = Color.black;
 	private static final String DEFAULT_CONNECTION = "Association";
 
 	private Connection con;
@@ -80,7 +80,7 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 		b_mult.set(LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator(1,
 				Math.PI / 4, 8));
 
-		set(STROKE_COLOR, for_color);
+		set(STROKE_COLOR, fore_color);
 		set(STROKE_WIDTH, 1d);
 		set(END_DECORATION, null);
 		set(START_DECORATION, null);
@@ -95,7 +95,7 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 
 	private void init(TextFigure tfig) {
 		tfig.setEditable(false);
-		tfig.set(AttributeKeys.TEXT_COLOR, for_color);
+		tfig.set(AttributeKeys.TEXT_COLOR, fore_color);
 		tfig.setAttributeEnabled(AttributeKeys.TEXT_COLOR, false);
 		tfig.setText("");
 		add(tfig);
@@ -113,7 +113,7 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 		if (association_rule == null)
 			return;
 
-		for_color = association_rule.getColor("forground-color", Color.black);
+		fore_color = association_rule.getColor("foreground-color", Color.black);
 	}
 
 	/**

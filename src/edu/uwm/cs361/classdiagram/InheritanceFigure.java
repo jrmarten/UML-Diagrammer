@@ -29,10 +29,10 @@ public class InheritanceFigure extends LineConnectionFigure {
 	 */
 	private static final long serialVersionUID = 5339743993660576339L;
 
-	private static Color for_color = Color.black;
+	private static Color fore_color = Color.black;
 
 	public InheritanceFigure() {
-		set(STROKE_COLOR, for_color);
+		set(STROKE_COLOR, fore_color);
 		set(STROKE_WIDTH, 1d);
 
 		set(END_DECORATION, new ArrowTip(0.60, 20.0, 16.5, false, true, false));
@@ -59,7 +59,7 @@ public class InheritanceFigure extends LineConnectionFigure {
 		if (inher_rule == null)
 			return;
 
-		for_color = inher_rule.getColor("forground-color", for_color);
+		fore_color = inher_rule.getColor("foreground-color", fore_color);
 	}
 
 	@Override

@@ -60,7 +60,7 @@ public class ClassFigure extends GraphicalCompositeFigure {
 	private UMLClass data;
 
 	private static class ColorSet {
-		public Color for_color, back_color, stroke_color;
+		public Color fore_color = Color.black, back_color = Color.white, stroke_color = Color.black;
 	}
 
 	private static ColorSet CLASSCOLORS = new ColorSet();
@@ -130,14 +130,16 @@ public class ClassFigure extends GraphicalCompositeFigure {
 		setAttributeEnabled(AttributeKeys.STROKE_COLOR, false);
 
 		nameFig.set(AttributeKeys.FILL_COLOR, colors.back_color);
-		nameFig.set(AttributeKeys.TEXT_COLOR, colors.for_color);
+		setAttributeEnabled(AttributeKeys.TEXT_COLOR, true);
+		nameFig.set(AttributeKeys.TEXT_COLOR, colors.fore_color);
+		setAttributeEnabled(AttributeKeys.TEXT_COLOR, false);
 
 		for (Figure fig : attrList.getChildren()) {
-			fig.set(AttributeKeys.TEXT_COLOR, colors.for_color);
+			fig.set(AttributeKeys.TEXT_COLOR, colors.fore_color);
 		}
 
 		for (Figure fig : methodList.getChildren()) {
-			fig.set(AttributeKeys.TEXT_COLOR, colors.for_color);
+			fig.set(AttributeKeys.TEXT_COLOR, colors.fore_color);
 		}
 	}
 
@@ -148,28 +150,28 @@ public class ClassFigure extends GraphicalCompositeFigure {
 	private static void readConfig() {
 		Style style = UMLApplicationModel.getProgramStyle();
 		if (style != null) {
-			CLASSCOLORS.for_color = style.getColor("Class.forground-color",
+			CLASSCOLORS.fore_color = style.getColor("Class.foreground-color",
 					Color.black);
 			CLASSCOLORS.back_color = style.getColor("Class.background-color",
 					Color.white);
 			CLASSCOLORS.stroke_color = style.getColor("Class.border-color",
 					Color.black);
 
-			ABSTRACTCOLORS.for_color = style.getColor(
-					"AbstractClass.forground-color", CLASSCOLORS.for_color);
+			ABSTRACTCOLORS.fore_color = style.getColor(
+					"AbstractClass.foreground-color", CLASSCOLORS.fore_color);
 			ABSTRACTCOLORS.back_color = style.getColor(
 					"AbstractClass.background-color", CLASSCOLORS.back_color);
 			ABSTRACTCOLORS.stroke_color = style.getColor(
 					"AbstractClass.border-color", CLASSCOLORS.stroke_color);
 
-			INTERFACECOLORS.for_color = style.getColor(
-					"Interface.forground-color", CLASSCOLORS.for_color);
+			INTERFACECOLORS.fore_color = style.getColor(
+					"Interface.foreground-color", CLASSCOLORS.fore_color);
 			INTERFACECOLORS.back_color = style.getColor(
 					"Interface.background-color", CLASSCOLORS.back_color);
 			INTERFACECOLORS.stroke_color = style.getColor(
 					"Interface.border-color", CLASSCOLORS.stroke_color);
 		} else {
-			CLASSCOLORS.for_color = ABSTRACTCOLORS.for_color = INTERFACECOLORS.for_color = Color.black;
+			CLASSCOLORS.fore_color = ABSTRACTCOLORS.fore_color = INTERFACECOLORS.fore_color = Color.black;
 			CLASSCOLORS.back_color = ABSTRACTCOLORS.back_color = INTERFACECOLORS.back_color = Color.white;
 			CLASSCOLORS.stroke_color = ABSTRACTCOLORS.stroke_color = INTERFACECOLORS.stroke_color = Color.black;
 		}
@@ -235,7 +237,7 @@ public class ClassFigure extends GraphicalCompositeFigure {
 
 		tmpFig = new TextFigure();
 		tmpFig.setText(attr.toString());
-		tmpFig.set(AttributeKeys.TEXT_COLOR, _colors.for_color);
+		tmpFig.set(AttributeKeys.TEXT_COLOR, _colors.fore_color);
 		if (attr.isStatic()) {
 			tmpFig.set(FONT_UNDERLINE, true);
 			tmpFig.setAttributeEnabled(FONT_UNDERLINE, false);
@@ -279,7 +281,7 @@ public class ClassFigure extends GraphicalCompositeFigure {
 			tmpFig.set(FONT_UNDERLINE, true);
 		if (meth.isAbstract())
 			tmpFig.set(FONT_ITALIC, true);
-		tmpFig.set(AttributeKeys.TEXT_COLOR, _colors.for_color);
+		tmpFig.set(AttributeKeys.TEXT_COLOR, _colors.fore_color);
 		tmpFig.addFigureListener(new MethodAdapter(tmpFig));
 
 		willChange();

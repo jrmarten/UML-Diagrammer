@@ -108,7 +108,7 @@ public class Settings
 							{
 								entry = entry.trim();
 								
-								String[] keyval = entry.split(KEYVAL_DELIM);
+								String[] keyval = entry.split(KEYVAL_DELIM, 2);
 								
 								if ( keyval.length < 2 ) continue;
 								if ( keyval[0].trim().equals("") || 
