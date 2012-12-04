@@ -219,7 +219,8 @@ public class UMLApplicationModel extends DefaultApplicationModel {
 				JMenuItem template = new JMenuItem();
 				String filename = tmp.getName();
 
-				URI uri = URI.create("file://" + tmp.getAbsolutePath());
+				String aPath = tmp.getAbsolutePath().replace("\\", "/");
+				URI uri = URI.create("file:///" + aPath);
 				if (uri == null)
 					continue;
 

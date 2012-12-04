@@ -50,9 +50,9 @@ public class SaveTemplateAction extends SaveFileAction {
 		Util.dprint(dirName);
 		filename = dirName + filename + ".xml";
 
-		Util.dprint(filename);
-
-		uri = URI.create("file://" + filename);
+		filename = filename.replace( '\\', '/');
+		
+		uri = URI.create("file:///" + filename);
 
 		saveViewToURI(getActiveView(), uri, null);
 		end_hook();
