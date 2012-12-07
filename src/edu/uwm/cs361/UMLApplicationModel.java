@@ -59,7 +59,7 @@ public class UMLApplicationModel extends DefaultApplicationModel {
 	private DefaultDrawingEditor sharedEditor;
 
 	public UMLApplicationModel() {
-
+		ClassFigure.initColors();
 	}
 
 	// XXX: May be the source of bugs if application switches to Multi-view
