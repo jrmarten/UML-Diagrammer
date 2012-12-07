@@ -23,6 +23,7 @@ import org.jhotdraw.draw.GraphicalCompositeFigure;
 import org.jhotdraw.draw.ListFigure;
 import org.jhotdraw.draw.RectangleFigure;
 import org.jhotdraw.draw.TextFigure;
+import org.jhotdraw.draw.connector.ChopRectangleConnector;
 import org.jhotdraw.draw.connector.LocatorConnector;
 import org.jhotdraw.draw.event.FigureAdapter;
 import org.jhotdraw.draw.event.FigureEvent;
@@ -209,8 +210,7 @@ public class ClassFigure extends GraphicalCompositeFigure {
 			handles.add(new MoveHandle(this, RelativeLocator.southWest()));
 			handles.add(new MoveHandle(this, RelativeLocator.southEast()));
 
-			handles.add(new ConnectorHandle(new LocatorConnector(this,
-					RelativeLocator.center()), new ConnectionFigure()));
+			handles.add(new ConnectorHandle(new ChopRectangleConnector(this), new ConnectionFigure()));
 			handles.add(new ConnectorHandle(new LocatorConnector(this,
 					RelativeLocator.north()), new InheritanceFigure()));
 			break;
