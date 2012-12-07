@@ -9,7 +9,7 @@
  * see accompanying license terms.
  */
 
-package edu.uwm.cs361.classdiagram;
+package edu.uwm.cs361.classdiagram.figure;
 
 import java.awt.Graphics2D;
 import java.awt.geom.*;

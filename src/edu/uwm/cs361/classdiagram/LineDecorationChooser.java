@@ -18,12 +18,12 @@ import javax.swing.WindowConstants;
 
 import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.AttributeKeys;
-import org.jhotdraw.draw.decoration.ArrowTip;
 import org.jhotdraw.draw.decoration.LineDecoration;
 
 import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.data.Connection;
 import edu.uwm.cs361.classdiagram.data.ConnectionType;
+import edu.uwm.cs361.classdiagram.figure.ConnectionFigure;
 
 public class LineDecorationChooser extends JFrame implements ActionListener {
 
@@ -31,9 +31,9 @@ public class LineDecorationChooser extends JFrame implements ActionListener {
 	private ConnectionFigure _data;
 	private boolean _isEnd;
 	private JRadioButton _composition, _aggregation, _association, _none;
-	private ArrowTip _compTip = new ArrowTip(0.40, 15.0, 30.0);
-	private ArrowTip _aggTip = new ArrowTip(0.40, 15.0, 30.0, false, true, true);
-	private ArrowTip _assTip = new ArrowTip(0.35, 20, 18.4);
+	//private ArrowTip _compTip = new ArrowTip(0.40, 15.0, 30.0);
+	//private ArrowTip _aggTip = new ArrowTip(0.40, 15.0, 30.0, false, true, true);
+	//private ArrowTip _assTip = new ArrowTip(0.35, 20, 18.4);
 
 	private final static int WIDTH = 300;
 	private final static int HEIGHT = 300;

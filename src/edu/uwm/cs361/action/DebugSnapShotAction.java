@@ -12,11 +12,11 @@ import org.jhotdraw.draw.Figure;
 
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.Util;
-import edu.uwm.cs361.classdiagram.ConnectionFigure;
-import edu.uwm.cs361.classdiagram.ClassFigure;
 import edu.uwm.cs361.classdiagram.data.Attribute;
 import edu.uwm.cs361.classdiagram.data.Method;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
+import edu.uwm.cs361.classdiagram.figure.ClassFigure;
+import edu.uwm.cs361.classdiagram.figure.ConnectionFigure;
 
 @SuppressWarnings("unused")
 public class DebugSnapShotAction extends AbstractAction {

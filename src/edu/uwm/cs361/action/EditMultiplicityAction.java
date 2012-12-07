@@ -6,7 +6,7 @@ import javax.swing.undo.AbstractUndoableEdit;
 
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.Util;
-import edu.uwm.cs361.classdiagram.ConnectionFigure;
+import edu.uwm.cs361.classdiagram.figure.ConnectionFigure;
 
 public class EditMultiplicityAction extends AssociationFigureAction {
 	public static final String ID = "actions.editMult";

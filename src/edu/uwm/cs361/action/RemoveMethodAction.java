@@ -3,7 +3,7 @@ package edu.uwm.cs361.action;
 import java.awt.event.ActionEvent;
 
 import edu.uwm.cs361.UMLApplicationModel;
-import edu.uwm.cs361.classdiagram.ClassFigure;
+import edu.uwm.cs361.classdiagram.figure.ClassFigure;
 
 @SuppressWarnings("serial")
 public class RemoveMethodAction extends ClassFigureAction {

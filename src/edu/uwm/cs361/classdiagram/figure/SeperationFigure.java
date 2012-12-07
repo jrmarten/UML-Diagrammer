@@ -1,4 +1,4 @@
-package edu.uwm.cs361.classdiagram;
+package edu.uwm.cs361.classdiagram.figure;
 
 import java.awt.Graphics2D;
 import static org.jhotdraw.draw.AttributeKeys.*;

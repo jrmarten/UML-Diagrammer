@@ -13,7 +13,7 @@ import org.jhotdraw.draw.Figure;
 import org.jhotdraw.draw.tool.SelectionTool;
 
 import edu.uwm.cs361.action.ClassFigureAction;
-import edu.uwm.cs361.classdiagram.ClassFigure;
+import edu.uwm.cs361.classdiagram.figure.ClassFigure;
 
 public class SingleSelectionTool extends SelectionTool
 {

@@ -1,4 +1,4 @@
-package edu.uwm.cs361.classdiagram;
+package edu.uwm.cs361.classdiagram.figure;
 
 import static org.jhotdraw.draw.AttributeKeys.END_DECORATION;
 import static org.jhotdraw.draw.AttributeKeys.FONT_ITALIC;
