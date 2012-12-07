@@ -1,0 +1,414 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Code Ninjas UML-Diagrammer</title>
+</head>
+
+<body>
+<h3 align="right"><p align="right">Code Ninjas</h3>
+<h4 align="right">Maximilian Felgenhauer<br />Anthony Klose<br />Jameson Marten<br />
+</p>
+</h4>
+
+
+<h2>Requirement Analysis
+</h2>
+<ol>
+  <li>Introduction<br /><br />
+    <ol>
+      <li>Purpose of the System<br />The purpose of this system is to facilitate writing Java code through the modeling of class structures in UML.</li>
+      <li>Scope of the System<br />This system is for Java programmers and program designers and developers.</li>
+      <li>The success criteria of the project<br />To create a functioning program which can diagram UML, and translate UML into Java code for an easy and useful utilization by any programmer.</li>
+    </ol>
+  </li>
+</ol>
+<ol>
+  <li value="2">Proposed System  <br />  <br />
+    <ol>
+      <li>Functional Requirements</li>A user must be able to: 
+        <ul>
+          <li>create and edit UML diagrams 
+          </li>
+          <li>read and write diagrams to a file </li>
+          <li>generate Java code from UML diagrams
+          </li>
+          <li>   make UML templates</li>
+        </ul>
+    </ol>
+    <br />
+    <ol start="2">
+      <li>Nonfunctional Requirements
+          <ol type="a">
+            <li>Usability 
+              <ul>
+                <li>This application should look native to the Windows or Mac based on the operating system being used.</li>
+                <li>There should be a maximum of two steps to create any UML element</li>
+                <li>The program will have a Single Document Interface.</li>
+              </ul>
+            </li>
+            <li>Reliability        </li>
+            <ul>
+              <li>The program will report any errors to the user instead of crashing, if possible.</li>
+            </ul>
+            <li>Performance
+              <ul>
+                <li>Should take the User no longer than 3 seconds to save a document.</li>
+                <li>Adding GUI elements should be instantaneous.</li>
+              </ul>
+            </li>
+          </ol>
+      </li>
+    </ol>  
+    <blockquote>
+      <p>&nbsp; </p>
+    </blockquote>  
+  <li>Use Case	Model</li>
+</ol>
+<ol>
+  <ol start="2">
+    <blockquote>
+      <p><img src="img/Screen shot 2012-12-07 at 1.29.17 PM.png" width="292" height="418" /></p>
+      <p><img src="../Desktop/Screen shot 2012-12-07 at 1.29.34 PM.png" width="317" height="228" /></p>
+    </blockquote>
+    <ol>
+      <li>Create UML Class Elements
+        <ol type="a">
+          <li>Priority level: High</li>
+          <li>Participating actors
+            <ul>
+              <li>User</li>
+              <li>System</li>
+            </ul>
+          </li>
+          <li>Flow of events          
+            <ol type="I">
+              <li>User actively clicks anywhere on the document</li>
+              <li>System creates UML Class at the location where the user click occurred</li>
+            </ol>
+          </li>
+          <li>Entry conditions          </li>
+          <ul>
+            <li>User presses Edit/Create/UML Class</li>
+            <li>User presses Right-click/Create/UML Class</li>
+          </ul>
+          <li>Exit conditions          </li>
+        </ol>
+        <ul>
+          <li>UML Class is created</li>
+        </ul>
+      <img src="../Desktop/Screen shot 2012-12-07 at 1.35.10 PM.png" width="430" height="299" />      </li>
+      <li>Edit UML Class Elements
+        <ol type="a">
+          <li>Priority level: Medium</li>
+          <li>Participating actors
+            <ul>
+              <li>User</li>
+              <li>System</li>
+            </ul>
+          </li>
+          <li>Flow of events
+            <ol type="I">
+              <li>System prompts User with an 'Edit Element' window</li>
+            </ol>
+          </li>
+          <li>Entry conditions
+            <ul>
+              <li>User Right-click Element/Edit/Add Attribute</li>
+              <li>User clicks Edit/Add/Attribute              </li>
+            </ul>
+          </li>
+        </ol>
+      </li>
+      <blockquote>
+        <p>		<img src="../Desktop/Screen shot 2012-12-07 at 1.39.28 PM.png" width="453" height="327" align="absmiddle" /></p>
+      </blockquote>
+      <li>Create Association
+        <ol type="a">
+          <li>Priority level: High</li>
+          <li>Participating actors
+            <ul>
+              <li>User </li>
+              <li> System</li>
+            </ul>
+          </li>
+          <li>Flow of events
+            <ol type="I">
+              <li> User will select which type of association</li>
+              <li>User will select one UML element</li>
+              <li>User will select a second UML element that is not the first</li>
+              <li>System creates a link between the two elements</li>
+            </ol>
+          </li>
+          <li>Entry conditions
+            <ul>
+              <li>User Clicks Edit/Create/Association</li>
+              <li>User Right clicks first element</li>
+            </ul>
+          </li>
+          <li>Exit conditions
+            <ul>
+              <li>User cancels</li>
+              <li>Link has been created<br />
+              </li>
+            </ul>
+          </li>
+        </ol></li>
+      <p><img src="../Desktop/Screen shot 2012-12-07 at 1.43.34 PM.png" width="397" height="222" />
+      </p>
+      <li>Remove Association
+        <ol type="a">
+          <li>Priority level: High</li>
+          <li>Participating actors<br />
+            ¥ User<br />
+            ¥ System</li>
+          <li>Flow of Events
+            <ol type="I">
+              <li>User selects an association</li>
+              <li>System unlinks the elements              </li>
+            </ol>
+          </li>
+          <li> Entry Conditions          </li>
+          <ul>
+            <li>User Clicks Edit/Association</li>
+          </ul>
+          <li>Exit Conditions
+          </li>
+        </ol>
+        <ol>
+          <ul>
+            <li>Link has been removed              </li>
+          </ul>
+        </ol>
+      </li>
+    </ol>
+  </ol>
+  <blockquote>
+    <p>	<img src="../Desktop/Screen shot 2012-12-07 at 1.47.15 PM.png" width="384" height="236" /></p>
+    <ol>
+      <li value="5">Open File
+        <ol type="a">
+          <li>Priority Level: Medium</li>
+          <li>Participating actors
+            <ul>
+              <li>User </li>
+              <li>System</li>
+            </ul>
+          </li>
+          <li>Flow of events
+            <ol type="I">
+              <li>System prompts User for a filename that exists on the System </li>
+              <li>User provides/selects filename</li>
+              <li>System opens a new document with the contents of the file</li>
+            </ol>
+          </li>
+          <li>Entry conditions          </li>
+          <ul>
+            <li>User presses File/Open</li>
+          </ul>
+          <li>Exit conditions
+          </li>
+          
+          <ul>
+            <li>User chooses filename</li>
+            <li>User cancels</li>
+          </ul>
+        </ol>
+      </li>
+    </ol>
+    <p><img src="../Desktop/Screen shot 2012-12-07 at 1.51.14 PM.png" width="323" height="184" /> </p>
+    <ol start="6">
+      <li>Write File
+        <ol type="a">
+          <li>Priority level: Medium</li>
+          <li>Participating actors
+            <ul>
+              <li>User</li>
+              <li>System</li>
+            </ul>
+          </li>
+          <li>Flow of events
+            <ol type="I">
+              <li>System prompts User for new or existing filename</li>
+              <li>User enters a filename</li>
+              <li>System saves document to a file on the system</li>
+            </ol>
+          </li>
+          <li>Entry conditions
+            <ul>
+              <li>User presses File/Save</li>
+              <li>User presses File/Save as...</li>
+              <li>User presses Save button</li>
+            </ul>
+          </li>
+          <li>Exit conditions
+            <ul>
+              <li>User specifies a file</li>
+              <li>User cancels</li>
+            </ul>
+            <blockquote>
+              <p>&nbsp;</p>
+            </blockquote>
+          </li>
+        </ol>
+      </li>
+      <li>Generate Java Skeletons
+        <ol type="a">
+          <li>Priority level: High          </li>
+          <li>Participating actors
+            <ul>
+              <li>User</li>
+              <li>System</li>
+            </ul>
+          </li>
+          <li>Flow of events
+            <ol type="I">
+              <li>System creates Java files</li>
+            </ol>
+          </li>
+          <li>Entry conditions
+            <ul>
+              <li>User presses File/Export/Java Project</li>
+              <li>User presses Right click/Export/Java Porject</li>
+            </ul>
+          </li>
+          <li>Exit conditions
+            <ul>
+              <li>System is done writing Java files</li>
+            </ul>
+          </li>
+        </ol>
+        <p><img src="../Desktop/Screen shot 2012-12-07 at 1.58.12 PM.png" width="357" height="240" /></p>
+      </li>
+      <li>Create UML Template 
+        <ol type="a">
+          <li>Priority level: Low</li>
+          <li>Participating actors
+            <ul>
+              <li>User</li>
+              <li>System</li>
+            </ul>
+          </li>
+          <li>Flow of events
+            <ol type="I">
+              <li>System prompt user for name of the template</li>
+              <li>System saves current document into templates file</li>
+            </ol>
+          </li>
+          <li>Entry conditions
+            <ul>
+              <li>Document is not empty</li>
+              <li>User presses File/Templates/Create</li>
+            </ul>
+          </li>
+          <li>Exit conditions
+            <ul>
+              <li>System finishes saving file</li>
+            </ul>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </blockquote>
+  <ol>
+    <blockquote>
+      <p>	<img src="../Desktop/Screen shot 2012-12-07 at 1.58.58 PM.png" width="466" height="285" /> </p>
+    </blockquote>
+    <ol>
+      <li value="9">Use UML Template
+        <ol type="a">
+          <li>Prioity level: Low</li>
+          <li>Participating Actors
+            <ul>
+              <li>User</li>
+              <li>System</li>
+            </ul>
+          </li>
+          <li>Flow of Events
+            <ol type="I">
+              <li>Prompt user for which template to fill the document</li>
+              <li>If current document is not empty, system prompts the user if he/she wants to continue</li>
+              <li>If current document is not empty, clear it</li>
+              <li>Fill current document with template</li>
+            </ol>
+          </li>
+          <li>Entry Conditions          </li>
+          <ul>
+            <li>User presses File/Templates/Open</li>
+          </ul>
+          <li>Exit Conditions
+            <ul>
+              <li>User decides to not continue</li>
+              <li>System finishes loading template              </li>
+            </ul>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </ol>
+  <blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+</ol>
+<h2>Object Design and UML Class Diagrams</h2>
+<p>asdfghjkl;asdfghjkl</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h2>Testing</h2>
+<h4>	Unit Test Cases</h4>
+<blockquote>
+  <p>The unit test cases are attached in the file, the test cases and the names of the .java files are shown below for reference.</p>
+  <p><img src="../Desktop/Screen shot 2012-12-07 at 2.28.25 PM.png" width="716" height="405" /></p>
+  <p><img src="../Desktop/Screen shot 2012-12-07 at 2.28.35 PM.png" width="716" height="464" /></p>
+</blockquote>
+<p>&nbsp;</p>
+<h4>System Tests</h4>
+<blockquote>
+  <p>The requirements of the program were most easily shown by screenshot videos using Jing.Ê Most videos did not require audio, as they were self-explanatory through the actions performed.Ê <br />
+The Java code generation does include audio explanations throughout the process.Ê Each requirement is listed in its specified order to assist in the understanding of what requirement the video is fulfilling.</p>
+  <ol>
+    <li><strong>Creation of UML class diagram features with the ability to edit class name, add/remove/validate/edit attributes, add/remove/validate/edit operations.</strong>  </li>
+  </ol>
+  <blockquote>
+    <p><a href="http://screencast.com/t/pOoysm8MC">	http://screencast.com/t/pOoysm8MC</a></p>
+    <p>Blank fields will remove a method or attribute when entered, and deleting a figure is as simple as selecting and pressing backspace, delete, or cutting it.</p>
+  </blockquote>
+  <ol>
+    <li value="2"><strong>Add/remove/edit relationships between figures that include inheritance, association, and dependency relationships.</strong>  </li>
+  </ol>
+  <blockquote>
+    <p><a href="http://screencast.com/t/QV5Ymy95xKf">http://screencast.com/t/QV5Ymy95xKf</a></p>
+    <p><strong>Test the ability to switch between unidirectional and bidirectional, add/remove/edit multiplicities, association names, and role names.</strong></p>
+    <p><a href="http://screencast.com/t/eHcIWVcqK4">http://screencast.com/t/eHcIWVcqK4</a></p>
+  </blockquote>
+  <ol start="3">
+    <li><strong>The ability to save diagrams to a file and restore diagrams from the file.</strong>  </li>
+  </ol>
+  <blockquote>
+    <p><a href="http://screencast.com/t/byF2BGYKC">http://screencast.com/t/byF2BGYKC</a><br />
+      A new file is created, then the classes are added, and it saved and closed.Ê A new file is created from the recently saved file, showing the save and open features working correctly.</p>
+  </blockquote>
+  <ol start="4">
+    <li><strong>The ability to generate Java source code from diagrams.</strong>  </li>
+  </ol>
+  <blockquote>
+    <p><a href="http://screencast.com/t/K83Ws5ZIIx8">http://screencast.com/t/K83Ws5ZIIx8</a></p>
+  </blockquote>
+  <ol start="5">
+    <li><strong>The ability to generate default class diagram for one or more design patterns.</strong></li>
+  </ol>
+  <blockquote>
+    <p>Templates can be created manually and saved under the file menu. A new instance is created, and the saved template now appears under the &quot;Templates&quot; menu. When selected, the template is loaded to the new diagram.</p>
+    <p><img src="../Pictures/temp1.png" width="802" height="475" /><img src="../Pictures/temp2.png" width="798" height="433" /></p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+  </blockquote>
+</blockquote>
+<h2> README</h2>
+<blockquote>
+  <p>A README.txt file is found in the directory under the main project folder, UML-Diagrammer as shown below. A demo.txt is also found in the same directory, which shows the features and allows the user to become more familiar with the program.</p>
+  <p>/UML-Diagrammer/README.txt</p>
+  <p>/UML-Diagrammer/demo.txt</p>
+</blockquote>
+</body>
+</html>
