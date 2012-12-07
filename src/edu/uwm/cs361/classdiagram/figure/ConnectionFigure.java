@@ -57,7 +57,9 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 	private TextFigure a_mult = new TextFigure();
 	private TextFigure b_mult = new TextFigure();
 
-	/** Creates a new instance. */
+	/**
+	 *  Creates a new instance.
+	 */
 	public ConnectionFigure() {
 		TextFigure[] figs = { a_role, b_role, a_mult, b_mult };
 
@@ -68,6 +70,9 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 		init();
 	}
 
+	/**
+	 * Initializes the multiplicities, roles, color, width and end decorations.
+	 */
 	private void init() {
 		setLayouter(new LocatorLayouter());
 
@@ -105,6 +110,9 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 		config();
 	}
 
+	/**
+	 * Gets the Association foreground color from the CSS file.
+	 */
 	private static void config() {
 		Style style = UMLApplicationModel.getProgramStyle();
 		if (style == null)
@@ -117,15 +125,13 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 	}
 
 	/**
-	 * Checks if two figures can be connected. Implement this method to
-	 * constrain the allowed connections between figures.
+	 * Checks if two figures can be connected. Returns true if they are both 
+	 * instances of ClassFigure.
 	 */
 	@Override
 	public boolean canConnect(Connector start, Connector end) {
-
 		return (start.getOwner() instanceof ClassFigure)
 				&& (end.getOwner() instanceof ClassFigure);
-
 	}
 
 	@Override
@@ -134,8 +140,8 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 	}
 
 	/**
-	 * Handles the disconnection of a connection. Override this method to handle
-	 * this event.
+	 * Handles the disconnection of two class figures. Removes connection figures
+	 * from the classes.
 	 */
 	@Override
 	protected void handleDisconnect(Connector start, Connector end) {
@@ -153,10 +159,6 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 	@Override
 	protected void handleConnect(Connector start, Connector end) {
 
-		/*
-		 * after reading in from a file a connection will exist but this method
-		 * is still called after reading
-		 */
 		if (con != null)
 			return;
 
@@ -169,6 +171,11 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 		ef.getData().addConnection(con);
 	}
 
+	/**
+	 * Sets the role names on the connection figures.
+	 * @param start_role Role name of the starting figure.
+	 * @param end_role Role name of the ending figure.
+	 */
 	public void setRoles(String start_role, String end_role) {
 		String old_start_role = con.getRole(con.getStart());
 		String old_end_role = con.getRole(con.getEnd());
@@ -186,6 +193,11 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 						old_start_role, old_end_role));
 	}
 
+	/**
+	 * Sets the multiplicities on the connection figures.
+	 * @param start_mult Multiplicity of the starting figure.
+	 * @param end_mult Multiplicity of the ending figure.
+	 */
 	public void setMult(String start_mult, String end_mult) {
 		String old_start_mult = con.getMultiplicity(con.getStart());
 		String old_end_mult = con.getMultiplicity(con.getEnd());
@@ -206,6 +218,9 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 						old_start_mult, old_end_mult));
 	}
 
+	/**
+	 * Makes an exact copy of the connection figure.
+	 */
 	@Override
 	public ConnectionFigure clone() {
 
@@ -224,6 +239,9 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 		return that;
 	}
 
+	/**
+	 * @return The data entity that the connection figure represents.
+	 */
 	public Connection getData() {
 		return con;
 	}
@@ -233,6 +251,10 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 		return 1;
 	}
 
+	/**
+	 * Notifies the starting and ending figures to remove
+	 * the connection from their data entities
+	 */
 	@Override
 	public void removeNotify(Drawing d) {
 		if (con != null) {
@@ -243,6 +265,9 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 		super.removeNotify(d);
 	}
 
+	/**
+	 * Adds actions to the connection figure's context menu
+	 */
 	@Override
 	public Collection<Action> getActions(Point2D.Double p) {
 		Collection<Action> col = new ArrayList<Action>();
@@ -253,10 +278,12 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 		return col;
 	}
 
+	/**
+	 * Writes the connection figure to XML
+	 */
 	@Override
 	public void write(DOMOutput out) throws IOException {
 		super.write(out);
-		// writeAttributes ( out );
 
 		out.openElement("connection");
 
@@ -272,6 +299,9 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 
 	}
 
+	/**
+	 * Reads the connection figure from XML
+	 */
 	@Override
 	public void read(DOMInput in) throws IOException {
 		Util.dprint("Reading Connection Figure");
@@ -311,6 +341,9 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 		Util.dprint(b.getName() + ": " + con.getRole(b));
 	}
 
+	/**
+	 * This method gets called when a bound property is changed.
+	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		if (!(e.getNewValue() instanceof String))
@@ -327,6 +360,9 @@ public class ConnectionFigure extends LabeledLineConnectionFigure implements
 		}
 	}
 
+	/**
+	 * @return The debug string that represents this connection figure.
+	 */
 	public String debug() {
 		UMLClass a = con.getStart();
 		UMLClass b = con.getEnd();

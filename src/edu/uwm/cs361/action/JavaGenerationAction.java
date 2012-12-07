@@ -16,6 +16,10 @@ import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.figure.ClassFigure;
 import edu.uwm.cs361.classdiagram.io.JavaGenerator;
 
+/**
+ * This class provides an action to generate a Java code 
+ * representation of the UML Diagram.
+ */
 @SuppressWarnings("serial")
 public class JavaGenerationAction extends AbstractAction {
 	DrawingView data;

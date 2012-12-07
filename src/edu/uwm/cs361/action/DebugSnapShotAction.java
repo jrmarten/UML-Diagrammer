@@ -11,17 +11,18 @@ import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 
 import edu.uwm.cs361.UMLApplicationModel;
-import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.data.Attribute;
 import edu.uwm.cs361.classdiagram.data.Method;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
 import edu.uwm.cs361.classdiagram.figure.ClassFigure;
 import edu.uwm.cs361.classdiagram.figure.ConnectionFigure;
 
-@SuppressWarnings("unused")
+/**
+ * This class provides an action for the user to print
+ * a text representation of the drawing's data to the terminal
+ */
 public class DebugSnapShotAction extends AbstractAction {
 	private static final long serialVersionUID = 3246670173154654804L;
-	public static final String delim = "________________________";
 	public static final String ID = "edit.DebugSnapShot";
 	DrawingView data;
 
@@ -33,16 +34,13 @@ public class DebugSnapShotAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
-		dprint("\n\n\n\n\n");
-		dprint("Data Representation");
+		dprint("\n\n+---------------------+\n| Data Representation |\n+---------------------+\n");
 
 		List<Figure> d = data.getDrawing().getFiguresFrontToBack();
 		for (Figure fig : d) {
 			if (fig instanceof ClassFigure) {
-				dprint(delim);
 				classfigure_hook((ClassFigure) fig);
 			} else if (fig instanceof ConnectionFigure) {
-				dprint(delim);
 				conSnap((ConnectionFigure) fig);
 			} else {
 				figure_hook(fig);
@@ -59,28 +57,25 @@ public class DebugSnapShotAction extends AbstractAction {
 
 	}
 
-	private void hash(Figure fig) {
-		dprint("" + fig.hashCode());
-	}
-
 	private void classSnap(ClassFigure cfig) {
 		UMLClass data = cfig.getData();
-		String buffer = data.getDeclaration() + "{\n";
+		String buffer = data.getDeclaration() + " {\n";
 		for (Attribute attr : data.getAttributes()) {
-			buffer += attr.getSignature() + "\n";
+			buffer += "  " + attr.getSignature() + "\n";
 		}
 		for (Method meth : data.getMethods()) {
-			buffer += meth.getSignature() + "\n";
+			buffer += "  " + meth.getSignature() + "\n";
 		}
 		buffer += "}\n";
 		dprint(buffer);
 	}
 
 	private void conSnap(ConnectionFigure fig) {
-		Util.dprint("Start: "
+		dprint("Connection Figure:");
+		dprint("  Start (" + fig.getData().getStart().getName() + ") end type: "
 				+ fig.getData().getConnectionType(fig.getData().getStart()));
-		Util.dprint("End: "
+		dprint("  End (" + fig.getData().getEnd().getName() + ") end type: "
 				+ fig.getData().getConnectionType(fig.getData().getEnd()));
-		Util.dprint(fig.debug());
+		dprint("\n");
 	}
 }

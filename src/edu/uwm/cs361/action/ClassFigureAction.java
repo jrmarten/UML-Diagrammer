@@ -5,6 +5,10 @@ import javax.swing.AbstractAction;
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.classdiagram.figure.ClassFigure;
 
+/**
+ * This class provides an action to add a class figure
+ * to the drawing
+ */
 @SuppressWarnings("serial")
 public abstract class ClassFigureAction extends AbstractAction {
 	protected ClassFigure data;
