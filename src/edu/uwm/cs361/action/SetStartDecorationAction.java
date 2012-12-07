@@ -3,8 +3,8 @@ package edu.uwm.cs361.action;
 import java.awt.event.ActionEvent;
 
 import edu.uwm.cs361.UMLApplicationModel;
-import edu.uwm.cs361.classdiagram.ConnectionFigure;
 import edu.uwm.cs361.classdiagram.LineDecorationChooser;
+import edu.uwm.cs361.classdiagram.figure.ConnectionFigure;
 
 @SuppressWarnings("serial")
 public class SetStartDecorationAction extends AssociationFigureAction {

@@ -3,7 +3,7 @@ package edu.uwm.cs361.action;
 import javax.swing.AbstractAction;
 
 import edu.uwm.cs361.UMLApplicationModel;
-import edu.uwm.cs361.classdiagram.ClassFigure;
+import edu.uwm.cs361.classdiagram.figure.ClassFigure;
 
 @SuppressWarnings("serial")
 public abstract class ClassFigureAction extends AbstractAction {

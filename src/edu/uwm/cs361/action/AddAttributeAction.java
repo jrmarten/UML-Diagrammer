@@ -7,7 +7,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 import edu.uwm.cs361.UMLApplicationModel;
-import edu.uwm.cs361.classdiagram.ClassFigure;
+import edu.uwm.cs361.classdiagram.figure.ClassFigure;
 
 @SuppressWarnings("serial")
 public class AddAttributeAction extends ClassFigureAction {

@@ -13,7 +13,7 @@ import org.jhotdraw.draw.Figure;
 import org.jhotdraw.gui.JFileURIChooser;
 
 import edu.uwm.cs361.Util;
-import edu.uwm.cs361.classdiagram.ClassFigure;
+import edu.uwm.cs361.classdiagram.figure.ClassFigure;
 import edu.uwm.cs361.classdiagram.io.JavaGenerator;
 
 @SuppressWarnings("serial")

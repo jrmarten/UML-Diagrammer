@@ -16,10 +16,10 @@ import org.jhotdraw.xml.DefaultDOMFactory;
 import com.sun.org.apache.bcel.internal.classfile.Attribute;
 import com.sun.org.apache.bcel.internal.classfile.Method;
 
-import edu.uwm.cs361.classdiagram.ConnectionFigure;
-import edu.uwm.cs361.classdiagram.ClassFigure;
-import edu.uwm.cs361.classdiagram.InheritanceFigure;
 import edu.uwm.cs361.classdiagram.data.UMLClass;
+import edu.uwm.cs361.classdiagram.figure.ClassFigure;
+import edu.uwm.cs361.classdiagram.figure.ConnectionFigure;
+import edu.uwm.cs361.classdiagram.figure.InheritanceFigure;
 
 public class UMLFactory extends DefaultDOMFactory {
 	private final static Object[][] classTagArray = {
