@@ -14,6 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.Action;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.UndoableEdit;
 
 import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.Figure;
@@ -143,11 +145,13 @@ public class ClassFigure extends GraphicalCompositeFigure {
 		}
 	}
 
+	/*
 	static {
 		readConfig();
 	}
+	*/
 
-	private static void readConfig() {
+	public static void initColors() {
 		Style style = UMLApplicationModel.getProgramStyle();
 		if (style != null) {
 			CLASSCOLORS.fore_color = style.getColor("Class.foreground-color",
@@ -218,9 +222,10 @@ public class ClassFigure extends GraphicalCompositeFigure {
 		Attribute attr = Attribute.Create(str);
 		boolean result = addAttribute(attr);
 
-		if (result) {
+		if (result && getDrawing() != null ) {
 			getDrawing().fireUndoableEditHappened(
-					new AddAttributeAction.Edit(this, str));
+					new AddAttributeEdit ( attr ) );
+					//new AddAttributeAction.Edit(this, str));
 		}
 
 		return result;
@@ -252,10 +257,13 @@ public class ClassFigure extends GraphicalCompositeFigure {
 	}
 
 	public void addMethod(String methtxt) {
+		
 		Method tmp = Method.Create(methtxt);
-		if (addMethod(tmp)) {
+		if (addMethod(tmp) && getDrawing() != null ) {
 			getDrawing().fireUndoableEditHappened(
-					new AddMethodAction.Edit(this, methtxt));
+					new AddMethodEdit ( tmp ) );
+					
+					//new AddMethodAction.Edit(this, methtxt));
 		}
 	}
 
@@ -309,6 +317,8 @@ public class ClassFigure extends GraphicalCompositeFigure {
 
 		boolean hasParams = (methTxt.contains("(") && methTxt.contains(")"));
 
+		RemoveMethodEdit edit = new RemoveMethodEdit ( null );
+		
 		if (!methTxt.contains(" ") && !hasParams) // just the name is present
 		{
 			for (int i = 0; i < data.getMethods().size(); i++) {
@@ -316,32 +326,40 @@ public class ClassFigure extends GraphicalCompositeFigure {
 				Method meth = data.getMethods().get(i);
 				if (meth.getName().equals(methTxt)) {
 					removeMethod(meth);
+					edit.addEdit( new RemoveMethodEdit ( meth ) );
+					i--;
 				}
 			}
-			return;
 		}
 
-		if (!hasParams)
-			return;
+		if (hasParams)
+		{
+			//	return;
 
-		String name = methTxt.substring(0, methTxt.indexOf("(")).trim();
-		Argument[] list = Method.extractParams(methTxt);
-		List<Argument> params = new LinkedList<Argument>();
-
-		for (Argument param : list) {
-			if (params == null)
-				continue;
-			params.add(param);
-		}
-
-		for (int i = 0; i < data.getMethods().size(); i++) {
-			Method meth = data.getMethods().get(i);
-
-			if (meth.getName().equals(name)
-					&& Util.equals(params, meth.getParameters())) {
-				removeMethod(meth);
+			String name = methTxt.substring(0, methTxt.indexOf("(")).trim();
+			Argument[] list = Method.extractParams(methTxt);
+			List<Argument> params = new LinkedList<Argument>();
+			
+			for (Argument param : list) {
+				if (params == null)
+					continue;
+				params.add(param);
 			}
 
+			for (int i = 0; i < data.getMethods().size(); i++) {
+				Method meth = data.getMethods().get(i);
+
+				if (meth.getName().equals(name)
+						&& Util.equals(params, meth.getParameters())) {
+					removeMethod(meth);
+					edit.addEdit( new RemoveMethodEdit ( meth ) );
+				}
+			}
+		}
+		
+		if ( getDrawing() != null )
+		{
+			getDrawing().fireUndoableEditHappened( edit );
 		}
 	}
 
@@ -355,18 +373,22 @@ public class ClassFigure extends GraphicalCompositeFigure {
 		if (!attrTxt.contains(" ")) {
 			for (Attribute attr : data.getAttributes()) {
 				if (attr.getName().equals(attrTxt)) {
-					removeAttribute(attr);
-					return;
+					attrTxt = attr.toString();
+					break;
 				}
 			}
 		}
 		Attribute attr = Attribute.Create(attrTxt);
-		removeAttribute(attr);
+		if ( removeAttribute(attr) && getDrawing() != null )
+		{
+			getDrawing().fireUndoableEditHappened(
+					new RemoveAttributeEdit ( attr ));
+		}
 	}
 
-	private void removeAttribute(Attribute attr) {
+	private boolean removeAttribute(Attribute attr) {
 		willChange();
-		data.removeAttribute(attr);
+		boolean ret = data.removeAttribute(attr);
 		for (int i = 0; i < attrList.getChildCount(); i++) {
 			Figure fig = attrList.getChild(i);
 			if (fig instanceof TextFigure) {
@@ -379,7 +401,7 @@ public class ClassFigure extends GraphicalCompositeFigure {
 			}
 		}
 		changed();
-
+		return ret;
 	}
 
 	private void removeMethod(Method meth) {
@@ -531,7 +553,8 @@ public class ClassFigure extends GraphicalCompositeFigure {
 
 	// XXX:FOR DEBUGING ONLY
 	public String snapShot() {
-
+		if ( !Util.debug() ) return null;
+		
 		String buffer = data.getDeclaration() + "{\n";
 		for (Attribute attr : data.getAttributes()) {
 			buffer += attr.getSignature() + "\n";
@@ -667,6 +690,108 @@ public class ClassFigure extends GraphicalCompositeFigure {
 		protected boolean remove(String old) {
 			Method meth = Method.Create(old);
 			return data.removeMethod(meth);
+		}
+	}
+	
+	private class AddAttributeEdit extends AbstractUndoableEdit
+	{
+		private Attribute attr;
+		
+		public AddAttributeEdit ( Attribute attr ) { this.attr = attr; }
+		
+		@Override
+		public void redo ( )
+		{
+			super.redo();
+			ClassFigure.this.addAttribute ( attr );
+		}
+		
+		@Override
+		public void undo ( )
+		{
+			super.undo();
+			ClassFigure.this.removeAttribute ( attr );
+		}
+	}
+	
+	private class AddMethodEdit extends AbstractUndoableEdit
+	{
+		private Method meth;
+		public AddMethodEdit ( Method meth ) { this.meth = meth; }
+		
+		@Override
+		public void redo ( )
+		{
+			super.redo();
+			ClassFigure.this.addMethod ( meth );
+		}
+		
+		@Override
+		public void undo ( )
+		{
+			super.undo();
+			ClassFigure.this.removeMethod ( meth );
+		}
+	}
+	
+	private class RemoveAttributeEdit extends AbstractUndoableEdit
+	{
+		private Attribute attr;
+		public RemoveAttributeEdit ( Attribute attr ) { this.attr = attr; }
+		
+		@Override
+		public void undo ( )
+		{
+			super.undo();
+			ClassFigure.this.addAttribute ( attr );
+		}
+		
+		@Override
+		public void redo ( )
+		{
+			super.redo();
+			ClassFigure.this.removeAttribute ( attr );
+		}
+	}
+	
+	private class RemoveMethodEdit extends AbstractUndoableEdit 
+	{
+		private Method meth;
+		private LinkedList<Method> agg = new LinkedList<Method>();
+		public RemoveMethodEdit ( Method meth ) { this.meth = meth; }
+		
+		@Override
+		public void undo ( )
+		{
+			super.undo();
+			if ( meth != null ) ClassFigure.this.addMethod ( meth );
+			for ( Method tmp : agg )
+			{
+				ClassFigure.this.addMethod ( tmp );
+			}
+		}
+		
+		@Override
+		public void redo ( )
+		{
+			super.redo();
+			if ( meth != null ) ClassFigure.this.removeMethod ( meth );
+			for ( Method tmp : agg )
+			{
+				ClassFigure.this.removeMethod ( tmp );
+			}
+		}
+		
+		@Override
+		public boolean addEdit ( UndoableEdit edit )
+		{
+			if ( edit instanceof RemoveMethodEdit )
+			{
+				agg.add( ((RemoveMethodEdit)edit).meth );
+				agg.addAll( ((RemoveMethodEdit)edit).agg );
+				return true;
+			}
+			else return false;
 		}
 	}
 }

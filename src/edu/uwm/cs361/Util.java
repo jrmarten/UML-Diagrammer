@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 public class Util {
 
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	public static boolean debug() {
 		return DEBUG;
