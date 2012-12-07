@@ -8,7 +8,7 @@ import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.figure.ConnectionFigure;
 
-public class EditRoleAction extends AssociationFigureAction {
+public class EditRoleAction extends ConnectionFigureAction {
 	public static final String ID = "actions.editRole";
 
 	public EditRoleAction(ConnectionFigure c) {

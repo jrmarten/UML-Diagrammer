@@ -8,7 +8,7 @@ import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.Util;
 import edu.uwm.cs361.classdiagram.figure.ConnectionFigure;
 
-public class EditMultiplicityAction extends AssociationFigureAction {
+public class EditMultiplicityAction extends ConnectionFigureAction {
 	public static final String ID = "actions.editMult";
 
 	public EditMultiplicityAction(ConnectionFigure fig) {

@@ -23,6 +23,12 @@ import edu.umd.cs.findbugs.annotations.Nullable;
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.Util;
 
+/**
+ * This class provides an action for the GUI
+ * to save a UML Diagram drawing as a template. 
+ * The template will be added to the Templates
+ * menu under the File menu.
+ */
 public class SaveTemplateAction extends SaveFileAction {
 	private static final long serialVersionUID = -5846294040633741021L;
 	protected URI uri;

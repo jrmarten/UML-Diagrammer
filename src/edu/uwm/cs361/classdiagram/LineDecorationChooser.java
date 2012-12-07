@@ -25,15 +25,17 @@ import edu.uwm.cs361.classdiagram.data.Connection;
 import edu.uwm.cs361.classdiagram.data.ConnectionType;
 import edu.uwm.cs361.classdiagram.figure.ConnectionFigure;
 
+/**
+ * This class is a JFrame menu where the user can choose
+ * the style of the starting or ending decoration on a connection
+ * figure.
+ */
 public class LineDecorationChooser extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 553854446330611986L;
 	private ConnectionFigure _data;
 	private boolean _isEnd;
 	private JRadioButton _composition, _aggregation, _association, _none;
-	//private ArrowTip _compTip = new ArrowTip(0.40, 15.0, 30.0);
-	//private ArrowTip _aggTip = new ArrowTip(0.40, 15.0, 30.0, false, true, true);
-	//private ArrowTip _assTip = new ArrowTip(0.35, 20, 18.4);
 
 	private final static int WIDTH = 300;
 	private final static int HEIGHT = 300;
@@ -55,7 +57,6 @@ public class LineDecorationChooser extends JFrame implements ActionListener {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 		setBounds(standard_x, standard_y, WIDTH, HEIGHT);
-		// setSize(300, 300);
 		setLayout(new BorderLayout(0, 0));
 		addComponents();
 	}
@@ -145,7 +146,11 @@ public class LineDecorationChooser extends JFrame implements ActionListener {
 		}
 	}
 
-	/** Returns an ImageIcon, or null if the path was invalid. */
+	/**
+	 * @param path Path to the icon's image file
+	 * @param description Name of the icon
+	 * @return An ImageIcon with an image and a description
+	 */
 	protected ImageIcon createImageIcon(String path, String description) {
 		java.net.URL imgURL = getClass().getResource(path);
 		if (imgURL != null) {

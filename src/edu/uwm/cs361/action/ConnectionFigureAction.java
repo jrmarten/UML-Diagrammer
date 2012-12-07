@@ -5,14 +5,15 @@ import javax.swing.AbstractAction;
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.classdiagram.figure.ConnectionFigure;
 
+/**
+ * This class provides an action to add a connection
+ * figure between two classes
+ */
 @SuppressWarnings("serial")
-public abstract class AssociationFigureAction extends AbstractAction {
+public abstract class ConnectionFigureAction extends AbstractAction {
 	protected ConnectionFigure _data;
 
-	// public static final String method_prompt = "actions.method.prompt";
-	// public static final String attribute_prompt = "actions.attribute.prompt";
-
-	public AssociationFigureAction(String str, ConnectionFigure fig) {
+	public ConnectionFigureAction(String str, ConnectionFigure fig) {
 		super(UMLApplicationModel.getProjectResources().getString(str));
 		_data = fig;
 	}

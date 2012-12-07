@@ -9,6 +9,10 @@ import javax.swing.undo.CannotUndoException;
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.classdiagram.figure.ClassFigure;
 
+/**
+ * This class provides an action for the GUI
+ * to adda method to a class figure.
+ */
 @SuppressWarnings("serial")
 public class AddMethodAction extends ClassFigureAction {
 
@@ -24,7 +28,9 @@ public class AddMethodAction extends ClassFigureAction {
 		data.addMethod(UMLApplicationModel.prompt(method_prompt));
 	}
 
-	// TODO:link
+	/**
+	 * Makes the action undoable.
+	 */
 	public static class Edit extends AbstractUndoableEdit {
 		private ClassFigure cfig;
 		private String meth;

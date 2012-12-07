@@ -5,6 +5,10 @@ import java.awt.event.ActionEvent;
 import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.classdiagram.figure.ClassFigure;
 
+/**
+ * This class provides an action for the GUI
+ * to remove a method from a class figure
+ */
 @SuppressWarnings("serial")
 public class RemoveMethodAction extends ClassFigureAction {
 

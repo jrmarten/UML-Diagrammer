@@ -6,8 +6,12 @@ import edu.uwm.cs361.UMLApplicationModel;
 import edu.uwm.cs361.classdiagram.LineDecorationChooser;
 import edu.uwm.cs361.classdiagram.figure.ConnectionFigure;
 
+/**
+ * This class provides an action for the GUI
+ * to set the end decoration of a connection figure.
+ */
 @SuppressWarnings("serial")
-public class SetEndDecorationAction extends AssociationFigureAction {
+public class SetEndDecorationAction extends ConnectionFigureAction {
 	public static final String ID = "actions.setEndDecoration";
 
 	public SetEndDecorationAction(ConnectionFigure c) {
