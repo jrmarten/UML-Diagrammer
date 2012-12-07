@@ -350,46 +350,40 @@ public class UMLApplicationModel extends DefaultApplicationModel {
 		return style;
 	}
 
-	public static String getProgramDirectory ( )
-	{
-		String os = System.getProperty( "os.name" );
-		String home = System.getProperty( "user.home");
-		String sep = System.getProperty ( "file.separator" );
-		
-		if ( Util.containsIgnoreCase ( os, "win" ) ) // if windows
-			{
-				String loc = System.getenv( "LOCALAPPDATA" );
-				if ( loc == null ) loc = System.getenv( "APPDATA" );
-				if ( loc == null ) loc = System.getenv( "HOMEPATH" );
-				
-				return home + sep + "Uml-Diagrammer" + sep;
-			}
-		else //assume unix based
-			{
-				return home + sep + ".uml-diagrammer" + sep;
-			}
-	}
-
-/*	public static String getProgramDirectory() {
+	public static String getProgramDirectory() {
 		String os = System.getProperty("os.name");
 		String home = System.getProperty("user.home");
 		String sep = System.getProperty("file.separator");
 
-		if (Util.containsIgnoreCase(os, "win")) { // If the system is Windows-based
+		if (Util.containsIgnoreCase(os, "win")) // if windows
+		{
 			String loc = System.getenv("LOCALAPPDATA");
 			if (loc == null)
 				loc = System.getenv("APPDATA");
 			if (loc == null)
 				loc = System.getenv("HOMEPATH");
-			String s = loc + sep + "uml-diagrammer" + sep;
-			Util.dprint(s);
-			return s;
-		} else { // Assume Unix-based
+
+			return home + sep + "Uml-Diagrammer" + sep;
+		} else // assume unix based
+		{
 			return home + sep + ".uml-diagrammer" + sep;
 		}
->>>>>>> c9e663ba28d059a521d061544e336f30051dc260
 	}
-*/
+
+	/*
+	 * public static String getProgramDirectory() { String os =
+	 * System.getProperty("os.name"); String home =
+	 * System.getProperty("user.home"); String sep =
+	 * System.getProperty("file.separator");
+	 * 
+	 * if (Util.containsIgnoreCase(os, "win")) { // If the system is
+	 * Windows-based String loc = System.getenv("LOCALAPPDATA"); if (loc ==
+	 * null) loc = System.getenv("APPDATA"); if (loc == null) loc =
+	 * System.getenv("HOMEPATH"); String s = loc + sep + "uml-diagrammer" + sep;
+	 * Util.dprint(s); return s; } else { // Assume Unix-based return home + sep
+	 * + ".uml-diagrammer" + sep; } >>>>>>>
+	 * c9e663ba28d059a521d061544e336f30051dc260 }
+	 */
 	public static String prompt(String id) {
 		return JOptionPane.showInputDialog(getProjectResources().getString(id));
 	}

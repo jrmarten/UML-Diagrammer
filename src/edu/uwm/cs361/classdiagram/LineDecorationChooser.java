@@ -50,6 +50,11 @@ public class LineDecorationChooser extends JFrame implements ActionListener {
 		standard_y = (d.height / 2) - (HEIGHT / 2);
 	}
 
+	/**
+	 * Create a new instance of the LineDecorationChooser
+	 * @param data The ConnectionFigure whose end decorations we will be changing
+	 * @param isEnd True if the decoration is the end decoration, false if it is the start decoration
+	 */
 	public LineDecorationChooser(ConnectionFigure data, boolean isEnd) {
 		super();
 		_data = data;

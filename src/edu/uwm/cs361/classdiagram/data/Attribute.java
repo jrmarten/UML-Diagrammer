@@ -2,54 +2,51 @@ package edu.uwm.cs361.classdiagram.data;
 
 import static edu.uwm.cs361.Util.report;
 
-public class Attribute
-{
+public class Attribute {
 
-	private String								name;
-	private String								type;
-	private Access								access	= Access.DEFAULT;
-	private String								val;
-	private boolean							staticp	= false;
-	private boolean							finalp	= false;
+	private String name;
+	private String type;
+	private Access access = Access.DEFAULT;
+	private String val;
+	private boolean staticp = false;
+	private boolean finalp = false;
 
-	private static final String[]	mods		= { "private", "-", "public", "+",
+	private static final String[] mods = { "private", "-", "public", "+",
 			"default", "~", "protected", "#", "static", "final", "s", "f" };
 
-	public Attribute() { }
+	public Attribute() {
+	}
 
-	private Attribute(String[] perms, String name, String type, String val)
-	{
+	private Attribute(String[] perms, String name, String type, String val) {
 		this.name = name;
 		this.type = type;
-		this.val  = val;
+		this.val = val;
 
-		for (String perm : perms)
-			{
-				perm = perm.trim();
-				if (perm.equals(""))
+		for (String perm : perms) {
+			perm = perm.trim();
+			if (perm.equals(""))
+				continue;
+
+			char tmp = perm.charAt(0);
+
+			switch (tmp) {
+			case 's':
+			case 'S':
+				staticp = true;
+				break;
+
+			case 'f':
+			case 'F':
+				finalp = true;
+				break;
+
+			default:
+				if (access != Access.DEFAULT)
 					continue;
-
-				char tmp = perm.charAt(0);
-
-				switch (tmp)
-					{
-						case 's':
-						case 'S':
-							staticp = true;
-						break;
-
-						case 'f':
-						case 'F':
-							finalp = true;
-						break;
-
-						default:
-							if (access != Access.DEFAULT)
-								continue;
-							access = Access.fromString(perm);
-					}
+				access = Access.fromString(perm);
 			}
-		if ( finalp )
+		}
+		if (finalp)
 			this.name = this.name.toUpperCase();
 	}
 
@@ -58,29 +55,26 @@ public class Attribute
 			return null;
 		if (str.trim().equals(""))
 			return null;
-		try
-			{
-				if (str.contains(":"))
-					return fromUML(str);
-				else
-					return fromSignature(str);
-			} catch (Exception e)
-			{
-				return null;
-			}
+		try {
+			if (str.contains(":"))
+				return fromUML(str);
+			else
+				return fromSignature(str);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	private static Attribute fromUML(String str) {
 		String[] parts;
-		
+
 		String val = null;
-		if ( str.contains( "=" ) )
-			{
-				parts = str.split( "=" );
-				str = parts[0].trim();
-				val = parts[1].trim();
-			}
-		
+		if (str.contains("=")) {
+			parts = str.split("=");
+			str = parts[0].trim();
+			val = parts[1].trim();
+		}
+
 		parts = str.split(":");
 		if (parts.length != 2)
 			return (Attribute) report("More than one colon in attribute declaration");
@@ -95,26 +89,24 @@ public class Attribute
 		parts[index] = "";
 
 		Access a = Access.fromSymbol(name.charAt(0));
-		if (a != null)
-			{
-				parts[index] = a.toString();
-				name = name.substring(1);
-			}
+		if (a != null) {
+			parts[index] = a.toString();
+			name = name.substring(1);
+		}
 
 		return filter(parts, name, type, val);
 	}
 
 	private static Attribute fromSignature(String str) {
 		String[] parts;
-		
+
 		String val = null;
-		if ( str.contains( "=" ) )
-			{
-				parts = str.split( "=" );
-				str = parts[0].trim();
-				val = parts[1].trim();
-			}
-		
+		if (str.contains("=")) {
+			parts = str.split("=");
+			str = parts[0].trim();
+			val = parts[1].trim();
+		}
+
 		parts = str.split(" ");
 
 		int nameIndex = parts.length - 1;
@@ -126,38 +118,37 @@ public class Attribute
 		parts[nameIndex - 1] = "";
 
 		Access a = Access.fromSymbol(name.charAt(0));
-		if (a != null)
-			{
-				parts[nameIndex] = a.toString();
-				name = name.substring(1);
-			}
+		if (a != null) {
+			parts[nameIndex] = a.toString();
+			name = name.substring(1);
+		}
 		return filter(parts, name, type, val);
 	}
 
 	private static boolean isValid(String in) {
 		if (in.equals(""))
 			return true;
-		for (String mod : mods)
-			{
-				if (mod.equalsIgnoreCase(in))
-					return true;
-			}
+		for (String mod : mods) {
+			if (mod.equalsIgnoreCase(in))
+				return true;
+		}
 		return false;
 	}
 
-	private static Attribute filter(String[] mods, String name, String type, String val) {
-		for (String mod : mods)
-			{
-				if (!isValid(mod))
-					return (Attribute) report("Invalid Modifier in Attribute Declaration: "
-							+ mod);
-			}
-		
-		if ( Keywords.keywordp( type ) )
-			return (Attribute) report ( "Invalid return type Attribute: " + type );
+	private static Attribute filter(String[] mods, String name, String type,
+			String val) {
+		for (String mod : mods) {
+			if (!isValid(mod))
+				return (Attribute) report("Invalid Modifier in Attribute Declaration: "
+						+ mod);
+		}
 
-		if ( Keywords.reservedp( name ) )
-			return (Attribute) report ( "Then name of an Attribute must not be a primitive or keyword: " + name );
+		if (Keywords.keywordp(type))
+			return (Attribute) report("Invalid return type Attribute: " + type);
+
+		if (Keywords.reservedp(name))
+			return (Attribute) report("Then name of an Attribute must not be a primitive or keyword: "
+					+ name);
 
 		boolean let = false;
 		boolean sym = false;
@@ -166,17 +157,15 @@ public class Attribute
 		if (Character.isDigit(name.charAt(0)))
 			return (Attribute) report("Invalid name in Attribute Declaration");
 
-		for (char ch : name.toCharArray())
-			{
-				let = Character.isLetter(ch);
-				sym = ch == '_' || ch == '$';
-				num = Character.isDigit(ch);
+		for (char ch : name.toCharArray()) {
+			let = Character.isLetter(ch);
+			sym = ch == '_' || ch == '$';
+			num = Character.isDigit(ch);
 
-				if (!(let || sym || num))
-					{
-						return (Attribute) report("Name is Ill formated in Attribute Declaration");
-					}
+			if (!(let || sym || num)) {
+				return (Attribute) report("Name is Ill formated in Attribute Declaration");
 			}
+		}
 
 		return new Attribute(mods, name, type, val);
 	}
@@ -194,14 +183,14 @@ public class Attribute
 
 	@Override
 	public String toString() {
-		return access.getSymbol() + name + ":" + type +
-				((val != null)? " = " + val: "");
+		return access.getSymbol() + name + ":" + type
+				+ ((val != null) ? " = " + val : "");
 	}
 
 	public String getSignature() {
 		return access.toString() + " " + ((staticp) ? "static " : "")
-				+ ((finalp) ? "final " : "") + type + " " + name + 
-				((val != null)? " = " + val: "" );
+				+ ((finalp) ? "final " : "") + type + " " + name
+				+ ((val != null) ? " = " + val : "");
 	}
 
 	public boolean sigEquals(Attribute attr) {
@@ -210,16 +199,15 @@ public class Attribute
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Attribute)
-			{
-				Attribute that = (Attribute) obj;
+		if (obj instanceof Attribute) {
+			Attribute that = (Attribute) obj;
 
-				boolean x = name.equals(that.name);
-				x = x && type.equals(that.type);
-				x = x && finalp == that.finalp && staticp == that.staticp;
-				x = x && access.equals(that.access);
-				return x;
-			}
+			boolean x = name.equals(that.name);
+			x = x && type.equals(that.type);
+			x = x && finalp == that.finalp && staticp == that.staticp;
+			x = x && access.equals(that.access);
+			return x;
+		}
 		return false;
 	}
 
