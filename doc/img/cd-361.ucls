@@ -1,0 +1,134 @@
+<class-diagram version="1.0.10" icons="false" always-add-relationships="false" generalizations="true" 
+  realizations="false" associations="true" dependencies="true" nesting-relationships="false">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="edu.uwm.cs361.UMLDriver" project="UML-Diagrammer" 
+    file="/UML-Diagrammer/src/edu/uwm/cs361/UMLDriver.java" binary="false">    
+    <position height="63" width="114" x="398" y="287"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" name="edu.uwm.cs361.UMLDrawing" project="UML-Diagrammer" 
+    file="/UML-Diagrammer/src/edu/uwm/cs361/UMLDrawing.java" binary="false">    
+    <position height="48" width="95" x="31" y="1226"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="edu.uwm.cs361.UMLApplicationModel.UMLMenuBuilder" 
+    project="UML-Diagrammer" file="/UML-Diagrammer/src/edu/uwm/cs361/UMLApplicationModel.java" binary="false">    
+    <position height="138" width="287" x="552" y="287"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="edu.uwm.cs361.UMLFactory" project="UML-Diagrammer" 
+    file="/UML-Diagrammer/src/edu/uwm/cs361/UMLFactory.java" binary="false">    
+    <position height="63" width="143" x="166" y="1226"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="edu.uwm.cs361.UMLButtonFactory" project="UML-Diagrammer" 
+    file="/UML-Diagrammer/src/edu/uwm/cs361/UMLButtonFactory.java" binary="false">    
+    <position height="63" width="327" x="31" y="287"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="edu.uwm.cs361.UMLApplicationModel" project="UML-Diagrammer" 
+    file="/UML-Diagrammer/src/edu/uwm/cs361/UMLApplicationModel.java" binary="false">    
+    <position height="363" width="313" x="207" y="465"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="edu.uwm.cs361.Util" project="UML-Diagrammer" 
+    file="/UML-Diagrammer/src/edu/uwm/cs361/Util.java" binary="false">    
+    <position height="318" width="281" x="557" y="868"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="edu.uwm.cs361.UMLView" project="UML-Diagrammer" 
+    file="/UML-Diagrammer/src/edu/uwm/cs361/UMLView.java" binary="false">    
+    <position height="318" width="231" x="70" y="868"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="9" corner="BOTTOM_RIGHT" language="java" name="edu.uwm.cs361.UMLView.UndoListener" project="UML-Diagrammer" 
+    file="/UML-Diagrammer/src/edu/uwm/cs361/UMLView.java" binary="false">    
+    <position height="63" width="286" x="851" y="465"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="10" corner="BOTTOM_RIGHT" language="java" name="edu.uwm.cs361.UMLDrawingEditor" project="UML-Diagrammer" 
+    file="/UML-Diagrammer/src/edu/uwm/cs361/UMLDrawingEditor.java" binary="false">    
+    <position height="93" width="176" x="341" y="868"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="11" corner="BOTTOM_RIGHT" language="java" 
+    name="edu.uwm.cs361.UMLApplicationModel.UMLMenuBuilder.SaveTemplateActionMod" project="UML-Diagrammer" 
+    file="/UML-Diagrammer/src/edu/uwm/cs361/UMLApplicationModel.java" binary="false">    
+    <position height="78" width="251" x="560" y="465"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <dependency id="12">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="13">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="14">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="15">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="16">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <dependency id="17">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="18">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="19">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="20">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <classifier-display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" 
+    visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="false" multiplicity="true"/>
+</class-diagram>
